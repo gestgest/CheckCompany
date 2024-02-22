@@ -8,7 +8,7 @@ namespace BennyKok.NotionAPI
 {
     public class NotionAsync : MonoBehaviour
     {
-        //secret_b5JDoyw1hpTiF6NLIsjvzhewY7Pr4yEvbSMJ3Y5DHtE
+        
         private IEnumerator Start()
         {
             var api = new NotionAPI(apiKey);
