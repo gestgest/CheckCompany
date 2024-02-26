@@ -1,38 +1,32 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System;
 using UnityEngine;
+using UnityEngine.Networking;
 
-namespace BennyKok.NotionAPI
+public class NotionAsync : MonoBehaviour
 {
-    public class NotionAsync : MonoBehaviour
+    private const string apiUrl = "YOUR_NOTION_API_ENDPOINT";
+    private const string apiKey = "secret_b5JDoyw1hpTiF6NLIsjvzhewY7Pr4yEvbSMJ3Y5DHtE";
+
+    void Start()
     {
-        
-        private IEnumerator Start()
-        {
-            var api = new NotionAPI(apiKey);
-
-            yield return api.GetDatabase<CardDatabaseProperties>(database_id, (db) =>
-            {
-                Debug.Log(db.id);
-                Debug.Log(db.created_time);
-                Debug.Log(db.title.First().text.content);
-            });
-
-            yield return api.QueryDatabaseJSON(database_id, (db) =>
-            {
-                Debug.Log(db);
-            });
-        }
-
-        // For type parsing the db Property with JsonUtility
-        [Serializable]
-        public class CardDatabaseProperties
-        {
-            public MultiSelectProperty Tags;
-            public TitleProperty Name;
-        }
+        StartCoroutine(GetNotionData());
     }
 
+    IEnumerator GetNotionData()
+    {
+        UnityWebRequest request = UnityWebRequest.Get(apiUrl);
+        request.SetRequestHeader("Authorization", $"Bearer {apiKey}");
+
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            // Parse and handle the Notion API response data here
+            Debug.Log(request.downloadHandler.text);
+        }
+        else
+        {
+            Debug.LogError(request.error);
+        }
+    }
 }
