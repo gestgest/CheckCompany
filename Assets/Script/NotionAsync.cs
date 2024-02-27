@@ -6,7 +6,6 @@ public class NotionAsync : MonoBehaviour
 {
     /*
     private const string apiUrl = "https://api.notion.com/v1/database/a3043281d65b4a238301fd1019a40a6a";
-    private const string apiKey = "secret_b5JDoyw1hpTiF6NLIsjvzhewY7Pr4yEvbSMJ3Y5DHtE";
     //https://www.notion.so/0250a3b8cbbe4b02ac08ffda81e61bab?v=73d1307224bc41bb8c7969a4cd1429f5&pvs=4
     void Start()
     {
