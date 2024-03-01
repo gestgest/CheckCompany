@@ -4,30 +4,31 @@ using UnityEngine.Networking;
 
 public class NotionAsync : MonoBehaviour
 {
-    /*
-    private const string apiUrl = "https://api.notion.com/v1/database/a3043281d65b4a238301fd1019a40a6a";
-    //https://www.notion.so/0250a3b8cbbe4b02ac08ffda81e61bab?v=73d1307224bc41bb8c7969a4cd1429f5&pvs=4
+    [SerializeField] private NotionAPIKeySO notionAPIKey;
+
+    //ë„¥ìŠ¨
+    private string apiKey;
+    private const string apiUrl = "https://api.notion.com/v1/blocks/22968b85dcd641eea2dfe612af8d2375";
     void Start()
     {
-        StartCoroutine(GetNotionData());
+        apiKey = notionAPIKey.GetAPIKey();
+        StartCoroutine(GetNexonData());
     }
-
-    IEnumerator GetNotionData()
+    IEnumerator GetNexonData()
     {
         UnityWebRequest request = UnityWebRequest.Get(apiUrl);
-        request.SetRequestHeader("Authorization", $"Bearer {apiKey}");
+        request.SetRequestHeader("Authorization", "Bearer " +apiKey);
+        request.SetRequestHeader("Notion-Version", "2022-06-28");
 
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.Success)
         {
-            // Parse and handle the Notion API response data here
             Debug.Log(request.downloadHandler.text);
         }
         else
         {
-            Debug.LogError("½ÇÆÐ : "+ request.error);
+            Debug.LogError("ì‹¤íŒ¨ : " + request.error);
         }
     }
-    */
 }

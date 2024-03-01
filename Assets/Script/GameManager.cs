@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] UIManager ui_manager;
-    int executive = 1; //ÀÓ¿ø¼ö
+    int executive = 1; //ì„ì›ìˆ˜
     int money;
     //int exp = 0;
 
