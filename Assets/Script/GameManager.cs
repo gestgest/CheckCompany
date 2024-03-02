@@ -7,7 +7,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] UIManager ui_manager;
     int executive = 1; //임원수
     int money;
-    //int exp = 0;
+    Reputation reputation = Reputation.single;
+    int exp = 0;
 
     #region MonoBehaviour
     void Start()
@@ -32,4 +33,17 @@ public class GameManager : MonoBehaviour
         } 
     }
     #endregion
+
+    enum Reputation
+    {
+        single = 0, //혼자하는 느낌
+        teamProject = 1, //조별수준
+        club = 2, //동아리
+        startup = 3, //스타트업 [동]
+        //지역 대표
+        //도 대표
+        //국가 대표
+        //대륙 대표
+        //글로벌
+    }
 }
