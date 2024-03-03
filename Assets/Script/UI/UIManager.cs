@@ -8,6 +8,15 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI moneyText;
     [SerializeField] private GameObject [] windows;
+
+    private void Start()
+    {
+        //일단 모든 윈도우 창 비활성화
+        for (int i = 0; i < windows.Length; i++)
+        {
+            windows[i].gameObject.SetActive(false);
+        }
+    }
     public void SetMoneyText(int value)
     {
         moneyText.text = value.ToString();
