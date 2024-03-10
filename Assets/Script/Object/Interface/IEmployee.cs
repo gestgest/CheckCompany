@@ -4,13 +4,15 @@ using UnityEngine;
 
 interface IEmployee
 {
-    EmployeeType employeeType { get; set; }
-    //이 밖에도 
-    enum EmployeeType
-    {
-        Product_Manager,
-        Developer,
-        Designer,
-        QA,
-    }
+    EmployeeType _EmployeeType { get; set; }
+    string Name { get; set; }
+    int Age { get; set; }
+    int Career { get; set; } //개월 단위
+}
+public enum EmployeeType
+{
+    Product_Manager = 0,
+    Developer = 1,
+    Designer = 2,
+    QA = 3,
 }

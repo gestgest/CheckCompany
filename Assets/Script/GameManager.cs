@@ -5,10 +5,10 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] UIManager ui_manager;
-    int executive = 1; //임원수
+    //int executive = 1; //임원수
     int money;
-    Reputation reputation = Reputation.single;
-    int exp = 0;
+    //Reputation reputation = Reputation.single; //레벨 [명예]
+    //int exp = 0;
 
     #region MonoBehaviour
     void Start()
