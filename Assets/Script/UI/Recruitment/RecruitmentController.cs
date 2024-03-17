@@ -33,7 +33,8 @@ public class RecruitmentController : MonoBehaviour
         for(int i = 0; i < recruitments.Count; i++)
         {
             Recruitment r = recruitments[i];
-            GameObject recruitmentObject = Instantiate(recruitmentPrefab);
+            
+            GameObject recruitmentObject = Instantiate(recruitmentPrefab, Vector3.zero, Quaternion.identity);
             RecruitmentContent recruitmentContent = recruitmentObject.GetComponent<RecruitmentContent>();
 
             //recruitmentContent.SetRecruitment(employeeTypeIcons[(int)r.GetEmployeeType()], r.GetDay(), r.GetSize());
