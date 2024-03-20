@@ -11,15 +11,18 @@ public class RecruitmentContent : MonoBehaviour
     [SerializeField] private Image icon;
     [SerializeField] private TextMeshProUGUI dDayText;
     [SerializeField] private TextMeshProUGUI RecruitmentNumber_Text;
+    public int ID { get; set; }
+
     private void Start()
     {
         //icon.sprite
     }
-    public void SetRecruitment(Sprite sprite, int day, int size)
+    public void SetRecruitment(Sprite sprite, int day, int size, int id)
     {
         SetIcon(sprite);
         SetDDay(day);
         SetRecruitmentNumber(size);
+        ID = id;
     }
 
     private void SetIcon(Sprite sprite)
@@ -34,4 +37,5 @@ public class RecruitmentContent : MonoBehaviour
     {
         RecruitmentNumber_Text.text = size.ToString();
     }
+
 }
