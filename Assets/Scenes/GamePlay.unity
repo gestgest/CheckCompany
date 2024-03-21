@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657993, g: 0.4964143, b: 0.5748183, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657934, g: 0.4964134, b: 0.5748174, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -551,6 +551,7 @@ MonoBehaviour:
   gameManager: {fileID: 602332989}
   recruitmentPrefab: {fileID: 5060871206081923505, guid: 252b52a0a06885442b21936fd0dcee40, type: 3}
   view: {fileID: 329780243}
+  costText: {fileID: 1888836745}
 --- !u!1 &165996825
 GameObject:
   m_ObjectHideFlags: 0
@@ -1253,7 +1254,19 @@ MonoBehaviour:
   m_Group: {fileID: 1134582095}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 143977384}
+        m_TargetAssemblyTypeName: RecruitmentController, Assembly-CSharp
+        m_MethodName: Setperiod
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
 --- !u!1 &393235418
 GameObject:
@@ -1551,7 +1564,19 @@ MonoBehaviour:
   m_Group: {fileID: 1134582095}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 143977384}
+        m_TargetAssemblyTypeName: RecruitmentController, Assembly-CSharp
+        m_MethodName: Setperiod
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 7
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1 &444847959
 GameObject:
@@ -2966,7 +2991,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 820207133}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 143977384}
+        m_TargetAssemblyTypeName: RecruitmentController, Assembly-CSharp
+        m_MethodName: AddRecruitment
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &820207133
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3709,7 +3746,19 @@ MonoBehaviour:
   m_Group: {fileID: 668531273}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 143977384}
+        m_TargetAssemblyTypeName: RecruitmentController, Assembly-CSharp
+        m_MethodName: SetLevel
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1 &1064319348
 GameObject:
@@ -4137,6 +4186,7 @@ GameObject:
   - component: {fileID: 1202074126}
   - component: {fileID: 1202074125}
   - component: {fileID: 1202074124}
+  - component: {fileID: 1202074127}
   m_Layer: 5
   m_Name: Dropdown
   m_TagString: Untagged
@@ -4227,7 +4277,19 @@ MonoBehaviour:
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 143977384}
+        m_TargetAssemblyTypeName: RecruitmentController, Assembly-CSharp
+        m_MethodName: SetEmployeeType
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_AlphaFadeSpeed: 0.15
 --- !u!114 &1202074125
 MonoBehaviour:
@@ -4267,6 +4329,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1202074122}
   m_CullTransparentMesh: 1
+--- !u!114 &1202074127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1202074122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 755c2e04b1bc15f41873a639cd94c057, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recruitmentController: {fileID: 143977384}
 --- !u!1 &1205287829
 GameObject:
   m_ObjectHideFlags: 0
@@ -5208,7 +5283,19 @@ MonoBehaviour:
   m_Group: {fileID: 1134582095}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 143977384}
+        m_TargetAssemblyTypeName: RecruitmentController, Assembly-CSharp
+        m_MethodName: Setperiod
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1 &1364913135
 GameObject:
@@ -6899,7 +6986,19 @@ MonoBehaviour:
   m_Group: {fileID: 668531273}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 143977384}
+        m_TargetAssemblyTypeName: RecruitmentController, Assembly-CSharp
+        m_MethodName: SetLevel
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
 --- !u!1 &1840094365
 GameObject:
@@ -7817,7 +7916,19 @@ MonoBehaviour:
   m_Group: {fileID: 668531273}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 143977384}
+        m_TargetAssemblyTypeName: RecruitmentController, Assembly-CSharp
+        m_MethodName: SetLevel
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1 &2081543994
 GameObject:
