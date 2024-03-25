@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         //일단 모든 윈도우 창 비활성화
+        // ++ 그냥 윈도우 부모를 가져와서 하위 윈도우를 가져가는게 어떨까? => 윈도우 창이 아무리 추가되어도 설정 안해도 됨
         for (int i = 0; i < windows.Length; i++)
         {
             windows[i].gameObject.SetActive(false);
