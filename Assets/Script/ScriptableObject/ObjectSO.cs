@@ -9,7 +9,11 @@ public class ObjectSO : ScriptableObject
     [SerializeField] private string object_name;
     [SerializeField] private int width;
     [SerializeField] private int length;
-    [SerializeField] private int moeny;
+    [SerializeField] private int money;
+
+
     //fbx?
+
+
     //type [책상인지 뭔지]
 }

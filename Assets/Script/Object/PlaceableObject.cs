@@ -56,5 +56,6 @@ public class PlaceableObject : MonoBehaviour
     public Vector3 GetStartPosition()
     {
         return transform.TransformPoint(vertices[0]);
+        
     }
 }

@@ -24,39 +24,53 @@ public class BuildingSystem : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            // Q 누른후 옮기다가 배치 안하고 Q누르면 초기화  
-            if (selectedObject != null)
-            {
-                Destroy(selectedObject.gameObject);
-                selectedObject = null;
-            }
-            InitWithObject(prefab1);
+            CreateObject(prefab1);
         }
 
         if (!selectedObject)
         {
             return;
         }
-        //놓는  
+
+        //놓는 함수
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            //타일이 없으면  
-            if (CheckTile(selectedObject))
-            {
-                selectedObject.Place();
-                Vector3Int startpos = gridLayout.WorldToCell(selectedObject.GetStartPosition());
-                TakenArea(startpos, selectedObject.Size);
-
-                //배치 하는 순간 조종 권한 제거  
-                Destroy(selectedObject.gameObject.GetComponent<HandlingObject>());
-                selectedObject = null;
-            }
-            else
-            {
-                Destroy(selectedObject.gameObject);
-            }
+            PutOnObject();
         }
         else if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Destroy(selectedObject.gameObject);
+        }
+    }
+
+    //건물 만드는 함수
+    public void CreateObject(GameObject obj)
+    {
+        if (selectedObject != null)
+        {
+            Destroy(selectedObject.gameObject);
+            selectedObject = null;
+        }
+        InitWithObject(obj);
+    }
+
+    //건물 놓는 함수
+    public void PutOnObject()
+    {
+        //놓는 함수
+
+        //타일이 없으면  
+        if (CheckTile(selectedObject))
+        {
+            selectedObject.Place();
+            Vector3Int startpos = gridLayout.WorldToCell(selectedObject.GetStartPosition());
+            TakenArea(startpos, selectedObject.Size);
+
+            //배치 하는 순간 조종 권한 제거  
+            Destroy(selectedObject.gameObject.GetComponent<HandlingObject>());
+            selectedObject = null;
+        }
+        else
         {
             Destroy(selectedObject.gameObject);
         }
@@ -66,7 +80,7 @@ public class BuildingSystem : MonoBehaviour
 
     public void InitWithObject(GameObject building)
     {
-        //맨 처음 생성할때 0,0,0에 생성  => 이것도 문제다
+        //맨 처음 생성할때 0,0,0에 생성  => 마우스 위치에 생성으로 
         Vector3 position = SnapCoordinateToGrid(Vector3.zero);
 
         GameObject obj = Instantiate(building, position, Quaternion.identity);
