@@ -136,13 +136,14 @@ public class BuildingSystem : MonoBehaviour
     //타일 색칠 함수  
     public void TakenArea(Vector3Int startpos, Vector3Int size)
     {
-        Debug.Log(startpos + ", size : " + size);
+        //Debug.Log(startpos + ", size : " + size);
         mainTilemap.BoxFill(startpos,
             takenTile,
             startpos.x,
             startpos.y,
             startpos.x + size.x,
-            startpos.y + size.y);
+            startpos.y + size.y
+        );
     }
     #endregion
 

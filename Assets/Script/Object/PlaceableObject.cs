@@ -44,6 +44,7 @@ public class PlaceableObject : MonoBehaviour
         for (int i = 0; i < verticesInt.Length; i++)
         {
             Vector3 worldpos = transform.TransformPoint(verticesInt[i]);
+            //Debug.Log(worldpos);
             //타일맵 기준  
             verticesInt[i] = BuildingSystem.instance.gridLayout.WorldToCell(worldpos);
         }
@@ -55,7 +56,7 @@ public class PlaceableObject : MonoBehaviour
 
     public Vector3 GetStartPosition()
     {
+        Debug.Log(vertices[0]);
         return transform.TransformPoint(vertices[0]);
-        
     }
 }
