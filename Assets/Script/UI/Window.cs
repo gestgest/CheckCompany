@@ -16,6 +16,11 @@ public class Window : MonoBehaviour
         panels[set_index].SetActive(true);
     }
 
+    private void Update()
+    {
+
+    }
+
     public void SwitchingPanel(int index)
     {
         panels[set_index].SetActive(false);

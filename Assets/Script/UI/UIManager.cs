@@ -18,6 +18,14 @@ public class UIManager : MonoBehaviour
             windows[i].gameObject.SetActive(false);
         }
     }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            SwitchingWindow(1);
+        }
+    }
+
     public void SetMoneyText(int value)
     {
         moneyText.text = value.ToString();

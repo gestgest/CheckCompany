@@ -13,7 +13,7 @@ public class BuildingSystem : MonoBehaviour
     public TileBase takenTile;
 
     public GameObject prefab1;
-    private PlaceableObject selectedObject;
+    [SerializeField] private PlaceableObject selectedObject;
     private void Awake()
     {
         instance = this;
@@ -57,11 +57,12 @@ public class BuildingSystem : MonoBehaviour
     //건물 놓는 함수
     public void PutOnObject()
     {
-        //놓는 함수
 
         //타일이 없으면  
         if (CheckTile(selectedObject))
         {
+            //놓기 전에 물어보는 함수
+
             selectedObject.Place();
             Vector3Int startpos = gridLayout.WorldToCell(selectedObject.GetStartPosition());
             TakenArea(startpos, selectedObject.Size);
@@ -114,8 +115,8 @@ public class BuildingSystem : MonoBehaviour
     //타일이 비어있는지  
     public bool CheckTile(PlaceableObject ob)
     {
-
         BoundsInt area = new BoundsInt();
+
         area.position = gridLayout.WorldToCell(ob.GetStartPosition());
         area.size = ob.Size;
 
@@ -133,16 +134,17 @@ public class BuildingSystem : MonoBehaviour
 
         return true;
     }
+
     //타일 색칠 함수  
     public void TakenArea(Vector3Int startpos, Vector3Int size)
     {
-        //Debug.Log(startpos + ", size : " + size);
+        Debug.Log(startpos + ", size : " + size);
         mainTilemap.BoxFill(startpos,
             takenTile,
             startpos.x,
-            startpos.y,
+            startpos.z,
             startpos.x + size.x,
-            startpos.y + size.y
+            startpos.z + size.z
         );
     }
     #endregion
