@@ -9,7 +9,7 @@ public class PlaceableObject : MonoBehaviour
     public Vector3Int Size { get; private set; }
     [SerializeField] private Vector3[] vertices;
 
-    private void Start()
+    private void Awake()
     {
         VertexLocalPosition();
         CalculateTileSize();
@@ -43,6 +43,8 @@ public class PlaceableObject : MonoBehaviour
 
         int x = (int)Mathf.Abs(vertices[0].x - vertices[1].x);
         int y = (int)Mathf.Abs(vertices[0].z - vertices[3].z);
+
+        Size = new Vector3Int(x, 0, y);
         /*
         Vector3Int[] verticesInt = new Vector3Int[vertices.Length];
 
@@ -61,13 +63,11 @@ public class PlaceableObject : MonoBehaviour
         //Debug.Log("엄z : " + verticesInt[0].z + " "+ verticesInt[3].z);
         int y = (int)Mathf.Abs(verticesInt[0].z - verticesInt[3].z);  
         */
-        Size = new Vector3Int(x, 0, y);
-        Debug.Log("엄 : " +  Size);
 
     }
 
     public Vector3 GetStartPosition()
     {
-        return transform.TransformPoint(vertices[0]);
+        return transform.TransformPoint(vertices[0]); //왜 이게 문제일까
     }
 }

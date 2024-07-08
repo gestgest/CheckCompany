@@ -14,6 +14,11 @@ public class BuildingSystem : MonoBehaviour
 
     public GameObject prefab1;
     [SerializeField] private PlaceableObject selectedObject;
+
+    public int debug_1;
+    public int debug_2;
+    public int debug_3;
+    public int debug_4;
     private void Awake()
     {
         instance = this;
@@ -138,14 +143,14 @@ public class BuildingSystem : MonoBehaviour
     //타일 색칠 함수  
     public void TakenArea(Vector3Int startpos, Vector3Int size)
     {
-        Debug.Log(startpos + ", size : " + size);
-        mainTilemap.BoxFill(startpos,
-            takenTile,
-            startpos.x,
-            startpos.z,
-            startpos.x + size.x,
-            startpos.z + size.z
-        );
+        for(int i = 0; i < size.z; i++)
+        {
+            for(int j = 0; j < size.x; j++)
+            {
+                mainTilemap.SetTile(startpos + new Vector3Int(j, i, 0), takenTile);
+            }
+
+        }
     }
     #endregion
 
