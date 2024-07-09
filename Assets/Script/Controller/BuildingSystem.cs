@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
 
 public class BuildingSystem : MonoBehaviour
 {
@@ -103,15 +104,15 @@ public class BuildingSystem : MonoBehaviour
         return position;
     }
 
-    //
+    //area는 범위, tilemap
     private static TileBase[] GetTileBlock(BoundsInt area, Tilemap tilemap)
     {
-        TileBase[] array = new TileBase[area.size.x * area.size.z];
+        TileBase[] array = new TileBase[area.size.x * area.size.y];
         int count = 0;
 
-        //cout << area.allPositionsWithin
-        foreach (var v in area.allPositionsWithin)
+        foreach (Vector3Int v in area.allPositionsWithin)
         {
+            Debug.Log(v);
             Vector3Int pos = new Vector3Int(v.x, v.y, 0);
             array[count] = tilemap.GetTile(pos);
             count++;
@@ -123,20 +124,20 @@ public class BuildingSystem : MonoBehaviour
     //타일이 비어있는지  
     public bool CheckTile(PlaceableObject ob)
     {
-        BoundsInt area = new BoundsInt();
-
-        area.position = gridLayout.WorldToCell(ob.GetStartPosition());
-        area.size = ob.Size;
+        Vector3Int position = gridLayout.WorldToCell(ob.GetStartPosition());
 
         //타일 베이스 [타일 가져오기]  
-        TileBase[] baseArray = GetTileBlock(area, mainTilemap);
 
-        foreach (TileBase b in baseArray)
+        for(int i = 0; i < ob.Size.z;i++)
         {
-            //b에 takenTile가 있다면???  
-            if (b == takenTile)
+            for(int j = 0; j < ob.Size.x;j++)
             {
-                return false;
+                TileBase b = mainTilemap.GetTile(new Vector3Int(position.x + j, position.z + i,0));
+                //b에 takenTile가 있다면???  
+                if (b == takenTile)
+                {
+                    return false;
+                }
             }
         }
         return true;
