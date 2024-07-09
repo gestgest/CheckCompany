@@ -41,8 +41,8 @@ public class PlaceableObject : MonoBehaviour
     private void CalculateTileSize()
     {
 
-        int x = (int)Mathf.Abs(vertices[0].x - vertices[1].x);
-        int y = (int)Mathf.Abs(vertices[0].z - vertices[3].z);
+        int x = (int)Mathf.Abs(vertices[0].x - vertices[1].x) * 2 + 1; //셀 사이즈
+        int y = (int)Mathf.Abs(vertices[0].z - vertices[3].z) + 1;
 
         Size = new Vector3Int(x, 0, y);
         /*

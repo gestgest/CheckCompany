@@ -12,13 +12,11 @@ public class BuildingSystem : MonoBehaviour
     public Tilemap mainTilemap;
     public TileBase takenTile;
 
+    [SerializeField] Transform internObjectList;
+
     public GameObject prefab1;
     [SerializeField] private PlaceableObject selectedObject;
 
-    public int debug_1;
-    public int debug_2;
-    public int debug_3;
-    public int debug_4;
     private void Awake()
     {
         instance = this;
@@ -51,6 +49,7 @@ public class BuildingSystem : MonoBehaviour
     //건물 만드는 함수
     public void CreateObject(GameObject obj)
     {
+        //선택된 오브젝트가 있다면
         if (selectedObject != null)
         {
             Destroy(selectedObject.gameObject);
@@ -91,6 +90,7 @@ public class BuildingSystem : MonoBehaviour
 
         GameObject obj = Instantiate(building, position, Quaternion.identity);
 
+        obj.transform.parent = internObjectList;
         //생성된 오브젝트에 HandlingObject속성 추가  
         obj.AddComponent<HandlingObject>();
         selectedObject = obj.GetComponent<PlaceableObject>();
@@ -102,11 +102,14 @@ public class BuildingSystem : MonoBehaviour
         position = grid.GetCellCenterWorld(cellPos);
         return position;
     }
+
+    //
     private static TileBase[] GetTileBlock(BoundsInt area, Tilemap tilemap)
     {
-        TileBase[] array = new TileBase[area.size.x * area.size.y * area.size.z];
+        TileBase[] array = new TileBase[area.size.x * area.size.z];
         int count = 0;
 
+        //cout << area.allPositionsWithin
         foreach (var v in area.allPositionsWithin)
         {
             Vector3Int pos = new Vector3Int(v.x, v.y, 0);
@@ -128,7 +131,7 @@ public class BuildingSystem : MonoBehaviour
         //타일 베이스 [타일 가져오기]  
         TileBase[] baseArray = GetTileBlock(area, mainTilemap);
 
-        foreach (var b in baseArray)
+        foreach (TileBase b in baseArray)
         {
             //b에 takenTile가 있다면???  
             if (b == takenTile)
@@ -136,7 +139,6 @@ public class BuildingSystem : MonoBehaviour
                 return false;
             }
         }
-
         return true;
     }
 
