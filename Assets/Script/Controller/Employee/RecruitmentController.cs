@@ -10,7 +10,7 @@ public class RecruitmentController : MonoBehaviour
     List<Recruitment> recruitments;
     List<GameObject> recruitmentObjects;
     int id = 0;
-
+    
     [SerializeField] List<Sprite> employeeTypeIcons; //아이콘
     [SerializeField] private GameManager gameManager; //데이터베이스
     [SerializeField] private GameObject recruitmentPrefab;
@@ -48,18 +48,11 @@ public class RecruitmentController : MonoBehaviour
         for(int i = 0; i < recruitments.Count; i++)
         {
             Recruitment r = recruitments[i];
-            
-            GameObject recruitmentObject = Instantiate(recruitmentPrefab, Vector3.zero, Quaternion.identity);
-            RecruitmentContent recruitmentContent = recruitmentObject.GetComponent<RecruitmentContent>();
-
-            //recruitmentContent.SetRecruitment(employeeTypeIcons[(int)r.GetEmployeeType()], r.GetDay(), r.GetSize(), i);
-            recruitmentContent.SetRecruitment(employeeTypeIcons[(int)(r.GetEmployeeType())], r.GetDay(), 0, i);
-            recruitmentObjects.Add(recruitmentObject);
-            recruitmentObject.transform.SetParent(view.transform);
+            CreateRecruitment(r);
         }
     }
 
-    //대충 Panel안에 채용 목록 띄워주는 함수
+    //Panel안에 채용 목록 띄워주는 함수
     private void CreateRecruitment(Recruitment r)
     {
         GameObject recruitmentObject = Instantiate(recruitmentPrefab, Vector3.zero, Quaternion.identity);

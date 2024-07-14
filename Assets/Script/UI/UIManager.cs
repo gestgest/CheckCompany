@@ -7,15 +7,14 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI moneyText;
-    [SerializeField] private GameObject [] windows;
+    [SerializeField] private Transform window_parent;
 
     private void Start()
     {
         //일단 모든 윈도우 창 비활성화
-        // ++ 그냥 윈도우 부모를 가져와서 하위 윈도우를 가져가는게 어떨까? => 윈도우 창이 아무리 추가되어도 설정 안해도 됨
-        for (int i = 0; i < windows.Length; i++)
+        for(int i = 0;i < window_parent.childCount; i++)
         {
-            windows[i].gameObject.SetActive(false);
+            window_parent.GetChild(i).gameObject.SetActive(false);
         }
     }
     private void Update()
@@ -34,7 +33,7 @@ public class UIManager : MonoBehaviour
     //윈도우 창 스위칭
     public void SwitchingWindow(int index)
     {
-        bool isActive = windows[index].gameObject.activeSelf;
-        windows[index].gameObject.SetActive(!isActive);
+        bool isActive = window_parent.GetChild(index).gameObject.activeSelf;
+        window_parent.GetChild(index).gameObject.SetActive(!isActive);
     }
 }
