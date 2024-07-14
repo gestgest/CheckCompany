@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 //채용 칸 스크립트
-public class RecruitmentContent : MonoBehaviour
+public class RecruitmentElement : MonoBehaviour
 {
     //모델
     [SerializeField] private Image icon;
@@ -17,6 +17,7 @@ public class RecruitmentContent : MonoBehaviour
     {
         //icon.sprite
     }
+    
     public void SetRecruitment(Sprite sprite, int day, int size, int id)
     {
         SetIcon(sprite);

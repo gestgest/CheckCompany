@@ -10,6 +10,8 @@ public struct Recruitment
     int level;
     List<IEmployee> employeeList;
     private EmployeeType employeeType;
+
+    
     public void SetEmployeeType(EmployeeType employeeType)
     {
         this.employeeType = employeeType;

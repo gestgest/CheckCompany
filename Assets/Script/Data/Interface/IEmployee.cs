@@ -8,7 +8,10 @@ interface IEmployee
     string Name { get; set; }
     int Age { get; set; }
     int Career { get; set; } //개월 단위
+    int Cost { get; set; } //월급
+    //기술
 }
+
 public enum EmployeeType
 {
     Product_Manager = 0,

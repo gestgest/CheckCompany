@@ -14,7 +14,7 @@ public class RecruitmentController : MonoBehaviour
     [SerializeField] List<Sprite> employeeTypeIcons; //아이콘
     [SerializeField] private GameManager gameManager; //데이터베이스
     [SerializeField] private GameObject recruitmentPrefab;
-    [SerializeField] private GameObject view; //
+    [SerializeField] private GameObject view; //parent
     [SerializeField] private TextMeshProUGUI costText;
 
     //채용 정보 [버튼을 누르면 함수를 호출해서 tmp처럼 대신 넣는 느낌]
@@ -43,6 +43,7 @@ public class RecruitmentController : MonoBehaviour
     }
 
     //pool 안 만들거임
+    //초기 채용공고 리스트 보여주는 함수
     private void InitRecruitments()
     {
         for(int i = 0; i < recruitments.Count; i++)
@@ -56,13 +57,15 @@ public class RecruitmentController : MonoBehaviour
     private void CreateRecruitment(Recruitment r)
     {
         GameObject recruitmentObject = Instantiate(recruitmentPrefab, Vector3.zero, Quaternion.identity);
-        RecruitmentContent recruitmentContent = recruitmentObject.GetComponent<RecruitmentContent>();
+        RecruitmentElement recruitmentContent = recruitmentObject.GetComponent<RecruitmentElement>();
 
         //recruitmentContent.SetRecruitment(employeeTypeIcons[(int)r.GetEmployeeType()], r.GetDay(), r.GetSize(), i);
         recruitmentContent.SetRecruitment(employeeTypeIcons[(int)(r.GetEmployeeType())], r.GetDay(), 0, r.GetID());
         recruitmentObjects.Add(recruitmentObject);
         recruitmentObject.transform.SetParent(view.transform);
     }
+
+    //추가하는 함수
     public void AddRecruitment()
     {
         Recruitment recruitment = new Recruitment();
@@ -73,7 +76,7 @@ public class RecruitmentController : MonoBehaviour
         recruitment.SetDay(period);
         recruitment.SetID(id++);
         //SetCost()
-
+        
         recruitments.Add(recruitment);
 
         CreateRecruitment(recruitment);
