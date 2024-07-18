@@ -6,7 +6,7 @@ using UnityEngine;
 public class EmployeeController : MonoBehaviour
 {
     //직원 목록
-    List<Employee> employees;
+    List<IEmployee> employees;
     List<GameObject> employeeObjects;
 
     [SerializeField] List<Sprite> employeeTypeIcons; //아이콘 => RecruitmentController이랑 중첩된다 -> 메모리 공간 차지
@@ -14,15 +14,15 @@ public class EmployeeController : MonoBehaviour
 
     private void Start()
     {
-        employees = new List<Employee>();
+        employees = new List<IEmployee>();
         employeeObjects = new List<GameObject>();
 
         //recruitments 가져오는 함수()
         //디버깅용 employee
-        Employee e = new Employee();
+        //Employee e = new Employee();
         
 
-        employees.Add(e);
+        //employees.Add(e);
 
         InitEmployeeSet();
     }
@@ -34,7 +34,7 @@ public class EmployeeController : MonoBehaviour
     }
 
     //show함수
-    private void ShowEmployeeUI(Employee e)
+    private void ShowEmployeeUI(IEmployee e)
     {
         
     }
