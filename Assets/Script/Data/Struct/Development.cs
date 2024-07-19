@@ -16,11 +16,9 @@ public class Development : MonoBehaviour, IEmployee
 
 
     public EmployeeType _EmployeeType { get { return employeeType; } set { employeeType = value; } }
-    public string Name { get { return name; } set {} }
-    public int Age { get { return age; } set {} }
-    public int Career { get { return career; } set {} }
+    public string Name { get { return employee_name; } set {  employee_name = value;} }
+    public int Age { get { return age; } set {age = value;} }
+    public int Career { get { return career; } set {career = value;} }
     public int Cost { get { return cost; } set { cost = value; } }
-
-
 
 }
