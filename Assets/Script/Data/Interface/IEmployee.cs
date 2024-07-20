@@ -4,7 +4,7 @@ using UnityEngine;
 
 interface IEmployee
 {
-    EmployeeType _EmployeeType { get; set; }
+    public EmployeeType _EmployeeType { get; set; }
     string Name { get; set; }
     int Age { get; set; }
     int Career { get; set; } //개월 단위
