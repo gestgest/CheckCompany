@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 //직원 고용 관련 
 public class EmployeeController : MonoBehaviour
@@ -11,8 +12,10 @@ public class EmployeeController : MonoBehaviour
 
     [SerializeField] List<Sprite> employeeTypeIcons; //아이콘 => RecruitmentController이랑 중첩된다 -> 메모리 공간 차지
     [SerializeField] private GameObject employeePrefab;
-    [SerializeField] private GameObject view;
-    [SerializeField] private GameObject employeeStatusWindow;
+    [SerializeField] private GameObject parent;
+    //[SerializeField] private GameObject employeeStatusWindow;
+    [SerializeField] private UIManager _UIManager;
+
 
     private void Start()
     {
@@ -55,16 +58,23 @@ public class EmployeeController : MonoBehaviour
     {
         GameObject employeeObject = Instantiate(employeePrefab, Vector3.zero, Quaternion.identity);
         EmployeeElement employeeContent = employeeObject.GetComponent<EmployeeElement>();
+        Button button = employeeObject.GetComponent<Button>();
 
-        //recruitmentContent.SetRecruitment(employeeTypeIcons[(int)r.GetEmployeeType()], r.GetDay(), r.GetSize(), i);
         employeeContent.SetEmployee(employeeTypeIcons[(int)(e._EmployeeType)],e.Name , e.Career, 1, e.Cost);
         employeeObjects.Add(employeeObject);
-        employeeObject.transform.SetParent(view.transform);
+        employeeObject.transform.SetParent(parent.transform);
+
+        //버튼 추가
+        button.onClick.AddListener(ShowEmployeeStatusWindow);
     }
 
-    //나중에 생성된 Employee 버튼 컴포넌트에 기능 추가 예정 => 직원 창 보여주는 기능
-    public void ShowEmployeeStatusWindow()
+    //직원 창 보여주는 기능
+    private void ShowEmployeeStatusWindow()
     {
-        employeeStatusWindow.SetActive(true);
+        //EmployeeStatusWindow의 index는 3. => 이렇게 하는게 아닌 유동적으로 바꿔야 한다. ★
+        _UIManager.ShowWindow(3);
+
+        //대충 직원 내용 윈도우창에 삽입
+        
     }
 }
