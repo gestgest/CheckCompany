@@ -12,6 +12,7 @@ public class EmployeeController : MonoBehaviour
     [SerializeField] List<Sprite> employeeTypeIcons; //아이콘 => RecruitmentController이랑 중첩된다 -> 메모리 공간 차지
     [SerializeField] private GameObject employeePrefab;
     [SerializeField] private GameObject view;
+    [SerializeField] private GameObject employeeStatusWindow;
 
     private void Start()
     {
@@ -43,7 +44,7 @@ public class EmployeeController : MonoBehaviour
     {
         for(int i = 0; i < employees.Count; i++)
         {
-            IEmployee e = employees[i];
+            IEmployee e = employees[i]; 
             CreateEmployeeElementUI(e);
         }
         
@@ -59,5 +60,11 @@ public class EmployeeController : MonoBehaviour
         employeeContent.SetEmployee(employeeTypeIcons[(int)(e._EmployeeType)],e.Name , e.Career, 1, e.Cost);
         employeeObjects.Add(employeeObject);
         employeeObject.transform.SetParent(view.transform);
+    }
+
+    //나중에 생성된 Employee 버튼 컴포넌트에 기능 추가 예정 => 직원 창 보여주는 기능
+    public void ShowEmployeeStatusWindow()
+    {
+        employeeStatusWindow.SetActive(true);
     }
 }
