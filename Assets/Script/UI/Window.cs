@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//를 상속받는 
 public class Window : MonoBehaviour
 {
     [SerializeField] private GameObject [] panels;
@@ -23,4 +24,6 @@ public class Window : MonoBehaviour
         panels[index].SetActive(true);
         set_index = index;
     }
+
+    //
 }

@@ -13,7 +13,7 @@ public class EmployeeController : MonoBehaviour
     [SerializeField] List<Sprite> employeeTypeIcons; //아이콘 => RecruitmentController이랑 중첩된다 -> 메모리 공간 차지
     [SerializeField] private GameObject employeePrefab;
     [SerializeField] private GameObject parent;
-    //[SerializeField] private GameObject employeeStatusWindow;
+    [SerializeField] private EmployeeStatusWindow employeeStatusWindow;
     [SerializeField] private UIManager _UIManager;
 
 
@@ -38,7 +38,8 @@ public class EmployeeController : MonoBehaviour
             e.Cost = 10;
 
             employees.Add(e);
-            CreateEmployeeElementUI(e);
+            CreateEmployeeElementUI(e, employees.Count - 1);
+            //정렬?
         }
     }
 
@@ -48,13 +49,13 @@ public class EmployeeController : MonoBehaviour
         for(int i = 0; i < employees.Count; i++)
         {
             IEmployee e = employees[i]; 
-            CreateEmployeeElementUI(e);
+            CreateEmployeeElementUI(e, i);
         }
         
     }
 
-    //show함수
-    private void CreateEmployeeElementUI(IEmployee e)
+    //show함수, index를 employees기준으로 하면 안된다. => 나중에 전체 ID로 바꿀 예정
+    private void CreateEmployeeElementUI(IEmployee e, int index)
     {
         GameObject employeeObject = Instantiate(employeePrefab, Vector3.zero, Quaternion.identity);
         EmployeeElement employeeContent = employeeObject.GetComponent<EmployeeElement>();
@@ -65,16 +66,19 @@ public class EmployeeController : MonoBehaviour
         employeeObject.transform.SetParent(parent.transform);
 
         //버튼 추가
-        button.onClick.AddListener(ShowEmployeeStatusWindow);
+        button.onClick.AddListener( () => { ShowEmployeeStatusWindow(index); });
     }
 
-    //직원 창 보여주는 기능
-    private void ShowEmployeeStatusWindow()
+    //직원 창 보여주는 기능, 나중에 index를 전체 id로 바꾸면 이분탐색으로 교체 예정
+    private void ShowEmployeeStatusWindow(int index)
     {
         //EmployeeStatusWindow의 index는 3. => 이렇게 하는게 아닌 유동적으로 바꿔야 한다. ★
         _UIManager.ShowWindow(3);
 
-        //대충 직원 내용 윈도우창에 삽입
-        
+        //Debug.Log(index);
+        Debug.Log(employees.Count);
+        //나중에 index를 전체 id로 바꾸면 이분탐색으로 교체 예정
+        employeeStatusWindow.SetValue(employees[index]);
+
     }
 }
