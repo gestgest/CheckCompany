@@ -34,6 +34,7 @@ public enum EmployeeRank
 
 public struct WorkTime
 {
-    float start;
-    float end;
+    public float start;
+    public float end;
+
 }
