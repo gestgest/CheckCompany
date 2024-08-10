@@ -10,13 +10,20 @@ public class Development : MonoBehaviour, IEmployee
     int id; //식별 번호 => 우리 회사 따로 ID 또는 전체 ID
     //우리 회사 따로면 그냥 employee[식별번호] 해야함
     //전체 ID면 계속 정렬시키고 이분탐색해야함 [채택]
-    EmployeeType employeeType = EmployeeType.Developer;
+    EmployeeType employeeType = EmployeeType.DEVELOPER;
     private string employee_name;
     private int age;
     private int career;
     private int cost;
     private WorkTime workTime;
     private EmployeeRank rank;
+    private List<Mission> missions;
+    private int mission_size = 0;
+
+    void Awake()
+    {
+        missions = new List<Mission>(5);
+    }
 
 
     public int ID { get { return id; } set {id = value;} }
@@ -27,5 +34,13 @@ public class Development : MonoBehaviour, IEmployee
     public int Cost { get { return cost; } set { cost = value; } }
     public EmployeeRank _Rank { get { return rank; } set { rank = value; } }
     public WorkTime _WorkTime { get { return workTime; } set { workTime = value; } }
-
+    public Mission GetMission(int index) {return missions[index];}
+    public int GetMissionSize() {return mission_size;}
+    public void AddMission(Mission m) {
+        missions[mission_size] = m;
+        mission_size++; 
+    }
+    public void RemoveMission() {
+        mission_size--; 
+    }
 }

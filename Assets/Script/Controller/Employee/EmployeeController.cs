@@ -29,13 +29,19 @@ public class EmployeeController : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.H))
         {
+            string [] s = {"유니티 클라이언트 기능 추가", "유니티 개발 영상" };
+            Mission m = new Mission();
+            m.SetMissionType(MissionType.SQL_DEV);
+            m.SetMissions(s);
+
             //디버깅용 employee
             IEmployee e = new Development();
-            e._EmployeeType = EmployeeType.Developer;
+            e._EmployeeType = EmployeeType.DEVELOPER;
             e.Name = "엄준식";
             e.Age = 10;
             e.Career = 10;
             e.Cost = 10;
+            e.AddMission(m);
 
             employees.Add(e);
             CreateEmployeeElementUI(e, employees.Count - 1);
@@ -76,7 +82,6 @@ public class EmployeeController : MonoBehaviour
         _UIManager.ShowWindow(3);
 
         //Debug.Log(index);
-        Debug.Log(employees.Count);
         //나중에 index를 전체 id로 바꾸면 이분탐색으로 교체 예정
         employeeStatusWindow.SetValue(employees[index]);
 

@@ -14,15 +14,19 @@ public interface IEmployee
     WorkTime _WorkTime { get; set; } //근무시간
 
     //기술
-    //교육
+    //미션 => 5개
+    Mission GetMission(int index);
+    int GetMissionSize();
+    void AddMission(Mission m);
+    void RemoveMission();
     //requirement
 }
 
 public enum EmployeeType
 {
-    Product_Manager = 0,
-    Developer = 1,
-    Designer = 2,
+    PRODUCT_MANAGER = 0,
+    DEVELOPER = 1,
+    DESIGNER = 2,
     QA = 3,
 }
 
