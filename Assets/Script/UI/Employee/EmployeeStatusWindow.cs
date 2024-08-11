@@ -3,6 +3,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class EmployeeStatusWindow : Window
 {
@@ -16,7 +17,11 @@ public class EmployeeStatusWindow : Window
 
 
     //MissionPanel
+    [SerializeField] private GameObject missionObjectParent; //5개
+    private MissionElementUI[] missionUIs; //5개
     //나중에 MissionElementUI에서 클릭 하면 바로바로 여기서 미션을 가져와야 함
+    // ㄴ 원래 이거였지만 어쩌다 보니 바뀜
+    //션을 받을 5개의 미션
     private MissionSO[] missions;
 
     [SerializeField] private GameObject descriptionPanel;
@@ -25,9 +30,17 @@ public class EmployeeStatusWindow : Window
     void Awake()
     {
         rf_dPanel = descriptionPanel.GetComponent<RectTransform>();
-        missions = new MissionSO[5];
+        missions = new MissionSO[5]; 
     }
-
+    
+    void Start()
+    {
+        for(int i = 0; i < missionObjectParent.transform.childCount; i++)
+        {
+            Transform mObj = missionObjectParent.transform.GetChild(i);
+            missionUIs[i] = mObj.GetComponent<MissionElementUI>();
+        }
+    }
     //EmployeeStatusWindow => 값 받기, panels 관련 애니메이션, panel이동 관련 함수
     //값 받기
     public void SetValue(IEmployee employee)
@@ -43,6 +56,9 @@ public class EmployeeStatusWindow : Window
         for (int i = 0; i < employee.GetMissionSize(); i++)
         {
             missions[i] = employee.GetMission(i);
+            
+            if(missions[i].GetMissionType() != MissionType.NONE)
+                missionUIs[i].SetValue(missions[i]);
         }
     }
 
