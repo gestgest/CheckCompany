@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: ProductManager
   m_EditorClassIdentifier: 
   employeeType: 0
-  icon: {fileID: 21300000, guid: 5ea3095122241674ea1e7e40bfa059e8, type: 3}
+  icon: {fileID: 21300000, guid: 45180bee3adfd714397a2742050d8218, type: 3}

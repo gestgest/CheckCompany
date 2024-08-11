@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: QA
   m_EditorClassIdentifier: 
   employeeType: 3
-  icon: {fileID: 21300000, guid: 55a3add44e74f1d4fa4413c8aa2d135a, type: 3}
+  icon: {fileID: 21300000, guid: 9f494819d686bde4fb1bac8e3d3b95c5, type: 3}

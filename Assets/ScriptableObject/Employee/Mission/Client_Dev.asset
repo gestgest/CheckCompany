@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 20d58af16c2a0454cacd97f4356b88a9, type: 3}
-  m_Name: SQL_Dev
+  m_Name: Client_Dev
   m_EditorClassIdentifier: 
-  mission_type: 0
-  icon: {fileID: 21300000, guid: 3beb11b4ba6783f41b87d44b571683d0, type: 3}
+  mission_type: 1
+  icon: {fileID: 21300000, guid: 78f9e7097600a4f4db4ac1634e8a9492, type: 3}
   missions:
-  - "SQL \uAC1C\uBC1C \uC601\uC0C1"
+  - "\uC720\uB2C8\uD2F0 \uAC1C\uBC1C \uC601\uC0C1"
+  - "\uC720\uB2C8\uD2F0 \uC751\uC6A9 \uD074\uB77C\uC774\uC5B8\uD2B8 \uAC1C\uBC1C"

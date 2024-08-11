@@ -5,7 +5,7 @@ using UnityEngine;
 public interface IEmployee
 {
     int ID { get; set; }
-    public EmployeeType _EmployeeType { get; set; }
+    public EmployeeSO _EmployeeType { get; set; }
     string Name { get; set; }
     int Age { get; set; }
     int Career { get; set; } //개월 단위
@@ -15,9 +15,9 @@ public interface IEmployee
 
     //기술
     //미션 => 5개
-    Mission GetMission(int index);
+    MissionSO GetMission(int index);
     int GetMissionSize();
-    void AddMission(Mission m);
+    void AddMission(MissionSO m);
     void RemoveMission();
     //requirement
 }

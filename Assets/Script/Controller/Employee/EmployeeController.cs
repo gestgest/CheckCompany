@@ -10,11 +10,13 @@ public class EmployeeController : MonoBehaviour
     List<IEmployee> employees;
     List<GameObject> employeeObjects;
 
-    [SerializeField] List<Sprite> employeeTypeIcons; //아이콘 => RecruitmentController이랑 중첩된다 -> 메모리 공간 차지
     [SerializeField] private GameObject employeePrefab;
     [SerializeField] private GameObject parent;
     [SerializeField] private EmployeeStatusWindow employeeStatusWindow;
     [SerializeField] private UIManager _UIManager;
+
+    [SerializeField] private EmployeeSO debugDevEmployeeType;
+    [SerializeField] private MissionSO debugMission;
 
 
     private void Start()
@@ -27,21 +29,17 @@ public class EmployeeController : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.H))
+        if (Input.GetKeyDown(KeyCode.H))
         {
-            string [] s = {"유니티 클라이언트 기능 추가", "유니티 개발 영상" };
-            Mission m = new Mission();
-            m.SetMissionType(MissionType.SQL_DEV);
-            m.SetMissions(s);
 
             //디버깅용 employee
             IEmployee e = new Development();
-            e._EmployeeType = EmployeeType.DEVELOPER;
+            e._EmployeeType = debugDevEmployeeType;
             e.Name = "엄준식";
             e.Age = 10;
             e.Career = 10;
             e.Cost = 10;
-            e.AddMission(m);
+            e.AddMission(debugMission);
 
             employees.Add(e);
             CreateEmployeeElementUI(e, employees.Count - 1);
@@ -52,12 +50,12 @@ public class EmployeeController : MonoBehaviour
     //init함수
     private void InitEmployeeSet()
     {
-        for(int i = 0; i < employees.Count; i++)
+        for (int i = 0; i < employees.Count; i++)
         {
-            IEmployee e = employees[i]; 
+            IEmployee e = employees[i];
             CreateEmployeeElementUI(e, i);
         }
-        
+
     }
 
     //show함수, index를 employees기준으로 하면 안된다. => 나중에 전체 ID로 바꿀 예정
@@ -67,12 +65,12 @@ public class EmployeeController : MonoBehaviour
         EmployeeElement employeeContent = employeeObject.GetComponent<EmployeeElement>();
         Button button = employeeObject.GetComponent<Button>();
 
-        employeeContent.SetEmployee(employeeTypeIcons[(int)(e._EmployeeType)],e.Name , e.Career, 1, e.Cost);
+        employeeContent.SetEmployee(e._EmployeeType.GetIcon(), e.Name, e.Career, 1, e.Cost);
         employeeObjects.Add(employeeObject);
         employeeObject.transform.SetParent(parent.transform);
 
         //버튼 추가
-        button.onClick.AddListener( () => { ShowEmployeeStatusWindow(index); });
+        button.onClick.AddListener(() => { ShowEmployeeStatusWindow(index); });
     }
 
     //직원 창 보여주는 기능, 나중에 index를 전체 id로 바꾸면 이분탐색으로 교체 예정

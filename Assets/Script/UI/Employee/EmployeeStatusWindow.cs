@@ -17,8 +17,7 @@ public class EmployeeStatusWindow : Window
 
     //MissionPanel
     //나중에 MissionElementUI에서 클릭 하면 바로바로 여기서 미션을 가져와야 함
-    [SerializeField] private Mission[] missions;
-    [SerializeField] private Sprite [] icons;
+    private MissionSO[] missions;
 
     [SerializeField] private GameObject descriptionPanel;
     RectTransform rf_dPanel;
@@ -26,7 +25,7 @@ public class EmployeeStatusWindow : Window
     void Awake()
     {
         rf_dPanel = descriptionPanel.GetComponent<RectTransform>();
-        missions = new Mission[5];
+        missions = new MissionSO[5];
     }
 
     //EmployeeStatusWindow => 값 받기, panels 관련 애니메이션, panel이동 관련 함수
@@ -55,6 +54,6 @@ public class EmployeeStatusWindow : Window
 
     public Sprite GetIcon(int index) 
     {
-        return icons[index];
+        return missions[index].GetIcon();
     }
 }
