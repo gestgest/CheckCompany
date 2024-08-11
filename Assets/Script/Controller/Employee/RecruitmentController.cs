@@ -18,7 +18,7 @@ public class RecruitmentController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI costText;
 
     //채용 정보 [버튼을 누르면 함수를 호출해서 tmp처럼 대신 넣는 느낌]
-    EmployeeType employeeType = EmployeeType.Developer; //나중에 타입 넣을때 사용
+    EmployeeType employeeType = EmployeeType.DEVELOPER; //나중에 타입 넣을때 사용
     private int level = 0; //0,1,2
     private int period = 1; //1 3 7
     private int cost; //코스트 => 게임 오브젝트도 가져와서 설정해야 할 거 같은데
@@ -32,7 +32,7 @@ public class RecruitmentController : MonoBehaviour
 
         //recruitments 가져오는 함수()
         Recruitment r = new Recruitment();
-        r.SetEmployeeType(EmployeeType.Developer);
+        r.SetEmployeeType(EmployeeType.DEVELOPER);
         r.SetDay(0);
         r.SetID(id++);
 
@@ -88,13 +88,13 @@ public class RecruitmentController : MonoBehaviour
         switch (index)
         {
             case 0:
-                employeeType = EmployeeType.Developer;
+                employeeType = EmployeeType.PRODUCT_MANAGER;
                 break;
             case 1:
-                employeeType = EmployeeType.Designer;
+                employeeType = EmployeeType.DEVELOPER;
                 break;
             case 2:
-                employeeType = EmployeeType.Product_Manager;
+                employeeType = EmployeeType.DESIGNER;
                 break;
             case 3:
                 employeeType = EmployeeType.QA;

@@ -9,6 +9,7 @@ public class MissionElementUI : MonoBehaviour, IPointerEnterHandler, IPointerExi
 {
     [SerializeField] EmployeeStatusWindow employeeStatusWindow;
     [SerializeField] GameObject descriptionPanel;
+
     static RectTransform rf_dPanel;
     RectTransform rf;
 

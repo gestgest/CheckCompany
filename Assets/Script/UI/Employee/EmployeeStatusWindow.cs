@@ -14,9 +14,11 @@ public class EmployeeStatusWindow : Window
     [SerializeField] private TextMeshProUGUI careerText;
     [SerializeField] private TextMeshProUGUI timeText;
 
+
     //MissionPanel
     //나중에 MissionElementUI에서 클릭 하면 바로바로 여기서 미션을 가져와야 함
     [SerializeField] private Mission[] missions;
+    [SerializeField] private Sprite [] icons;
 
     [SerializeField] private GameObject descriptionPanel;
     RectTransform rf_dPanel;
@@ -51,4 +53,8 @@ public class EmployeeStatusWindow : Window
         return rf_dPanel.rect.width;
     }
 
+    public Sprite GetIcon(int index) 
+    {
+        return icons[index];
+    }
 }
