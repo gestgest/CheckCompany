@@ -40,6 +40,8 @@ public class EmployeeController : MonoBehaviour
             e.Career = 10;
             e.Cost = 10;
             e.AddMission(debugMission);
+            e.AddMission(debugMission);
+            e.AddMission(debugMission);
 
             employees.Add(e);
             CreateEmployeeElementUI(e, employees.Count - 1);

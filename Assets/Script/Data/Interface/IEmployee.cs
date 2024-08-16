@@ -18,7 +18,8 @@ public interface IEmployee
     MissionSO GetMission(int index);
     int GetMissionSize();
     void AddMission(MissionSO m);
-    void RemoveMission();
+    void RemoveMission(int index);
+    public const int MAX_MISSION_SIZE = 5;
     //requirement
 }
 

@@ -21,23 +21,24 @@ public class EmployeeStatusWindow : Window
     //나중에 MissionElementUI에서 클릭 하면 바로바로 여기서 미션을 가져와야 함
     // ㄴ 원래 이거였지만 어쩌다 보니 바뀜
     //션을 받을 5개의 미션
-    private MissionSO[] missions;
     
     [SerializeField] private GameObject descriptionPanel;
+    private IEmployee employee;
     RectTransform rf_dPanel;
 
+    //const IEmployee.MAX_MISSION_SIZE = 5;
     void Awake()
     {
         rf_dPanel = descriptionPanel.GetComponent<RectTransform>();
-        missions = new MissionSO[5]; 
-        missionUIs = new MissionElementUI[5];
+        missionUIs = new MissionElementUI[IEmployee.MAX_MISSION_SIZE];
     }
     
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         for(int i = 0; i < missionObjectParent.transform.childCount; i++)
         {
-            Transform mObj = missionObjectParent.transform.GetChild(i); //오류 ★★★★★
+            Transform mObj = missionObjectParent.transform.GetChild(i);
             missionUIs[i] = mObj.GetComponent<MissionElementUI>();
         }
     }
@@ -45,6 +46,7 @@ public class EmployeeStatusWindow : Window
     //값 받기
     public void SetValue(IEmployee employee)
     {
+        this.employee = employee;
         nameText.text = employee.Name + " 사원"; //일단 사원으로 함
         //이미지는 패스
         ageText.text = "나이 : " + employee.Age.ToString() + "살";
@@ -52,26 +54,37 @@ public class EmployeeStatusWindow : Window
         careerText.text = "경력 기간 : " + employee.Career.ToString() + "개월";
         timeText.text = "근무시간 : " + employee._WorkTime.start.ToString() + " ~ " + employee._WorkTime.end.ToString();
 
-        //미션도 해야함 ★★★★★
-        for (int i = 0; i < employee.GetMissionSize(); i++)
-        {
-            missions[i] = employee.GetMission(i);
-            
-            if(missions[i].GetMissionType() != MissionType.NONE)
-                missionUIs[i].SetValue(missions[i]);
-            else
-                missionUIs[i].SetValue();
-        }
+        SetMission();
     }
 
     public float GetDescriptionPanelHeight()
     {
-        //Debug.Log(rf_dPanel.rect.width);
         return rf_dPanel.rect.width;
     }
 
-    public Sprite GetIcon(int index) 
+
+    //////////////////////////////////////Mission////////////////////////////////////////
+    public void RemoveMission(int index) 
     {
-        return missions[index].GetIcon();
+        employee.RemoveMission(index);
+        SetMission();
+    }
+
+    private void SetMission()
+    {
+        for (int i = 0; i < employee.GetMissionSize(); i++)
+        {
+            MissionSO mission = employee.GetMission(i);
+            
+            if(mission.GetMissionType() != MissionType.NONE)
+                missionUIs[i].SetValue(mission);
+        }
+
+        for (int i = employee.GetMissionSize(); i < IEmployee.MAX_MISSION_SIZE; i++)
+        {
+            missionUIs[i].SetValue();
+
+        }
+        
     }
 }

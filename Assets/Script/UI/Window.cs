@@ -8,7 +8,7 @@ public class Window : MonoBehaviour
     [SerializeField] private GameObject [] panels;
     int set_index;
 
-    private void Start()
+    protected virtual void Start()
     {
         set_index = 0;
         for(int i = 0; i < panels.Length; i++)

@@ -21,7 +21,7 @@ public class Development : IEmployee
 
     public Development()
     {
-        missions = new MissionSO[5];
+        missions = new MissionSO[IEmployee.MAX_MISSION_SIZE];
     }
 
     public int ID { get { return id; } set { id = value; } }
@@ -40,8 +40,12 @@ public class Development : IEmployee
         missions[mission_size] = m;
         mission_size++;
     }
-    public void RemoveMission()
+    public void RemoveMission(int index)
     {
+        for(int i = index; i < mission_size || i < IEmployee.MAX_MISSION_SIZE - 1; i++)
+        {
+            missions[i] = missions[i + 1];
+        }
         mission_size--;
     }
 }
