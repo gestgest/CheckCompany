@@ -52,7 +52,7 @@ public class EmployeeStatusWindow : Window
         careerText.text = "경력 기간 : " + employee.Career.ToString() + "개월";
         timeText.text = "근무시간 : " + employee._WorkTime.start.ToString() + " ~ " + employee._WorkTime.end.ToString();
 
-        //미션도 해야함
+        //미션도 해야함 ★★★★★
         for (int i = 0; i < employee.GetMissionSize(); i++)
         {
             missions[i] = employee.GetMission(i);
