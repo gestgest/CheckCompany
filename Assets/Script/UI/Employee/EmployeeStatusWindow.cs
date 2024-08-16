@@ -15,7 +15,6 @@ public class EmployeeStatusWindow : Window
     [SerializeField] private TextMeshProUGUI careerText;
     [SerializeField] private TextMeshProUGUI timeText;
 
-
     //MissionPanel
     [SerializeField] private GameObject missionObjectParent; //5개
     private MissionElementUI[] missionUIs; //5개
@@ -23,7 +22,7 @@ public class EmployeeStatusWindow : Window
     // ㄴ 원래 이거였지만 어쩌다 보니 바뀜
     //션을 받을 5개의 미션
     private MissionSO[] missions;
-
+    
     [SerializeField] private GameObject descriptionPanel;
     RectTransform rf_dPanel;
 
@@ -31,13 +30,14 @@ public class EmployeeStatusWindow : Window
     {
         rf_dPanel = descriptionPanel.GetComponent<RectTransform>();
         missions = new MissionSO[5]; 
+        missionUIs = new MissionElementUI[5];
     }
     
     void Start()
     {
         for(int i = 0; i < missionObjectParent.transform.childCount; i++)
         {
-            Transform mObj = missionObjectParent.transform.GetChild(i);
+            Transform mObj = missionObjectParent.transform.GetChild(i); //오류 ★★★★★
             missionUIs[i] = mObj.GetComponent<MissionElementUI>();
         }
     }
@@ -59,6 +59,8 @@ public class EmployeeStatusWindow : Window
             
             if(missions[i].GetMissionType() != MissionType.NONE)
                 missionUIs[i].SetValue(missions[i]);
+            else
+                missionUIs[i].SetValue();
         }
     }
 

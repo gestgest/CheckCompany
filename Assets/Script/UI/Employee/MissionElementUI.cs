@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.UIElements;
+using Unity.VisualScripting;
 
 //미션 아이콘 스크립트
 public class MissionElementUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
@@ -16,7 +17,7 @@ public class MissionElementUI : MonoBehaviour, IPointerEnterHandler, IPointerExi
     [SerializeField] RadioButtonGroup missionGroup; //미션 항목
 
 
-    UnityEngine.UI.Image icon;
+    [SerializeField] private UnityEngine.UI.Image icon;
     string mission_name;
 
     RectTransform rf_dPanel;
@@ -29,10 +30,13 @@ public class MissionElementUI : MonoBehaviour, IPointerEnterHandler, IPointerExi
     {
         rf = GetComponent<RectTransform>();
         dis = (rf.rect.width + employeeStatusWindow.GetDescriptionPanelHeight()) / 2 + 30; //50은 오브젝트 크기
-        icon = GetComponentInChildren<UnityEngine.UI.Image>();
 
         isMissionON = false;
-        //icon.gameObject.SetActive(false);
+    }
+
+    void OnEnable()
+    {
+        icon.gameObject.SetActive(isMissionON);
     }
 
     //UI 오브젝트 위에 마우스 커서를 올렸을 때
@@ -57,6 +61,8 @@ public class MissionElementUI : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
     //마우스 클릭했을때
     //ㄴ 1) 이미 미션이 있는 경우
+    
+
     //ㄴ 2) 미션이 없는 경우 => 미션 생성해주는 미니창
 
     //아이콘 설정
