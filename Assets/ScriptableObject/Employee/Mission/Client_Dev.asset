@@ -15,6 +15,7 @@ MonoBehaviour:
   mission_type: 2
   missionName: "\uD074\uB77C\uC774\uC5B8\uD2B8 \uAC1C\uBC1C"
   icon: {fileID: 21300000, guid: 78f9e7097600a4f4db4ac1634e8a9492, type: 3}
-  missions:
-  - "\uC720\uB2C8\uD2F0 \uAC1C\uBC1C \uC601\uC0C1"
-  - "\uC720\uB2C8\uD2F0 \uC751\uC6A9 \uD074\uB77C\uC774\uC5B8\uD2B8 \uAC1C\uBC1C"
+  small_missions:
+  - "\uC720\uB2C8\uD2F0 \uAC15\uC758 \uBCF4\uAE30"
+  - "\uC720\uB2C8\uD2F0 \uC624\uD508\uC18C\uC2A4 \uB72F\uAE30"
+  - "\uC720\uB2C8\uD2F0 \uD504\uB85C\uC81D\uD2B8 \uD558\uAE30"

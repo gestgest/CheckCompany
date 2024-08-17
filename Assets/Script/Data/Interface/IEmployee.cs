@@ -16,10 +16,19 @@ public interface IEmployee
     //기술
     //미션 => 5개
     MissionSO GetMission(int index);
+    bool GetIsClearSmallMission(int index);
+    int GetIsClearSmallMissionSize();
+    void SetIsClearSmallMission(int index);
     int GetMissionSize();
+
+
     void AddMission(MissionSO m);
     void RemoveMission(int index);
+
+
+
     public const int MAX_MISSION_SIZE = 5;
+    public const int MAX_SMALL_MISSION_SIZE = 7;
     //requirement
 }
 

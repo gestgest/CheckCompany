@@ -12,10 +12,8 @@ public class MissionElementUI : MonoBehaviour, IPointerEnterHandler, IPointerExi
 {
     [SerializeField] private int id;
     [SerializeField] EmployeeStatusWindow employeeStatusWindow;
-    //[SerializeField] GameObject miniMissionAddWindow; //미션 추가하는 윈도우
+    [SerializeField] GameObject addMissionMiniWindow; //미션 추가하는 윈도우
     [SerializeField] GameObject missionDescriptionPanel;
-
-    [SerializeField] RadioButtonGroup missionGroup; //미션 항목
 
     [SerializeField] private UnityEngine.UI.Image icon;
 
@@ -62,7 +60,8 @@ public class MissionElementUI : MonoBehaviour, IPointerEnterHandler, IPointerExi
             employeeStatusWindow.RemoveMission(id);
         }
         else{
-            //아이콘 생성 창 ★
+            //addMissionMiniWindow 위치조정 안해도 될거 같기도...?
+            addMissionMiniWindow.SetActive(true);
         }
     }
 

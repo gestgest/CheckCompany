@@ -16,8 +16,6 @@ public class EmployeeController : MonoBehaviour
     [SerializeField] private UIManager _UIManager;
 
     [SerializeField] private EmployeeSO debugDevEmployeeType;
-    [SerializeField] private MissionSO debugMission;
-
 
     private void Start()
     {
@@ -39,9 +37,6 @@ public class EmployeeController : MonoBehaviour
             e.Age = 10;
             e.Career = 10;
             e.Cost = 10;
-            e.AddMission(debugMission);
-            e.AddMission(debugMission);
-            e.AddMission(debugMission);
 
             employees.Add(e);
             CreateEmployeeElementUI(e, employees.Count - 1);

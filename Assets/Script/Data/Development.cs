@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 //Employee가 아니라 개발자, 디자이너 이런식으로 해야할 거 같은데
@@ -18,10 +19,12 @@ public class Development : IEmployee
 
     private MissionSO[] missions; //5개
     private int mission_size = 0;
+    private bool [] isClearSmallMission; //pool
 
     public Development()
     {
         missions = new MissionSO[IEmployee.MAX_MISSION_SIZE];
+        isClearSmallMission = new bool[IEmployee.MAX_SMALL_MISSION_SIZE];
     }
 
     public int ID { get { return id; } set { id = value; } }
@@ -33,19 +36,57 @@ public class Development : IEmployee
     public EmployeeRank _Rank { get { return rank; } set { rank = value; } }
     public WorkTime _WorkTime { get { return workTime; } set { workTime = value; } }
     public MissionSO GetMission(int index) { return missions[index]; }
+    public bool GetIsClearSmallMission(int index) { return isClearSmallMission[index]; }
+
+    public int GetIsClearSmallMissionSize() 
+    {
+        int count = 0;
+        if(mission_size == 0)
+            return count;
+
+        MissionSO mission = GetMission(0);
+        for(int i = 0; i < mission.GetSmallMissions().Length; i++)
+        {
+            if(isClearSmallMission[i])
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public void SetIsClearSmallMission(int index) 
+    { 
+        isClearSmallMission[index] = !isClearSmallMission[index];
+    }
+
     public int GetMissionSize() { return mission_size; }
 
     public void AddMission(MissionSO m)
     {
+        if(mission_size == IEmployee.MAX_MISSION_SIZE)
+            return; 
         missions[mission_size] = m;
         mission_size++;
+
+        if(mission_size == 1)
+            SetFirstMission();
     }
     public void RemoveMission(int index)
     {
-        for(int i = index; i < mission_size || i < IEmployee.MAX_MISSION_SIZE - 1; i++)
+        for(int i = index; i < mission_size && i < IEmployee.MAX_MISSION_SIZE - 1; i++)
         {
             missions[i] = missions[i + 1];
         }
         mission_size--;
+
+        SetFirstMission();
+    }
+    private void SetFirstMission()
+    {
+        for(int i = 0; i < IEmployee.MAX_SMALL_MISSION_SIZE; i++)
+        {
+            isClearSmallMission[i] = false;
+        }
     }
 }

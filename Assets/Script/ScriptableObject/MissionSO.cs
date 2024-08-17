@@ -9,7 +9,7 @@ public class MissionSO : ScriptableObject
     [SerializeField] private MissionType mission_type = MissionType.NONE;
     [SerializeField] private string missionName;
     [SerializeField] private Sprite icon;
-    [SerializeField] private string[] missions;
+    [SerializeField] private string[] small_missions;
 
     public MissionType GetMissionType()
     {
@@ -19,9 +19,9 @@ public class MissionSO : ScriptableObject
     {
         return icon;
     }
-    public string GetMission(int index)
+    public string [] GetSmallMissions()
     {
-        return missions[index];
+        return small_missions;
     }
     public string GetName()
     {

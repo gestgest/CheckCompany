@@ -15,5 +15,5 @@ MonoBehaviour:
   mission_type: 1
   missionName: "SQL \uAC1C\uBC1C"
   icon: {fileID: 21300000, guid: 3beb11b4ba6783f41b87d44b571683d0, type: 3}
-  missions:
-  - "SQL \uAC1C\uBC1C \uC601\uC0C1"
+  small_missions:
+  - "SQL \uAC15\uC758 \uB4E3\uAE30"
