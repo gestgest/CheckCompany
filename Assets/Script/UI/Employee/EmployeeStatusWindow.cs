@@ -130,7 +130,7 @@ public class EmployeeStatusWindow : Window
                 string[] missions_text = mission.GetSmallMissions();
                 int j;
                 small_mission_size = missions_text.Length;
-                small_mission_current_size = employee.GetIsClearSmallMissionSize();
+                SetSmall_mission_current_size(employee.GetIsClearSmallMissionSize());
                 
                 //오브젝트 풀링? => 7
                 for(j = 0; j < small_mission_size && j < IEmployee.MAX_SMALL_MISSION_SIZE; j++)
@@ -157,7 +157,7 @@ public class EmployeeStatusWindow : Window
             if(i == 0)
             {
                 small_mission_size = 0;
-                small_mission_current_size = 0;
+                SetSmall_mission_current_size(0);
                 for(int j = 0; j < IEmployee.MAX_SMALL_MISSION_SIZE; j++)
                     smallMission_PoolObjects[j].SetActive(false);
             }
@@ -170,23 +170,36 @@ public class EmployeeStatusWindow : Window
     //소 미션을 클리어 한 경우
     public void ClearSmallMission(int index)
     {
-        employee.SetIsClearSmallMission(index);
-        //++
-        small_mission_current_size++;
-
-        if(small_mission_current_size == small_mission_size)
+        //켰다면
+        if(smallMission_PoolObjects[index].GetComponent<Toggle>().isOn)
         {
-             RemoveMission(0);
-             processBar_text.text = "0%";
+            AddSmall_mission_current_size(+1);
         }
         else
         {
-            //대충 rect로 진행바
-            //미션 갯수 카운팅하고
-            processBar_text.text = ((float)small_mission_current_size * 100 / small_mission_size).ToString() + "%";
+            AddSmall_mission_current_size(-1);
         }
+        employee.SetIsClearSmallMission(index);
 
+        if(small_mission_current_size == small_mission_size)
+        {
+            RemoveMission(0);
+        }
+    }
 
+    //프로퍼티 - small_mission_current_size
+    public void AddSmall_mission_current_size(int value)
+    {
+        SetSmall_mission_current_size(small_mission_current_size + value);
+    }
 
+    public void SetSmall_mission_current_size(int value)
+    {
+        small_mission_current_size = value;
+        if(small_mission_size == 0)
+            processBar_text.text = "0%";
+        else
+            processBar_text.text = ((float)small_mission_current_size * 100 / small_mission_size).ToString() + "%";
+        Debug.Log(small_mission_current_size);
     }
 }
