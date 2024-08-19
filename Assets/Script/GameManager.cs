@@ -13,7 +13,8 @@ public class GameManager : MonoBehaviour
     #region MonoBehaviour
     void Start()
     {
-        Money = 0 ;
+        //디버깅
+        Money = 0;
     }
 
     // Update is called once per frame

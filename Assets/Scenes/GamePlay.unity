@@ -734,6 +734,7 @@ MonoBehaviour:
   - {fileID: 488100412}
   - {fileID: 2066266583}
   - {fileID: 221784516}
+  gameManager: {fileID: 602332989}
   nameText: {fileID: 27555887}
   image: {fileID: 500320031}
   ageText: {fileID: 481965495}

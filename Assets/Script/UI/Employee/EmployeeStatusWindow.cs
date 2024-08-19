@@ -8,6 +8,9 @@ using Unity.VisualScripting;
 public class EmployeeStatusWindow : Window
 {
     //const IEmployee.MAX_MISSION_SIZE = 5;
+    [SerializeField] private GameManager gameManager;
+
+
 
     //Description Panel
     [SerializeField] private TextMeshProUGUI nameText;
@@ -147,7 +150,6 @@ public class EmployeeStatusWindow : Window
     {
         if(clearSmallMissionLock)
             return;
-        Debug.Log(small_mission_current_size);
         //켰다면
         if (smallMission_PoolObjects[index].GetComponent<Toggle>().isOn)
         {
@@ -159,9 +161,13 @@ public class EmployeeStatusWindow : Window
         }
         employee.SetIsClearSmallMission(index);
 
+        //미션 클리어
         if (small_mission_current_size == small_mission_size)
         {
+            //디버깅용 돈 주는 이벤트
+            gameManager.Money += 10000;
             RemoveMission(0);
+            
         }
     }
 
