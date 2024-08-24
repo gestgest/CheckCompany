@@ -5,6 +5,7 @@ using Firebase;
 using Firebase.Auth;
 using System.Threading.Tasks;
 using UnityEngine.UI;
+using System.ComponentModel;
 
 
 public class FirebaseAuthManager : MonoBehaviour
@@ -86,7 +87,7 @@ public class FirebaseAuthManager : MonoBehaviour
         yield return new WaitUntil(() => loginTask.IsCompleted);
 
         //만약 로그인 테스크가 계속 실행중이라면
-        if(loginTask.Exception != null)
+        if (loginTask.Exception != null)
         {
             Debug.LogError(loginTask.Exception);
 
@@ -97,7 +98,7 @@ public class FirebaseAuthManager : MonoBehaviour
 
 
             //보안을 위해 case에 상관없이 Login Failed?
-            switch(authError)
+            switch (authError)
             {
                 case AuthError.InvalidEmail:
                     failedMessage += "Email is invalid";
@@ -132,11 +133,67 @@ public class FirebaseAuthManager : MonoBehaviour
 
     private IEnumerator RegisterAynsc(string name, string email, string password, string confirmPassword)
     {
-        if(name == "")
+        if (name == "")
         {
             Debug.LogError("이름 넣어라");
         }
-        yield return null;
+        else if (email == "")
+        {
+            Debug.LogError("이메일 넣어라");
+        }
+        else if (password == "")
+        {
+            Debug.LogError("비밀번호 넣어라");
+        }
+        else if (confirmPassword != password)
+        {
+            Debug.LogError("비밀번호 매치 안됨");
+        }
+        else
+        {
+            //이메일과 비밀번호로 비동기 생성
+            Task<AuthResult> registerTask = auth.CreateUserWithEmailAndPasswordAsync(email, password);
+
+            //완료할때까지 대기
+            yield return new WaitUntil(() => registerTask.IsCompleted);
+
+            if (registerTask.Exception != null)
+            {
+                Debug.LogError(registerTask.Exception);
+
+                FirebaseException firebaseException = registerTask.Exception.GetBaseException() as FirebaseException;
+                AuthError authError = (AuthError)firebaseException.ErrorCode;
+
+                string failedMessage = "Register Failed! Because ";
+
+                switch (authError)
+                {
+                    case AuthError.InvalidEmail:
+                        failedMessage += "Email is invalid";
+                        break;
+                    //일부로 case 더 안넣음
+                    default:
+                        failedMessage = "Registration Failed";
+                        break;
+                }
+
+                Debug.LogError(failedMessage);
+
+            }
+            else //등록
+            {
+                user = registerTask.Result.User;
+
+                UserProfile userProfile = new UserProfile { DisplayName = name };
+
+                Task updateProfileTask = user.UpdateUserProfileAsync(userProfile);
+
+                yield return new WaitUntil(() => updateProfileTask.IsCompleted);
+
+                //이후 작성
+            }
+
+        }
     }
 
 
