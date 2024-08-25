@@ -6,6 +6,7 @@ using Firebase.Auth;
 using System.Threading.Tasks;
 using UnityEngine.UI;
 using System.ComponentModel;
+using TMPro;
 
 
 public class FirebaseAuthManager : MonoBehaviour
@@ -17,22 +18,21 @@ public class FirebaseAuthManager : MonoBehaviour
 
     [Space]
     [Header("Login")]
-    [SerializeField] private InputField emailLoginTextField;
-    [SerializeField] private InputField passwordLoginTextField;
+    [SerializeField] private TMP_InputField emailLoginTextField;
+    [SerializeField] private TMP_InputField passwordLoginTextField;
 
-    [SerializeField] private InputField nameRegisterTextField;
-    [SerializeField] private InputField emailRegisterTextField;
-    [SerializeField] private InputField passwordRegisterTextField;
-    [SerializeField] private InputField confirmPasswordRegisterTextField;
+    [SerializeField] private TMP_InputField nameRegisterTextField;
+    [SerializeField] private TMP_InputField emailRegisterTextField;
+    [SerializeField] private TMP_InputField passwordRegisterTextField;
+    [SerializeField] private TMP_InputField confirmPasswordRegisterTextField;
 
-
-    // Start is called before the first frame update
     void Awake()
     {
-        //전역 무언가를 생성
+        //파이어베이스 서버 체크 => 전역 무언가를 생성
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
         {
             dependencyStatus = task.Result;
+            //이용가능하다면
             if (dependencyStatus == DependencyStatus.Available)
             {
                 InitFirebase();
@@ -46,7 +46,7 @@ public class FirebaseAuthManager : MonoBehaviour
 
     void InitFirebase()
     {
-        auth = FirebaseAuth.DefaultInstance;
+        auth = FirebaseAuth.DefaultInstance; //싱글톤으로 디폴트 FirebaseAuth 생성
 
         auth.StateChanged += AuthStatusChanged;
         AuthStatusChanged(this, null);
@@ -126,9 +126,15 @@ public class FirebaseAuthManager : MonoBehaviour
         }
     }
 
-    private void Register()
+    public void Register()
     {
-        //startCoroutine
+        StartCoroutine(
+            RegisterAynsc(
+                nameRegisterTextField.text,
+                emailRegisterTextField.text,
+                passwordRegisterTextField.text,
+                confirmPasswordRegisterTextField.text
+        ));
     }
 
     private IEnumerator RegisterAynsc(string name, string email, string password, string confirmPassword)
@@ -190,7 +196,24 @@ public class FirebaseAuthManager : MonoBehaviour
 
                 yield return new WaitUntil(() => updateProfileTask.IsCompleted);
 
-                //이후 작성
+                if (updateProfileTask.Exception != null)
+                {
+                    //유저 내용 제거
+                    user.DeleteAsync();
+
+                    Debug.LogError(updateProfileTask.Exception);
+
+                    FirebaseException firebaseException = updateProfileTask.Exception.GetBaseException() as FirebaseException;
+                    AuthError authError = (AuthError)firebaseException.ErrorCode;
+
+                    Debug.LogError("오류" + authError);
+                }
+                else
+                {
+                    //회원가입 성공
+                    Debug.Log("회원가입 성공");
+                }
+
             }
 
         }
