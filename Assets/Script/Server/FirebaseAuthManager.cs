@@ -74,7 +74,7 @@ public class FirebaseAuthManager : MonoBehaviour
         }
     }
 
-    void Login()
+    public void Login()
     {
         StartCoroutine(LoginAynsc(emailLoginTextField.text, passwordLoginTextField.text));
     }
@@ -122,6 +122,7 @@ public class FirebaseAuthManager : MonoBehaviour
         else //로그인 성공
         {
             user = loginTask.Result.User;
+            Debug.Log("성공" + user);
 
         }
     }
