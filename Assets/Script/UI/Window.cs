@@ -11,11 +11,11 @@ public class Window : MonoBehaviour
     protected virtual void Start()
     {
         set_index = 0;
-        for(int i = 0; i < panels.Length; i++)
+        panels[set_index].SetActive(true);
+        for(int i = 1; i < panels.Length; i++)
         {
             panels[i].SetActive(false);
         }
-        panels[set_index].SetActive(true);
     }
 
     public void SwitchingPanel(int index)
