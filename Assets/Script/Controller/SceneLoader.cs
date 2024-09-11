@@ -10,16 +10,11 @@ public class SceneLoader : MonoBehaviour
 {
 	[SerializeField] private AssetReference _managersScene;
 
-
-	[Header("Broadcasting on")]
-	[SerializeField] private AssetReference _menuLoadChannel = default;
-
 	private void Start()
 	{
-		//_managersScene.LoadSceneAsync(LoadSceneMode.Additive, true).Completed += LoadEventChannel;
-		//Additive는 로드된 씬에 추가로 넣는 느낌
-		//즉 기존 init에 sceneReference를 추가
-		//true는 비동기 완료 되면 바로 scene 실행
+		_managersScene.LoadSceneAsync(LoadSceneMode.Single, true);
+		//비동기 씬 로드, true : 로딩되면 바로 실행
+		//이후 기존에 있는 메모리는 제거되는 듯?
 	}
 
 }
