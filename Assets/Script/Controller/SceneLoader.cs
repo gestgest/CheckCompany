@@ -10,7 +10,7 @@ public class SceneLoader : MonoBehaviour
 {
 	[SerializeField] private AssetReference _managersScene;
 
-	private void Start()
+	public void SceneLoad()
 	{
 		_managersScene.LoadSceneAsync(LoadSceneMode.Single, true);
 		//비동기 씬 로드, true : 로딩되면 바로 실행

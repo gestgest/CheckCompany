@@ -25,6 +25,7 @@ public class FirebaseAuthManager : MonoBehaviour
     [SerializeField] private TMP_InputField emailRegisterTextField;
     [SerializeField] private TMP_InputField passwordRegisterTextField;
     [SerializeField] private TMP_InputField confirmPasswordRegisterTextField;
+    [SerializeField] private SceneLoader sceneLoader;
 
     void Awake()
     {
@@ -123,7 +124,7 @@ public class FirebaseAuthManager : MonoBehaviour
         {
             user = loginTask.Result.User;
             Debug.Log("성공" + user);
-
+            SceneLoad();
         }
     }
 
@@ -220,5 +221,9 @@ public class FirebaseAuthManager : MonoBehaviour
         }
     }
 
-
+    //씬 로드
+    public void SceneLoad()
+    {
+        sceneLoader.SceneLoad();
+    }
 }
