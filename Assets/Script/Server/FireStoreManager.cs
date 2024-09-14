@@ -13,7 +13,7 @@ public class FireStoreManager : MonoBehaviour
     static FirebaseFirestore db;
     public GameManager gameManager;
 
-    //나중에 싱글톤으로 해야한다
+    //이미 app과 db는 싱글톤이다.
     public void Init()
     {
         // Firebase Firestore 초기화
@@ -21,11 +21,15 @@ public class FireStoreManager : MonoBehaviour
         {
             FirebaseApp app = FirebaseApp.DefaultInstance;
             db = FirebaseFirestore.DefaultInstance;
-            Debug.Log("Firebase Firestore Initialized");
+            Debug.Log("Firestore 작동");
+
+            //이거 스타트가 아닌 로그인 이후 작동해야 한다.
+            if(gameManager != null)
+                gameManager.Init();
         });
     }
 
-    public void SetFirestore(string key, int value)
+    public void SetFirestore(string collection_name, string document_name, string key, object value)
     {
         // 저장할 데이터
         Dictionary<string, object> user = new Dictionary<string, object>
@@ -39,8 +43,8 @@ public class FireStoreManager : MonoBehaviour
         //일단 employees에 Employee가 들어있어야 한다
 
         // "users" 컬렉션에 새로운 문서 생성
-        //db.Collection("user").AddAsync(user).ContinueWithOnMainThread(task =>
-        db.Collection("user").Document("milkan660").SetAsync(user).ContinueWithOnMainThread(task =>
+        //db.Collection("GamePlayUser").AddAsync(user).ContinueWithOnMainThread(task =>
+        db.Collection(collection_name).Document(document_name).SetAsync(user).ContinueWithOnMainThread(task =>
         {
             if (task.IsCompleted)
             {
@@ -53,11 +57,12 @@ public class FireStoreManager : MonoBehaviour
         });
     }
 
-    public async Task<object> GetFirestore(string id, string key)
+    public async Task<object> GetFirestore(string collection_name, string id, string key)
     {
         Dictionary<string, object> result = null;
         // 특정 문서 가져오기 => 임시 
-        DocumentReference docRef = db.Collection("user").Document(id);
+        DocumentReference docRef = db.Collection(collection_name).Document(id);
+
         await docRef.GetSnapshotAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsCompleted)
@@ -66,8 +71,6 @@ public class FireStoreManager : MonoBehaviour
                 if (snapshot.Exists)
                 {
                     result = snapshot.ConvertTo<Dictionary<string, object>>();
-                    Debug.Log("Get Data : " + result[key]);
-                    gameManager.Money = (int)result[key];
                 }
                 else
                 {
@@ -80,9 +83,7 @@ public class FireStoreManager : MonoBehaviour
             }
         });
 
-
         return result[key];
     }
-
 }
 //mDatabaseRef.Child("users").Child(userId).Child("username").SetValueAsync(name);

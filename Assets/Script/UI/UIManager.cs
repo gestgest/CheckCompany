@@ -23,7 +23,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void SetMoneyText(int value)
+    public void SetMoneyText(long value)
     {
         moneyText.text = value.ToString();
     }

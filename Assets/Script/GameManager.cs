@@ -1,46 +1,60 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Firebase.Auth;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] UIManager ui_manager;
     [SerializeField] FireStoreManager fireStoreManager;
-    
+    private FirebaseAuth auth;
+    private FirebaseUser user;
+    private string nickname;
+
     //int executive = 1; //임원수
-    int money;
+    long money;
     //Reputation reputation = Reputation.single; //레벨 [명예]
     //int exp = 0;
 
     void Start()
     {
         fireStoreManager.Init();
-        
     }
 
-    void Update()
+    public async void Init()
     {
-        if(Input.GetKeyDown(KeyCode.N))
-        {
-            Debug.Log("시작");
-            Task.Run(() => fireStoreManager.GetFirestore("milkan660", "money"));
+        //Auth로 가져오고
+        auth = FirebaseAuth.DefaultInstance;
+        user = auth.CurrentUser;
 
-            //Money = (int) fireStoreManager.GetFirestore("milkan660", "money");
-            
+        //만약 로그인 안했을 경우 무조건 디폴트 계정을 넣어야 한다.★★★
+        if (user == null)
+        {
+            //디폴트 계정
         }
+        Debug.Log(user.Email);
+
+        //user.Email으로 쿼리 만들고
+        nickname = (string)await fireStoreManager.GetFirestore("User", user.Email, "nickname");
+        Money = (long)await fireStoreManager.GetFirestore("GamePlayUser", nickname, "money");
+        //서버에게 number 받는 거는 무조건 long 으로 해야한다
+        //타입이 64비트가 나온다. => 8바이트 => long
+        //int는 4바이트
     }
 
-    public int Money {  
+    public long Money
+    {
         //애초에 서버에 데이터를 넣는 게 낫지 않나
-        get { return money; } 
-        set { 
-            Debug.Log("들어간닷 : " + value);
+        get { return money; }
+        set
+        {
+            Debug.Log("돈 서버에게 입력 받음 : " + value);
             money = value;
-            fireStoreManager.SetFirestore("money", money);
+            //fireStoreManager.SetFirestore("GamePlayUser", "milkan660" ,"money", money);
             //서버 로딩
             ui_manager.SetMoneyText(value);
-        } 
+        }
     }
 
     enum Reputation

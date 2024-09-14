@@ -15,6 +15,8 @@ public class FirebaseAuthManager : MonoBehaviour
     private DependencyStatus dependencyStatus;
     [SerializeField] private FirebaseAuth auth;
     [SerializeField] private FirebaseUser user;
+    [SerializeField] private FireStoreManager fireStoreManager;
+
 
     [Space]
     [Header("Login")]
@@ -26,6 +28,7 @@ public class FirebaseAuthManager : MonoBehaviour
     [SerializeField] private TMP_InputField passwordRegisterTextField;
     [SerializeField] private TMP_InputField confirmPasswordRegisterTextField;
     [SerializeField] private SceneLoader sceneLoader;
+    [SerializeField] private Window parent_window;
 
     void Awake()
     {
@@ -37,12 +40,17 @@ public class FirebaseAuthManager : MonoBehaviour
             if (dependencyStatus == DependencyStatus.Available)
             {
                 InitFirebase();
+                fireStoreManager.Init();
             }
             else
             {
                 Debug.LogError("연결 오류" + dependencyStatus);
             }
         });
+        
+        //이게 CheckAndFixDependenciesAsync함수를 동시에 실행되면 맛탱이가 가나.
+        //정보. 파이어베이스를 두개가 동시에 실행한다면 그냥 유니티가 맛이 감
+        //예를 들어 Auth와 FireStore가 동시에 실행되는 Start()면 맛이 감
     }
 
     void InitFirebase()
@@ -179,7 +187,7 @@ public class FirebaseAuthManager : MonoBehaviour
                     case AuthError.InvalidEmail:
                         failedMessage += "Email is invalid";
                         break;
-                    //일부로 case 더 안넣음
+                    //일부로 보안때문에 case 더 안넣음
                     default:
                         failedMessage = "Registration Failed";
                         break;
@@ -214,6 +222,14 @@ public class FirebaseAuthManager : MonoBehaviour
                 {
                     //회원가입 성공
                     Debug.Log("회원가입 성공");
+
+                    //user 닉네임 Document
+                    fireStoreManager.SetFirestore("User", user.Email, "nickname", name);
+                    
+                    //초기값 설정
+                    fireStoreManager.SetFirestore("GamePlayUser", name, "money", 0);
+
+                    parent_window.SwitchingPanel(1); //로그인 화면으로
                 }
 
             }
