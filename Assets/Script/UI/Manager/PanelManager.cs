@@ -6,28 +6,27 @@ using UnityEngine;
 public class PanelManager : MonoBehaviour
 {
     [SerializeField] private Transform panel_parent;
-    private List<GameObject> panels;
+    protected List<GameObject> panels;
     int set_index;
 
-    void Start()
+    protected virtual void Start()
     {
         panels = new List<GameObject>();
-        Debug.Log(panel_parent.childCount);
 
         for (int i = 0; i < panel_parent.childCount; i++)
         {
             panels.Add(panel_parent.GetChild(i).gameObject);
         }
 
-        set_index = 0;
-        panels[set_index].SetActive(true);
-        for (int i = 1; i < panels.Count; i++)
+        for (int i = 0; i < panels.Count; i++)
         {
             panels[i].SetActive(false);
         }
+        set_index = 0;
+        panels[set_index].SetActive(true);
     }
 
-    public void SwitchingPanel(int index)
+    virtual public void SwitchingPanel(int index)
     {
         panels[set_index].SetActive(false);
         panels[index].SetActive(true);
@@ -48,6 +47,5 @@ public class PanelManager : MonoBehaviour
 
         panels[set_index].SetActive(true);
     }
-
     //
 }

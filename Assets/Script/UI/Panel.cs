@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class Panel : MonoBehaviour
 {
+    [SerializeField] private PanelSO panelInfo;
+
     //UI컴포넌트 버튼이나 인풋 field
     private Transform selected_parent; //부모 오브젝트
     [SerializeField] private List<Selectable> selected_objects; //선택 오브젝트들
@@ -54,5 +56,14 @@ public class Panel : MonoBehaviour
             }
             selected_objects[index].Select();
         }
+    }
+
+    public Sprite GetSprite()
+    {
+        return panelInfo.GetIcon();
+    }
+    public string GetTitle()
+    {
+        return panelInfo.GetTitle();
     }
 }

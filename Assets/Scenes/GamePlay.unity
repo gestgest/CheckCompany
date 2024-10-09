@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 19920659}
   - component: {fileID: 19920661}
   - component: {fileID: 19920660}
+  - component: {fileID: 19920662}
   m_Layer: 5
   m_Name: EmployeePanel
   m_TagString: Untagged
@@ -202,6 +203,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 19920658}
   m_CullTransparentMesh: 1
+--- !u!114 &19920662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 19920658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ec1fbf39c8835142b35fda844d698e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelInfo: {fileID: 11400000, guid: d0bf2e75e8787e547b0c6a6ec73c5f14, type: 2}
+  selected_objects: []
 --- !u!1 &26997225
 GameObject:
   m_ObjectHideFlags: 0
@@ -627,6 +642,7 @@ GameObject:
   - component: {fileID: 122420081}
   - component: {fileID: 122420080}
   - component: {fileID: 122420082}
+  - component: {fileID: 122420083}
   m_Layer: 5
   m_Name: EmployeeStatusPanel
   m_TagString: Untagged
@@ -738,6 +754,20 @@ MonoBehaviour:
   - {fileID: 1628016312}
   - {fileID: 1754490399}
   smallMission_prefab: {fileID: 1359309258578336218, guid: 074f8cbdcbd61574aafb7a4828beb8db, type: 3}
+--- !u!114 &122420083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122420078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ec1fbf39c8835142b35fda844d698e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelInfo: {fileID: 11400000, guid: 2422b8b1e26db9d43a1504abd3f2f96f, type: 2}
+  selected_objects: []
 --- !u!1 &143977382
 GameObject:
   m_ObjectHideFlags: 0
@@ -1536,6 +1566,7 @@ GameObject:
   - component: {fileID: 289924993}
   - component: {fileID: 289924996}
   - component: {fileID: 289924995}
+  - component: {fileID: 289924997}
   m_Layer: 5
   m_Name: CompanyStatusPanel
   m_TagString: Untagged
@@ -1604,6 +1635,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 289924992}
   m_CullTransparentMesh: 1
+--- !u!114 &289924997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 289924992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ec1fbf39c8835142b35fda844d698e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelInfo: {fileID: 11400000, guid: 38eb2a1a0fee5a045b29c545380d0fa2, type: 2}
+  selected_objects: []
 --- !u!1 &292730466
 GameObject:
   m_ObjectHideFlags: 0
@@ -3808,10 +3853,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 511141743}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 750aa0201dcb1c540842ff38a1f1c99c, type: 3}
+  m_Script: {fileID: 11500000, guid: 7f523a58564aade4ab3363f66faff8c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   panel_parent: {fileID: 463659565}
+  icon: {fileID: 270962518}
+  title: {fileID: 576199158}
 --- !u!1 &512347914
 GameObject:
   m_ObjectHideFlags: 0
@@ -3945,7 +3992,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 511141746}
-        m_TargetAssemblyTypeName: PanelManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: GamePanelManager, Assembly-CSharp
         m_MethodName: SwitchingPanel
         m_Mode: 3
         m_Arguments:
@@ -7528,7 +7575,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 511141746}
-        m_TargetAssemblyTypeName: PanelManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: GamePanelManager, Assembly-CSharp
         m_MethodName: SwitchingPanel
         m_Mode: 3
         m_Arguments:
@@ -7793,7 +7840,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 511141746}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PanelManager, Assembly-CSharp
         m_MethodName: SwitchingPanel
         m_Mode: 3
@@ -11918,6 +11965,7 @@ GameObject:
   - component: {fileID: 1556699440}
   - component: {fileID: 1556699442}
   - component: {fileID: 1556699441}
+  - component: {fileID: 1556699443}
   m_Layer: 5
   m_Name: ShopPanel
   m_TagString: Untagged
@@ -11987,6 +12035,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1556699439}
   m_CullTransparentMesh: 1
+--- !u!114 &1556699443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1556699439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ec1fbf39c8835142b35fda844d698e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelInfo: {fileID: 11400000, guid: 52e3f1d5f2431d347b8f1dd06cc69f1a, type: 2}
+  selected_objects: []
 --- !u!1 &1578676222
 GameObject:
   m_ObjectHideFlags: 0
@@ -12993,7 +13055,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 511141746}
-        m_TargetAssemblyTypeName: PanelManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: GamePanelManager, Assembly-CSharp
         m_MethodName: SwitchingPanel
         m_Mode: 3
         m_Arguments:
