@@ -3,16 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //를 상속받는 
-public class Window : MonoBehaviour
+public class PanelManager : MonoBehaviour
 {
-    [SerializeField] private GameObject [] panels;
+    [SerializeField] private Transform panel_parent;
+    private List<GameObject> panels;
     int set_index;
 
-    protected virtual void Start()
+    void Start()
     {
+        panels = new List<GameObject>();
+        Debug.Log(panel_parent.childCount);
+
+        for (int i = 0; i < panel_parent.childCount; i++)
+        {
+            panels.Add(panel_parent.GetChild(i).gameObject);
+        }
+
         set_index = 0;
         panels[set_index].SetActive(true);
-        for(int i = 1; i < panels.Length; i++)
+        for (int i = 1; i < panels.Count; i++)
         {
             panels[i].SetActive(false);
         }
@@ -29,12 +38,13 @@ public class Window : MonoBehaviour
     public void NextPanel(int direction)
     {
         panels[set_index].SetActive(false);
-        
+
         set_index += direction;
-        if(set_index < 0){
-            set_index += panels.Length;
+        if (set_index < 0)
+        {
+            set_index += panels.Count;
         }
-        set_index %= panels.Length;
+        set_index %= panels.Count;
 
         panels[set_index].SetActive(true);
     }

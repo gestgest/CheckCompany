@@ -75,7 +75,7 @@ public class EmployeeController : MonoBehaviour
     private void ShowEmployeeStatusWindow(int index)
     {
         //EmployeeStatusWindow의 index는 3. => 이렇게 하는게 아닌 유동적으로 바꿔야 한다. ★
-        _UIManager.ShowWindow(3);
+        //_UIManager.ShowWindow(3);
 
         //Debug.Log(index);
         //나중에 index를 전체 id로 바꾸면 이분탐색으로 교체 예정

@@ -28,7 +28,7 @@ public class FirebaseAuthManager : MonoBehaviour
     [SerializeField] private TMP_InputField passwordRegisterTextField;
     [SerializeField] private TMP_InputField confirmPasswordRegisterTextField;
     [SerializeField] private SceneLoader sceneLoader;
-    [SerializeField] private Window parent_window;
+    [SerializeField] private PanelManager parent_window;
 
     void Awake()
     {

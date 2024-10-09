@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 
-public class EmployeeStatusWindow : Window
+public class EmployeeStatusWindow : MonoBehaviour
 {
     //const IEmployee.MAX_MISSION_SIZE = 5;
     [SerializeField] private GameManager gameManager;
@@ -53,9 +53,8 @@ public class EmployeeStatusWindow : Window
         missionUIs = new MissionElementUI[IEmployee.MAX_MISSION_SIZE];
     }
 
-    protected override void Start()
+    void Start()
     {
-        base.Start();
         for (int i = 0; i < missionObjectParent.transform.childCount; i++)
         {
             Transform mObj = missionObjectParent.transform.GetChild(i);
