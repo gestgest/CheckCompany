@@ -11,12 +11,13 @@ public class Panel : MonoBehaviour
 
     //UI컴포넌트 버튼이나 인풋 field
     private Transform selected_parent; //부모 오브젝트
-    [SerializeField] private List<Selectable> selected_objects; //선택 오브젝트들
+    private List<Selectable> selected_objects; //선택 오브젝트들
 
     int index;
 
     void Start()
     {
+        selected_objects = new List<Selectable>();
         selected_parent = transform;
         
         for(int i = 0; i < selected_parent.childCount; i++)
@@ -65,5 +66,9 @@ public class Panel : MonoBehaviour
     public string GetTitle()
     {
         return panelInfo.GetTitle();
+    }
+    public PanelSO [] GetButtons()
+    {
+        return panelInfo.GetButtons();
     }
 }
