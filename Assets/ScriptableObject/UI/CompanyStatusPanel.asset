@@ -14,3 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: "_\uD68C\uC0AC\uC774\uB984"
   icon: {fileID: 21300000, guid: 7c26b3537ac041d41888431eaa21039b, type: 3}
+  index: 0
+  buttons:
+  - {fileID: 11400000, guid: 52e3f1d5f2431d347b8f1dd06cc69f1a, type: 2}
+  - {fileID: 11400000, guid: d0bf2e75e8787e547b0c6a6ec73c5f14, type: 2}

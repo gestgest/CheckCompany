@@ -38,7 +38,7 @@ public class GamePanelManager : PanelManager
         {
             buttons[i].SetActive(true);
 
-            buttons[i].GetComponent<Image>().sprite = panelInfos[i].GetIcon();
+            buttons[i].transform.GetChild(0).GetComponent<Image>().sprite = panelInfos[i].GetIcon();
             //클릭하면 이벤트 추가
         }
         
