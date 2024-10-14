@@ -7,10 +7,13 @@ public class PanelManager : MonoBehaviour
 {
     [SerializeField] private Transform panel_parent;
     protected List<GameObject> panels;
+
+    Stack<int> nav_panel_stack;
     int set_index;
 
     protected virtual void Start()
     {
+        nav_panel_stack = new Stack<int>();
         panels = new List<GameObject>();
 
         for (int i = 0; i < panel_parent.childCount; i++)
@@ -26,7 +29,7 @@ public class PanelManager : MonoBehaviour
         panels[set_index].SetActive(true);
     }
 
-    virtual public void SwitchingPanel(int index)
+    public virtual void SwitchingPanel(int index)
     {
         panels[set_index].SetActive(false);
         panels[index].SetActive(true);
@@ -46,6 +49,34 @@ public class PanelManager : MonoBehaviour
         set_index %= panels.Count;
 
         panels[set_index].SetActive(true);
+    }
+
+    //뒤로가기 제외
+    public void Click_Button_Panel(int index)
+    {
+        Push_nav_panel_stack(set_index);
+        SwitchingPanel(index);
+    }
+
+    public void Back_Nav_Panel()
+    {
+        int num = Pop_nav_panel_stack();
+        Debug.Log("pop의 index : " + num);
+        
+        SwitchingPanel(num);
+    }
+
+    protected int Pop_nav_panel_stack()
+    {
+        if(nav_panel_stack.Count == 0)
+            return 0;
+        return nav_panel_stack.Pop();
+    }
+
+    protected void Push_nav_panel_stack(int index)
+    {
+        Debug.Log("push의 index : " + index);
+        nav_panel_stack.Push(index);
     }
     //
 }

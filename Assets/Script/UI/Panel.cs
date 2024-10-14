@@ -71,4 +71,8 @@ public class Panel : MonoBehaviour
     {
         return panelInfo.GetButtons();
     }
+    public int Get_panel_index()
+    {
+        return panelInfo.GetIndex();
+    }
 }
