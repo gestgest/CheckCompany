@@ -10,8 +10,9 @@ public class GamePanelManager : PanelManager
     [SerializeField] private Image icon;
     [SerializeField] private TextMeshProUGUI title;
     [SerializeField] private Button[] buttons;
+    [SerializeField] private Animator panel_animator;
 
-    bool isNav = false;
+    bool isExpandPanel = false;
 
     const int POOL_MAX_SIZE = 5;
     protected override void Start()
@@ -54,6 +55,11 @@ public class GamePanelManager : PanelManager
             buttons[i].gameObject.SetActive(false);
         }
 
+    }
+
+    public void TransformPanel()
+    {
+        panel_animator.SetTrigger("isExpand");
     }
 
 
