@@ -75,4 +75,8 @@ public class Panel : MonoBehaviour
     {
         return panelInfo.GetIndex();
     }
+    public int Get_panel_height()
+    {
+        return panelInfo.GetHeight();
+    }
 }

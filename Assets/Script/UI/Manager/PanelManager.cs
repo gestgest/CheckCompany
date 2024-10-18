@@ -9,7 +9,7 @@ public class PanelManager : MonoBehaviour
     protected List<GameObject> panels;
 
     Stack<int> nav_panel_stack;
-    int set_index;
+    protected int set_index;
 
     protected virtual void Start()
     {
@@ -52,9 +52,11 @@ public class PanelManager : MonoBehaviour
     }
 
     //뒤로가기 제외
-    public void Click_Button_Panel(int index)
+    public void Click_Button_Panel(int index, bool isNav)
     {
-        Push_nav_panel_stack(set_index);
+        if(isNav){
+            Push_nav_panel_stack(set_index);
+        }
         SwitchingPanel(index);
     }
 

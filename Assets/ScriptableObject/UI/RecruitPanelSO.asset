@@ -15,4 +15,5 @@ MonoBehaviour:
   title: "\uBAA8\uC9D1"
   icon: {fileID: 21300000, guid: 205608ef2ed9dda4ab67f647dbe8d663, type: 3}
   index: 3
+  height: 1
   buttons: []

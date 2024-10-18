@@ -24,8 +24,8 @@ public class GamePanelManager : PanelManager
 
     public override void SwitchingPanel(int index)
     {
-        base.SwitchingPanel(index);
         SwitchingInfo(index);
+        base.SwitchingPanel(index);
     }
 
     void SwitchingInfo(int index)
@@ -34,9 +34,15 @@ public class GamePanelManager : PanelManager
         //top 정보 수정
         icon.sprite = panel.GetSprite();
         this.title.text = panel.GetTitle();
-
-        //bottom 정보 수정
+        int parent_height = panels[set_index].GetComponent<Panel>().Get_panel_height();
+        int height = panel.Get_panel_height();
+        
+        if(parent_height == height && height != 0) {
+            return;
+        }
+        //bottom 버튼 정보 수정 [이미지]
         PanelSO[] panelInfos = panel.GetButtons();
+
         for (int i = 0; i < panelInfos.Length; i++)
         {
             buttons[i].gameObject.SetActive(true);
@@ -44,10 +50,10 @@ public class GamePanelManager : PanelManager
             buttons[i].transform.GetChild(0).GetComponent<Image>().sprite = panelInfos[i].GetIcon();
             int panel_index = panelInfos[i].GetIndex();
 
-            
+            bool isNav = height < panelInfos[i].GetHeight();
             //클릭하면 이벤트 추가
             buttons[i].onClick.RemoveAllListeners();
-            buttons[i].onClick.AddListener(() => { Click_Button_Panel(panel_index); });
+            buttons[i].onClick.AddListener(() => { Click_Button_Panel(panel_index, isNav); });
         }
 
         for (int i = panelInfos.Length; i < POOL_MAX_SIZE; i++)

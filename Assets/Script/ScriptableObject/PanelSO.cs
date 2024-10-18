@@ -9,6 +9,7 @@ public class PanelSO : ScriptableObject
     [SerializeField] private string title;
     [SerializeField] private Sprite icon;
     [SerializeField] private int index;
+    [SerializeField] private int height; //0 1 2 3 4
     [SerializeField] private PanelSO [] buttons;
     //bottom 버튼 SO들
 
@@ -20,6 +21,9 @@ public class PanelSO : ScriptableObject
     }
     public int GetIndex(){
         return index;
+    }
+    public int GetHeight(){
+        return height;
     }
     public PanelSO [] GetButtons(){
         return buttons;
