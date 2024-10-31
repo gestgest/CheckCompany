@@ -36,7 +36,7 @@ public class GamePanelManager : PanelManager
         this.title.text = panel.GetTitle();
         int parent_height = panels[set_index].GetComponent<Panel>().Get_panel_height();
         int height = panel.Get_panel_height();
-        
+
         if(parent_height == height && height != 0) {
             return;
         }

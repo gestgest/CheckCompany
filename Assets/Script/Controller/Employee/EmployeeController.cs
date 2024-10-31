@@ -79,7 +79,8 @@ public class EmployeeController : MonoBehaviour
 
         //Debug.Log(index);
         //나중에 index를 전체 id로 바꾸면 이분탐색으로 교체 예정
-        employeeStatusWindow.SetValue(employees[index]);
 
+        //대충 Panel 이동 함수
+        employeeStatusWindow.SetValue(employees[index]);
     }
 }

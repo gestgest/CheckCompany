@@ -10,10 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b428c833e0947649a42d554dc523171, type: 3}
-  m_Name: EmployeeStatusPanel
+  m_Name: CompanyStatusPanelSO
   m_EditorClassIdentifier: 
-  title: "_\uC9C1\uC6D0\uC774\uB984"
-  icon: {fileID: 21300000, guid: 91976e8b9ce0f0341838727acd55621c, type: 3}
-  index: 5
-  height: 2
-  buttons: []
+  title: "_\uD68C\uC0AC\uC774\uB984"
+  icon: {fileID: 21300000, guid: 7c26b3537ac041d41888431eaa21039b, type: 3}
+  index: 0
+  height: 0
+  buttons:
+  - {fileID: 11400000, guid: 52e3f1d5f2431d347b8f1dd06cc69f1a, type: 2}
+  - {fileID: 11400000, guid: d0bf2e75e8787e547b0c6a6ec73c5f14, type: 2}
