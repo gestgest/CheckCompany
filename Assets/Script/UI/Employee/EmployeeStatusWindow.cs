@@ -129,6 +129,7 @@ public class EmployeeStatusWindow : MonoBehaviour
     private void SetMission()
     {
         int missionSize = employee.GetMissionSize();
+        //Debug.Log("EmployeeStatusWindow 의 SetMission : " + missionSize);
         for (int i = 0; i < missionSize; i++)
         {
             MissionSO mission = employee.GetMission(i);

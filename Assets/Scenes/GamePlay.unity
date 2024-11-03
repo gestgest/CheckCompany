@@ -3801,8 +3801,9 @@ MonoBehaviour:
   employeePrefab: {fileID: 7451260809270566376, guid: 147f27304293a2e48a04f84d1cd21c44, type: 3}
   parent: {fileID: 1490410352}
   employeeStatusWindow: {fileID: 122420082}
-  _UIManager: {fileID: 511141745}
+  gamePanelManager: {fileID: 511141746}
   debugDevEmployeeType: {fileID: 11400000, guid: 15d3cddb1b549ac41b194a5de5f12099, type: 2}
+  employeeStatusPanelSO: {fileID: 11400000, guid: 2422b8b1e26db9d43a1504abd3f2f96f, type: 2}
 --- !u!1001 &517550519
 PrefabInstance:
   m_ObjectHideFlags: 0
