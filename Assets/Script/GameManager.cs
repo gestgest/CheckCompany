@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        fireStoreManager.Init();
+        //fireStoreManager.Init();
     }
 
     public async void Init()

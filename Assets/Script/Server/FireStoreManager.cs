@@ -23,9 +23,11 @@ public class FireStoreManager : MonoBehaviour
             db = FirebaseFirestore.DefaultInstance;
             Debug.Log("Firestore 작동");
 
-            //이거 스타트가 아닌 로그인 이후 작동해야 한다.
+            //이거 스타트가 아닌 로그인 이후 작동해야 한다. 
+            /*
             if(gameManager != null)
-                gameManager.Init();
+                gameManager.Init(); => 대충 서버에서 데이터 들어오는 함수
+            */
         });
     }
 

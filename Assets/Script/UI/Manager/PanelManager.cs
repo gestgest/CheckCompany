@@ -16,6 +16,8 @@ public class PanelManager : MonoBehaviour
         nav_panel_stack = new Stack<int>();
         panels = new List<GameObject>();
 
+
+        //Panel 리스트에 넣어서 
         for (int i = 0; i < panel_parent.childCount; i++)
         {
             panels.Add(panel_parent.GetChild(i).gameObject);
