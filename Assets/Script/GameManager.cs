@@ -19,7 +19,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        //fireStoreManager.Init();
+        //절대로 LoginScene에 넣지마 => 메인 스레드 충돌 오류
+        fireStoreManager.Init();
     }
 
     public async void Init()

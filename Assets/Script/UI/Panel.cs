@@ -26,10 +26,22 @@ public class Panel : MonoBehaviour
             if(sel == null){
                 continue;
             }
+            // 클릭 이벤트를 추가하기 위해 EventTrigger 컴포넌트를 동적으로 추가합니다.
+            EventTrigger trigger = sel.gameObject.AddComponent<EventTrigger>();
+
+            // 클릭 이벤트 항목을 생성합니다.
+            EventTrigger.Entry entry = new EventTrigger.Entry();
+            entry.eventID = EventTriggerType.PointerClick;
+
+            int select_index = selected_objects.Count;
+            // 클릭 시 호출할 메서드를 설정합니다.
+            entry.callback.AddListener((eventData) => { GetSelectIndex(sel, select_index); });
+
             selected_objects.Add(sel);
-            //selected_objects.
+            // EventTrigger에 클릭 이벤트 항목을 추가합니다.
+            trigger.triggers.Add(entry);
         }
-        Index = 0;
+        index = -1;
     }
 
     // Update is called once per frame
@@ -45,9 +57,10 @@ public class Panel : MonoBehaviour
     {
         get { return index; }
         set {
+            
             index = value;
-
-            if(selected_objects.Count == 0)
+            Debug.Log("Panel 함수 : 끼루루" + index);
+            if (selected_objects.Count == 0)
             {
                 return;
             }
@@ -57,6 +70,11 @@ public class Panel : MonoBehaviour
             }
             selected_objects[index].Select();
         }
+    }
+
+    public void GetSelectIndex(Selectable selectable, int i)
+    {
+        Index = i;
     }
 
     public Sprite GetSprite()

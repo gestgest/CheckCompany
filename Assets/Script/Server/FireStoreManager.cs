@@ -16,7 +16,7 @@ public class FireStoreManager : MonoBehaviour
     //이미 app과 db는 싱글톤이다.
     public void Init()
     {
-        // Firebase Firestore 초기화
+        // Firebase Firestore 초기화 => 게임 시작할땐 GamaManager필요없다.
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
         {
             FirebaseApp app = FirebaseApp.DefaultInstance;
@@ -24,10 +24,8 @@ public class FireStoreManager : MonoBehaviour
             Debug.Log("Firestore 작동");
 
             //이거 스타트가 아닌 로그인 이후 작동해야 한다. 
-            /*
             if(gameManager != null)
-                gameManager.Init(); => 대충 서버에서 데이터 들어오는 함수
-            */
+                gameManager.Init(); //=> 대충 서버에서 데이터 들어오는 함수
         });
     }
 
