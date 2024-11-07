@@ -51,15 +51,16 @@ public class EmployeeStatusWindow : MonoBehaviour
     {
         rf_dPanel = descriptionPanel.GetComponent<RectTransform>();
         missionUIs = new MissionElementUI[IEmployee.MAX_MISSION_SIZE];
-    }
 
-    void Start()
-    {
         for (int i = 0; i < missionObjectParent.transform.childCount; i++)
         {
             Transform mObj = missionObjectParent.transform.GetChild(i);
             missionUIs[i] = mObj.GetComponent<MissionElementUI>();
         }
+    }
+
+    void Start()
+    {
     }
 
 
@@ -76,7 +77,7 @@ public class EmployeeStatusWindow : MonoBehaviour
         careerText.text = "경력 기간 : " + employee.Career.ToString() + "개월";
         timeText.text = "근무시간 : " + employee._WorkTime.start.ToString() + " ~ " + employee._WorkTime.end.ToString();
 
-        SetMission();
+        SetMission(); //
         AddMissionToMiniWindow();
     }
 
@@ -134,6 +135,7 @@ public class EmployeeStatusWindow : MonoBehaviour
         {
             MissionSO mission = employee.GetMission(i);
 
+            //?
             if (mission.GetMissionType() != MissionType.NONE)
                 missionUIs[i].SetValue(mission);
         }

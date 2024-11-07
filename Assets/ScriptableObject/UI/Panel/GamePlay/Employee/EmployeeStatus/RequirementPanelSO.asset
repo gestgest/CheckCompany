@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RequirementPanelSO
   m_EditorClassIdentifier: 
   title: "\uC694\uAD6C\uC0AC\uD56D"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 9f494819d686bde4fb1bac8e3d3b95c5, type: 3}
   index: 7
   height: 2
   buttons: []

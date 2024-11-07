@@ -30,6 +30,7 @@ public class GamePanelManager : PanelManager
 
     void SwitchingInfo(int index)
     {
+        Debug.Log("GamePanelManager 의 SwitchingInfo 인덱스: " + index);
         Panel panel = panels[index].GetComponent<Panel>();
         //top 정보 수정
         icon.sprite = panel.GetSprite();
@@ -37,9 +38,11 @@ public class GamePanelManager : PanelManager
         int parent_height = panels[set_index].GetComponent<Panel>().Get_panel_height();
         int height = panel.Get_panel_height();
 
+        //이미지
         if(parent_height == height && height != 0) {
             return;
         }
+
         //bottom 버튼 정보 수정 [이미지]
         PanelSO[] panelInfos = panel.GetButtons();
 
