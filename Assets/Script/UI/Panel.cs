@@ -59,7 +59,7 @@ public class Panel : MonoBehaviour
         set {
             
             index = value;
-            Debug.Log("Panel 함수 : 끼루루" + index);
+            //Debug.Log("Panel 함수 : 끼루루" + index);
             if (selected_objects.Count == 0)
             {
                 return;

@@ -79,7 +79,7 @@ public class PanelManager : MonoBehaviour
 
     protected void Push_nav_panel_stack(int index)
     {
-        Debug.Log("push의 index : " + index);
+        //Debug.Log("push의 index : " + index);
         nav_panel_stack.Push(index);
     }
     //

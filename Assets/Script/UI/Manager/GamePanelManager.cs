@@ -30,7 +30,7 @@ public class GamePanelManager : PanelManager
 
     void SwitchingInfo(int index)
     {
-        Debug.Log("GamePanelManager 의 SwitchingInfo 인덱스: " + index);
+        //Debug.Log("GamePanelManager 의 SwitchingInfo 인덱스: " + index);
         Panel panel = panels[index].GetComponent<Panel>();
         //top 정보 수정
         icon.sprite = panel.GetSprite();

@@ -30,13 +30,7 @@ public class RecruitmentController : MonoBehaviour
         recruitments = new List<Recruitment>();
         recruitmentObjects = new List<GameObject>();
 
-        //recruitments 가져오는 함수()
-        Recruitment r = new Recruitment();
-        r.SetEmployeeType(EmployeeType.DEVELOPER);
-        r.SetDay(0);
-        r.SetID(id++);
-
-        recruitments.Add(r);
+        //서버에서 recruitments 가져오는 함수()
 
         InitRecruitments(); //초기 설정
         //ShowRecruitments();
