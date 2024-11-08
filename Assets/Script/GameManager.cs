@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
         get { return money; }
         set
         {
-            Debug.Log("돈 서버에게 입력 받음 : " + value);
+            //Debug.Log("돈 서버에게 입력 받음 : " + value);
             money = value;
             //fireStoreManager.SetFirestore("GamePlayUser", "milkan660" ,"money", money);
             //서버 로딩

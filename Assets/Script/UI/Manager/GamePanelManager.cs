@@ -12,8 +12,6 @@ public class GamePanelManager : PanelManager
     [SerializeField] private Button[] buttons;
     [SerializeField] private Animator panel_animator;
 
-    bool isExpandPanel = false;
-
     const int POOL_MAX_SIZE = 5;
     protected override void Start()
     {

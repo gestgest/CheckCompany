@@ -39,4 +39,6 @@ public class RecruitmentElement : MonoBehaviour
         RecruitmentNumber_Text.text = size.ToString();
     }
 
+    //여기에 dropButton 기능 추가해야함
+
 }

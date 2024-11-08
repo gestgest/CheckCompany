@@ -65,7 +65,7 @@ public class PanelManager : MonoBehaviour
     public void Back_Nav_Panel()
     {
         int num = Pop_nav_panel_stack();
-        Debug.Log("pop의 index : " + num);
+        //Debug.Log("pop의 index : " + num);
         
         SwitchingPanel(num);
     }

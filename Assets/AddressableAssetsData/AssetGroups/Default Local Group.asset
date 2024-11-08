@@ -13,17 +13,16 @@ MonoBehaviour:
   m_Name: Default Local Group
   m_EditorClassIdentifier: 
   m_GroupName: Default Local Group
-  m_Data:
-    m_SerializedData: []
-  m_GUID: 3537ab08c7f0c1e478efb89a53928b5e
+  m_GUID: c9eeb6f8d2cb61a4ebd5b2c2001fef39
   m_SerializeEntries:
   - m_GUID: 9fc0d4010bbf28b4594072e72b8655ab
     m_Address: Assets/Scenes/GamePlay.unity
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 3286b346cef43d14cbaa32c7f1e2dab3, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 4e6b4d5c258aba74f993a7c987e6e8c7, type: 2}
     - {fileID: 11400000, guid: b84145a0a76a5bc4db64c81555277010, type: 2}
+    - {fileID: 11400000, guid: 4e6b4d5c258aba74f993a7c987e6e8c7, type: 2}
