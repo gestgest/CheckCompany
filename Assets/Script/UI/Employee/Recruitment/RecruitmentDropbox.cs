@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-//나중에 dropbox 인터페이스 만들 예정 [소공]
+//나중에 dropbox 인터페이스 만들 예정 [소공] => 채용 공고 드롭박스 클래스
 public class RecruitmentDropbox : MonoBehaviour
 {
     TMP_Dropdown dropdown;

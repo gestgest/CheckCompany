@@ -11,13 +11,43 @@ public class RecruitmentElement : MonoBehaviour
     [SerializeField] private Image icon;
     [SerializeField] private TextMeshProUGUI dDayText;
     [SerializeField] private TextMeshProUGUI RecruitmentNumber_Text;
-    public int ID { get; set; }
+    [SerializeField] private GameObject applicantPanel;
+
+    [SerializeField] private GameObject applicant_Prefab;
+    
+
+    //지원자 정보 리스트
+    private List<IEmployee> employees;
+    private List<GameObject> employee_GameObjects;
+
+    public int ID { get; set; } //채용 구분 ID
 
     private void Start()
     {
+        employees = new List<IEmployee>();
+        employee_GameObjects = new List<GameObject>();
         //icon.sprite
     }
-    
+
+    private void Update()
+    {
+        //키보드 R 누르면
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Debug.Log("RecruitmentElement : R 버튼 누름");
+            IEmployee employee = new Development();
+            employee.ID = 0;
+            employee.Name = "문재현";
+            employee.Age = 19;
+            employee.CareerPeriod = 12; //1 year
+            employee.Salary = 100; //월 100만원
+
+            employees.Add(employee);
+            SetRecruitmentNumber(employees.Count);
+            CreateEmployeeObject(employee);
+        }
+    }
+
     public void SetRecruitment(Sprite sprite, int day, int size, int id)
     {
         SetIcon(sprite);
@@ -25,6 +55,19 @@ public class RecruitmentElement : MonoBehaviour
         SetRecruitmentNumber(size);
         ID = id;
     }
+
+    private void CreateEmployeeObject(IEmployee employee)
+    {
+        GameObject tmp = Instantiate(applicant_Prefab);
+
+        ApplicantElement applicantElement = tmp.GetComponent<ApplicantElement>();
+        applicantElement.SetValue(employee);
+
+        tmp.transform.SetParent(applicantPanel.transform);
+        employee_GameObjects.Add(tmp);
+    }
+
+
 
     private void SetIcon(Sprite sprite)
     {
@@ -36,9 +79,14 @@ public class RecruitmentElement : MonoBehaviour
     }
     private void SetRecruitmentNumber(int size)
     {
-        RecruitmentNumber_Text.text = size.ToString();
+        RecruitmentNumber_Text.text = size.ToString() + "명";
     }
 
-    //여기에 dropButton 기능 추가해야함
+    //dropButton
+    public void SwitchingPanel()
+    {
+        applicantPanel.SetActive(!(applicantPanel.activeSelf));
+    }
 
+    
 }

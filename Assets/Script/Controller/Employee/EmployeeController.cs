@@ -30,14 +30,14 @@ public class EmployeeController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.H))
         {
-
+            Debug.Log("EmployeeController : H");
             //디버깅용 employee
             IEmployee e = new Development();
             e._EmployeeType = debugDevEmployeeType;
             e.Name = "엄준식";
             e.Age = 10;
-            e.Career = 10;
-            e.Cost = 10;
+            e.CareerPeriod = 10;
+            e.Salary = 10;
 
             employees.Add(e);
             CreateEmployeeElementUI(e, employees.Count - 1);
@@ -64,7 +64,7 @@ public class EmployeeController : MonoBehaviour
         Button button = employeeObject.GetComponent<Button>();
 
 
-        employeeContent.SetEmployee(e._EmployeeType.GetIcon(), e.Name, e.Career, 1, e.Cost);
+        employeeContent.SetEmployee(e._EmployeeType.GetIcon(), e.Name, e.CareerPeriod, 1, e.Salary);
         employeeObjects.Add(employeeObject);
         employeeObject.transform.SetParent(parent.transform);
 

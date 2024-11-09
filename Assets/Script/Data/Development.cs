@@ -12,8 +12,8 @@ public class Development : IEmployee
     private EmployeeSO employeeType;
     private string employee_name;
     private int age;
-    private int career;
-    private int cost;
+    private int careerPeriod;
+    private int salary;
     private WorkTime workTime;
     private EmployeeRank rank;
 
@@ -31,8 +31,8 @@ public class Development : IEmployee
     public EmployeeSO _EmployeeType { get { return employeeType; } set { employeeType = value; } }
     public string Name { get { return employee_name; } set { employee_name = value; } }
     public int Age { get { return age; } set { age = value; } }
-    public int Career { get { return career; } set { career = value; } }
-    public int Cost { get { return cost; } set { cost = value; } }
+    public int CareerPeriod { get { return careerPeriod; } set { careerPeriod = value; } }
+    public int Salary { get { return salary; } set { salary = value; } }
     public EmployeeRank _Rank { get { return rank; } set { rank = value; } }
     public WorkTime _WorkTime { get { return workTime; } set { workTime = value; } }
     public MissionSO GetMission(int index) { return missions[index]; }
