@@ -14,7 +14,9 @@ public class RecruitmentElement : MonoBehaviour
     [SerializeField] private GameObject applicantPanel;
 
     [SerializeField] private GameObject applicant_Prefab;
-    
+    private Transform layout_parent;
+    private VerticalLayoutGroup parent_VLG;
+
 
     //지원자 정보 리스트
     private List<IEmployee> employees;
@@ -26,7 +28,10 @@ public class RecruitmentElement : MonoBehaviour
     {
         employees = new List<IEmployee>();
         employee_GameObjects = new List<GameObject>();
+        layout_parent = transform.parent; //부모 가져오기
+        parent_VLG = layout_parent.GetComponent<VerticalLayoutGroup>(); //부모의 layout 가져오기
         //icon.sprite
+
     }
 
     private void Update()
@@ -85,8 +90,10 @@ public class RecruitmentElement : MonoBehaviour
     //dropButton
     public void SwitchingPanel()
     {
+        parent_VLG.childControlHeight = false;
         applicantPanel.SetActive(!(applicantPanel.activeSelf));
+        parent_VLG.childControlHeight = true;
     }
 
-    
+
 }
