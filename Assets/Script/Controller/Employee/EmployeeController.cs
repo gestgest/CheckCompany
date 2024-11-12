@@ -76,7 +76,7 @@ public class EmployeeController : MonoBehaviour
     private void ShowEmployeeStatusWindow(int index)
     {
         //EmployeeStatusWindow의 index는 5. 
-        gamePanelManager.Click_Button_Panel(employeeStatusPanelSO.GetIndex(),true);
+        PanelManager.instance.Click_Button_Panel(employeeStatusPanelSO.GetIndex(),true);
 
         //Debug.Log(index);
         //나중에 index를 전체 id로 바꾸면 이분탐색으로 교체 예정

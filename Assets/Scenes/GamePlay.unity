@@ -1287,7 +1287,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 291015018}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 741635678}
+        m_TargetAssemblyTypeName: ApplicantPanel, Assembly-CSharp
+        m_MethodName: DeleteApplicant
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &291015018
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5976,14 +5988,14 @@ GameObject:
   - component: {fileID: 741635674}
   - component: {fileID: 741635677}
   - component: {fileID: 741635676}
-  - component: {fileID: 741635675}
+  - component: {fileID: 741635678}
   m_Layer: 5
   m_Name: ApplicantPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &741635674
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6005,19 +6017,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &741635675
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 741635673}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ec1fbf39c8835142b35fda844d698e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  panelInfo: {fileID: 11400000, guid: d87e931103ef7224a959fad3a822e117, type: 2}
 --- !u!114 &741635676
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6056,6 +6055,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 741635673}
   m_CullTransparentMesh: 1
+--- !u!114 &741635678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 741635673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a5f9397336c4944e95035b9408f751a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelInfo: {fileID: 11400000, guid: d87e931103ef7224a959fad3a822e117, type: 2}
 --- !u!1 &744651055
 GameObject:
   m_ObjectHideFlags: 0
@@ -13607,7 +13619,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1757425784}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 741635678}
+        m_TargetAssemblyTypeName: ApplicantPanel, Assembly-CSharp
+        m_MethodName: EmployApplicant
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1757425784
 MonoBehaviour:
   m_ObjectHideFlags: 0

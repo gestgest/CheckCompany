@@ -5,11 +5,27 @@ using UnityEngine;
 //를 상속받는 
 public class PanelManager : MonoBehaviour
 {
+    public static PanelManager instance;
     [SerializeField] private Transform panel_parent;
     protected List<GameObject> panels;
 
     Stack<int> nav_panel_stack;
     protected int set_index;
+
+    // => 다른 싱글톤처럼 new로 하면 MonoBehaviour와 같은 클래스가 문제를 일으킬 수 있다.
+    //유니티식 싱글톤
+    private void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+            //DontDestroyOnLoad(gameObject);
+            return;
+        }
+        Destroy(gameObject);
+        
+        //return instance;
+    }
 
     protected virtual void Start()
     {

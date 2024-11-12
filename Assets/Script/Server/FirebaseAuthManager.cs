@@ -28,7 +28,6 @@ public class FirebaseAuthManager : MonoBehaviour
     [SerializeField] private TMP_InputField passwordRegisterTextField;
     [SerializeField] private TMP_InputField confirmPasswordRegisterTextField;
     [SerializeField] private SceneLoader sceneLoader;
-    [SerializeField] private PanelManager parent_window;
 
     void Awake()
     {
@@ -229,7 +228,7 @@ public class FirebaseAuthManager : MonoBehaviour
                     //초기값 설정
                     fireStoreManager.SetFirestore("GamePlayUser", name, "money", 0);
 
-                    parent_window.SwitchingPanel(1); //로그인 화면으로
+                    PanelManager.instance.SwitchingPanel(1); //로그인 화면으로
                 }
 
             }

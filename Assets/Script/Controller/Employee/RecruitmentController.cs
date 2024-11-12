@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class RecruitmentController : MonoBehaviour
 {
@@ -53,7 +54,7 @@ public class RecruitmentController : MonoBehaviour
         GameObject recruitmentObject = Instantiate(recruitmentPrefab, Vector3.zero, Quaternion.identity);
         RecruitmentElement recruitmentContent = recruitmentObject.GetComponent<RecruitmentElement>();
 
-        //recruitmentContent.SetRecruitment(employeeTypeIcons[(int)r.GetEmployeeType()], r.GetDay(), r.GetSize(), i);
+        //recruitmentContent.SetRecruitment(employeeTypeIcons[(int)r.GetEmployeeType()], r.GetDay(), r.GetSize(), i)
         recruitmentContent.SetRecruitment(employeeTypes[(int)(r.GetEmployeeType())].GetIcon(), r.GetDay(), 0, r.GetID());
         recruitmentObjects.Add(recruitmentObject);
         recruitmentObject.transform.SetParent(view.transform);
