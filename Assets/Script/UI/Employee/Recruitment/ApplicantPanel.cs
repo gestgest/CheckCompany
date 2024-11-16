@@ -6,11 +6,11 @@ public class ApplicantPanel : Panel
     private Button xButton;
     private Button yButton;
 
-    private int index; //직원 index
+    private long applicant_id; //직원 index
 
-    void SetValue(int index)
+    public void SetValue(long id)
     {
-        this.index = index;
+        this.applicant_id = id;
     }
     //X
     public void DeleteApplicant()
@@ -23,7 +23,6 @@ public class ApplicantPanel : Panel
     public void EmployApplicant()
     {
         PanelManager.instance.Back_Nav_Panel();
-        
         //지원자 고용 함수
     }
 

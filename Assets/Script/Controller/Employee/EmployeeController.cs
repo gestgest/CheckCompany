@@ -13,8 +13,6 @@ public class EmployeeController : MonoBehaviour
     [SerializeField] private GameObject employeePrefab;
     [SerializeField] private GameObject parent;
     [SerializeField] private EmployeeStatusWindow employeeStatusWindow;
-    [SerializeField] private GamePanelManager gamePanelManager;
-
     [SerializeField] private EmployeeSO debugDevEmployeeType;
     [SerializeField] private PanelSO employeeStatusPanelSO;
 

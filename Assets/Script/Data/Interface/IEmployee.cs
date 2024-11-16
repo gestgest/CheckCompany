@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IEmployee
 {
-    int ID { get; set; }
+    long ID { get; set; }
     public EmployeeSO _EmployeeType { get; set; }
     string Name { get; set; }
     int Age { get; set; }

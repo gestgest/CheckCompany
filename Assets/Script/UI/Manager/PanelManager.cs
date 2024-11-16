@@ -99,4 +99,10 @@ public class PanelManager : MonoBehaviour
         nav_panel_stack.Push(index);
     }
     //
+
+    public Panel GetPanel(int index)
+    {
+        return panels[index].GetComponent<Panel>();
+    }
+    //
 }

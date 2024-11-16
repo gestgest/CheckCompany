@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance;
+
     [SerializeField] UIManager ui_manager;
     [SerializeField] FireStoreManager fireStoreManager;
     private FirebaseAuth auth;
@@ -13,9 +15,20 @@ public class GameManager : MonoBehaviour
     private string nickname;
 
     //int executive = 1; //임원수
+    long executive_count = 0;
     long money;
     //Reputation reputation = Reputation.single; //레벨 [명예]
     //int exp = 0;
+
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            return;
+        }
+        Destroy(gameObject);
+    }
 
     void Start()
     {
@@ -58,6 +71,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public long Executive_count
+    {
+        //애초에 서버에 데이터를 넣는 게 낫지 않나
+        get { return executive_count; }
+        set
+        {
+            //Debug.Log("돈 서버에게 입력 받음 : " + value);
+            executive_count = value;
+            //fireStoreManager.SetFirestore("GamePlayUser", "milkan660" ,"money", money);
+            //서버 로딩
+            //ui_manager.SetMoneyText(value);
+        }
+    }
+
     enum Reputation
     {
         single = 0, //혼자하는 느낌
@@ -72,6 +99,8 @@ public class GameManager : MonoBehaviour
         //대륙 대표
         //글로벌
     }
+
+    
 
 
 }

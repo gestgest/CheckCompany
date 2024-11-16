@@ -13,6 +13,7 @@ public class RecruitmentElement : MonoBehaviour
     [SerializeField] private TextMeshProUGUI dDayText;
     [SerializeField] private TextMeshProUGUI RecruitmentNumber_Text;
     [SerializeField] private GameObject applicantPanel;
+    
 
     [SerializeField] private GameObject applicant_Prefab;
     private Transform layout_parent;
@@ -42,7 +43,8 @@ public class RecruitmentElement : MonoBehaviour
         {
             Debug.Log("RecruitmentElement : R 버튼 누름");
             IEmployee employee = new Development();
-            employee.ID = 0;
+            employee.ID = GameManager.instance.Executive_count;
+            GameManager.instance.Executive_count = employee.ID + 1;
             employee.Name = "문재현";
             employee.Age = 19;
             employee.CareerPeriod = 12; //1 year
