@@ -13,7 +13,6 @@ public class RecruitmentController : MonoBehaviour
     int id = 0;
     
     [SerializeField] List<EmployeeSO> employeeTypes; 
-    [SerializeField] private GameManager gameManager; //데이터베이스
     [SerializeField] private GameObject recruitmentPrefab;
     [SerializeField] private GameObject view; //parent
     [SerializeField] private TextMeshProUGUI costText;

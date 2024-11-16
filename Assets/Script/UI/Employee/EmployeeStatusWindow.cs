@@ -8,7 +8,6 @@ using Unity.VisualScripting;
 public class EmployeeStatusWindow : MonoBehaviour
 {
     //const IEmployee.MAX_MISSION_SIZE = 5;
-    [SerializeField] private GameManager gameManager;
 
 
 
@@ -167,7 +166,7 @@ public class EmployeeStatusWindow : MonoBehaviour
         if (small_mission_current_size == small_mission_size)
         {
             //디버깅용 돈 주는 이벤트
-            gameManager.Money += 10000;
+            GameManager.instance.Money += 10000;
             RemoveMission(0);
             
         }

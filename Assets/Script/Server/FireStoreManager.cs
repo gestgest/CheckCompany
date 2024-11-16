@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 public class FireStoreManager : MonoBehaviour
 {
     static FirebaseFirestore db;
-    public GameManager gameManager;
 
     //이미 app과 db는 싱글톤이다.
     public void Init()
@@ -24,8 +23,8 @@ public class FireStoreManager : MonoBehaviour
             Debug.Log("Firestore 작동");
 
             //이거 스타트가 아닌 로그인 이후 작동해야 한다. 
-            if(gameManager != null)
-                gameManager.Init(); //=> 대충 서버에서 데이터 들어오는 함수
+            if(GameManager.instance != null)
+                GameManager.instance.Init(); //=> 대충 서버에서 데이터 들어오는 함수
         });
     }
 
