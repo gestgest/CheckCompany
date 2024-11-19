@@ -539,7 +539,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3267c69b70104e343b8554a30f2757a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 602332989}
   nameText: {fileID: 576199158}
   image: {fileID: 500320031}
   ageText: {fileID: 481965495}
@@ -4031,7 +4030,6 @@ MonoBehaviour:
   employeePrefab: {fileID: 7451260809270566376, guid: 147f27304293a2e48a04f84d1cd21c44, type: 3}
   parent: {fileID: 1490410352}
   employeeStatusWindow: {fileID: 122420082}
-  gamePanelManager: {fileID: 511141746}
   debugDevEmployeeType: {fileID: 11400000, guid: 15d3cddb1b549ac41b194a5de5f12099, type: 2}
   employeeStatusPanelSO: {fileID: 11400000, guid: 2422b8b1e26db9d43a1504abd3f2f96f, type: 2}
 --- !u!1001 &517550519
@@ -9603,7 +9601,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a44bd993097f2384ea94ca61d80c3a23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 602332989}
 --- !u!1 &1313963528
 GameObject:
   m_ObjectHideFlags: 0

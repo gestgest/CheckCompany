@@ -23,7 +23,9 @@ public class ApplicantPanel : Panel
     public void EmployApplicant()
     {
         PanelManager.instance.Back_Nav_Panel();
+
         //지원자 고용 함수
+        //(applicant_id)
     }
 
 

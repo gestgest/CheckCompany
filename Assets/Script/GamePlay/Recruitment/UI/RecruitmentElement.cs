@@ -21,15 +21,15 @@ public class RecruitmentElement : MonoBehaviour
 
 
     //지원자 정보 리스트
-    private List<IEmployee> employees;
-    private List<GameObject> employee_GameObjects;
+    private List<IEmployee> applicants; //정렬된 상태어야 하는데
+    private List<GameObject> applicant_objects;
 
     public int ID { get; set; } //채용 구분 ID
 
     private void Start()
     {
-        employees = new List<IEmployee>();
-        employee_GameObjects = new List<GameObject>();
+        applicants = new List<IEmployee>();
+        applicant_objects = new List<GameObject>();
         layout_parent = transform.parent; //부모 가져오기
         parent_VLG = layout_parent.GetComponent<VerticalLayoutGroup>(); //부모의 layout 가져오기
         //icon.sprite
@@ -50,8 +50,8 @@ public class RecruitmentElement : MonoBehaviour
             employee.CareerPeriod = 12; //1 year
             employee.Salary = 100; //월 100만원
 
-            employees.Add(employee);
-            SetRecruitmentNumber(employees.Count);
+            applicants.Add(employee);
+            SetRecruitmentNumber(applicants.Count);
             CreateEmployeeObject(employee);
         }
     }
@@ -72,7 +72,7 @@ public class RecruitmentElement : MonoBehaviour
         applicantElement.SetValue(employee);
 
         tmp.transform.SetParent(applicantPanel.transform);
-        employee_GameObjects.Add(tmp);
+        applicant_objects.Add(tmp);
     }
 
 
@@ -89,6 +89,21 @@ public class RecruitmentElement : MonoBehaviour
     {
         RecruitmentNumber_Text.text = size.ToString() + "명";
     }
+
+    //이진탐색
+    public IEmployee Search_Employee(int id)
+    {
+
+        return null;
+    }
+
+    public IEmployee Binary_Search_IEmployee(int start, int end)
+    {
+
+    }
+
+
+
 
     //dropButton
     public void SwitchingPanel()
