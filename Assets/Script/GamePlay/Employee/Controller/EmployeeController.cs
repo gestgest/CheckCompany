@@ -6,6 +6,7 @@ using UnityEngine.UI;
 //직원 고용 관련 
 public class EmployeeController : MonoBehaviour
 {
+    public static EmployeeController instance;
     //직원 목록
     List<IEmployee> employees;
     List<GameObject> employeeObjects;
@@ -15,6 +16,16 @@ public class EmployeeController : MonoBehaviour
     [SerializeField] private EmployeeStatusWindow employeeStatusWindow;
     [SerializeField] private EmployeeSO debugDevEmployeeType;
     [SerializeField] private PanelSO employeeStatusPanelSO;
+
+    private void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+            return;
+        }
+        Destroy(gameObject);
+    }
 
     private void Start()
     {
@@ -65,15 +76,17 @@ public class EmployeeController : MonoBehaviour
         employeeStatusWindow.SetValue(employees[index]);
     }
 
-    public void CreateEmployee()
+    public void CreateEmployee(IEmployee e)
     {
-        IEmployee e = new Development();
-        e._EmployeeType = debugDevEmployeeType;
-        e.Name = "엄준식";
-        e.Age = 10;
-        e.CareerPeriod = 10;
-        e.Salary = 10;
-        e.ID = 0;
+        //IEmployee e = new Development();
+        //e._EmployeeType = debugDevEmployeeType;
+        //e.Name = "엄준식";
+        //e.Age = 10;
+        //e.CareerPeriod = 10;
+        //e.Salary = 10;
+        //e.ID = 0;
+
+        Debug.Log(e._EmployeeType);
 
         employees.Add(e);
         CreateEmployeeElementUI(e);

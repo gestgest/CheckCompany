@@ -50,6 +50,7 @@ public class RecruitmentElement : MonoBehaviour
             employee.Age = 19;
             employee.CareerPeriod = 12; //1 year
             employee.Salary = 100; //월 100만원
+            //employee._EmployeeType = RecruitmentController.instance.GetEmployeeType();
 
             applicants.Add(employee);
             SetRecruitmentNumber(applicants.Count);
@@ -91,6 +92,16 @@ public class RecruitmentElement : MonoBehaviour
         RecruitmentNumber_Text.text = size.ToString() + "명";
     }
 
+
+    public IEmployee GetApplicant(int id)
+    {
+        int index = Search_Employee_Index(id);
+        if (index == -1)
+            return null;
+        return applicants[index];
+
+    }
+
     #endregion 
 
     //이진탐색
@@ -128,6 +139,7 @@ public class RecruitmentElement : MonoBehaviour
         Destroy(applicant_objects[index]);
         applicant_objects.RemoveAt(index);
     }
+
 
 
     //dropButton

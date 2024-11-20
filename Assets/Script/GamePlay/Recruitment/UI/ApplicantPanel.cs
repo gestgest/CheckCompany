@@ -35,9 +35,13 @@ public class ApplicantPanel : Panel
     {
         RecruitmentElement recruitmentElement = RecruitmentController.instance.GetRecruitmentObject(recruitment_id).GetComponent<RecruitmentElement>();
         //생성되는 함수
-        //RecruitmentController.instance.CreateEmployee();
+        IEmployee employee = recruitmentElement.GetApplicant(applicant_id);
 
-        recruitmentElement.RemoveApplicant(applicant_id);
+        if(employee != null)
+        {
+            EmployeeController.instance.CreateEmployee(employee);
+            recruitmentElement.RemoveApplicant(applicant_id);
+        }
         PanelManager.instance.Back_Nav_Panel();
     }
 

@@ -136,6 +136,11 @@ public class RecruitmentController : MonoBehaviour
         costText.text = cost.ToString();
     }
 
+    public EmployeeSO GetEmployeeType(int id)
+    {
+        return recruitments[id].GetEmployeeType();
+    }
+
     public GameObject GetRecruitmentObject(int index)
     {
         return recruitmentObjects[index];

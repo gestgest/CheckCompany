@@ -29,7 +29,7 @@ public interface IEmployee
 
     public const int MAX_MISSION_SIZE = 5;
     public const int MAX_SMALL_MISSION_SIZE = 7;
-    //requirement
+    //requirementEmployeeType
 }
 
 public enum EmployeeType
