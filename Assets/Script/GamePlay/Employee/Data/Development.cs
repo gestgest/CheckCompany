@@ -6,7 +6,7 @@ using UnityEngine;
 //개발자
 public class Development : IEmployee
 {
-    long id; //식별 번호 => 우리 회사 따로 ID 또는 전체 ID
+    int id; //식별 번호 => 우리 회사 따로 ID 또는 전체 ID
     //우리 회사 따로면 그냥 employee[식별번호] 해야함
     //전체 ID면 계속 정렬시키고 이분탐색해야함 [채택]
     private EmployeeSO employeeType;
@@ -27,7 +27,7 @@ public class Development : IEmployee
         isClearSmallMission = new bool[IEmployee.MAX_SMALL_MISSION_SIZE];
     }
 
-    public long ID { get { return id; } set { id = value; } }
+    public int ID { get { return id; } set { id = value; } }
     public EmployeeSO _EmployeeType { get { return employeeType; } set { employeeType = value; } }
     public string Name { get { return employee_name; } set { employee_name = value; } }
     public int Age { get { return age; } set { age = value; } }

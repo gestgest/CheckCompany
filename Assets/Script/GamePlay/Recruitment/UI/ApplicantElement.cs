@@ -12,6 +12,8 @@ public class ApplicantElement : MonoBehaviour
     [SerializeField] private TextMeshProUGUI careerPeriod_text;
     private ApplicantPanel applicantPanel;
 
+    //int recruitment_id;
+
     private long applicant_id;
 
     private void Start()
@@ -20,7 +22,7 @@ public class ApplicantElement : MonoBehaviour
     }
 
     // Init 급
-    public void SetValue(IEmployee employee)
+    public void SetValue(IEmployee employee, int recruitment_id)
     {
         //icon
         name_text.text = employee.Name;
@@ -31,7 +33,7 @@ public class ApplicantElement : MonoBehaviour
         Button button = GetComponent<Button>();
 
         //버튼 누르면 이동
-        button.onClick.AddListener(() => { PanelManager.instance.Click_Button_Panel(8, true); applicantPanel.SetValue(employee.ID); });
+        button.onClick.AddListener(() => { PanelManager.instance.Click_Button_Panel(8, true); applicantPanel.SetID(employee.ID, recruitment_id); });
     }
 
     //클릭하면 그 직원 승진이든 삭제든

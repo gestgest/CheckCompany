@@ -5,12 +5,14 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
+//채용 공고 컨트롤러
 public class RecruitmentController : MonoBehaviour
 {
+    public static RecruitmentController instance;
     //채용 리스트
     List<Recruitment> recruitments;
     List<GameObject> recruitmentObjects;
-    int id = 0;
+    int id = 0; //생성하려는 id
     
     [SerializeField] List<EmployeeSO> employeeTypes; 
     [SerializeField] private GameObject recruitmentPrefab;
@@ -24,6 +26,15 @@ public class RecruitmentController : MonoBehaviour
     private int cost; //코스트 => 게임 오브젝트도 가져와서 설정해야 할 거 같은데
 
 
+    private void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+            return;
+        }
+        Destroy(gameObject);
+    }
 
     private void Start()
     {
@@ -125,6 +136,10 @@ public class RecruitmentController : MonoBehaviour
         costText.text = cost.ToString();
     }
 
+    public GameObject GetRecruitmentObject(int index)
+    {
+        return recruitmentObjects[index];
+    }
 
     #endregion
 }

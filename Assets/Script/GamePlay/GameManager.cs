@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     private string nickname;
 
     //int executive = 1; //임원수
-    long executive_count = 0;
+    int executive_count = 0;
     long money;
     //Reputation reputation = Reputation.single; //레벨 [명예]
     //int exp = 0;
@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public long Executive_count
+    public int Executive_count
     {
         //애초에 서버에 데이터를 넣는 게 낫지 않나
         get { return executive_count; }

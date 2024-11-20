@@ -12,8 +12,8 @@ public class RecruitmentElement : MonoBehaviour
     [SerializeField] private Image icon;
     [SerializeField] private TextMeshProUGUI dDayText;
     [SerializeField] private TextMeshProUGUI RecruitmentNumber_Text;
-    [SerializeField] private GameObject applicantPanel;
-    
+    [SerializeField] private GameObject applicantsPanel; //지원자 리스트
+
 
     [SerializeField] private GameObject applicant_Prefab;
     private Transform layout_parent;
@@ -32,6 +32,7 @@ public class RecruitmentElement : MonoBehaviour
         applicant_objects = new List<GameObject>();
         layout_parent = transform.parent; //부모 가져오기
         parent_VLG = layout_parent.GetComponent<VerticalLayoutGroup>(); //부모의 layout 가져오기
+
         //icon.sprite
 
     }
@@ -69,13 +70,13 @@ public class RecruitmentElement : MonoBehaviour
         GameObject tmp = Instantiate(applicant_Prefab);
 
         ApplicantElement applicantElement = tmp.GetComponent<ApplicantElement>();
-        applicantElement.SetValue(employee);
+        applicantElement.SetValue(employee, ID);
 
-        tmp.transform.SetParent(applicantPanel.transform);
+        tmp.transform.SetParent(applicantsPanel.transform);
         applicant_objects.Add(tmp);
     }
 
-
+    #region property
 
     private void SetIcon(Sprite sprite)
     {
@@ -90,26 +91,50 @@ public class RecruitmentElement : MonoBehaviour
         RecruitmentNumber_Text.text = size.ToString() + "명";
     }
 
+    #endregion 
+
     //이진탐색
-    public IEmployee Search_Employee(int id)
+    public int Search_Employee_Index(int id)
     {
-
-        return null;
+        return Binary_Search_Employee_Index(0, applicants.Count - 1, id);
     }
 
-    public IEmployee Binary_Search_IEmployee(int start, int end)
+    private int Binary_Search_Employee_Index(int start, int end, int id)
     {
+        if (start > end) return -1;
+        int mid = (start + end) / 2;
+
+        //아이디가 같다
+        if (applicants[mid].ID == id)
+        {
+            return mid;
+        }
+        else if (id > applicants[mid].ID)
+        {
+            return Binary_Search_Employee_Index(mid + 1, end, id);
+        }
+        else
+        {
+            return Binary_Search_Employee_Index(start, mid - 1, id);
+        }
 
     }
 
+    public void RemoveApplicant(int id)
+    {
+        int index = Search_Employee_Index(id);
 
+        applicants.RemoveAt(index);
+        Destroy(applicant_objects[index]);
+        applicant_objects.RemoveAt(index);
+    }
 
 
     //dropButton
     public void SwitchingPanel()
     {
         parent_VLG.childControlHeight = false;
-        applicantPanel.SetActive(!(applicantPanel.activeSelf));
+        applicantsPanel.SetActive(!(applicantsPanel.activeSelf));
         parent_VLG.childControlHeight = true;
     }
 
