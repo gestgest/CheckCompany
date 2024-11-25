@@ -9,16 +9,16 @@ public struct Recruitment
     int id; //모집 구분 id => 이걸로 모집 컴포넌트를 제거 생성해야한다
     int level;
     List<IEmployee> employeeList;
-    private EmployeeType employeeType;
+    private EmployeeSO employeeSO;
 
     
-    public void SetEmployeeType(EmployeeType employeeType)
+    public void SetEmployeeSO(EmployeeSO employeeSO)
     {
-        this.employeeType = employeeType;
+        this.employeeSO = employeeSO;
     }
-    public EmployeeType GetEmployeeType()
+    public EmployeeSO GetEmployeeSO()
     {
-        return employeeType;
+        return employeeSO;
     }
     public void SetDay(int day)
     {

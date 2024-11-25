@@ -696,7 +696,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae1591fb0a3505640aa927fb2600f8ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  employeeTypes:
+  employeeSOs:
   - {fileID: 11400000, guid: 8bc37c78e20212d479e6b29330ed631b, type: 2}
   - {fileID: 11400000, guid: 15d3cddb1b549ac41b194a5de5f12099, type: 2}
   - {fileID: 11400000, guid: 88e98f653e9e18e45a87d95530a15dcb, type: 2}

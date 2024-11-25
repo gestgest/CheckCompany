@@ -9,7 +9,7 @@ public class Development : IEmployee
     int id; //식별 번호 => 우리 회사 따로 ID 또는 전체 ID
     //우리 회사 따로면 그냥 employee[식별번호] 해야함
     //전체 ID면 계속 정렬시키고 이분탐색해야함 [채택]
-    private EmployeeSO employeeType;
+    private EmployeeSO employeeSO;
     private string employee_name;
     private int age;
     private int careerPeriod;
@@ -28,7 +28,7 @@ public class Development : IEmployee
     }
 
     public int ID { get { return id; } set { id = value; } }
-    public EmployeeSO _EmployeeType { get { return employeeType; } set { employeeType = value; } }
+    public EmployeeSO _EmployeeSO { get { return employeeSO; } set { employeeSO = value; } }
     public string Name { get { return employee_name; } set { employee_name = value; } }
     public int Age { get { return age; } set { age = value; } }
     public int CareerPeriod { get { return careerPeriod; } set { careerPeriod = value; } }

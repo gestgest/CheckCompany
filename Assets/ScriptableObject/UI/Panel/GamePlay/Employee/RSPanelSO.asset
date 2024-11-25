@@ -16,4 +16,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: b6a96c7c65795c94abf54a62adbf5c38, type: 3}
   index: 4
   height: 1
-  buttons: []
+  buttons:
+  - {fileID: 11400000, guid: d0bf2e75e8787e547b0c6a6ec73c5f14, type: 2}
+  - {fileID: 11400000, guid: 352892ce7d28ddf449db745f5cdddd28, type: 2}
+  - {fileID: 11400000}

@@ -25,6 +25,7 @@ public class RecruitmentElement : MonoBehaviour
     private List<GameObject> applicant_objects;
 
     public int ID { get; set; } //채용 구분 ID
+    private EmployeeSO employeeSO;
 
     private void Start()
     {
@@ -50,17 +51,19 @@ public class RecruitmentElement : MonoBehaviour
             employee.Age = 19;
             employee.CareerPeriod = 12; //1 year
             employee.Salary = 100; //월 100만원
-            //employee._EmployeeType = RecruitmentController.instance.GetEmployeeType();
+            employee._EmployeeSO = RecruitmentController.instance.GetEmployeeSO((int)(employeeSO.GetEmployeeType())); //recruitment에 걸맞게
 
             applicants.Add(employee);
+            SelectionApplicantSort();
             SetRecruitmentNumber(applicants.Count);
             CreateEmployeeObject(employee);
         }
     }
 
-    public void SetRecruitment(Sprite sprite, int day, int size, int id)
+    public void SetRecruitment(EmployeeSO employeeSO, int day, int size, int id)
     {
-        SetIcon(sprite);
+        this.employeeSO = employeeSO;
+        SetIcon(employeeSO.GetIcon());
         SetDDay(day);
         SetRecruitmentNumber(size);
         ID = id;
@@ -136,8 +139,9 @@ public class RecruitmentElement : MonoBehaviour
         int index = Search_Employee_Index(id);
 
         applicants.RemoveAt(index);
-        Destroy(applicant_objects[index]);
+        Destroy(applicant_objects[index]); //Pool링?
         applicant_objects.RemoveAt(index);
+        SetRecruitmentNumber(applicants.Count);
     }
 
 
@@ -150,5 +154,35 @@ public class RecruitmentElement : MonoBehaviour
         parent_VLG.childControlHeight = true;
     }
 
+    private void SelectionApplicantSort()
+    {
+        //O(n^2) => 나중에 다른 정렬로 바꾸지 않을까
+        for(int i = 0; i < applicants.Count; i++)
+        {
+            for (int j = i + 1; j < applicants.Count; j++)
+            {
+                if (applicants[i].ID > applicants[j].ID)
+                {
+                    IEmployee tmp = applicants[i];
+                    applicants[i] = applicants[j];
+                    applicants[j] = tmp;
+
+                    Transform a = applicant_objects[i].transform;
+                    int a_index = a.GetSiblingIndex();
+                    Transform b = applicant_objects[j].transform;
+                    int b_index = b.GetSiblingIndex();
+
+                    //Debug.Log("a : " +a_index);
+                    //Debug.Log("b : " +b_index);
+                    b.SetSiblingIndex(a_index);
+                    a.SetSiblingIndex(b_index);
+
+                    GameObject tmp_object = applicant_objects[i];
+                    applicant_objects[i] = applicant_objects[j];
+                    applicant_objects[j] = tmp_object;
+                }
+            }
+        }
+    }
 
 }

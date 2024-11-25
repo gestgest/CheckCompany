@@ -14,7 +14,7 @@ public class RecruitmentController : MonoBehaviour
     List<GameObject> recruitmentObjects;
     int id = 0; //생성하려는 id
     
-    [SerializeField] List<EmployeeSO> employeeTypes; 
+    [SerializeField] List<EmployeeSO> employeeSOs; 
     [SerializeField] private GameObject recruitmentPrefab;
     [SerializeField] private GameObject view; //parent
     [SerializeField] private TextMeshProUGUI costText;
@@ -65,7 +65,7 @@ public class RecruitmentController : MonoBehaviour
         RecruitmentElement recruitmentContent = recruitmentObject.GetComponent<RecruitmentElement>();
 
         //recruitmentContent.SetRecruitment(employeeTypeIcons[(int)r.GetEmployeeType()], r.GetDay(), r.GetSize(), i)
-        recruitmentContent.SetRecruitment(employeeTypes[(int)(r.GetEmployeeType())].GetIcon(), r.GetDay(), 0, r.GetID());
+        recruitmentContent.SetRecruitment(employeeSOs[(int)(r.GetEmployeeSO().GetEmployeeType())], r.GetDay(), 0, r.GetID());
         recruitmentObjects.Add(recruitmentObject);
         recruitmentObject.transform.SetParent(view.transform);
     }
@@ -76,7 +76,7 @@ public class RecruitmentController : MonoBehaviour
         Recruitment recruitment = new Recruitment();
 
         //버튼 정보 가져오기 디버깅
-        recruitment.SetEmployeeType(employeeTypes[employeeTypeIndex].GetEmployeeType());
+        recruitment.SetEmployeeSO(employeeSOs[employeeTypeIndex]);
         recruitment.SetLevel(level);
         recruitment.SetDay(period);
         recruitment.SetID(id++);
@@ -136,9 +136,9 @@ public class RecruitmentController : MonoBehaviour
         costText.text = cost.ToString();
     }
 
-    public EmployeeSO GetEmployeeType(int id)
+    public EmployeeSO GetEmployeeSO(int id)
     {
-        return recruitments[id].GetEmployeeType();
+        return recruitments[id].GetEmployeeSO();
     }
 
     public GameObject GetRecruitmentObject(int index)
