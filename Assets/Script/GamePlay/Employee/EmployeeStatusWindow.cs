@@ -9,8 +9,6 @@ public class EmployeeStatusWindow : MonoBehaviour
 {
     //const IEmployee.MAX_MISSION_SIZE = 5;
 
-
-
     //Description Panel
     [SerializeField] private TextMeshProUGUI nameText;
     [SerializeField] private Image image;

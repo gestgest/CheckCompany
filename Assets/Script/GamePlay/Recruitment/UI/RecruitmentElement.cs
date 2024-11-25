@@ -58,6 +58,10 @@ public class RecruitmentElement : MonoBehaviour
             SetRecruitmentNumber(applicants.Count);
             CreateEmployeeObject(employee);
         }
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            RerollPanel();
+        }
     }
 
     public void SetRecruitment(EmployeeSO employeeSO, int day, int size, int id)
@@ -142,15 +146,20 @@ public class RecruitmentElement : MonoBehaviour
         Destroy(applicant_objects[index]); //Pool링?
         applicant_objects.RemoveAt(index);
         SetRecruitmentNumber(applicants.Count);
+
+    }
+
+    public void SwitchPanel()
+    {
+        applicantsPanel.SetActive(!(applicantsPanel.activeSelf));
+        RerollPanel();
     }
 
 
-
-    //dropButton
-    public void SwitchingPanel()
+    //dropButton, 배치관리자가 제대로 안되는거 방지
+    private void RerollPanel()
     {
         parent_VLG.childControlHeight = false;
-        applicantsPanel.SetActive(!(applicantsPanel.activeSelf));
         parent_VLG.childControlHeight = true;
     }
 
