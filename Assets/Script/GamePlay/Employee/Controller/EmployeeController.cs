@@ -55,12 +55,31 @@ public class EmployeeController : MonoBehaviour
         Button button = employeeObject.GetComponent<Button>();
 
 
-        employeeContent.SetEmployee(e._EmployeeSO.GetIcon(), e.Name, e.CareerPeriod, 1, e.Salary);
+        employeeContent.SetEmployee(e._EmployeeSO.GetIcon(), e.Name, e.CareerPeriod, 1, e.Salary, e.ID);
         employeeObjects.Add(employeeObject);
         employeeObject.transform.SetParent(parent.transform);
 
         //버튼 추가
         button.onClick.AddListener(() => { ShowEmployeeStatusWindow(e.ID); });
+    }
+
+
+    //제거 함수
+    public void RemoveEmployee(int id)
+    {
+        int index = Search_Employee_Index(id);
+
+        //직원 제거 함수, index가 -1이면 오류
+        if (index != -1)
+        {
+            employees.RemoveAt(index);
+            Destroy(employeeObjects[index]);
+            employeeObjects.RemoveAt(index);
+        }
+        else
+        {
+            Debug.Log("id : " + id);
+        }
     }
 
     //직원 창 보여주는 기능

@@ -14,16 +14,16 @@ public class EmployeeElement : MonoBehaviour
     [SerializeField] private TextMeshProUGUI weight_speed; //업무속도 => 가중치
     [SerializeField] private TextMeshProUGUI costUI;
 
-    //해고 버튼
-    public int ID { get; set; }
+    public int ID { get; set; } //직원 아이디
 
-    public void SetEmployee(Sprite sprite, string name, int career, int weight_speed, int cost)
+    public void SetEmployee(Sprite sprite, string name, int career, int weight_speed, int cost, int id)
     {
         SetIcon(sprite);
         SetEmployeeName(name);
         SetCareer(career);
         SetWeightSpeed(weight_speed);
         SetCost(cost);
+        ID = id;
     }
     private void SetIcon(Sprite icon)
     {
@@ -45,5 +45,12 @@ public class EmployeeElement : MonoBehaviour
     private void SetCost(int cost)
     {
         costUI.text = cost.ToString();
+    }
+
+
+    //싱글톤으로 Employee를 제거하는 함수
+    public void RemoveEmployee()
+    {
+        EmployeeController.instance.RemoveEmployee(ID);
     }
 }
