@@ -28,7 +28,7 @@ public class FireStoreManager : MonoBehaviour
         });
     }
 
-    public void SetFirestore(string collection_name, string document_name, string key, object value)
+    public void SetFirestoreData(string collection_name, string document_name, string key, object value)
     {
         // 저장할 데이터
         Dictionary<string, object> user = new Dictionary<string, object>
@@ -56,7 +56,7 @@ public class FireStoreManager : MonoBehaviour
         });
     }
 
-    public async Task<object> GetFirestore(string collection_name, string id, string key)
+    public async Task<object> GetFirestoreData(string collection_name, string id, string key)
     {
         Dictionary<string, object> result = null;
         // 특정 문서 가져오기 => 임시 

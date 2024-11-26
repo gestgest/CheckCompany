@@ -45,8 +45,8 @@ public class RecruitmentElement : MonoBehaviour
         {
             Debug.Log("RecruitmentElement : R 버튼 누름");
             IEmployee employee = new Development();
-            employee.ID = GameManager.instance.Executive_count;
-            GameManager.instance.Executive_count = employee.ID + 1;
+            employee.ID = GameManager.instance.Employee_count;
+            GameManager.instance.Employee_count = employee.ID + 1;
             employee.Name = "문재현";
             employee.Age = 19;
             employee.CareerPeriod = 12; //1 year

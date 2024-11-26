@@ -14,8 +14,8 @@ public class GameManager : MonoBehaviour
     private FirebaseUser user;
     private string nickname;
 
-    //int executive = 1; //임원수
-    int executive_count = 0;
+    //int executive = 1; //임원, 그냥 Employee를 하는게 낫지 않나
+    int employee_count = 0;
     long money;
     //Reputation reputation = Reputation.single; //레벨 [명예]
     //int exp = 0;
@@ -50,12 +50,14 @@ public class GameManager : MonoBehaviour
         Debug.Log(user.Email);
 
         //user.Email으로 쿼리 만들고
-        nickname = (string)await fireStoreManager.GetFirestore("User", user.Email, "nickname");
-        Money = (long)await fireStoreManager.GetFirestore("GamePlayUser", nickname, "money");
+        nickname = (string)await fireStoreManager.GetFirestoreData("User", user.Email, "nickname");
+        Money = (long)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "money");
         //서버에게 number 받는 거는 무조건 long 으로 해야한다
         //타입이 64비트가 나온다. => 8바이트 => long
         //int는 4바이트
     }
+
+    #region property
 
     public long Money
     {
@@ -65,25 +67,30 @@ public class GameManager : MonoBehaviour
         {
             //Debug.Log("돈 서버에게 입력 받음 : " + value);
             money = value;
-            //fireStoreManager.SetFirestore("GamePlayUser", "milkan660" ,"money", money);
+
+            //근데 이러면 불필요한 서버 데이터 전달이 두번?
+            fireStoreManager.SetFirestoreData("GamePlayUser", nickname, "money", money);
+            
             //서버 로딩
             ui_manager.SetMoneyText(value);
         }
     }
 
-    public int Executive_count
+    public int Employee_count
     {
         //애초에 서버에 데이터를 넣는 게 낫지 않나
-        get { return executive_count; }
+        get { return employee_count; }
         set
         {
             //Debug.Log("돈 서버에게 입력 받음 : " + value);
-            executive_count = value;
+            employee_count = value;
             //fireStoreManager.SetFirestore("GamePlayUser", "milkan660" ,"money", money);
             //서버 로딩
             //ui_manager.SetMoneyText(value);
         }
     }
+
+    #endregion
 
     enum Reputation
     {

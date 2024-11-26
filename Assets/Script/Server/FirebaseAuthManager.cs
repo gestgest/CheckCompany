@@ -223,10 +223,10 @@ public class FirebaseAuthManager : MonoBehaviour
                     Debug.Log("회원가입 성공");
 
                     //user 닉네임 Document
-                    fireStoreManager.SetFirestore("User", user.Email, "nickname", name);
+                    fireStoreManager.SetFirestoreData("User", user.Email, "nickname", name);
                     
                     //초기값 설정
-                    fireStoreManager.SetFirestore("GamePlayUser", name, "money", 0);
+                    fireStoreManager.SetFirestoreData("GamePlayUser", name, "money", 0);
 
                     PanelManager.instance.SwitchingPanel(1); //로그인 화면으로
                 }
