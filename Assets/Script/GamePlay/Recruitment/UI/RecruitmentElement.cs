@@ -60,6 +60,7 @@ public class RecruitmentElement : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.T))
         {
+            Debug.Log("RecruitmentElement : T 버튼 누름");
             RerollPanel();
         }
     }

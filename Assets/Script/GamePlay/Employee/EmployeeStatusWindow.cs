@@ -10,7 +10,7 @@ public class EmployeeStatusWindow : MonoBehaviour
     //const IEmployee.MAX_MISSION_SIZE = 5;
 
     //Description Panel
-    [SerializeField] private TextMeshProUGUI nameText;
+    [SerializeField] private TextMeshProUGUI [] nameTexts;
     [SerializeField] private Image image;
     [SerializeField] private TextMeshProUGUI ageText;
     [SerializeField] private TextMeshProUGUI salaryText;
@@ -67,7 +67,11 @@ public class EmployeeStatusWindow : MonoBehaviour
     public void SetValue(IEmployee employee)
     {
         this.employee = employee;
-        nameText.text = employee.Name + " 사원"; //일단 사원으로 함
+
+        for(int i = 0; i < nameTexts.Length; i++)
+        {
+            nameTexts[i].text = employee.Name + " 사원"; //일단 사원으로 함
+        }
         //이미지는 패스
         ageText.text = "나이 : " + employee.Age.ToString() + "살";
         salaryText.text = "연봉 : " + (employee.Salary * 12).ToString() + "원";
