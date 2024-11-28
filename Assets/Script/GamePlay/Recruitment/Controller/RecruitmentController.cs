@@ -140,6 +140,10 @@ public class RecruitmentController : MonoBehaviour
     {
         return recruitments[id].GetEmployeeSO();
     }
+    public Recruitment GetRecruitment(int id)
+    {
+        return recruitments[id];
+    }
 
     public GameObject GetRecruitmentObject(int index)
     {

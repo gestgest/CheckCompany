@@ -52,6 +52,7 @@ public class GameManager : MonoBehaviour
         //user.Email으로 쿼리 만들고
         nickname = (string)await fireStoreManager.GetFirestoreData("User", user.Email, "nickname");
         Money = (long)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "money");
+        //RecruitmentController.instance.GetFirestoreData("Recruitment")
         //서버에게 number 받는 거는 무조건 long 으로 해야한다
         //타입이 64비트가 나온다. => 8바이트 => long
         //int는 4바이트
@@ -75,6 +76,13 @@ public class GameManager : MonoBehaviour
             ui_manager.SetMoneyText(value);
         }
     }
+    //모집 => RecruitmentController
+    // ㄴ 지원자 (applicant) = Employee타입
+    //     ㄴ 
+    //    - [ ] 지원자
+    //- [ ] 직원
+    //    - [ ] 미션
+
 
     public int Employee_count
     {
@@ -89,6 +97,9 @@ public class GameManager : MonoBehaviour
             //ui_manager.SetMoneyText(value);
         }
     }
+
+    
+
 
     #endregion
 
