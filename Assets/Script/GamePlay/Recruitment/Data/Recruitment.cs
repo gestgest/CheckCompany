@@ -47,4 +47,20 @@ public struct Recruitment
     {
         this.level = level;
     }
+
+    public Dictionary<string, object> RecruitmentToJSON()
+    {
+
+        // 저장할 데이터
+        Dictionary<string, object> data = new Dictionary<string, object>
+        {
+            { "day", day },
+            { "id", id },
+            { "level", level },
+            //{ "employeeList", employeeList},
+            { "employeeType", (int)employeeSO.GetEmployeeType() },
+        };
+        return data;
+    }
+
 }

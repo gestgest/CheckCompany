@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using Firebase.Firestore;
 
 //채용 공고 컨트롤러
 public class RecruitmentController : MonoBehaviour
@@ -54,12 +55,12 @@ public class RecruitmentController : MonoBehaviour
         for(int i = 0; i < recruitments.Count; i++)
         {
             Recruitment r = recruitments[i];
-            CreateRecruitment(r);
+            CreateRecruitmentObject(r);
         }
     }
 
     //Panel안에 채용 목록 띄워주는 함수
-    private void CreateRecruitment(Recruitment r)
+    private void CreateRecruitmentObject(Recruitment r)
     {
         GameObject recruitmentObject = Instantiate(recruitmentPrefab, Vector3.zero, Quaternion.identity);
         RecruitmentElement recruitmentContent = recruitmentObject.GetComponent<RecruitmentElement>();
@@ -83,8 +84,9 @@ public class RecruitmentController : MonoBehaviour
         //SetCost()
         
         recruitments.Add(recruitment);
+        Set_server_recruitment_index(recruitment.GetID());
 
-        CreateRecruitment(recruitment);
+        CreateRecruitmentObject(recruitment);
     }
 
     #region Property
@@ -140,15 +142,24 @@ public class RecruitmentController : MonoBehaviour
     {
         return recruitments[id].GetEmployeeSO();
     }
-    public Recruitment GetRecruitment(int id)
+    public Recruitment GetRecruitment(int id) //server 예정
     {
         return recruitments[id];
     }
 
-    public GameObject GetRecruitmentObject(int index)
+
+    public GameObject GetRecruitmentObject(int index) 
     {
         return recruitmentObjects[index];
     }
 
     #endregion
+
+    public void Set_server_recruitment_index(int index) //recruit 인덱스만 서버 동기화
+    {
+        FireStoreManager.instance.SetFirestoreData("GamePlayUser", "milkan660" ,"recruitments", 
+            FieldValue.ArrayUnion(recruitments[index].RecruitmentToJSON())
+        );
+        //user/
+    }
 }

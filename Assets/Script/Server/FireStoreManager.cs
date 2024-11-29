@@ -11,6 +11,17 @@ using System.Threading.Tasks;
 public class FireStoreManager : MonoBehaviour
 {
     static FirebaseFirestore db;
+    public static FireStoreManager instance;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            return;
+        }
+        Destroy(gameObject);
+    }
 
     //이미 app과 db는 싱글톤이다.
     public void Init()
@@ -31,7 +42,7 @@ public class FireStoreManager : MonoBehaviour
     public void SetFirestoreData(string collection_name, string document_name, string key, object value)
     {
         // 저장할 데이터
-        Dictionary<string, object> user = new Dictionary<string, object>
+        Dictionary<string, object> data = new Dictionary<string, object>
         {
             { key, value }
         };
@@ -43,7 +54,8 @@ public class FireStoreManager : MonoBehaviour
 
         // "users" 컬렉션에 새로운 문서 생성
         //db.Collection("GamePlayUser").AddAsync(user).ContinueWithOnMainThread(task =>
-        db.Collection(collection_name).Document(document_name).SetAsync(user).ContinueWithOnMainThread(task =>
+        //db.Collection(collection_name).Document(document_name).SetAsync(data).ContinueWithOnMainThread(task =>
+        db.Collection(collection_name).Document(document_name).UpdateAsync(data).ContinueWithOnMainThread(task =>
         {
             if (task.IsCompleted)
             {

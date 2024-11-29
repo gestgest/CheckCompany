@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour
         }
     }
     //모집 => RecruitmentController
-    // ㄴ 지원자 (applicant) = Employee타입
+    // ㄴ 지원자 (applicant) = Employee타입 => Set_server_recruitment_index()
     //     ㄴ 
     //    - [ ] 지원자
     //- [ ] 직원
