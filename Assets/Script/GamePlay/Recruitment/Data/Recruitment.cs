@@ -8,7 +8,7 @@ public struct Recruitment
     int day; //Date
     int id; //모집 구분 id => 이걸로 모집 컴포넌트를 제거 생성해야한다
     int level;
-    List<IEmployee> employeeList;
+    List<IEmployee> applicants;
     private EmployeeSO employeeSO;
 
     
@@ -30,9 +30,8 @@ public struct Recruitment
     }
     public int GetSize()
     {
-        return employeeList.Count;
+        return applicants.Count;
     }
-
 
     public int GetID()
     {
@@ -57,10 +56,29 @@ public struct Recruitment
             { "day", day },
             { "id", id },
             { "level", level },
-            //{ "employeeList", employeeList},
+            //{ "applicants", GetApplicantsToJson()},
             { "employeeType", (int)employeeSO.GetEmployeeType() },
         };
+        //EmployeeToJSON
         return data;
     }
 
+
+    public Dictionary<int, Dictionary<string, object>> GetApplicantsToJson() //employees를 JSON으로
+    {
+        Dictionary<int, Dictionary<string, object>> result = new Dictionary<int, Dictionary<string, object>>();
+
+        if(applicants == null)
+        {
+            return null;
+        }
+
+        for(int i = 0; i < applicants.Count; i++)
+        {
+            result.Add(applicants[i].ID, applicants[i].EmployeeToJSON());
+            //result.applicants[i].EmployeeToJSON());
+        }
+
+        return result;
+    }
 }

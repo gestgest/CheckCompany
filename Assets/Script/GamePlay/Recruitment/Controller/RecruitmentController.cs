@@ -84,7 +84,7 @@ public class RecruitmentController : MonoBehaviour
         //SetCost()
         
         recruitments.Add(recruitment);
-        Set_server_recruitment_index(recruitment.GetID());
+        Add_server_recruitment_index(recruitment.GetID());
 
         CreateRecruitmentObject(recruitment);
     }
@@ -155,11 +155,21 @@ public class RecruitmentController : MonoBehaviour
 
     #endregion
 
-    public void Set_server_recruitment_index(int index) //recruit 인덱스만 서버 동기화
+    public void Add_server_recruitment_index(int index) //recruit 인덱스만 서버 동기화 => Firestore 배열 Add 기능만 있음
     {
-        FireStoreManager.instance.SetFirestoreData("GamePlayUser", "milkan660" ,"recruitments", 
-            FieldValue.ArrayUnion(recruitments[index].RecruitmentToJSON())
-        );
+        Dictionary<int, object> data = new Dictionary<int, object>
+        {
+            { 10, 10}
+            //{ index, recruitments[index].RecruitmentToJSON() }
+        };
+        //대충 가져와서
+        //
+
+        //new Dictionary<int, object> { }
+        FireStoreManager.instance.SetFirestoreData("GamePlayUser", "milkan660", "recruitments", data);
+
+        //FieldValue.ArrayUnion(recruitments[index].RecruitmentToJSON()) //기존에 있는 배열에서 추가한 느낌
+
         //user/
-    }
+    }   
 }

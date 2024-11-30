@@ -29,7 +29,32 @@ public interface IEmployee
 
     public const int MAX_MISSION_SIZE = 5;
     public const int MAX_SMALL_MISSION_SIZE = 7;
+ 
     //requirementEmployeeType
+
+    public Dictionary<string, object> EmployeeToJSON()
+    {
+        Dictionary<string, float> _worktime = new Dictionary<string, float>
+        {
+            { "start", _WorkTime.start },
+            { "end", _WorkTime.end },
+        };
+
+        Dictionary<string, object> result = new Dictionary<string, object>
+        {
+            { "id", ID },
+            { "name", Name },
+            { "age", Age },
+            { "careerPeriod", CareerPeriod },
+            { "rank", _Rank },
+            { "salary", Salary },
+            { "workTime", _worktime },
+        };
+        //{ "employeeType", (int)employeeSO.GetEmployeeType() } => 이거는 Recruitment와 중첩되니 패스
+
+
+        return result;
+    }
 }
 
 public enum EmployeeType
