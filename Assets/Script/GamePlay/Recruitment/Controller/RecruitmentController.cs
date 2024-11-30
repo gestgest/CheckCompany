@@ -157,6 +157,7 @@ public class RecruitmentController : MonoBehaviour
 
     public void Add_server_recruitment_index(int index) //recruit 인덱스만 서버 동기화 => Firestore 배열 Add 기능만 있음
     {
+        long
         Dictionary<int, object> data = new Dictionary<int, object>
         {
             { 10, 10}
