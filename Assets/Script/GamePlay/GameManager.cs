@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
         //user.Email으로 쿼리 만들고
         nickname = (string)await fireStoreManager.GetFirestoreData("User", user.Email, "nickname");
         Money = (long)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "money");
-        Employee_count = (int)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "employee_count");
+        //Employee_count = (int)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "employee_count");
         //RecruitmentController.instance.GetFirestoreData("Recruitment")
         //서버에게 number 받는 거는 무조건 long 으로 해야한다
         //타입이 64비트가 나온다. => 8바이트 => long
@@ -60,6 +60,8 @@ public class GameManager : MonoBehaviour
     }
 
     #region property
+
+    public string Nickname => nickname;
 
     public long Money
     {

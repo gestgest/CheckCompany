@@ -59,7 +59,7 @@ public class FireStoreManager : MonoBehaviour
         {
             if (task.IsCompleted)
             {
-                Debug.Log("데이터 입력 성공");
+                Debug.Log(collection_name +"/" + document_name + "/" + key  +  " : 데이터 입력 성공");
             }
             else
             {
