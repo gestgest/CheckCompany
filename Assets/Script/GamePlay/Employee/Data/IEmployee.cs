@@ -42,7 +42,7 @@ public interface IEmployee
 
         Dictionary<string, object> result = new Dictionary<string, object>
         {
-            { "id", ID },
+            //{ "id", ID },
             { "name", Name },
             { "age", Age },
             { "careerPeriod", CareerPeriod },

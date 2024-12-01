@@ -56,7 +56,7 @@ public struct Recruitment
             { "day", day },
             { "id", id },
             { "level", level },
-            //{ "applicants", GetApplicantsToJson()},
+            { "applicants", GetApplicantsToJson()},
             { "employeeType", (int)employeeSO.GetEmployeeType() },
         };
         //EmployeeToJSON
@@ -64,18 +64,18 @@ public struct Recruitment
     }
 
 
-    public Dictionary<int, Dictionary<string, object>> GetApplicantsToJson() //employees를 JSON으로
+    public Dictionary<string, Dictionary<string, object>> GetApplicantsToJson() //employees를 JSON으로
     {
-        Dictionary<int, Dictionary<string, object>> result = new Dictionary<int, Dictionary<string, object>>();
+        Dictionary<string, Dictionary<string, object>> result = new Dictionary<string, Dictionary<string, object>>();
 
         if(applicants == null)
         {
-            return null;
+            return result;
         }
 
         for(int i = 0; i < applicants.Count; i++)
         {
-            result.Add(applicants[i].ID, applicants[i].EmployeeToJSON());
+            result.Add(applicants[i].ID.ToString(), applicants[i].EmployeeToJSON());
             //result.applicants[i].EmployeeToJSON());
         }
 

@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     private FirebaseUser user;
     private string nickname;
 
-    //int executive = 1; //임원, 그냥 Employee를 하는게 낫지 않나
+    //int executive = 1; //임원, 임원 생성할때 이거 참조해야한다
     int employee_count = 0;
     long money;
     //Reputation reputation = Reputation.single; //레벨 [명예]
@@ -52,6 +52,7 @@ public class GameManager : MonoBehaviour
         //user.Email으로 쿼리 만들고
         nickname = (string)await fireStoreManager.GetFirestoreData("User", user.Email, "nickname");
         Money = (long)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "money");
+        Employee_count = (int)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "employee_count");
         //RecruitmentController.instance.GetFirestoreData("Recruitment")
         //서버에게 number 받는 거는 무조건 long 으로 해야한다
         //타입이 64비트가 나온다. => 8바이트 => long
@@ -78,8 +79,7 @@ public class GameManager : MonoBehaviour
     }
     //모집 => RecruitmentController
     // ㄴ 지원자 (applicant) = Employee타입 => Set_server_recruitment_index()
-    //     ㄴ 
-    //    - [ ] 지원자
+    //     - ApplicantElement
     //- [ ] 직원
     //    - [ ] 미션
 
@@ -92,7 +92,7 @@ public class GameManager : MonoBehaviour
         {
             //Debug.Log("돈 서버에게 입력 받음 : " + value);
             employee_count = value;
-            //fireStoreManager.SetFirestore("GamePlayUser", "milkan660" ,"money", money);
+            fireStoreManager.SetFirestoreData("GamePlayUser", nickname ,"employee_count", employee_count);
             //서버 로딩
             //ui_manager.SetMoneyText(value);
         }
