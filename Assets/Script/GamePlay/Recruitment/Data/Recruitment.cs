@@ -54,7 +54,7 @@ public struct Recruitment
         Dictionary<string, object> data = new Dictionary<string, object>
         {
             { "day", day },
-            { "id", id },
+            //{ "id", id },
             { "level", level },
             { "applicants", GetApplicantsToJson()},
             { "employeeType", (int)employeeSO.GetEmployeeType() },
@@ -63,18 +63,23 @@ public struct Recruitment
         return data;
     }
 
-    public Recruitment JSONToRecruitment(KeyValuePair<string, object> data)
+    public void JSONToRecruitment(KeyValuePair<string, object> data)
     {
-        Recruitment recruitment = new Recruitment();
-        recruitment.SetID(int.Parse(data.Key));
+        this.SetID(int.Parse(data.Key));
 
+        Dictionary<string, object> keyValues = (Dictionary<string, object>)data.Value;
         //디버깅
-        recruitment.SetDay(1);
-        recruitment.SetLevel(0);
-        recruitment.SetEmployeeSO(RecruitmentController.instance.GetEmployeeSO(0));
-        //applicants List 비어있지않나? 
+        this.SetDay(Convert.ToInt32(keyValues["day"]));
+        this.SetLevel(Convert.ToInt32(keyValues["level"]));
+        this.SetEmployeeSO(RecruitmentController.instance.GetEmployeeSO(
+            Convert.ToInt32(keyValues["employeeType"]
+        )));
 
-        return recruitment;
+        if(applicants == null)
+        {
+            //Debug.Log("비어있다네");
+            //applicants = new List<IEmployee>();
+        }
     }
 
 

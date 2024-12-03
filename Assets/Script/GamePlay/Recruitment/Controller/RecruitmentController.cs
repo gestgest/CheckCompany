@@ -39,20 +39,23 @@ public class RecruitmentController : MonoBehaviour
 
     private void Start()
     {
-        //recruitments = new List<Recruitment>();
+        recruitments = new List<Recruitment>();
         recruitmentObjects = new List<GameObject>();
 
         //서버에서 recruitments 가져오는 함수() => 이미 init로 함
 
         //dictionary => list로 변환하는 함수
 
-        InitRecruitments(); //초기 설정
+        //InitRecruitments(); //recruitments => 오브젝트
         //ShowRecruitments();
+    }
+    private void Update()
+    {
     }
 
     //pool 안 만들거임
     //초기 채용공고 리스트 보여주는 함수
-    private void InitRecruitments()
+    public void InitRecruitments()
     {
         for(int i = 0; i < recruitments.Count; i++)
         {
@@ -140,28 +143,35 @@ public class RecruitmentController : MonoBehaviour
         costText.text = cost.ToString();
     }
 
-    public EmployeeSO GetEmployeeSO(int id)
+    public EmployeeSO GetRecruitmentEmployeeSO(int id)
     {
         return recruitments[id].GetEmployeeSO();
     }
+
+    public EmployeeSO GetEmployeeSO(int index)
+    {
+        return employeeSOs[index];
+    }
+
     public Recruitment GetRecruitment(int id) // property
     {
         return recruitments[id];
     }
-    public void GetServerRecruitments(Dictionary<string, object> recruitments) //server 예정
+    public void GetServerRecruitments(Dictionary<string, object> serverRecruitments) //server 예정
     {
         if(this.recruitments == null)
             this.recruitments = new List<Recruitment>();
 
 
         //map형태의 recruitments를 list로 변환
-        foreach (KeyValuePair<string, object> recruitment in recruitments)
+        foreach (KeyValuePair<string, object> serverRecruitment in serverRecruitments)
         {
-            recruitment.
-            this.recruitments.Add();
+            Recruitment recruitment = new Recruitment();
+            recruitment.JSONToRecruitment(serverRecruitment);
+            this.recruitments.Add(recruitment);
         }
 
-
+        InitRecruitments();
     }
 
 

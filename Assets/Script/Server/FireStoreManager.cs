@@ -82,6 +82,7 @@ public class FireStoreManager : MonoBehaviour
                 if (snapshot.Exists)
                 {
                     result = snapshot.ConvertTo<Dictionary<string, object>>();
+                    //Debug.Log("받기 성공했다네 : " + key);
                 }
                 else
                 {

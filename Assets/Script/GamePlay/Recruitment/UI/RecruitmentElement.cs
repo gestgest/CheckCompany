@@ -11,7 +11,7 @@ public class RecruitmentElement : MonoBehaviour
     //모델
     [SerializeField] private Image icon;
     [SerializeField] private TextMeshProUGUI dDayText;
-    [SerializeField] private TextMeshProUGUI RecruitmentNumber_Text;
+    [SerializeField] private TextMeshProUGUI applicantNumber_Text;
     [SerializeField] private GameObject applicantsPanel; //지원자 리스트
 
 
@@ -51,11 +51,13 @@ public class RecruitmentElement : MonoBehaviour
             employee.Age = 19;
             employee.CareerPeriod = 12; //1 year
             employee.Salary = 100; //월 100만원
-            employee._EmployeeSO = RecruitmentController.instance.GetEmployeeSO((int)(employeeSO.GetEmployeeType())); //recruitment에 걸맞게
+            employee._EmployeeSO = RecruitmentController.instance.GetRecruitmentEmployeeSO((int)(employeeSO.GetEmployeeType())); //recruitment에 걸맞게
+
+            //서버에 들어가버려잇
 
             applicants.Add(employee);
             SelectionApplicantSort();
-            SetRecruitmentNumber(applicants.Count);
+            SetApplicantsNumber(applicants.Count); //지원자 수
             CreateEmployeeObject(employee);
         }
         if (Input.GetKeyDown(KeyCode.T))
@@ -70,7 +72,7 @@ public class RecruitmentElement : MonoBehaviour
         this.employeeSO = employeeSO;
         SetIcon(employeeSO.GetIcon());
         SetDDay(day);
-        SetRecruitmentNumber(size);
+        SetApplicantsNumber(size);
         ID = id;
     }
 
@@ -95,9 +97,9 @@ public class RecruitmentElement : MonoBehaviour
     {
         dDayText.text = day.ToString();
     }
-    private void SetRecruitmentNumber(int size)
+    private void SetApplicantsNumber(int size)
     {
-        RecruitmentNumber_Text.text = size.ToString() + "명";
+        applicantNumber_Text.text = size.ToString() + "명";
     }
 
 
@@ -146,7 +148,7 @@ public class RecruitmentElement : MonoBehaviour
         applicants.RemoveAt(index);
         Destroy(applicant_objects[index]); //Pool링?
         applicant_objects.RemoveAt(index);
-        SetRecruitmentNumber(applicants.Count);
+        SetApplicantsNumber(applicants.Count);
 
     }
 
