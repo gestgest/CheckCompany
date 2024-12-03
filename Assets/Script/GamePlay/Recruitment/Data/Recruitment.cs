@@ -10,6 +10,11 @@ public struct Recruitment
     int level;
     List<IEmployee> applicants;
     private EmployeeSO employeeSO;
+    
+    //public Recruitment()
+    //{
+    //    applicants = new List<IEmployee>();
+    //}
 
     
     public void SetEmployeeSO(EmployeeSO employeeSO)
@@ -77,8 +82,16 @@ public struct Recruitment
 
         if(applicants == null)
         {
-            //Debug.Log("비어있다네");
-            //applicants = new List<IEmployee>();
+            applicants = new List<IEmployee>();
+        }
+
+        foreach (KeyValuePair<string, object> serverApplicant in (Dictionary<string, object>)keyValues["applicants"])
+        {
+            //0, (age, careerPeriod, name, rank, salary, worktime {start, end})
+            //Switch문으로 해결
+            IEmployee employee = new Development();
+            employee.SetEmployeeWithJson(serverApplicant);
+            applicants.Add(employee);
         }
     }
 

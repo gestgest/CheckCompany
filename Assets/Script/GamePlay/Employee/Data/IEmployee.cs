@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -52,8 +53,24 @@ public interface IEmployee
         };
         //{ "employeeType", (int)employeeSO.GetEmployeeType() } => 이거는 Recruitment와 중첩되니 패스
 
-
         return result;
+    }
+
+    public void SetEmployeeWithJson(KeyValuePair<string, object> employee)
+    {
+        //0, (age, careerPeriod, name, rank, salary, worktime {start, end})
+        ID = int.Parse(employee.Key);
+
+        Dictionary<string, object> keyValues = (Dictionary<string, object>)employee.Value;
+        Age = Convert.ToInt32(keyValues["age"]);
+        CareerPeriod = Convert.ToInt32(keyValues["careerPeriod"]);
+        Name = keyValues["name"].ToString();
+        _Rank = (EmployeeRank)Convert.ToInt32(keyValues["rank"]);
+        Salary = Convert.ToInt32(keyValues["salary"]);
+
+        Dictionary<string, object> worktime = (Dictionary<string, object>)keyValues["worktime"];
+        _WorkTime = new WorkTime((float)worktime["start"], (float)worktime["end"]);
+
     }
 }
 
@@ -75,5 +92,9 @@ public struct WorkTime
 {
     public float start;
     public float end;
-
+    public WorkTime(float start, float end)
+    {
+        this.start = start;
+        this.end = end;
+    }
 }

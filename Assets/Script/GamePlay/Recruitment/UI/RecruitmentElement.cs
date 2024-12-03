@@ -21,11 +21,11 @@ public class RecruitmentElement : MonoBehaviour
 
 
     //지원자 정보 리스트
-    private List<IEmployee> applicants; //정렬된 상태어야 하는데
+    private List<IEmployee> applicants; //정렬된 상태어야 하는데, ㅇㅇ
     private List<GameObject> applicant_objects;
 
     public int ID { get; set; } //채용 구분 ID
-    private EmployeeSO employeeSO;
+    private EmployeeSO employeeSO; //ㅇㅇ
 
     private void Start()
     {
@@ -68,7 +68,7 @@ public class RecruitmentElement : MonoBehaviour
         }
     }
 
-    public void SetRecruitment(EmployeeSO employeeSO, int day, int size, int id)
+    public void SetRecruitment(EmployeeSO employeeSO, int day, int size, int id) //나중에 매개변수를 Recruitment으로 해라 ㅇㅇ
     {
         this.employeeSO = employeeSO;
         SetIcon(employeeSO.GetIcon());
