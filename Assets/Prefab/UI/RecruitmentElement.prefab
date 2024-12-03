@@ -710,7 +710,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 2106845460715770564}
   dDayText: {fileID: 2106845461754606357}
-  applicantNumber_Text: {fileID: 0}
+  applicantNumber_Text: {fileID: 2106845460131550434}
   applicantsPanel: {fileID: 2106845461655963815}
   applicant_Prefab: {fileID: 3574423401577469288, guid: 6f8bd351da971344abb7d815ff2ca37b, type: 3}
 --- !u!114 &7520629813391628149

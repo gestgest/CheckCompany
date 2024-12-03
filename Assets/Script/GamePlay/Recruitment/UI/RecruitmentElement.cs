@@ -54,6 +54,7 @@ public class RecruitmentElement : MonoBehaviour
             employee._EmployeeSO = RecruitmentController.instance.GetRecruitmentEmployeeSO((int)(employeeSO.GetEmployeeType())); //recruitment에 걸맞게
 
             //서버에 들어가버려잇
+            SetServerApplicant(employee);
 
             applicants.Add(employee);
             SelectionApplicantSort();
@@ -87,6 +88,18 @@ public class RecruitmentElement : MonoBehaviour
         applicant_objects.Add(tmp);
     }
 
+    private void SetServerApplicant(IEmployee applicant)
+    {
+
+        FireStoreManager.instance.SetFirestoreData("GamePlayUser",
+            GameManager.instance.Nickname,
+            "recruitments." + ID.ToString() + ".applicants." + applicant.ID,
+            applicant.EmployeeToJSON()
+        );
+
+    }
+
+
     #region property
 
     private void SetIcon(Sprite sprite)
@@ -112,8 +125,9 @@ public class RecruitmentElement : MonoBehaviour
 
     }
 
-    #endregion 
+    #endregion
 
+    #region binary_search
     //이진탐색
     public int Search_Employee_Index(int id)
     {
@@ -196,5 +210,6 @@ public class RecruitmentElement : MonoBehaviour
             }
         }
     }
+    #endregion
 
 }
