@@ -39,10 +39,12 @@ public class RecruitmentController : MonoBehaviour
 
     private void Start()
     {
-        recruitments = new List<Recruitment>();
+        //recruitments = new List<Recruitment>();
         recruitmentObjects = new List<GameObject>();
 
-        //서버에서 recruitments 가져오는 함수()
+        //서버에서 recruitments 가져오는 함수() => 이미 init로 함
+
+        //dictionary => list로 변환하는 함수
 
         InitRecruitments(); //초기 설정
         //ShowRecruitments();
@@ -142,9 +144,24 @@ public class RecruitmentController : MonoBehaviour
     {
         return recruitments[id].GetEmployeeSO();
     }
-    public Recruitment GetRecruitment(int id) //server 예정
+    public Recruitment GetRecruitment(int id) // property
     {
         return recruitments[id];
+    }
+    public void GetServerRecruitments(Dictionary<string, object> recruitments) //server 예정
+    {
+        if(this.recruitments == null)
+            this.recruitments = new List<Recruitment>();
+
+
+        //map형태의 recruitments를 list로 변환
+        foreach (KeyValuePair<string, object> recruitment in recruitments)
+        {
+            recruitment.
+            this.recruitments.Add();
+        }
+
+
     }
 
 
@@ -168,6 +185,7 @@ public class RecruitmentController : MonoBehaviour
             recruitments[index].RecruitmentToJSON()
         );
 
+        //recruitments.index => 
         //FieldValue.ArrayUnion(recruitments[index].RecruitmentToJSON()) //기존에 있는 배열에서 추가한 느낌
 
         //user/

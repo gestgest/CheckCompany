@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -52,7 +53,9 @@ public class GameManager : MonoBehaviour
         //user.Email으로 쿼리 만들고
         nickname = (string)await fireStoreManager.GetFirestoreData("User", user.Email, "nickname");
         Money = (long)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "money");
-        //Employee_count = (int)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "employee_count");
+        Employee_count = Convert.ToInt32(await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "employee_count"));
+        RecruitmentController.instance.GetServerRecruitments((Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "employee_count"));
+
         //RecruitmentController.instance.GetFirestoreData("Recruitment")
         //서버에게 number 받는 거는 무조건 long 으로 해야한다
         //타입이 64비트가 나온다. => 8바이트 => long

@@ -63,6 +63,20 @@ public struct Recruitment
         return data;
     }
 
+    public Recruitment JSONToRecruitment(KeyValuePair<string, object> data)
+    {
+        Recruitment recruitment = new Recruitment();
+        recruitment.SetID(int.Parse(data.Key));
+
+        //디버깅
+        recruitment.SetDay(1);
+        recruitment.SetLevel(0);
+        recruitment.SetEmployeeSO(RecruitmentController.instance.GetEmployeeSO(0));
+        //applicants List 비어있지않나? 
+
+        return recruitment;
+    }
+
 
     public Dictionary<string, Dictionary<string, object>> GetApplicantsToJson() //employees를 JSON으로
     {
