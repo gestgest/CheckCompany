@@ -11,12 +11,14 @@ public struct Recruitment
     List<IEmployee> applicants;
     private EmployeeSO employeeSO;
     
-    //public Recruitment()
-    //{
-    //    applicants = new List<IEmployee>();
-    //}
+    public void Init()
+    {
+        applicants = new List<IEmployee>();
+    }
 
-    
+
+    #region PROPERTY
+
     public void SetEmployeeSO(EmployeeSO employeeSO)
     {
         this.employeeSO = employeeSO;
@@ -52,7 +54,19 @@ public struct Recruitment
         this.level = level;
     }
 
-    public Dictionary<string, object> RecruitmentToJSON()
+    public void AddApplicant(IEmployee applicant)
+    {
+        applicants.Add(applicant);
+    }
+
+    public int GetApplicantsCount()
+    {
+        return applicants.Count;
+    }
+
+    #endregion
+    #region SERVER
+    public Dictionary<string, object> RecruitmentToJSON() //recruitment를 
     {
 
         // 저장할 데이터
@@ -68,6 +82,27 @@ public struct Recruitment
         return data;
     }
 
+    public Dictionary<string, Dictionary<string, object>> GetApplicantsToJson() //employees를 JSON으로
+    {
+        Dictionary<string, Dictionary<string, object>> result = new Dictionary<string, Dictionary<string, object>>();
+
+        if (applicants == null)
+        {
+            return result;
+        }
+
+        for (int i = 0; i < applicants.Count; i++)
+        {
+            result.Add(applicants[i].ID.ToString(), applicants[i].EmployeeToJSON());
+            //result.applicants[i].EmployeeToJSON());
+        }
+
+        return result;
+    }
+
+
+
+    //Recruitment 값 입력
     public void JSONToRecruitment(KeyValuePair<string, object> data)
     {
         this.SetID(int.Parse(data.Key));
@@ -95,22 +130,5 @@ public struct Recruitment
         }
     }
 
-
-    public Dictionary<string, Dictionary<string, object>> GetApplicantsToJson() //employees를 JSON으로
-    {
-        Dictionary<string, Dictionary<string, object>> result = new Dictionary<string, Dictionary<string, object>>();
-
-        if(applicants == null)
-        {
-            return result;
-        }
-
-        for(int i = 0; i < applicants.Count; i++)
-        {
-            result.Add(applicants[i].ID.ToString(), applicants[i].EmployeeToJSON());
-            //result.applicants[i].EmployeeToJSON());
-        }
-
-        return result;
-    }
+    #endregion
 }

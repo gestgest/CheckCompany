@@ -21,14 +21,16 @@ public class RecruitmentElement : MonoBehaviour
 
 
     //지원자 정보 리스트
-    private List<IEmployee> applicants; //정렬된 상태어야 하는데, ㅇㅇ
+    private Recruitment recruitment;
+    private List<IEmployee> applicants; //정렬된 상태어야 하는데, 제거 예정 ㅇㅇ
     private List<GameObject> applicant_objects;
 
     public int ID { get; set; } //채용 구분 ID
-    private EmployeeSO employeeSO; //ㅇㅇ
+    private EmployeeSO employeeSO; // 제거 예정 ㅇㅇ
 
     private void Start()
     {
+        recruitment.Init();
         applicants = new List<IEmployee>();
         applicant_objects = new List<GameObject>();
         layout_parent = transform.parent; //부모 가져오기
@@ -56,9 +58,9 @@ public class RecruitmentElement : MonoBehaviour
             //서버에 들어가버려잇
             SetServerApplicant(employee);
 
-            applicants.Add(employee);
+            recruitment.AddApplicant(employee);
             SelectionApplicantSort();
-            SetApplicantsNumber(applicants.Count); //지원자 수
+            SetApplicantsNumber(recruitment.GetApplicantsCount()); //지원자 수
             CreateEmployeeObject(employee);
         }
         if (Input.GetKeyDown(KeyCode.T))
@@ -116,6 +118,7 @@ public class RecruitmentElement : MonoBehaviour
     }
 
 
+    //ㅇㅇ 여기 아래부터 applicants 작업 안함
     public IEmployee GetApplicant(int id)
     {
         int index = Search_Employee_Index(id);
