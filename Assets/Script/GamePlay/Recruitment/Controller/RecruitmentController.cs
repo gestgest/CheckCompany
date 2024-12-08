@@ -12,7 +12,7 @@ public class RecruitmentController : MonoBehaviour
     public static RecruitmentController instance;
     //채용 리스트
     List<Recruitment> recruitments;
-    List<GameObject> recruitmentObjects;
+    List<GameObject> recruitmentObjects; //RecruitmentElement
     int id = 0; //생성하려는 id
     
     [SerializeField] List<EmployeeSO> employeeSOs; 
@@ -71,7 +71,10 @@ public class RecruitmentController : MonoBehaviour
         RecruitmentElement recruitmentContent = recruitmentObject.GetComponent<RecruitmentElement>();
 
         //recruitmentContent.SetRecruitment(employeeTypeIcons[(int)r.GetEmployeeType()], r.GetDay(), r.GetSize(), i)
-        recruitmentContent.SetRecruitment(employeeSOs[(int)(r.GetEmployeeSO().GetEmployeeType())], r.GetDay(), 0, r.GetID());
+        recruitmentContent.Init();
+        recruitmentContent.SetRecruitment(r);
+        recruitmentContent.SetApplicant(); //그리기
+
         recruitmentObjects.Add(recruitmentObject);
         recruitmentObject.transform.SetParent(view.transform);
     }
@@ -80,6 +83,7 @@ public class RecruitmentController : MonoBehaviour
     public void AddRecruitment()
     {
         Recruitment recruitment = new Recruitment();
+        recruitment.Init();
 
         //버튼 정보 가져오기 디버깅
         recruitment.SetEmployeeSO(employeeSOs[employeeTypeIndex]);

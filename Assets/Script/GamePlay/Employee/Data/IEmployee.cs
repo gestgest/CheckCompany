@@ -49,7 +49,7 @@ public interface IEmployee
             { "careerPeriod", CareerPeriod },
             { "rank", _Rank },
             { "salary", Salary },
-            { "workTime", _worktime },
+            { "worktime", _worktime },
         };
         //{ "employeeType", (int)employeeSO.GetEmployeeType() } => 이거는 Recruitment와 중첩되니 패스
 
@@ -69,7 +69,7 @@ public interface IEmployee
         Salary = Convert.ToInt32(keyValues["salary"]);
 
         Dictionary<string, object> worktime = (Dictionary<string, object>)keyValues["worktime"];
-        _WorkTime = new WorkTime((float)worktime["start"], (float)worktime["end"]);
+        _WorkTime = new WorkTime(Convert.ToSingle(worktime["start"]), Convert.ToSingle(worktime["end"]));
 
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,17 +23,13 @@ public class RecruitmentElement : MonoBehaviour
 
     //지원자 정보 리스트
     private Recruitment recruitment;
-    private List<IEmployee> applicants; //정렬된 상태어야 하는데, 제거 예정 ㅇㅇ
     private List<GameObject> applicant_objects;
 
-    public int ID { get; set; } //채용 구분 ID
-    private EmployeeSO employeeSO; // 제거 예정 ㅇㅇ
 
     private void Start()
     {
         recruitment.Init();
-        applicants = new List<IEmployee>();
-        applicant_objects = new List<GameObject>();
+        Init();
         layout_parent = transform.parent; //부모 가져오기
         parent_VLG = layout_parent.GetComponent<VerticalLayoutGroup>(); //부모의 layout 가져오기
 
@@ -53,15 +50,15 @@ public class RecruitmentElement : MonoBehaviour
             employee.Age = 19;
             employee.CareerPeriod = 12; //1 year
             employee.Salary = 100; //월 100만원
-            employee._EmployeeSO = RecruitmentController.instance.GetRecruitmentEmployeeSO((int)(employeeSO.GetEmployeeType())); //recruitment에 걸맞게
+            employee._EmployeeSO = RecruitmentController.instance.GetRecruitmentEmployeeSO(
+                (int)(recruitment.GetEmployeeSO().GetEmployeeType())
+            );
 
             //서버에 들어가버려잇
             SetServerApplicant(employee);
 
             recruitment.AddApplicant(employee);
-            SelectionApplicantSort();
-            SetApplicantsNumber(recruitment.GetApplicantsCount()); //지원자 수
-            CreateEmployeeObject(employee);
+            SetApplicant(employee);
         }
         if (Input.GetKeyDown(KeyCode.T))
         {
@@ -70,13 +67,46 @@ public class RecruitmentElement : MonoBehaviour
         }
     }
 
-    public void SetRecruitment(EmployeeSO employeeSO, int day, int size, int id) //나중에 매개변수를 Recruitment으로 해라 ㅇㅇ
+    public void Init()
     {
-        this.employeeSO = employeeSO;
-        SetIcon(employeeSO.GetIcon());
-        SetDDay(day);
-        SetApplicantsNumber(size);
-        ID = id;
+        if(applicant_objects == null)
+            applicant_objects = new List<GameObject>();
+
+    }
+
+    /// <summary>
+    /// 한번에 그리는 함수
+    /// </summary>
+    public void SetApplicant()
+    {
+        SelectionApplicantSort();
+        int applicant_size = recruitment.GetApplicantCount();
+
+        SetApplicantsNumber(applicant_size); //지원자 수
+
+        for (int i = 0; i < applicant_size; i++)
+        {
+            CreateEmployeeObject(recruitment.GetApplicant(i));
+        }
+    }
+
+    /// <summary>
+    /// 지원자로 오브젝트 그리는 함수
+    /// </summary>
+    /// <param name="employee"></param>
+    public void SetApplicant(IEmployee employee)
+    {
+        SelectionApplicantSort();
+        SetApplicantsNumber(recruitment.GetApplicantCount()); //지원자 수
+        CreateEmployeeObject(employee);
+    }
+
+    public void SetRecruitment(Recruitment recruitment) //나중에 매개변수를 Recruitment으로 해라 ㅇㅇ
+    {
+        this.recruitment = recruitment;
+        SetIcon(recruitment.GetEmployeeSO().GetIcon());
+        SetDDay(recruitment.GetDay());
+        SetApplicantsNumber(recruitment.GetApplicantCount());
     }
 
     private void CreateEmployeeObject(IEmployee employee)
@@ -84,7 +114,7 @@ public class RecruitmentElement : MonoBehaviour
         GameObject tmp = Instantiate(applicant_Prefab);
 
         ApplicantElement applicantElement = tmp.GetComponent<ApplicantElement>();
-        applicantElement.SetValue(employee, ID);
+        applicantElement.SetValue(employee, recruitment.GetID());
 
         tmp.transform.SetParent(applicantsPanel.transform);
         applicant_objects.Add(tmp);
@@ -95,7 +125,7 @@ public class RecruitmentElement : MonoBehaviour
 
         FireStoreManager.instance.SetFirestoreData("GamePlayUser",
             GameManager.instance.Nickname,
-            "recruitments." + ID.ToString() + ".applicants." + applicant.ID,
+            "recruitments." + recruitment.GetID().ToString() + ".applicants." + applicant.ID,
             applicant.EmployeeToJSON()
         );
 
@@ -118,56 +148,16 @@ public class RecruitmentElement : MonoBehaviour
     }
 
 
-    //ㅇㅇ 여기 아래부터 applicants 작업 안함
     public IEmployee GetApplicant(int id)
     {
-        int index = Search_Employee_Index(id);
+        int index = recruitment.Search_Employee_Index(id);
         if (index == -1)
             return null;
-        return applicants[index];
-
+        return recruitment.GetApplicant(index);
     }
 
     #endregion
 
-    #region binary_search
-    //이진탐색
-    public int Search_Employee_Index(int id)
-    {
-        return Binary_Search_Employee_Index(0, applicants.Count - 1, id);
-    }
-
-    private int Binary_Search_Employee_Index(int start, int end, int id)
-    {
-        if (start > end) return -1;
-        int mid = (start + end) / 2;
-
-        //아이디가 같다
-        if (applicants[mid].ID == id)
-        {
-            return mid;
-        }
-        else if (id > applicants[mid].ID)
-        {
-            return Binary_Search_Employee_Index(mid + 1, end, id);
-        }
-        else
-        {
-            return Binary_Search_Employee_Index(start, mid - 1, id);
-        }
-
-    }
-
-    public void RemoveApplicant(int id)
-    {
-        int index = Search_Employee_Index(id);
-
-        applicants.RemoveAt(index);
-        Destroy(applicant_objects[index]); //Pool링?
-        applicant_objects.RemoveAt(index);
-        SetApplicantsNumber(applicants.Count);
-
-    }
 
     public void SwitchPanel()
     {
@@ -183,18 +173,31 @@ public class RecruitmentElement : MonoBehaviour
         parent_VLG.childControlHeight = true;
     }
 
+
+    #region binary_search
+    //이진탐색
+
+    public void RemoveApplicant(int id)
+    {
+        int index = recruitment.Search_Employee_Index(id);
+
+        recruitment.RemoveServerApplicant(index);
+        Destroy(applicant_objects[index]); //Pool링?
+        applicant_objects.RemoveAt(index);
+        SetApplicantsNumber(recruitment.GetApplicantCount());
+
+    }
+
     private void SelectionApplicantSort()
     {
         //O(n^2) => 나중에 다른 정렬로 바꾸지 않을까
-        for(int i = 0; i < applicants.Count; i++)
+        for(int i = 0; i < recruitment.GetApplicantCount(); i++)
         {
-            for (int j = i + 1; j < applicants.Count; j++)
+            for (int j = i + 1; j < recruitment.GetApplicantCount(); j++)
             {
-                if (applicants[i].ID > applicants[j].ID)
+                if (recruitment.GetApplicant(i).ID > recruitment.GetApplicant(j).ID)
                 {
-                    IEmployee tmp = applicants[i];
-                    applicants[i] = applicants[j];
-                    applicants[j] = tmp;
+                    recruitment.SwitchApplicant(i, j);
 
                     Transform a = applicant_objects[i].transform;
                     int a_index = a.GetSiblingIndex();

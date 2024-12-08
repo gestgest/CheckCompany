@@ -13,7 +13,8 @@ public struct Recruitment
     
     public void Init()
     {
-        applicants = new List<IEmployee>();
+        if(applicants == null)
+            applicants = new List<IEmployee>();
     }
 
 
@@ -59,12 +60,57 @@ public struct Recruitment
         applicants.Add(applicant);
     }
 
-    public int GetApplicantsCount()
+    public void RemoveApplicant(int index)
+    {
+        applicants.RemoveAt(index);
+    }
+
+    public int GetApplicantCount()
     {
         return applicants.Count;
     }
+    public IEmployee GetApplicant(int index)
+    {
+        return applicants[index];
+    }
 
     #endregion
+
+    public void SwitchApplicant(int i, int j)
+    {
+
+        IEmployee tmp = applicants[i];
+        applicants[i] = applicants[j];
+        applicants[j] = tmp;
+    }
+
+
+    public int Search_Employee_Index(int id)
+    {
+        return Binary_Search_Employee_Index(0, GetApplicantCount() - 1, id);
+    }
+
+    private int Binary_Search_Employee_Index(int start, int end, int id)
+    {
+        if (start > end) return -1;
+        int mid = (start + end) / 2;
+
+        //아이디가 같다
+        if (applicants[mid].ID == id)
+        {
+            return mid;
+        }
+        else if (id > applicants[mid].ID)
+        {
+            return Binary_Search_Employee_Index(mid + 1, end, id);
+        }
+        else
+        {
+            return Binary_Search_Employee_Index(start, mid - 1, id);
+        }
+
+    }
+
     #region SERVER
     public Dictionary<string, object> RecruitmentToJSON() //recruitment를 
     {
@@ -82,7 +128,8 @@ public struct Recruitment
         return data;
     }
 
-    public Dictionary<string, Dictionary<string, object>> GetApplicantsToJson() //employees를 JSON으로
+    //employees를 JSON으로
+    public Dictionary<string, Dictionary<string, object>> GetApplicantsToJson() 
     {
         Dictionary<string, Dictionary<string, object>> result = new Dictionary<string, Dictionary<string, object>>();
 
@@ -115,10 +162,7 @@ public struct Recruitment
             Convert.ToInt32(keyValues["employeeType"]
         )));
 
-        if(applicants == null)
-        {
-            applicants = new List<IEmployee>();
-        }
+        Init();
 
         foreach (KeyValuePair<string, object> serverApplicant in (Dictionary<string, object>)keyValues["applicants"])
         {
@@ -126,8 +170,21 @@ public struct Recruitment
             //Switch문으로 해결
             IEmployee employee = new Development();
             employee.SetEmployeeWithJson(serverApplicant);
-            applicants.Add(employee);
+            AddApplicant(employee);
+
+            //그러니까 이거를 그려야한다
         }
+    }
+
+    public void RemoveServerApplicant(int index)
+    {
+        string id = GetID().ToString(); 
+        FireStoreManager.instance.SetFirestoreData(
+            "GamePlayUser",
+            GameManager.instance.Nickname,
+            "recruitment." + id + "applicants." + index.ToString(),
+            null
+        );
     }
 
     #endregion
