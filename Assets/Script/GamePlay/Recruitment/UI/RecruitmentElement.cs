@@ -51,8 +51,9 @@ public class RecruitmentElement : MonoBehaviour
             employee.CareerPeriod = 12; //1 year
             employee.Salary = 100; //월 100만원
             employee._EmployeeSO = RecruitmentController.instance.GetRecruitmentEmployeeSO(
-                (int)(recruitment.GetEmployeeSO().GetEmployeeType())
+                recruitment.GetID()
             );
+            //(int)(recruitment.GetEmployeeSO().GetEmployeeType()
 
             //서버에 들어가버려잇
             SetServerApplicant(employee);
@@ -79,15 +80,16 @@ public class RecruitmentElement : MonoBehaviour
     /// </summary>
     public void SetApplicant()
     {
-        SelectionApplicantSort();
         int applicant_size = recruitment.GetApplicantCount();
-
         SetApplicantsNumber(applicant_size); //지원자 수
 
+
+        //오브젝트 생성
         for (int i = 0; i < applicant_size; i++)
         {
             CreateEmployeeObject(recruitment.GetApplicant(i));
         }
+        SelectionApplicantSort();
     }
 
     /// <summary>
@@ -96,9 +98,9 @@ public class RecruitmentElement : MonoBehaviour
     /// <param name="employee"></param>
     public void SetApplicant(IEmployee employee)
     {
-        SelectionApplicantSort();
         SetApplicantsNumber(recruitment.GetApplicantCount()); //지원자 수
         CreateEmployeeObject(employee);
+        SelectionApplicantSort();
     }
 
     public void SetRecruitment(Recruitment recruitment) //나중에 매개변수를 Recruitment으로 해라 ㅇㅇ
@@ -177,13 +179,14 @@ public class RecruitmentElement : MonoBehaviour
     #region binary_search
     //이진탐색
 
-    public void RemoveApplicant(int id)
+    public void RemoveApplicant(int applicant_id)
     {
-        int index = recruitment.Search_Employee_Index(id);
+        int index = recruitment.Search_Employee_Index(applicant_id);
 
-        recruitment.RemoveServerApplicant(index);
+        recruitment.RemoveServerApplicant(applicant_id);
         Destroy(applicant_objects[index]); //Pool링?
         applicant_objects.RemoveAt(index);
+        recruitment.RemoveApplicant(index);
         SetApplicantsNumber(recruitment.GetApplicantCount());
 
     }

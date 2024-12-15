@@ -51,6 +51,10 @@ public class RecruitmentController : MonoBehaviour
     }
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            Debug.Log("RecruitmentController : W 버튼 누름 : " + GetRecruitmentEmployeeSO(0).GetEmployeeType());
+        }
     }
 
     //pool 안 만들거임
@@ -148,8 +152,13 @@ public class RecruitmentController : MonoBehaviour
         costText.text = cost.ToString();
     }
 
+    //id는 recruitment의 id임
     public EmployeeSO GetRecruitmentEmployeeSO(int id)
     {
+        Debug.Log("id : " + id);
+        Debug.Log("Count : " + recruitments.Count);
+        Debug.Log("recruitment : " + recruitments[id].GetID());
+        Debug.Log("타입 : " + recruitments[id].GetEmployeeSO().GetEmployeeType());
         return recruitments[id].GetEmployeeSO();
     }
 
@@ -162,7 +171,7 @@ public class RecruitmentController : MonoBehaviour
     {
         return recruitments[id];
     }
-    public void GetServerRecruitments(Dictionary<string, object> serverRecruitments) //server 예정
+    public void GetRecruitmentsFromServer(Dictionary<string, object> serverRecruitments) //server 예정
     {
         if(this.recruitments == null)
             this.recruitments = new List<Recruitment>();

@@ -36,10 +36,5 @@ public class ApplicantElement : MonoBehaviour
         button.onClick.AddListener(() => { PanelManager.instance.Click_Button_Panel(8, true); applicantPanel.SetID(employee.ID, recruitment_id); });
     }
 
-    //클릭하면 그 직원 승진이든 삭제든
-    public void dd()
-    {
-
-    }
 
 }

@@ -168,9 +168,10 @@ public struct Recruitment
         {
             //0, (age, careerPeriod, name, rank, salary, worktime {start, end})
             //Switch문으로 해결 => emploeeSO로 구분
-            IEmployee employee = new Development();
+            IEmployee employee = new EmployeeBuilder().BuildEmployee(employeeSO);
+            
+
             employee.SetEmployeeWithJson(serverApplicant); //가져오는 함수
-            employee._EmployeeSO = employeeSO; //이거 하 원래
             AddApplicant(employee);
 
             //그러니까 이거를 그려야한다
@@ -180,11 +181,10 @@ public struct Recruitment
     public void RemoveServerApplicant(int index)
     {
         string id = GetID().ToString(); 
-        FireStoreManager.instance.SetFirestoreData(
+        FireStoreManager.instance.DeleteFirestoreDataKey(
             "GamePlayUser",
             GameManager.instance.Nickname,
-            "recruitment." + id + "applicants." + index.ToString(),
-            null
+            "recruitments." + id + ".applicants." + index.ToString()
         );
     }
 

@@ -19,9 +19,9 @@ public class ApplicantPanel : Panel
     }
 
     //X
+     //지원자 제거 함수
     public void DeleteApplicant()
     {
-        //지원자 제거 함수
         RecruitmentElement recruitmentElement = RecruitmentController.instance.GetRecruitmentObject(recruitment_id).GetComponent<RecruitmentElement>();
         recruitmentElement.RemoveApplicant(applicant_id);
 
@@ -30,6 +30,7 @@ public class ApplicantPanel : Panel
     }
 
     //Y
+    //지원자 고용하고 기존 거 제거 함수
     public void EmployApplicant()
     {
         RecruitmentElement recruitmentElement = RecruitmentController.instance.GetRecruitmentObject(recruitment_id).GetComponent<RecruitmentElement>();

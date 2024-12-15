@@ -14,7 +14,6 @@ public class EmployeeController : MonoBehaviour
     [SerializeField] private GameObject employeePrefab;
     [SerializeField] private GameObject parent;
     [SerializeField] private EmployeeStatusWindow employeeStatusWindow;
-    [SerializeField] private EmployeeSO debugDevEmployeeType;
     [SerializeField] private PanelSO employeeStatusPanelSO;
 
     private void Awake()
@@ -54,10 +53,6 @@ public class EmployeeController : MonoBehaviour
         EmployeeElement employeeContent = employeeObject.GetComponent<EmployeeElement>();
         Button button = employeeObject.GetComponent<Button>();
 
-        if (e._EmployeeSO == null)
-        {
-            Debug.Log("엄준식");
-        }
         employeeContent.SetEmployee(e._EmployeeSO.GetIcon(), e.Name, e.CareerPeriod, 1, e.Salary, e.ID);
         employeeObjects.Add(employeeObject);
         employeeObject.transform.SetParent(parent.transform);
@@ -76,12 +71,13 @@ public class EmployeeController : MonoBehaviour
         if (index != -1)
         {
             employees.RemoveAt(index);
+            RemoveEmployeeToServer(id); //서버도 제거
             Destroy(employeeObjects[index]);
             employeeObjects.RemoveAt(index);
         }
         else
         {
-            Debug.Log("id : " + id);
+            Debug.LogError("제거 직원 id error : " + id);
         }
     }
 
@@ -89,7 +85,7 @@ public class EmployeeController : MonoBehaviour
     private void ShowEmployeeStatusWindow(int id)
     {
         //EmployeeStatusWindow의 index는 5. 
-        PanelManager.instance.Click_Button_Panel(employeeStatusPanelSO.GetIndex(),true);
+        PanelManager.instance.Click_Button_Panel(employeeStatusPanelSO.GetIndex(), true);
 
         Debug.Log(id);
 
@@ -108,21 +104,54 @@ public class EmployeeController : MonoBehaviour
 
     public void CreateEmployee(IEmployee e)
     {
-        //IEmployee e = new Development();
-        //e._EmployeeType = debugDevEmployeeType;
-        //e.Name = "엄준식";
-        //e.Age = 10;
-        //e.CareerPeriod = 10;
-        //e.Salary = 10;
-        //e.ID = 0;
 
-        //Debug.Log(e._EmployeeSO);
-
+        SetEmployeeToServer(e);
         employees.Add(e);
         CreateEmployeeElementUI(e);
         SelectionEmployeeSort();
-
     }
+
+    #region SERVER
+    void SetEmployeeToServer(IEmployee e)
+    {
+        //서버에 
+        FireStoreManager.instance.SetFirestoreData("GamePlayUser",
+            GameManager.instance.Nickname,
+            "employees." + e.ID,
+            e.EmployeeToJSON()
+        );
+    }
+
+    void RemoveEmployeeToServer(int id)
+    {
+        FireStoreManager.instance.DeleteFirestoreDataKey(
+            "GamePlayUser",
+            GameManager.instance.Nickname, 
+            "employees." + id.ToString()
+        );
+    }
+
+    public void GetEmployeesFromServer(Dictionary<string, object> serverEmployees)
+    {
+        if (this.employees == null)
+            this.employees = new List<IEmployee>();
+
+
+        //map형태의 recruitments를 list로 변환
+        foreach (KeyValuePair<string, object> serverEmployee in serverEmployees)
+        {
+            EmployeeSO employeeSO = (int)serverEmployee["emplyeeType"];
+                //serverEmployee["emplyeeType"]
+            IEmployee employee = new EmployeeBuilder().BuildEmployee(employeeSO);
+            employee.EmployeeToJSON(serverEmployee);
+            recruitment.JSONToRecruitment(serverEmployee);
+            this.employees.Add(serverEmployee);
+        }
+    }
+
+    #endregion
+
+    #region BINARY_SEARCH
 
     //이진탐색
     public int Search_Employee_Index(int id)
@@ -185,4 +214,6 @@ public class EmployeeController : MonoBehaviour
             }
         }
     }
+
+    #endregion
 }

@@ -31,6 +31,15 @@ public class GameManager : MonoBehaviour
         Destroy(gameObject);
     }
 
+    private void Update()
+    {
+        /*
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            Debug.Log("RecruitmentElement : T 버튼 누름");
+        }
+        */
+    }
     void Start()
     {
         //절대로 LoginScene에 넣지마 => 메인 스레드 충돌 오류
@@ -50,17 +59,23 @@ public class GameManager : MonoBehaviour
         }
         Debug.Log(user.Email);
 
+
+        //서버에게 number 받는 거는 무조건 long 으로 해야한다, ToInt32
+        //타입이 64비트가 나온다. => 8바이트 => long
+        //int는 4바이트
+
         //user.Email으로 쿼리 만들고
         nickname = (string)await fireStoreManager.GetFirestoreData("User", user.Email, "nickname");
         Money = (long)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "money");
         employee_count = Convert.ToInt32(await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "employee_count"));
 
         Dictionary<string,object> recruitments = (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "recruitments");
-        RecruitmentController.instance.GetServerRecruitments(recruitments);
+        RecruitmentController.instance.GetRecruitmentsFromServer(recruitments);
 
-        //서버에게 number 받는 거는 무조건 long 으로 해야한다, ToInt32
-        //타입이 64비트가 나온다. => 8바이트 => long
-        //int는 4바이트
+        Dictionary<string, object> employees = (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "employees");
+
+        //employees get
+
     }
 
     #region property

@@ -39,6 +39,14 @@ public class FireStoreManager : MonoBehaviour
         });
     }
 
+    //키 Delete
+    public void DeleteFirestoreDataKey(string collection_name, string document_name, string key)
+    {
+        //db.Collection(collection_name).Document(document_name).DeleteAsync(); => 문서 제거
+
+        SetFirestoreData(collection_name, document_name, key, FieldValue.Delete);
+    }
+
     public void SetFirestoreData(string collection_name, string document_name, string key, object value)
     {
         // 저장할 데이터
@@ -51,7 +59,7 @@ public class FireStoreManager : MonoBehaviour
             { key, value }
         */
         //일단 employees에 Employee가 들어있어야 한다
-
+        
         // "users" 컬렉션에 새로운 문서 생성
         //db.Collection("GamePlayUser").AddAsync(user).ContinueWithOnMainThread(task =>
         //db.Collection(collection_name).Document(document_name).SetAsync(data).ContinueWithOnMainThread(task =>

@@ -50,9 +50,10 @@ public interface IEmployee
             { "careerPeriod", CareerPeriod },
             { "rank", _Rank },
             { "salary", Salary },
+            { "employeeType", (int)_EmployeeSO.GetEmployeeType() },
             { "worktime", _worktime },
         };
-        //{ "employeeType", (int)employeeSO.GetEmployeeType() } => 이거는 Recruitment와 중첩되니 패스
+         //=> 이거는 Recruitment와 중첩되니 패스
 
         return result;
     }
