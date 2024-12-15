@@ -57,6 +57,7 @@ public class RecruitmentController : MonoBehaviour
     //초기 채용공고 리스트 보여주는 함수
     public void InitRecruitments()
     {
+        id = recruitments.Count;
         for(int i = 0; i < recruitments.Count; i++)
         {
             Recruitment r = recruitments[i];

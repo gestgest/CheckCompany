@@ -33,6 +33,7 @@ public interface IEmployee
  
     //requirementEmployeeType
 
+   //서버로 넣기 
     public Dictionary<string, object> EmployeeToJSON()
     {
         Dictionary<string, float> _worktime = new Dictionary<string, float>
@@ -56,10 +57,12 @@ public interface IEmployee
         return result;
     }
 
+    //서버에 받기
     public void SetEmployeeWithJson(KeyValuePair<string, object> employee)
     {
         //0, (age, careerPeriod, name, rank, salary, worktime {start, end})
         ID = int.Parse(employee.Key);
+        //_EmployeeSO는 그 전에 Recruitment의 JSONToRecruitment함수 에서 함
 
         Dictionary<string, object> keyValues = (Dictionary<string, object>)employee.Value;
         Age = Convert.ToInt32(keyValues["age"]);

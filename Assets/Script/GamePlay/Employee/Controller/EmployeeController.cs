@@ -54,7 +54,10 @@ public class EmployeeController : MonoBehaviour
         EmployeeElement employeeContent = employeeObject.GetComponent<EmployeeElement>();
         Button button = employeeObject.GetComponent<Button>();
 
-
+        if (e._EmployeeSO == null)
+        {
+            Debug.Log("엄준식");
+        }
         employeeContent.SetEmployee(e._EmployeeSO.GetIcon(), e.Name, e.CareerPeriod, 1, e.Salary, e.ID);
         employeeObjects.Add(employeeObject);
         employeeObject.transform.SetParent(parent.transform);

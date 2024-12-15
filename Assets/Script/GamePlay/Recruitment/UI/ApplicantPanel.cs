@@ -27,7 +27,6 @@ public class ApplicantPanel : Panel
 
         PanelManager.instance.Back_Nav_Panel();
 
-
     }
 
     //Y
