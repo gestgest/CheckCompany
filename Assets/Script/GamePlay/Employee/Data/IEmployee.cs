@@ -50,16 +50,16 @@ public interface IEmployee
             { "careerPeriod", CareerPeriod },
             { "rank", _Rank },
             { "salary", Salary },
-            { "employeeType", (int)_EmployeeSO.GetEmployeeType() },
+            { "employeeType", (int)_EmployeeSO.GetEmployeeType() }, //고용하면 채용공고가 없어지기 때문에 넣어야함
             { "worktime", _worktime },
         };
-         //=> 이거는 Recruitment와 중첩되니 패스
+         
 
         return result;
     }
 
     //서버에 받기
-    public void SetEmployeeWithJson(KeyValuePair<string, object> employee)
+    public void SetEmployeeFromJson(KeyValuePair<string, object> employee)
     {
         //0, (age, careerPeriod, name, rank, salary, worktime {start, end})
         ID = int.Parse(employee.Key);

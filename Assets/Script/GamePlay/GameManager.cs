@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
         RecruitmentController.instance.GetRecruitmentsFromServer(recruitments);
 
         Dictionary<string, object> employees = (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "employees");
-
+        EmployeeController.instance.GetEmployeesFromServer(employees);
         //employees get
 
     }

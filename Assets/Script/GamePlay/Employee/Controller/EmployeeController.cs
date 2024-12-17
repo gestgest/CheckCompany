@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -131,22 +132,26 @@ public class EmployeeController : MonoBehaviour
         );
     }
 
+    //고용된 직원 서버 자료들을 인 게임으로 가져오는 함수
     public void GetEmployeesFromServer(Dictionary<string, object> serverEmployees)
     {
         if (this.employees == null)
             this.employees = new List<IEmployee>();
 
 
-        //map형태의 recruitments를 list로 변환
+        //map형태의 employees를 list로 변환
         foreach (KeyValuePair<string, object> serverEmployee in serverEmployees)
         {
-            EmployeeSO employeeSO = (int)serverEmployee["emplyeeType"];
-                //serverEmployee["emplyeeType"]
+            Dictionary<string, object> tmp = (Dictionary<string, object>)(serverEmployee.Value);
+
+            EmployeeSO employeeSO = RecruitmentController.instance.GetEmployeeSO(Convert.ToInt32(tmp["employeeType"]));
             IEmployee employee = new EmployeeBuilder().BuildEmployee(employeeSO);
-            employee.EmployeeToJSON(serverEmployee);
-            recruitment.JSONToRecruitment(serverEmployee);
-            this.employees.Add(serverEmployee);
+
+            employee.SetEmployeeFromJson(serverEmployee);
+            this.employees.Add(employee);
         }
+
+        InitEmployeeSet();
     }
 
     #endregion
