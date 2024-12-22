@@ -553,9 +553,6 @@ MonoBehaviour:
   addMissionMiniWindow: {fileID: 936718803}
   processBar: {fileID: 215840418}
   processBar_text: {fileID: 1427675750}
-  missions:
-  - {fileID: 11400000, guid: adcaf5836866e294f98185669a974d3a, type: 2}
-  - {fileID: 11400000, guid: e96617f3d45cd2244b0d8796ed0f6868, type: 2}
   addMissionElement_parent: {fileID: 421526660}
   addMissionElement_prefab: {fileID: 9022450608184969405, guid: e0b79ce9c5a4b93498de71c48c3fe453, type: 3}
   smallMission_PoolObjects:
@@ -2261,6 +2258,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 373943252}
   m_CullTransparentMesh: 1
+--- !u!1 &377234035
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 377234036}
+  - component: {fileID: 377234037}
+  m_Layer: 0
+  m_Name: MissionController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &377234036
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377234035}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 853192603}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &377234037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377234035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25f10cdd785fb3c4b9a936b5c40c2534, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  missions:
+  - {fileID: 11400000, guid: adcaf5836866e294f98185669a974d3a, type: 2}
+  - {fileID: 11400000, guid: e96617f3d45cd2244b0d8796ed0f6868, type: 2}
 --- !u!1 &388333794
 GameObject:
   m_ObjectHideFlags: 0
@@ -6438,6 +6482,7 @@ Transform:
   m_Children:
   - {fileID: 143977383}
   - {fileID: 512347915}
+  - {fileID: 377234036}
   m_Father: {fileID: 602332988}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &855242060

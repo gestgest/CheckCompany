@@ -74,6 +74,10 @@ public interface IEmployee
 
         Dictionary<string, object> worktime = (Dictionary<string, object>)keyValues["worktime"];
         _WorkTime = new WorkTime(Convert.ToSingle(worktime["start"]), Convert.ToSingle(worktime["end"]));
+        
+        //서버에서 Mission 가져오기
+        //   Array로 가져오자
+        //   GetMission()
 
     }
 }

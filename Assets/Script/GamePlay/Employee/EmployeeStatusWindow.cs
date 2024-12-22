@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 
+
+//MonoBehaviour 대신 Panel해야하나?
 public class EmployeeStatusWindow : MonoBehaviour
 {
     //const IEmployee.MAX_MISSION_SIZE = 5;
@@ -19,7 +21,7 @@ public class EmployeeStatusWindow : MonoBehaviour
 
     //MissionPanel
     [SerializeField] private GameObject missionObjectParent; //5개
-    private MissionElementUI[] missionUIs; //5개
+    private MissionElementUI[] missionUIs; //5개 
     //나중에 MissionElementUI에서 클릭 하면 바로바로 여기서 미션을 가져와야 함
     // ㄴ 원래 이거였지만 어쩌다 보니 바뀜
 
@@ -29,16 +31,21 @@ public class EmployeeStatusWindow : MonoBehaviour
     [SerializeField] private TextMeshProUGUI processBar_text;
 
     private IEmployee employee;
+    // ㄴ Mission : 미션 목록들
+    //    ㄴ 이미 그 전
+    
     RectTransform rf_dPanel;
 
     //ㄴ MissionPanel의 AddMissionMiniWindow
-    [SerializeField] private MissionSO[] missions;  //추가할 미션 갯수
+    private Mission[] missions;  //추가할 미션  => 아직  안쓴다. 대신 미션 필터링할때 여기에 담을 수 있다.
     [SerializeField] private Transform addMissionElement_parent;
     [SerializeField] private GameObject addMissionElement_prefab;
 
     //MissionPanel의 Mission
     [SerializeField] private GameObject[] smallMission_PoolObjects; //풀링용 오브젝트 (7개)
     [SerializeField] private GameObject smallMission_prefab; //토글
+    
+    //아마 이거 달성률 임
     private int small_mission_size;
     private int small_mission_current_size;
     bool clearSmallMissionLock = false;
@@ -95,7 +102,8 @@ public class EmployeeStatusWindow : MonoBehaviour
     {
         //나중에 개발자에 따라 기술에 따라 필터링기능 넣을 예정 ★★★★
         //missions 개수만큼 addMissionElement_prefab 생성
-        for (int i = 0; i < missions.Length; i++)
+        //어,,, 이 미션은 controller로 가져와야 한다
+        for (int i = 0; i < MissionController.instance.GetMissionSize(); i++)
         {
             GameObject addMissionElement = Instantiate(addMissionElement_prefab);
 
@@ -104,7 +112,7 @@ public class EmployeeStatusWindow : MonoBehaviour
 
             //SetMission 함수 실행
             AddMissionElementUI element = addMissionElement.GetComponent<AddMissionElementUI>();
-            element.SetMission(missions[i]);
+            element.SetMission(MissionController.instance.GetMission(i));
             element.SetEmployeeStatusWindow(this.GetComponent<EmployeeStatusWindow>());
         }
     }
@@ -220,9 +228,10 @@ public class EmployeeStatusWindow : MonoBehaviour
         SetSmall_mission_current_size(small_mission_current_size + value);
     }
 
+    
     public void SetSmall_mission_current_size(int value)
     {
-        small_mission_current_size = value;
+        small_mission_current_size = value; //서버적용
         if (small_mission_size == 0)
             processBar_text.text = "0%";
         else
