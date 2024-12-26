@@ -171,7 +171,7 @@ public struct Recruitment
             IEmployee employee = new EmployeeBuilder().BuildEmployee(employeeSO);
             
 
-            employee.SetEmployeeFromJson(serverApplicant); //가져오는 함수
+            employee.GetEmployeeFromJson(serverApplicant); //가져오는 함수
             AddApplicant(employee);
 
             //그러니까 이거를 그려야한다

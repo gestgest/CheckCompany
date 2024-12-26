@@ -20,7 +20,7 @@ public class Mission
 
     #region SERVER
     //서버에서 가져온 JSON 타입을 Mission에 넣기
-    void GetMissionFromJSON(Dictionary<string, object> mission)
+    public void GetMissionFromJSON(Dictionary<string, object> mission)
     {
         goal = Convert.ToInt32(mission["goal"]);
         int id = Convert.ToInt32(mission["id"]);
@@ -29,7 +29,8 @@ public class Mission
         m_SO = MissionController.instance.GetMission(id);
     }
 
-    void SetMissionToServer(string nickname)
+    //서버 보내기 
+    public void SetMissionToServer(string nickname)
     {
         Dictionary<string, object> mission = new Dictionary<string, object>
         {

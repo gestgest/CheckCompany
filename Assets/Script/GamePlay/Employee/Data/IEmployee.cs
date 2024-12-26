@@ -59,7 +59,7 @@ public interface IEmployee
     }
 
     //서버에 받기
-    public void SetEmployeeFromJson(KeyValuePair<string, object> employee)
+    public void GetEmployeeFromJson(KeyValuePair<string, object> employee)
     {
         //0, (age, careerPeriod, name, rank, salary, worktime {start, end})
         ID = int.Parse(employee.Key);
@@ -74,11 +74,12 @@ public interface IEmployee
 
         Dictionary<string, object> worktime = (Dictionary<string, object>)keyValues["worktime"];
         _WorkTime = new WorkTime(Convert.ToSingle(worktime["start"]), Convert.ToSingle(worktime["end"]));
-        
-        //서버에서 Mission 가져오기
-        //   Array로 가져오자
-        //   GetMission()
 
+        //keyValues["missions"] => List<Mission>
+        //   Array로 가져오자 for문
+            Mission mission;   
+            //mission.GetMissionFromJSON()
+            //AddMission
     }
 }
 
