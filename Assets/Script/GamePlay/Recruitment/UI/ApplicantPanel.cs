@@ -35,7 +35,7 @@ public class ApplicantPanel : Panel
     {
         RecruitmentElement recruitmentElement = RecruitmentController.instance.GetRecruitmentObject(recruitment_id).GetComponent<RecruitmentElement>();
         //생성되는 함수
-        IEmployee employee = recruitmentElement.GetApplicant(applicant_id);
+        Employee employee = recruitmentElement.GetApplicant(applicant_id);
 
         if(employee != null)
         {

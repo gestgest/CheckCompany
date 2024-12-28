@@ -4,9 +4,11 @@ using UnityEngine;
 //Employee 만드는 빌더 클래스
 public class EmployeeBuilder
 {
-    public IEmployee BuildEmployee(EmployeeSO employeeSO)
+    public Employee BuildEmployee(EmployeeSO employeeSO)
     {
-        IEmployee employee;
+        Employee employee;
+        employee = new Employee(); 
+        /*
         switch (employeeSO.GetEmployeeType())
         {
             case EmployeeType.PRODUCT_MANAGER:
@@ -25,6 +27,7 @@ public class EmployeeBuilder
                 employee = new Development(); //디폴트
                 break;
         }
+        */
         employee._EmployeeSO = employeeSO;
         return employee;
     }

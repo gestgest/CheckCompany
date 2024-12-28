@@ -8,13 +8,13 @@ public struct Recruitment
     int day; //Date
     int id; //모집 구분 id => 이걸로 모집 컴포넌트를 제거 생성해야한다
     int level;
-    List<IEmployee> applicants;
+    List<Employee> applicants;
     private EmployeeSO employeeSO;
     
     public void Init()
     {
         if(applicants == null)
-            applicants = new List<IEmployee>();
+            applicants = new List<Employee>();
     }
 
 
@@ -55,7 +55,7 @@ public struct Recruitment
         this.level = level;
     }
 
-    public void AddApplicant(IEmployee applicant)
+    public void AddApplicant(Employee applicant)
     {
         applicants.Add(applicant);
     }
@@ -69,7 +69,7 @@ public struct Recruitment
     {
         return applicants.Count;
     }
-    public IEmployee GetApplicant(int index)
+    public Employee GetApplicant(int index)
     {
         return applicants[index];
     }
@@ -79,7 +79,7 @@ public struct Recruitment
     public void SwitchApplicant(int i, int j)
     {
 
-        IEmployee tmp = applicants[i];
+        Employee tmp = applicants[i];
         applicants[i] = applicants[j];
         applicants[j] = tmp;
     }
@@ -168,7 +168,7 @@ public struct Recruitment
         {
             //0, (age, careerPeriod, name, rank, salary, worktime {start, end})
             //Switch문으로 해결 => emploeeSO로 구분
-            IEmployee employee = new EmployeeBuilder().BuildEmployee(employeeSO);
+            Employee employee = new EmployeeBuilder().BuildEmployee(employeeSO);
             
 
             employee.GetEmployeeFromJson(serverApplicant); //가져오는 함수

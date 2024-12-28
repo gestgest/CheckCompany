@@ -9,7 +9,7 @@ public class EmployeeController : MonoBehaviour
 {
     public static EmployeeController instance;
     //직원 목록
-    List<IEmployee> employees;
+    List<Employee> employees;
     List<GameObject> employeeObjects;
 
     [SerializeField] private GameObject employeePrefab;
@@ -29,7 +29,7 @@ public class EmployeeController : MonoBehaviour
 
     private void Start()
     {
-        employees = new List<IEmployee>();
+        employees = new List<Employee>();
         employeeObjects = new List<GameObject>();
 
         InitEmployeeSet();
@@ -41,14 +41,14 @@ public class EmployeeController : MonoBehaviour
     {
         for (int i = 0; i < employees.Count; i++)
         {
-            IEmployee e = employees[i];
+            Employee e = employees[i];
             CreateEmployeeElementUI(e);
         }
 
     }
 
     //show함수, index를 employees기준으로 하면 안된다. => 나중에 전체 ID로 바꿀 예정
-    private void CreateEmployeeElementUI(IEmployee e)
+    private void CreateEmployeeElementUI(Employee e)
     {
         GameObject employeeObject = Instantiate(employeePrefab, Vector3.zero, Quaternion.identity);
         EmployeeElement employeeContent = employeeObject.GetComponent<EmployeeElement>();
@@ -103,7 +103,7 @@ public class EmployeeController : MonoBehaviour
         }
     }
 
-    public void CreateEmployee(IEmployee e)
+    public void CreateEmployee(Employee e)
     {
 
         SetEmployeeToServer(e);
@@ -113,7 +113,7 @@ public class EmployeeController : MonoBehaviour
     }
 
     #region SERVER
-    void SetEmployeeToServer(IEmployee e)
+    void SetEmployeeToServer(Employee e)
     {
         //서버에 
         FireStoreManager.instance.SetFirestoreData("GamePlayUser",
@@ -136,7 +136,7 @@ public class EmployeeController : MonoBehaviour
     public void GetEmployeesFromServer(Dictionary<string, object> serverEmployees)
     {
         if (this.employees == null)
-            this.employees = new List<IEmployee>();
+            this.employees = new List<Employee>();
 
 
         //map형태의 employees를 list로 변환
@@ -145,7 +145,7 @@ public class EmployeeController : MonoBehaviour
             Dictionary<string, object> tmp = (Dictionary<string, object>)(serverEmployee.Value);
 
             EmployeeSO employeeSO = RecruitmentController.instance.GetEmployeeSO(Convert.ToInt32(tmp["employeeType"]));
-            IEmployee employee = new EmployeeBuilder().BuildEmployee(employeeSO);
+            Employee employee = new EmployeeBuilder().BuildEmployee(employeeSO);
 
             employee.GetEmployeeFromJson(serverEmployee);
             this.employees.Add(employee);
@@ -197,7 +197,7 @@ public class EmployeeController : MonoBehaviour
             {
                 if (employees[i].ID > employees[j].ID)
                 {
-                    IEmployee tmp = employees[i];
+                    Employee tmp = employees[i];
                     employees[i] = employees[j];
                     employees[j] = tmp;
 

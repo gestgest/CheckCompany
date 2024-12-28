@@ -43,7 +43,7 @@ public class RecruitmentElement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             Debug.Log("RecruitmentElement : R 버튼 누름");
-            IEmployee employee = new Development();
+            Employee employee = new Employee();
             employee.ID = GameManager.instance.Employee_count;
             GameManager.instance.Employee_count = employee.ID + 1;
             employee.Name = "문재현";
@@ -96,7 +96,7 @@ public class RecruitmentElement : MonoBehaviour
     /// 지원자로 오브젝트 그리는 함수
     /// </summary>
     /// <param name="employee"></param>
-    public void SetApplicant(IEmployee employee)
+    public void SetApplicant(Employee employee)
     {
         SetApplicantsNumber(recruitment.GetApplicantCount()); //지원자 수
         CreateEmployeeObject(employee);
@@ -111,7 +111,7 @@ public class RecruitmentElement : MonoBehaviour
         SetApplicantsNumber(recruitment.GetApplicantCount());
     }
 
-    private void CreateEmployeeObject(IEmployee employee)
+    private void CreateEmployeeObject(Employee employee)
     {
         GameObject tmp = Instantiate(applicant_Prefab);
 
@@ -122,7 +122,7 @@ public class RecruitmentElement : MonoBehaviour
         applicant_objects.Add(tmp);
     }
 
-    private void SetServerApplicant(IEmployee applicant)
+    private void SetServerApplicant(Employee applicant)
     {
 
         FireStoreManager.instance.SetFirestoreData("GamePlayUser",
@@ -150,7 +150,7 @@ public class RecruitmentElement : MonoBehaviour
     }
 
 
-    public IEmployee GetApplicant(int id)
+    public Employee GetApplicant(int id)
     {
         int index = recruitment.Search_Employee_Index(id);
         if (index == -1)

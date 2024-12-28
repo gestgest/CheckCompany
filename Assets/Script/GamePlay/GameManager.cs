@@ -113,7 +113,12 @@ public class GameManager : MonoBehaviour
         {
             //Debug.Log("돈 서버에게 입력 받음 : " + value);
             employee_count = value;
-            fireStoreManager.SetFirestoreData("GamePlayUser", nickname ,"employee_count", employee_count);
+            fireStoreManager.SetFirestoreData(
+                "GamePlayUser",
+                nickname ,
+                "employee_count", 
+                employee_count
+            );
             //서버 로딩
             //ui_manager.SetMoneyText(value);
         }

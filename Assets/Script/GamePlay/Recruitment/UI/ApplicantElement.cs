@@ -22,7 +22,7 @@ public class ApplicantElement : MonoBehaviour
     }
 
     // Init 급
-    public void SetValue(IEmployee employee, int recruitment_id)
+    public void SetValue(Employee employee, int recruitment_id)
     {
         //icon
         name_text.text = employee.Name;
