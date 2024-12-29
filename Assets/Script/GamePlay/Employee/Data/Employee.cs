@@ -34,7 +34,7 @@ public class Employee
     public EmployeeRank _Rank { get { return rank; } set { rank = value; } }
     public WorkTime _WorkTime { get { return workTime; } set { workTime = value; } }
     public Mission GetMission(int index) { return missions[index]; }
-    public bool GetSmallMissionAchievement(int index) {  return missions[0].GetAchievement(index); }
+    public bool Get_SmallMission_Achievement(int index) {  return missions[0].GetAchievement(index); }
     //public bool GetSmallMissionAchievement(int index) { return false; }
 
     //기술
@@ -44,7 +44,8 @@ public class Employee
         missions = new Mission[MAX_MISSION_SIZE];
     }
     
-    //소 미션 클리어 갯수 구하기
+    //소 미션 클리어 갯수 구하기 => Mission 함수의 GetAchievementClearCount를 이용해라 
+    /*
     public int GetIsClearSmallMissionSize() 
     {
         int count = 0;
@@ -61,11 +62,8 @@ public class Employee
         }
         return count;
     }
+    */
 
-    public void SetIsClearSmallMission(int index) 
-    { 
-        missions[0].SetAchievement(index,!GetSmallMissionAchievement(index));
-    }
 
     public int GetMissionSize() { return mission_size; }
 

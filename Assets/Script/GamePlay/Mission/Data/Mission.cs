@@ -9,8 +9,8 @@ public class Mission
 
     //달성률
     //생각해보니 달성률이 아니라 각각의 미션 달성을 true false 해야할듯
-    private List<bool> achievementList; //small_missions 사이즈만큼 할당
-    private int achievementCount;
+    private bool [] achievementList; //small_missions 사이즈만큼 할당
+    private int achievementClearCount;
     
     int mission_id; 
     //어떤 미션을 가지고 있는지 => 나중에 미션 컨트롤러에서 m_SO를 가져오기 위한
@@ -67,8 +67,9 @@ public class Mission
     public void SetMissionSO(MissionSO missionSO)
     {
         m_SO = missionSO;
-        achievementList = new List<bool>(missionSO.GetSmallMissions().Length);
-        Debug.Log("achievementList : " + achievementList.Count);
+        achievementList = new bool[missionSO.GetSmallMissions().Length];
+        //Debug.Log("achievementList : " + missionSO.GetSmallMissions().Length);
+        // 애초에 0 Debug.Log("achievementList : " + achievementList.Count);
 
         SetAchievementAllFalse();
     }
@@ -77,32 +78,34 @@ public class Mission
     {
         return achievementList[index];
     }
-    public int GetAchievementCount()
+    public int GetAchievementClearCount()
     {
-        return achievementCount;
+        return achievementClearCount;
     }
     
     public void SetAchievement(int index, bool isAchieved)
     {
+        //한번에 두번 호출
+        //Debug.Log("엄준식" + achievementClearCount);
         achievementList[index] = isAchieved;
         if (isAchieved)
         {
-            achievementCount++;
+            achievementClearCount++;
         }
         else
         {
-            achievementCount--;
+            achievementClearCount--;
         }
     }
 
     public void SetAchievementAllFalse()
     {
-        for(int i = 0; i < achievementList.Count; i++)
+        for(int i = 0; i < achievementList.Length; i++)
         {
             achievementList[i] = false;
         }
 
-        achievementCount = 0;
+        achievementClearCount = 0;
     }
     
     #endregion
