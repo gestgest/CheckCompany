@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Firebase.Firestore;
 using UnityEngine;
 
 public class Mission
@@ -39,7 +40,7 @@ public class Mission
     }
 
     //서버 보내기 
-    public void SetMissionToServer(string nickname)
+    public void SetMissionToServer(string nickname, int id)
     {
         Dictionary<string, object> mission = new Dictionary<string, object>
         {
@@ -47,12 +48,12 @@ public class Mission
             {"id", mission_id}
         };
         
-        //서버에 보내기
+        //서버에 보내기 => 잠만 1 미션 2 미션 이렇게 배열로 보내고 싶은 데,?
         FireStoreManager.instance.SetFirestoreData(
             "GamePlayUser",
             nickname,
-            "mission",
-            mission
+            "employees." + id.ToString()+ ".mission",
+            FieldValue.ArrayUnion(mission)
         );
     }
 

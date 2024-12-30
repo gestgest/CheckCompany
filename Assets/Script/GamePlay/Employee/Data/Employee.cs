@@ -69,13 +69,18 @@ public class Employee
 
     public void AddMission(Mission m)
     {
+        //꽉 차있다면 => 취소
         if(mission_size == Employee.MAX_MISSION_SIZE)
-            return; 
+            return;
+        
         missions[mission_size] = m;
         mission_size++;
+        
+        //서버에 미션을 넣는다.
+        m.SetMissionToServer(GameManager.instance.Nickname, id);
 
-        if(mission_size == 1)
-            missions[0].SetAchievementAllFalse();;
+        if (mission_size == 1)
+            missions[0].SetAchievementAllFalse();
     }
     public void RemoveMission(int index)
     {
