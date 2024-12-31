@@ -6,9 +6,7 @@ using UnityEngine;
 //public interface IEmployee
 public class Employee
 {
-    int id; //식별 번호 => 우리 회사 따로 ID 또는 전체 ID
-    //우리 회사 따로면 그냥 employee[식별번호] 해야함
-    //전체 ID면 계속 정렬시키고 이분탐색해야함 [채택]
+    int id; //식별 번호 => 전체 ID
     private EmployeeSO employeeSO;
     private string employee_name;
     private int age;
@@ -97,7 +95,7 @@ public class Employee
     //requirementEmployeeType
 
    //서버로 넣기 
-    public Dictionary<string, object> EmployeeToJSON()
+    public Dictionary<string, object> SetEmployeeToJSON()
     {
         Dictionary<string, float> _worktime = new Dictionary<string, float>
         {
@@ -122,7 +120,7 @@ public class Employee
     }
 
     //서버에 받기
-    public void GetEmployeeFromJson(KeyValuePair<string, object> employee)
+    public void GetEmployeeFromServer(KeyValuePair<string, object> employee)
     {
         //0, (age, careerPeriod, name, rank, salary, worktime {start, end})
         ID = int.Parse(employee.Key);
@@ -138,11 +136,18 @@ public class Employee
         Dictionary<string, object> worktime = (Dictionary<string, object>)keyValues["worktime"];
         _WorkTime = new WorkTime(Convert.ToSingle(worktime["start"]), Convert.ToSingle(worktime["end"]));
 
-        //keyValues["missions"] => List<Mission>
-        //   Array로 가져오자 for문
-            Mission mission;   
+        List<object> missions_tmp = keyValues["missions"] as List<object>;
+        for(int i = 0; i < missions_tmp.Count; i++)
+        {
+            //Mission mission;
             //mission.GetMissionFromJSON()
             //AddMission
+            //Mission mission = missions_tmp[i] as (Dictionary<string, object>);
+        }
+        //missions_tmp
+
+        //keyValues["missions"] => List<Mission>
+        //Array로 가져오자 for문
     }
 }
 

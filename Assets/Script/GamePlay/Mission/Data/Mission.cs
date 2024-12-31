@@ -52,7 +52,7 @@ public class Mission
         FireStoreManager.instance.SetFirestoreData(
             "GamePlayUser",
             nickname,
-            "employees." + id.ToString()+ ".mission",
+            "employees." + id.ToString()+ ".missions",
             FieldValue.ArrayUnion(mission)
         );
     }

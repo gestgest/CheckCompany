@@ -119,7 +119,7 @@ public class EmployeeController : MonoBehaviour
         FireStoreManager.instance.SetFirestoreData("GamePlayUser",
             GameManager.instance.Nickname,
             "employees." + e.ID,
-            e.EmployeeToJSON()
+            e.SetEmployeeToJSON()
         );
     }
 
@@ -147,7 +147,7 @@ public class EmployeeController : MonoBehaviour
             EmployeeSO employeeSO = RecruitmentController.instance.GetEmployeeSO(Convert.ToInt32(tmp["employeeType"]));
             Employee employee = new EmployeeBuilder().BuildEmployee(employeeSO);
 
-            employee.GetEmployeeFromJson(serverEmployee);
+            employee.GetEmployeeFromServer(serverEmployee);
             this.employees.Add(employee);
         }
 

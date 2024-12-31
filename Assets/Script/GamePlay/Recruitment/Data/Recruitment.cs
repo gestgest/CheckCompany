@@ -140,7 +140,7 @@ public struct Recruitment
 
         for (int i = 0; i < applicants.Count; i++)
         {
-            result.Add(applicants[i].ID.ToString(), applicants[i].EmployeeToJSON());
+            result.Add(applicants[i].ID.ToString(), applicants[i].SetEmployeeToJSON());
             //result.applicants[i].EmployeeToJSON());
         }
 
@@ -171,7 +171,7 @@ public struct Recruitment
             Employee employee = new EmployeeBuilder().BuildEmployee(employeeSO);
             
 
-            employee.GetEmployeeFromJson(serverApplicant); //가져오는 함수
+            employee.GetEmployeeFromServer(serverApplicant); //가져오는 함수
             AddApplicant(employee);
 
             //그러니까 이거를 그려야한다
