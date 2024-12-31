@@ -129,6 +129,7 @@ public class EmployeeStatusWindow : MonoBehaviour
     {
         Mission mission = new Mission(m);
         employee.AddMission(mission);
+        employee.SetMissionToServer(mission, GameManager.instance.Nickname, mission.GetMissionID());
         addMissionMiniWindow.SetActive(false);
         SetMissionUI();
         if(employee.GetMissionSize() == 1)

@@ -74,8 +74,8 @@ public class Employee
         missions[mission_size] = m;
         mission_size++;
         
-        //서버에 미션을 넣는다.
-        m.SetMissionToServer(GameManager.instance.Nickname, id);
+        //서버에 미션을 넣는다. => 이거 초반에 가져올때 가져오고 넣어짐
+        //SetMissionToServer(m, GameManager.instance.Nickname, m.GetMissionID());
 
         if (mission_size == 1)
             missions[0].SetAchievementAllFalse();
@@ -94,6 +94,13 @@ public class Employee
  
     //requirementEmployeeType
 
+    #region SERVER
+
+    public void SetMissionToServer(Mission m, string name, int id)
+    {
+        m.SetMissionToServer(GameManager.instance.Nickname, m.GetMissionID());
+    }
+    
    //서버로 넣기 
     public Dictionary<string, object> SetEmployeeToJSON()
     {
@@ -115,12 +122,13 @@ public class Employee
             { "worktime", _worktime },
         };
          
+        //미션은?
 
         return result;
     }
 
     //서버에 받기
-    public void GetEmployeeFromServer(KeyValuePair<string, object> employee)
+    public void GetEmployeeFromJSON(KeyValuePair<string, object> employee)
     {
         //0, (age, careerPeriod, name, rank, salary, worktime {start, end})
         ID = int.Parse(employee.Key);
@@ -139,16 +147,16 @@ public class Employee
         List<object> missions_tmp = keyValues["missions"] as List<object>;
         for(int i = 0; i < missions_tmp.Count; i++)
         {
-            //Mission mission;
-            //mission.GetMissionFromJSON()
-            //AddMission
-            //Mission mission = missions_tmp[i] as (Dictionary<string, object>);
+            Dictionary<string, object> mission_map = (Dictionary<string, object>)missions_tmp[i];
+            Mission mission = new Mission();
+            mission.GetMissionFromJSON(mission_map);
+            AddMission(mission);
         }
-        //missions_tmp
-
-        //keyValues["missions"] => List<Mission>
-        //Array로 가져오자 for문
+        //세팅?
     }
+    
+    #endregion
+
 }
 
 public enum EmployeeType

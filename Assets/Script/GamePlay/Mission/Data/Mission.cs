@@ -22,7 +22,7 @@ public class Mission
     - id : number
         
     */
-
+    public Mission()  { }
     public Mission(MissionSO missionSO)
     {
         SetMissionSO(missionSO);
@@ -32,11 +32,15 @@ public class Mission
     //서버에서 가져온 JSON 타입을 Mission에 넣기
     public void GetMissionFromJSON(Dictionary<string, object> mission)
     {
-        //achievementList = Convert.ToInt32(mission["achievementList"]);
-        int id = Convert.ToInt32(mission["id"]);
-        
         //id 탐색
-        m_SO = MissionController.instance.GetMission(id);
+        int id = Convert.ToInt32(mission["id"]);
+        SetMissionSO(MissionController.instance.GetMission(id));
+        
+        List<object> achievementList_tmp = (List<object>)mission["achievementList"];
+        for (int i = 0; i < achievementList_tmp.Count; i++)
+        {
+            achievementList[i] = (bool)achievementList_tmp[i];
+        }
     }
 
     //서버 보내기 
@@ -68,6 +72,7 @@ public class Mission
     public void SetMissionSO(MissionSO missionSO)
     {
         m_SO = missionSO;
+        mission_id = m_SO.GetID();
         achievementList = new bool[missionSO.GetSmallMissions().Length];
         //Debug.Log("achievementList : " + missionSO.GetSmallMissions().Length);
         // 애초에 0 Debug.Log("achievementList : " + achievementList.Count);
@@ -107,6 +112,11 @@ public class Mission
         }
 
         achievementClearCount = 0;
+    }
+
+    public int GetMissionID()
+    {
+        return mission_id;
     }
     
     #endregion

@@ -147,7 +147,7 @@ public class EmployeeController : MonoBehaviour
             EmployeeSO employeeSO = RecruitmentController.instance.GetEmployeeSO(Convert.ToInt32(tmp["employeeType"]));
             Employee employee = new EmployeeBuilder().BuildEmployee(employeeSO);
 
-            employee.GetEmployeeFromServer(serverEmployee);
+            employee.GetEmployeeFromJSON(serverEmployee);
             this.employees.Add(employee);
         }
 
