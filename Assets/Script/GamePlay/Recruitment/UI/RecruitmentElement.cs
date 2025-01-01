@@ -124,7 +124,7 @@ public class RecruitmentElement : MonoBehaviour
 
     private void SetServerApplicant(Employee applicant)
     {
-
+       
         FireStoreManager.instance.SetFirestoreData("GamePlayUser",
             GameManager.instance.Nickname,
             "recruitments." + recruitment.GetID().ToString() + ".applicants." + applicant.ID,

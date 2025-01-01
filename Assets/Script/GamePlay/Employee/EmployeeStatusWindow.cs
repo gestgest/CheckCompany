@@ -121,19 +121,21 @@ public class EmployeeStatusWindow : MonoBehaviour
     {
         employee.RemoveMission(index);
         SetMissionUI();
-        if(index == 0)
-            SetSmallMission();
+
+        // if(index == 0)
+        //     SetSmallMission();
     }
 
     public void AddMission(MissionSO m)
     {
         Mission mission = new Mission(m);
         employee.AddMission(mission);
-        employee.SetMissionToServer(mission, GameManager.instance.Nickname, mission.GetMissionID());
+        employee.AddMissionToServer(mission, GameManager.instance.Nickname, employee.ID);
         addMissionMiniWindow.SetActive(false);
         SetMissionUI();
-        if(employee.GetMissionSize() == 1)
-            SetSmallMission();
+
+        // if(employee.GetMissionSize() == 1)
+        //     SetSmallMission();
         
     }
 
@@ -142,6 +144,8 @@ public class EmployeeStatusWindow : MonoBehaviour
     {
         int missionSize = employee.GetMissionSize();
         //Debug.Log("EmployeeStatusWindow 의 SetMission : " + missionSize);
+        
+        
         for (int i = 0; i < missionSize; i++)
         {
             Mission mission = employee.GetMission(i);
@@ -155,6 +159,8 @@ public class EmployeeStatusWindow : MonoBehaviour
         {
             missionUIs[i].SetValue();
         }
+        
+        SetSmallMission();
     }
 
     /////////////////////////////////////소미션
@@ -182,9 +188,11 @@ public class EmployeeStatusWindow : MonoBehaviour
         }
     }
 
-    //소 미션 셋팅
+    //소 미션 셋팅 => 이 친구가 계속 안됨
     private void SetSmallMission()
     {
+        //Debug.Log("EmployeeStatusWindow 의 GetMissionSize : " + employee.GetMissionSize());
+
         if(employee.GetMissionSize() == 0)
         {
             small_mission_size = 0;
@@ -225,7 +233,11 @@ public class EmployeeStatusWindow : MonoBehaviour
     /// //////////////////프로퍼티 - small_mission_current_size
     public void Check_smallmission_achievement(int index, bool check)
     {
-        employee.GetMission(0).SetAchievement(index, check); 
+        Mission mission = employee.GetMission(0);
+        mission.SetAchievement(index, check);
+        if(mission.GetAchievementClearCount() != small_mission_size)
+            employee.SetAllMissionToServer(GameManager.instance.Nickname, employee.ID);
+
         Set_smallMission_achievement_UI();
     }
 

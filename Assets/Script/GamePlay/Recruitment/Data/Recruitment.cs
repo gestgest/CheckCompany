@@ -75,7 +75,7 @@ public struct Recruitment
     }
 
     #endregion
-
+    #region UI
     public void SwitchApplicant(int i, int j)
     {
 
@@ -83,7 +83,6 @@ public struct Recruitment
         applicants[i] = applicants[j];
         applicants[j] = tmp;
     }
-
 
     public int Search_Employee_Index(int id)
     {
@@ -110,6 +109,7 @@ public struct Recruitment
         }
 
     }
+    #endregion
 
     #region SERVER
     public Dictionary<string, object> RecruitmentToJSON() //recruitment를 

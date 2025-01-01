@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Firebase.Firestore;
+
 
 //public interface IEmployee
 public class Employee
@@ -77,32 +79,63 @@ public class Employee
         //서버에 미션을 넣는다. => 이거 초반에 가져올때 가져오고 넣어짐
         //SetMissionToServer(m, GameManager.instance.Nickname, m.GetMissionID());
 
-        if (mission_size == 1)
-            missions[0].SetAchievementAllFalse();
+        //if (mission_size == 1)
+            //missions[0].SetAchievementAllFalse();
     }
     public void RemoveMission(int index)
     {
+        string nickName = GameManager.instance.Nickname;
+        RemoveAllMissionsToServer(GameManager.instance.Nickname, ID);
         for(int i = index; i < mission_size && i < Employee.MAX_MISSION_SIZE - 1; i++)
         {
             missions[i] = missions[i + 1];
+            if(missions[i] != null)
+                AddMissionToServer(missions[i], nickName, ID);
         }
         mission_size--;
-
-        if(mission_size >= 1)
-            missions[0].SetAchievementAllFalse();
+        
+        
     }
  
     //requirementEmployeeType
 
     #region SERVER
 
-    public void SetMissionToServer(Mission m, string name, int id)
+    public void RemoveAllMissionsToServer(string nickname, int id)
     {
-        m.SetMissionToServer(GameManager.instance.Nickname, m.GetMissionID());
+        FireStoreManager.instance.SetFirestoreData(
+            "GamePlayUser",
+            nickname,
+            "employees." + id.ToString()+ ".missions",
+            FieldValue.Delete
+        );
+    }
+
+    public void SetAllMissionToServer(string nickname, int id)
+    {
+        RemoveAllMissionsToServer(nickname, id);
+        for (int i = 0; i < missions.Length; i++)
+        {
+            if (missions[i] == null)
+            {
+                break;
+            }
+            AddMissionToServer(missions[i], nickname, id);
+        }
     }
     
-   //서버로 넣기 
-    public Dictionary<string, object> SetEmployeeToJSON()
+    public void AddMissionToServer(Mission m, string nickname, int id)
+    {
+        FireStoreManager.instance.SetFirestoreData(
+            "GamePlayUser",
+            nickname,
+            "employees." + id.ToString()+ ".missions",
+            FieldValue.ArrayUnion(m.SetMissionToJSON())
+        );
+    }
+    
+    //JSON으로 만들기
+    public Dictionary<string, object>  SetEmployeeToJSON()
     {
         Dictionary<string, float> _worktime = new Dictionary<string, float>
         {
@@ -123,7 +156,7 @@ public class Employee
         };
          
         //미션은?
-
+        
         return result;
     }
 
@@ -143,14 +176,18 @@ public class Employee
 
         Dictionary<string, object> worktime = (Dictionary<string, object>)keyValues["worktime"];
         _WorkTime = new WorkTime(Convert.ToSingle(worktime["start"]), Convert.ToSingle(worktime["end"]));
-
-        List<object> missions_tmp = keyValues["missions"] as List<object>;
-        for(int i = 0; i < missions_tmp.Count; i++)
+        
+        if (keyValues.TryGetValue("missions", out object output))
         {
-            Dictionary<string, object> mission_map = (Dictionary<string, object>)missions_tmp[i];
-            Mission mission = new Mission();
-            mission.GetMissionFromJSON(mission_map);
-            AddMission(mission);
+            List<object> missions_tmp = output as List<object>;
+        
+            for(int i = 0; i < missions_tmp.Count; i++)
+            {
+                Dictionary<string, object> mission_map = (Dictionary<string, object>)missions_tmp[i];
+                Mission mission = new Mission();
+                mission.GetMissionFromJSON(mission_map);
+                AddMission(mission);
+            }
         }
         //세팅?
     }

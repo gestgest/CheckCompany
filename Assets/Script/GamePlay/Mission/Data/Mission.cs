@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Firebase.Firestore;
 using UnityEngine;
 
 public class Mission
@@ -43,22 +42,15 @@ public class Mission
         }
     }
 
-    //서버 보내기 
-    public void SetMissionToServer(string nickname, int id)
+    //JSON으로 만들기 (서버 보내기)
+    public Dictionary<string, object> SetMissionToJSON()
     {
-        Dictionary<string, object> mission = new Dictionary<string, object>
+        Dictionary<string, object> result = new Dictionary<string, object>
         {
             {"achievementList", achievementList},
             {"id", mission_id}
         };
-        
-        //서버에 보내기 => 잠만 1 미션 2 미션 이렇게 배열로 보내고 싶은 데,?
-        FireStoreManager.instance.SetFirestoreData(
-            "GamePlayUser",
-            nickname,
-            "employees." + id.ToString()+ ".missions",
-            FieldValue.ArrayUnion(mission)
-        );
+        return result;
     }
 
     #endregion
@@ -74,9 +66,10 @@ public class Mission
         m_SO = missionSO;
         mission_id = m_SO.GetID();
         achievementList = new bool[missionSO.GetSmallMissions().Length];
-        //Debug.Log("achievementList : " + missionSO.GetSmallMissions().Length);
+        
         // 애초에 0 Debug.Log("achievementList : " + achievementList.Count);
-
+        
+        
         SetAchievementAllFalse();
     }
 
@@ -92,8 +85,8 @@ public class Mission
     public void SetAchievement(int index, bool isAchieved)
     {
         //한번에 두번 호출
-        //Debug.Log("엄준식" + achievementClearCount);
         achievementList[index] = isAchieved;
+            
         if (isAchieved)
         {
             achievementClearCount++;

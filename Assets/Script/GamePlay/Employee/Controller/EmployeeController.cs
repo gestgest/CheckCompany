@@ -88,7 +88,7 @@ public class EmployeeController : MonoBehaviour
         //EmployeeStatusWindow의 index는 5. 
         PanelManager.instance.Click_Button_Panel(employeeStatusPanelSO.GetIndex(), true);
 
-        Debug.Log(id);
+        //Debug.Log("직원 아이디" + id);
 
         int index = Search_Employee_Index(id);
 
@@ -105,7 +105,6 @@ public class EmployeeController : MonoBehaviour
 
     public void CreateEmployee(Employee e)
     {
-
         SetEmployeeToServer(e);
         employees.Add(e);
         CreateEmployeeElementUI(e);
@@ -133,7 +132,7 @@ public class EmployeeController : MonoBehaviour
     }
 
     //고용된 직원 서버 자료들을 인 게임으로 가져오는 함수
-    public void GetEmployeesFromServer(Dictionary<string, object> serverEmployees)
+    public void GetEmployeesFromJSON(Dictionary<string, object> serverEmployees)
     {
         if (this.employees == null)
             this.employees = new List<Employee>();
