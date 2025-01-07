@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     //int executive = 1; //임원, 임원 생성할때 이거 참조해야한다
     int employee_count = 0;
     long money;
+    
     //Reputation reputation = Reputation.single; //레벨 [명예]
     //int exp = 0;
 
