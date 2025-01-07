@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     //int executive = 1; //임원, 임원 생성할때 이거 참조해야한다
     int employee_count = 0;
     long money;
+    private Date date;
     
     //Reputation reputation = Reputation.single; //레벨 [명예]
     //int exp = 0;
@@ -45,6 +46,8 @@ public class GameManager : MonoBehaviour
     {
         //절대로 LoginScene에 넣지마 => 메인 스레드 충돌 오류
         fireStoreManager.Init();
+        date = new Date();
+        SetDateUI();
     }
 
     public async void Init()
@@ -123,6 +126,23 @@ public class GameManager : MonoBehaviour
             //서버 로딩
             //ui_manager.SetMoneyText(value);
         }
+    }
+
+    public Date _Date
+    {
+        //애초에 서버에 데이터를 넣는 게 낫지 않나
+        get { return date; }
+        set
+        {
+            date = value;
+            //서버 로딩
+            SetDateUI();
+        }
+    }
+
+    public void SetDateUI()
+    {
+        ui_manager.SetDateText(date);
     }
 
     
