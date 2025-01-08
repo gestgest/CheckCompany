@@ -5,7 +5,7 @@ public class Date
     int year;
     int month;
     int day;
-    int week; //MON ~ 
+    Week week; //MON ~ 
 
     int hour;
     int minute;
@@ -15,7 +15,7 @@ public class Date
         year = 1;
         month = 1;
         day = 1;
-        week = 1;
+        week = Week.MON;
         hour = 1;
         minute = 1;
     }
@@ -43,7 +43,12 @@ public class Date
     {
         set
         {
+            int before = day;
+            
             day = value;
+            before = day - before;
+            
+            
             int day_leapYear = addDay_LeapYear();
             if (day > MONTH_DAY[month - 1] + day_leapYear)
             {
@@ -58,8 +63,14 @@ public class Date
         } 
         
     }
-    public int Week { set { week = value; } get { return week; } }
+    public Week _Week { set { week = value; } get { return week; } }
 
+    private void AddWeek(int day)
+    {
+        day = (day + (int)week) % 7;
+        week = (Week)day;
+    }
+    
     public int Hour { set { hour = value; } get { return hour; } }
 
     public int Minute { set { minute = value; } get { return minute; } }
@@ -96,8 +107,15 @@ public class Date
         return Year + "년 " 
                     + Month + "월 " 
                     + Day + "일 " 
-                    + Week + "요일 " 
+                    + _Week + "요일 " 
                     + Hour + "시 " 
                     + Minute + "분";
     }
+    
+    
+}
+
+public enum Week
+{            
+    MON, TUE, WED, THU, FRI, SAT, SUN
 }
