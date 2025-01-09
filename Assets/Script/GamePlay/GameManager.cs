@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
         //절대로 LoginScene에 넣지마 => 메인 스레드 충돌 오류
         fireStoreManager.Init();
         date = new Date();
-        SetDateUI();
+        //SetDateUI();
     }
 
     public async void Init()
@@ -72,7 +72,9 @@ public class GameManager : MonoBehaviour
         nickname = (string)await fireStoreManager.GetFirestoreData("User", user.Email, "nickname");
         Money = (long)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "money");
         employee_count = Convert.ToInt32(await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "employee_count"));
-
+        date.GetDateFromJSON((Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "date"));
+        SetDateUI();
+        
         Dictionary<string,object> recruitments = (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "recruitments");
         RecruitmentController.instance.GetRecruitmentsFromServer(recruitments);
 
@@ -140,13 +142,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void AddDateMinute(int value)
+    {
+        date.Minute += value;
+        RecruitmentController.instance.AddApplicants(60 / value);
+        SetDateUI();
+    }
+
     public void SetDateUI()
     {
         ui_manager.SetDateText(date);
     }
-
-    
-
 
     #endregion
 
@@ -164,8 +170,5 @@ public class GameManager : MonoBehaviour
         //대륙 대표
         //글로벌
     }
-
-    
-
 
 }

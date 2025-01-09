@@ -39,28 +39,6 @@ public class RecruitmentElement : MonoBehaviour
 
     private void Update()
     {
-        //키보드 R 누르면
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            Debug.Log("RecruitmentElement : R 버튼 누름");
-            Employee employee = new Employee();
-            employee.ID = GameManager.instance.Employee_count;
-            GameManager.instance.Employee_count = employee.ID + 1;
-            employee.Name = "문재현";
-            employee.Age = 19;
-            employee.CareerPeriod = 12; //1 year
-            employee.Salary = 100; //월 100만원
-            employee._EmployeeSO = RecruitmentController.instance.GetRecruitmentEmployeeSO(
-                recruitment.GetID()
-            );
-            //(int)(recruitment.GetEmployeeSO().GetEmployeeType()
-
-            //서버에 들어가버려잇
-            SetServerApplicant(employee);
-
-            recruitment.AddApplicant(employee);
-            SetApplicant(employee);
-        }
         if (Input.GetKeyDown(KeyCode.T))
         {
             Debug.Log("RecruitmentElement : T 버튼 누름");
@@ -122,6 +100,13 @@ public class RecruitmentElement : MonoBehaviour
         applicant_objects.Add(tmp);
     }
 
+    public void RemoveRecruitment()
+    {
+        RecruitmentController.instance.RemoveRecruitment(recruitment.GetID());
+        Destroy(gameObject);
+        //이 오브젝트 제거
+    }
+    
     private void SetServerApplicant(Employee applicant)
     {
        
@@ -130,7 +115,6 @@ public class RecruitmentElement : MonoBehaviour
             "recruitments." + recruitment.GetID().ToString() + ".applicants." + applicant.ID,
             applicant.SetEmployeeToJSON()
         );
-
     }
 
 
@@ -149,6 +133,27 @@ public class RecruitmentElement : MonoBehaviour
         applicantNumber_Text.text = size.ToString() + "명";
     }
 
+    //지원자 넣는 함수 => 나중에 Employee 매개변수 받고 생성할 예정
+    public void AddApplicant()
+    {
+        Employee employee = new Employee();
+        employee.ID = GameManager.instance.Employee_count;
+        GameManager.instance.Employee_count = employee.ID + 1;
+        employee.Name = "문재현";
+        employee.Age = 19;
+        employee.CareerPeriod = 12; //1 year
+        employee.Salary = 100; //월 100만원
+        employee._EmployeeSO = RecruitmentController.instance.GetRecruitmentEmployeeSO(
+            recruitment.GetID()
+        );
+        //(int)(recruitment.GetEmployeeSO().GetEmployeeType()
+
+        //서버에 들어가버려잇
+        SetServerApplicant(employee);
+
+        recruitment.AddApplicant(employee);
+        SetApplicant(employee);
+    }
 
     public Employee GetApplicant(int id)
     {
@@ -159,7 +164,6 @@ public class RecruitmentElement : MonoBehaviour
     }
 
     #endregion
-
 
     public void SwitchPanel()
     {

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using Firebase.Firestore;
+using Random = UnityEngine.Random;
 
 //채용 공고 컨트롤러
 public class RecruitmentController : MonoBehaviour
@@ -155,13 +156,33 @@ public class RecruitmentController : MonoBehaviour
     //id는 recruitment의 id임
     public EmployeeSO GetRecruitmentEmployeeSO(int id)
     {
-        Debug.Log("id : " + id);
-        Debug.Log("Count : " + recruitments.Count);
-        Debug.Log("recruitment : " + recruitments[id].GetID());
-        Debug.Log("타입 : " + recruitments[id].GetEmployeeSO().GetEmployeeType());
         return recruitments[id].GetEmployeeSO();
     }
 
+    //randomMax 값 만큼 랜덤 돌리기
+    // ReSharper disable Unity.PerformanceAnalysis
+    public void AddApplicants(int randomWeight)
+    {
+        for (int i = 0; i < recruitments.Count; i++)
+        {
+            int value = Random.Range(0, randomWeight); //randomMax
+            if (value == 0)
+            {
+                recruitmentObjects[i].GetComponent<RecruitmentElement>().AddApplicant();
+            }
+        }
+    }
+
+    public void RemoveRecruitment(int id)
+    {
+        int index = Search_Recruitment_Index(id);
+        recruitments.RemoveAt(index);
+        recruitmentObjects.RemoveAt(index);
+
+        //서버 연동
+        Remove_server_recruitment_index(id);
+    }
+    
     public EmployeeSO GetEmployeeSO(int index)
     {
         return employeeSOs[index];
@@ -213,5 +234,43 @@ public class RecruitmentController : MonoBehaviour
         //FieldValue.ArrayUnion(recruitments[index].RecruitmentToJSON()) //기존에 있는 배열에서 추가한 느낌
 
         //user/
-    }   
+    }
+
+    public void Remove_server_recruitment_index(int id)
+    {
+        FireStoreManager.instance.DeleteFirestoreDataKey(
+            "GamePlayUser",
+            GameManager.instance.Nickname, 
+            "recruitments." + id.ToString()
+        );
+    }
+    
+    //Recruitment 이진탐색
+    public int Search_Recruitment_Index(int id)
+    {
+        int index = Binary_Search_Recruitment_Index(0, recruitments.Count - 1, id);
+        if (recruitments[index].GetID() == id)
+        {
+            return index;
+        }
+        return -1;
+    }
+
+    private int Binary_Search_Recruitment_Index(int start, int end, int id)
+    {
+        if (start > end)
+        {
+            return start;
+        }
+        int mid = (start + end) / 2;
+        if (id > recruitments[mid].GetID())
+        {
+            return Binary_Search_Recruitment_Index(mid + 1, end, id);
+        }
+        else
+        {
+            return Binary_Search_Recruitment_Index(start, mid - 1, id);
+        }
+    }
+    
 }

@@ -1,4 +1,7 @@
+using System;
 using UnityEngine;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class Date
 {
@@ -20,7 +23,12 @@ public class Date
         minute = 1;
     }
     #region PROPERTY
-    public int Year { set { year = value; } get { return year; } }
+    public int Year 
+    { 
+        set
+    { 
+        year = value;
+    } get { return year; } }
 
     public int Month
     {
@@ -56,6 +64,8 @@ public class Date
 
                 Month++;
             }
+            
+            AddWeek(before);
         }
         get
         {
@@ -70,10 +80,42 @@ public class Date
         day = (day + (int)week) % 7;
         week = (Week)day;
     }
-    
-    public int Hour { set { hour = value; } get { return hour; } }
 
-    public int Minute { set { minute = value; } get { return minute; } }
+    public int Hour
+    {
+        set
+        {
+            hour = value;
+            if (hour >= 24)
+            {
+                hour %= 24;
+                Day++;
+            }
+        }
+        get
+        {
+            return hour;
+        }
+    }
+
+    public int Minute
+    {
+        set
+        {
+            minute = value;
+            if (minute >= 60)
+            {
+                minute %= 60;
+                Hour++;
+            }
+
+            SetDateToServer(DateToJSON());
+        }
+        get
+        {
+            return minute; 
+        }
+    }
     #endregion
 
     private static int[] MONTH_DAY =
@@ -111,8 +153,95 @@ public class Date
                     + Hour + "시 " 
                     + Minute + "분";
     }
-    
-    
+
+    #region SERVER
+
+    //너무 데이터 낭비 아닐까 => year가 바뀌면 year만 수정하는 느낌으로
+    //근데 또 그러기엔 여러번 서버에 전송하는 느낌
+    public Dictionary<string, object> DateToJSON()
+    {
+        Dictionary<string, object> result = new Dictionary<string, object>()
+        {
+            { "year", year },
+            { "month", month },
+            { "day", day },
+            { "week", (int)week },
+            { "hour", hour },
+            { "minute", minute }
+        };
+        
+        return result;
+    }
+    public Dictionary<string, object>  YearToJSON()
+    {
+        Dictionary<string, object> result = new Dictionary<string, object>()
+        {
+            { "year", year },
+        };
+        
+        return result;
+    }
+
+    public Dictionary<string, object>  MonthToJSON()
+    {
+        Dictionary<string, object> result = new Dictionary<string, object>()
+        {
+            { "month", month },
+        };
+        
+        return result;
+    }
+
+    public Dictionary<string, object>  DayToJSON()
+    {
+        Dictionary<string, object> result = new Dictionary<string, object>()
+        {
+            { "day", day },
+            { "week", (int)week },
+        };
+        
+        return result;
+    }
+
+    public Dictionary<string, object> HourToJSON()
+    {
+        Dictionary<string, object> result = new Dictionary<string, object>()
+        {
+            { "hour", hour },
+        };
+        
+        return result;
+    }
+
+    public Dictionary<string, object>  MinuteToJSON()
+    {
+        Dictionary<string, object> result = new Dictionary<string, object>()
+        {
+            { "minute", minute }
+        };
+        
+        return result;
+    }
+
+    public void SetDateToServer(Dictionary<string, object> data)
+    {
+        FireStoreManager.instance.SetFirestoreData("GamePlayUser",
+            GameManager.instance.Nickname ,
+            "date",
+            data
+        );
+    }
+    public void GetDateFromJSON(Dictionary<string, object> data)
+    {
+        year = Convert.ToInt32(data["year"]);
+        month = Convert.ToInt32(data["month"]);
+        day = Convert.ToInt32(data["day"]);
+        week = (Week)Convert.ToInt32(data["week"]);
+        hour = Convert.ToInt32(data["hour"]);
+        minute = Convert.ToInt32(data["minute"]);
+    }
+
+    #endregion
 }
 
 public enum Week
