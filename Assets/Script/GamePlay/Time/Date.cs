@@ -55,14 +55,22 @@ public class Date
             
             day = value;
             before = day - before;
-            
-            
-            int day_leapYear = addDay_LeapYear();
-            if (day > MONTH_DAY[month - 1] + day_leapYear)
-            {
-                Day %= MONTH_DAY[month - 1] + day_leapYear;
 
-                Month++;
+
+            while (true)
+            {
+                int day_leapYear = addDay_LeapYear();
+                if (day > MONTH_DAY[month - 1] + day_leapYear)
+                {
+                    Day %= MONTH_DAY[month - 1] + day_leapYear;
+
+                    Month++;
+                }
+                else
+                {
+                    break;
+                }
+                
             }
             
             AddWeek(before);
@@ -88,8 +96,8 @@ public class Date
             hour = value;
             if (hour >= 24)
             {
+                Day += hour / 24;
                 hour %= 24;
-                Day++;
             }
         }
         get
@@ -105,8 +113,8 @@ public class Date
             minute = value;
             if (minute >= 60)
             {
+                Hour += minute / 60;
                 minute %= 60;
-                Hour++;
             }
 
             SetDateToServer(DateToJSON());
