@@ -704,6 +704,7 @@ MonoBehaviour:
   recruitmentPrefab: {fileID: 8974342152770559031, guid: 32efdf2fedeb42c45ac036900fd03e16, type: 3}
   view: {fileID: 329780243}
   costText: {fileID: 1475385537}
+  employeeNameSO: {fileID: 11400000, guid: b1872c501f9b97343a92b3e8f02cb4c0, type: 2}
 --- !u!1 &177504715
 GameObject:
   m_ObjectHideFlags: 0

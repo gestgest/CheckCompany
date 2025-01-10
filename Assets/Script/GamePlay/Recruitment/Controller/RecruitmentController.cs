@@ -14,18 +14,21 @@ public class RecruitmentController : MonoBehaviour
     //채용 리스트
     List<Recruitment> recruitments;
     List<GameObject> recruitmentObjects; //RecruitmentElement
-    int id = 0; //생성하려는 id
+    int id = 0; //생성하려는 recruitment id
     
     [SerializeField] List<EmployeeSO> employeeSOs; 
     [SerializeField] private GameObject recruitmentPrefab;
     [SerializeField] private GameObject view; //parent
     [SerializeField] private TextMeshProUGUI costText;
+    [SerializeField] private EmployeeNameSO employeeNameSO;
 
     //채용 정보 [버튼을 누르면 함수를 호출해서 tmp처럼 대신 넣는 느낌]
     private int employeeTypeIndex = 0; //0,1,2,3
     private int level = 0; //0,1,2
     private int period = 1; //1 3 7
     private int cost; //코스트 => 게임 오브젝트도 가져와서 설정해야 할 거 같은데
+
+    
 
 
     private void Awake()
@@ -168,7 +171,9 @@ public class RecruitmentController : MonoBehaviour
             int value = Random.Range(0, randomWeight); //randomMax
             if (value == 0)
             {
-                recruitmentObjects[i].GetComponent<RecruitmentElement>().AddApplicant();
+                string name = employeeNameSO.GetRandomName();
+
+                recruitmentObjects[i].GetComponent<RecruitmentElement>().AddApplicant(name);
             }
         }
     }
@@ -212,6 +217,7 @@ public class RecruitmentController : MonoBehaviour
 
     public GameObject GetRecruitmentObject(int index) 
     {
+        Debug.Log(index);
         return recruitmentObjects[index];
     }
 

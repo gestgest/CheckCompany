@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fedf350a647d0094eb328a6af0207c9f, type: 3}
+  m_Name: EmployeeNameSO
+  m_EditorClassIdentifier: 
+  male_names:
+  - "\uBB38\uC7AC\uD604"
+  - "\uAE40\uC2DC\uC6B0"
+  - "\uC774\uC120"
+  - "\uBC15\uAC74\uC6B0"
+  - "\uAE40\uC778\uD638"
+  - "\uC720\uC900\uC0C1"
+  female_names:
+  - "\uAE40\uD61C\uBBF8"
+  - "\uAC15\uC8FC\uC774"

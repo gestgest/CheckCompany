@@ -134,12 +134,12 @@ public class RecruitmentElement : MonoBehaviour
     }
 
     //지원자 넣는 함수 => 나중에 Employee 매개변수 받고 생성할 예정
-    public void AddApplicant()
+    public void AddApplicant(string name)
     {
         Employee employee = new Employee();
         employee.ID = GameManager.instance.Employee_count;
         GameManager.instance.Employee_count = employee.ID + 1;
-        employee.Name = "문재현";
+        employee.Name = name;
         employee.Age = 19;
         employee.CareerPeriod = 12; //1 year
         employee.Salary = 100; //월 100만원
