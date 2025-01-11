@@ -144,7 +144,7 @@ public class RecruitmentElement : MonoBehaviour
         employee.CareerPeriod = 12; //1 year
         employee.Salary = 100; //월 100만원
         employee._EmployeeSO = RecruitmentController.instance.GetRecruitmentEmployeeSO(
-            recruitment.GetID()
+            RecruitmentController.instance.Search_Recruitment_Index(recruitment.GetID())
         );
         //(int)(recruitment.GetEmployeeSO().GetEmployeeType()
 

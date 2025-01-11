@@ -40,6 +40,16 @@ public class Date
                 Year++;
                 Month %= 12;
             }
+
+            //월급 차감
+            if (EmployeeController.instance.PayEmployees())
+            {
+                Debug.Log("월급 차감");
+            }
+            else
+            {
+                Debug.Log("월급이 없습니다");
+            }
         }
         get
         {

@@ -111,6 +111,24 @@ public class EmployeeController : MonoBehaviour
         SelectionEmployeeSort();
     }
 
+    //결제 시도하고 안되면 false
+    public bool PayEmployees()
+    {
+        int sum = 0;
+        for (int i = 0; i < employees.Count; i++)
+        {
+            sum += employees[i].Salary;
+        }
+
+        if (sum <= GameManager.instance.Money)
+        {
+            GameManager.instance.Money -= sum;
+            return true;
+        }
+
+        return false;
+    }
+
     #region SERVER
     void SetEmployeeToServer(Employee e)
     {

@@ -53,13 +53,6 @@ public class RecruitmentController : MonoBehaviour
         //InitRecruitments(); //recruitments => 오브젝트
         //ShowRecruitments();
     }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            Debug.Log("RecruitmentController : W 버튼 누름 : " + GetRecruitmentEmployeeSO(0).GetEmployeeType());
-        }
-    }
 
     //pool 안 만들거임
     //초기 채용공고 리스트 보여주는 함수
@@ -156,10 +149,10 @@ public class RecruitmentController : MonoBehaviour
         costText.text = cost.ToString();
     }
 
-    //id는 recruitment의 id임
-    public EmployeeSO GetRecruitmentEmployeeSO(int id)
+    //index는 recruitment의 index임
+    public EmployeeSO GetRecruitmentEmployeeSO(int index)
     {
-        return recruitments[id].GetEmployeeSO();
+        return recruitments[index].GetEmployeeSO();
     }
 
     //randomMax 값 만큼 랜덤 돌리기

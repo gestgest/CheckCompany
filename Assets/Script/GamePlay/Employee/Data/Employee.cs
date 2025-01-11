@@ -13,7 +13,7 @@ public class Employee
     private string employee_name;
     private int age;
     private int careerPeriod;
-    private int salary;
+    private int salary; //월급?
     private WorkTime workTime;
     private EmployeeRank rank;
 
