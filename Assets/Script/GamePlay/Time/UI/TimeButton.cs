@@ -51,6 +51,6 @@ public class TimeButton : MonoBehaviour
     //꾸욱 누르면 발생하는 함수
     private void AddTime()
     {
-        GameManager.instance.AddDateMinute(3600 * 20);
+        GameManager.instance.AddDateMinute(10);
     }
 }
