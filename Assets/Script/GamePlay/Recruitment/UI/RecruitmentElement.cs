@@ -140,7 +140,12 @@ public class RecruitmentElement : MonoBehaviour
         employee.ID = GameManager.instance.Employee_count;
         GameManager.instance.Employee_count = employee.ID + 1;
         employee.Name = name;
+        //employee.IsEmployee = false;
         employee.Age = 19;
+        employee.Max_Stamina = 100; //이렇게 해야지 Max값으로 Stamina값 비교 가능
+        employee.SetStamina(100, false);
+        employee.Max_Mental = 100;
+        employee.Mental = 100;
         employee.CareerPeriod = 12; //1 year
         employee.Salary = 100; //월 100만원
         employee._EmployeeSO = RecruitmentController.instance.GetRecruitmentEmployeeSO(

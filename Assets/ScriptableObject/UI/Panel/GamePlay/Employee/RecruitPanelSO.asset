@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b428c833e0947649a42d554dc523171, type: 3}
   m_Name: RecruitPanelSO
   m_EditorClassIdentifier: 
-  title: "\uBAA8\uC9D1"
-  icon: {fileID: 21300000, guid: d4e25b0eddf41bf43ae0edfb83be4f60, type: 3}
-  index: 3
+  title: "\uCC44\uC6A9\uD604\uD669"
+  icon: {fileID: 21300000, guid: b6a96c7c65795c94abf54a62adbf5c38, type: 3}
+  index: 4
   height: 1
-  buttons: []
+  buttons:
+  - {fileID: 11400000, guid: d0bf2e75e8787e547b0c6a6ec73c5f14, type: 2}
+  - {fileID: 11400000, guid: 352892ce7d28ddf449db745f5cdddd28, type: 2}
+  - {fileID: 11400000}

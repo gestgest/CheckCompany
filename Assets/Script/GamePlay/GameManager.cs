@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour
 
         //user.Email으로 쿼리 만들고
         nickname = (string)await fireStoreManager.GetFirestoreData("User", user.Email, "nickname");
-        Money = (long)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "money");
+        SetMoney((long)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "money"), false);
         employee_count = Convert.ToInt32(await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "employee_count"));
         date.GetDateFromJSON((Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "date"));
         SetDateUI();
@@ -88,27 +88,19 @@ public class GameManager : MonoBehaviour
 
     public string Nickname => nickname;
 
-    public long Money
-    {
-        //애초에 서버에 데이터를 넣는 게 낫지 않나
-        get { return money; }
-        set
-        {
-            //Debug.Log("돈 서버에게 입력 받음 : " + value);
-            money = value;
+    public long Money => money;
 
-            //근데 이러면 불필요한 서버 데이터 전달이 두번?
+    public void SetMoney(long value, bool toServer = true)
+    {
+        //Debug.Log("돈 서버에게 입력 받음 : " + value);
+        money = value;
+
+        if(toServer)
             fireStoreManager.SetFirestoreData("GamePlayUser", nickname, "money", money);
-            
-            //서버 로딩
-            ui_manager.SetMoneyText(value);
-        }
+
+        //서버 로딩
+        ui_manager.SetMoneyText(value);
     }
-    //모집 => RecruitmentController
-    // ㄴ 지원자 (applicant) = Employee타입 => Set_server_recruitment_index()
-    //     - ApplicantElement
-    //- [ ] 직원
-    //    - [ ] 미션
 
 
     public int Employee_count

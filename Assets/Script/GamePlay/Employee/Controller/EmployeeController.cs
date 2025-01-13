@@ -105,6 +105,7 @@ public class EmployeeController : MonoBehaviour
 
     public void CreateEmployee(Employee e)
     {
+        
         SetEmployeeToServer(e);
         employees.Add(e);
         CreateEmployeeElementUI(e);
@@ -122,11 +123,20 @@ public class EmployeeController : MonoBehaviour
 
         if (sum <= GameManager.instance.Money)
         {
-            GameManager.instance.Money -= sum;
+            GameManager.instance.SetMoney(GameManager.instance.Money - sum);
             return true;
         }
 
         return false;
+    }
+
+    public void AddStamina(int add_value)
+    {
+        for(int i = 0; i < employees.Count; i++)
+        {
+            Employee employee = employees[i];
+            employee.SetStamina(employee.Stamina + add_value, false);
+        }
     }
 
     #region SERVER

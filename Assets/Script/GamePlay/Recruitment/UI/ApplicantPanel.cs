@@ -37,7 +37,7 @@ public class ApplicantPanel : Panel
         RecruitmentElement recruitmentElement = GetRecruitmentElement();
         //생성되는 함수
         Employee employee = recruitmentElement.GetApplicant(applicant_id);
-
+        employee.IsEmployee = true;
         if(employee != null)
         {
             EmployeeController.instance.CreateEmployee(employee);

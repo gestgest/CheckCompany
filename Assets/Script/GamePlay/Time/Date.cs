@@ -109,6 +109,8 @@ public class Date
                 Day += hour / 24;
                 hour %= 24;
             }
+
+
         }
         get
         {
@@ -125,6 +127,10 @@ public class Date
             {
                 Hour += minute / 60;
                 minute %= 60;
+
+                //임시 디버깅용 회복 함수
+                EmployeeController.instance.AddStamina(10);
+                Debug.Log("체력 회복");
             }
 
             SetDateToServer(DateToJSON());

@@ -183,7 +183,7 @@ public class EmployeeStatusWindow : MonoBehaviour
         if (employee.GetMission(0).GetAchievementClearCount() == small_mission_size)
         {
             //디버깅용 돈 주는 이벤트
-            GameManager.instance.Money += 10000;
+            GameManager.instance.SetMoney(GameManager.instance.Money + 10000);
             RemoveMission(0);
         }
     }
@@ -234,8 +234,19 @@ public class EmployeeStatusWindow : MonoBehaviour
     public void Check_smallmission_achievement(int index, bool check)
     {
         Mission mission = employee.GetMission(0);
-        mission.SetAchievement(index, check);
-        if(mission.GetAchievementClearCount() != small_mission_size)
+
+        //10은 그냥 적은거
+        if(employee.Stamina >= 10)
+        {
+            mission.SetAchievement(index, check);
+            employee.SetStamina(employee.Stamina - 10);
+        }
+        else
+        {
+            Debug.Log("체력이 부족합니다.");
+            return;
+        }
+        if (mission.GetAchievementClearCount() != small_mission_size)
             employee.SetAllMissionToServer(GameManager.instance.Nickname, employee.ID);
 
         Set_smallMission_achievement_UI();

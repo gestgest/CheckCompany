@@ -8653,7 +8653,7 @@ GameObject:
   - component: {fileID: 1110578336}
   - component: {fileID: 1110578335}
   m_Layer: 5
-  m_Name: RSPanel
+  m_Name: RecruitPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13524,7 +13524,7 @@ GameObject:
   - component: {fileID: 1747650253}
   - component: {fileID: 1747650252}
   m_Layer: 5
-  m_Name: RecruitPanel
+  m_Name: AddRecruitPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
