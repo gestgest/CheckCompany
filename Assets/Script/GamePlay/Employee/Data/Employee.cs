@@ -56,6 +56,9 @@ public class Employee
         stamina = value;
         if (stamina > max_stamina)
             stamina = max_stamina;
+
+        EmployeeController.instance.SetStaminaBarUI(ID, stamina);
+        
         if(toServer)
             SetStaminaToServer(GameManager.instance.Nickname, id);
     }

@@ -16,7 +16,7 @@ public class EmployeeController : MonoBehaviour
     [SerializeField] private GameObject parent;
     [SerializeField] private EmployeeStatusWindow employeeStatusWindow;
     [SerializeField] private PanelSO employeeStatusPanelSO;
-
+    
     private void Awake()
     {
         if(instance == null)
@@ -44,8 +44,8 @@ public class EmployeeController : MonoBehaviour
             Employee e = employees[i];
             CreateEmployeeElementUI(e);
         }
-
     }
+
 
     //show함수, index를 employees기준으로 하면 안된다. => 나중에 전체 ID로 바꿀 예정
     private void CreateEmployeeElementUI(Employee e)
@@ -135,10 +135,20 @@ public class EmployeeController : MonoBehaviour
         for(int i = 0; i < employees.Count; i++)
         {
             Employee employee = employees[i];
-            employee.SetStamina(employee.Stamina + add_value, false);
+            employee.SetStamina(employee.Stamina + add_value);
         }
     }
 
+    public void SetStaminaBarUI(int employee_id, int value)
+    {
+        employeeStatusWindow.SetStaminaBarUI(employee_id, value);
+    }
+    public void SetMentalBarUI(int employee_id, int value)
+    {
+        employeeStatusWindow.SetMentalBarUI(employee_id, value);
+
+    }
+    
     #region SERVER
     void SetEmployeeToServer(Employee e)
     {

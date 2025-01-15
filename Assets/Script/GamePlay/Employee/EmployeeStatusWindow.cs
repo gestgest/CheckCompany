@@ -11,31 +11,30 @@ public class EmployeeStatusWindow : MonoBehaviour
 {
     //const Employee.MAX_MISSION_SIZE = 5;
 
-    //Description Panel
+    //Description Panel UI 부분
     [SerializeField] private TextMeshProUGUI [] nameTexts;
     [SerializeField] private Image image;
     [SerializeField] private TextMeshProUGUI ageText;
     [SerializeField] private TextMeshProUGUI salaryText;
     [SerializeField] private TextMeshProUGUI careerPeriodText;
     [SerializeField] private TextMeshProUGUI timeText;
-
+    
+    [SerializeField] private Bar staminaBar;
+    [SerializeField] private Bar mentalBar;
+    
+    
     //MissionPanel
     [SerializeField] private GameObject missionObjectParent; //5개
     private MissionElementUI[] missionUIs; //5개 
     //나중에 MissionElementUI에서 클릭 하면 바로바로 여기서 미션을 가져와야 함
     // ㄴ 원래 이거였지만 어쩌다 보니 바뀜
 
+    //Mission UI 부분
     [SerializeField] private GameObject descriptionPanel;
     [SerializeField] private GameObject addMissionMiniWindow;
     [SerializeField] private GameObject processBar;
     [SerializeField] private TextMeshProUGUI processBar_text;
-
-    private Employee employee;
-    // ㄴ Mission : 미션 목록들은 여기에 있다 ****************
-    //    ㄴ 이미 그 전
     
-    RectTransform rf_dPanel;
-
     //ㄴ MissionPanel의 AddMissionMiniWindow
     //private Mission[] missions;  //추가할 미션  => 아직  안쓴다. 대신 미션 필터링할때 여기에 담을 수 있다.
     [SerializeField] private Transform addMissionElement_parent;
@@ -45,6 +44,11 @@ public class EmployeeStatusWindow : MonoBehaviour
     [SerializeField] private GameObject[] smallMission_PoolObjects; //풀링용 오브젝트 (7개)
     [SerializeField] private GameObject smallMission_prefab; //토글
     
+    private Employee employee;
+    // ㄴ Mission : 미션 목록들은 여기에 있다 ****************
+    //    ㄴ 이미 그 전
+    
+    RectTransform rf_dPanel;
     //아마 이거 달성률 임
     private int small_mission_size; // 이거 제거 예정이었으나 그냥 호출 한번하고 계속 보관하는 용도
     bool clearSmallMissionLock = false;
@@ -83,7 +87,10 @@ public class EmployeeStatusWindow : MonoBehaviour
         salaryText.text = "연봉 : " + (employee.Salary * 12).ToString() + "원";
         careerPeriodText.text = "경력 기간 : " + employee.CareerPeriod.ToString() + "개월";
         timeText.text = "근무시간 : " + employee._WorkTime.start.ToString() + " ~ " + employee._WorkTime.end.ToString();
-
+        
+        staminaBar.Init(employee.Stamina, employee.Max_Stamina);
+        mentalBar.Init(employee.Mental, employee.Max_Mental);
+        
         SetMissionUI(); //
         AddMissionToMiniWindow();
     }
@@ -264,5 +271,21 @@ public class EmployeeStatusWindow : MonoBehaviour
         int small_mission_achievement = employee.GetMission(0).GetAchievementClearCount();
         //Debug.Log("미션 완료 횟수 : " + small_mission_achievement);
         processBar_text.text = ((float)small_mission_achievement * 100 / small_mission_size).ToString() + "%";
+    }
+    
+    public void SetStaminaBarUI(int employee_id, int value)
+    {
+        if (employee == null)
+            return;
+        if(employee.ID == employee_id)
+            staminaBar.SetValue(value);
+    }
+    public void SetMentalBarUI(int employee_id, int value)
+    {
+        if (employee == null)
+            return;
+        
+        if(employee.ID == employee_id)
+            staminaBar.SetValue(value);
     }
 }
