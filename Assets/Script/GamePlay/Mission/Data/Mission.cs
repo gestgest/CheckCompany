@@ -39,6 +39,10 @@ public class Mission
         for (int i = 0; i < achievementList_tmp.Count; i++)
         {
             achievementList[i] = (bool)achievementList_tmp[i];
+            if (achievementList[i])
+            {
+                achievementClearCount++;
+            }
         }
     }
 

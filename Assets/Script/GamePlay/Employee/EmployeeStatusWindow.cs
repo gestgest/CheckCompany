@@ -180,6 +180,7 @@ public class EmployeeStatusWindow : MonoBehaviour
         if (smallMission_PoolObjects[index].GetComponent<Toggle>().isOn)
         {
             Check_smallmission_achievement(index, true);
+
         }
         else
         {
@@ -195,7 +196,7 @@ public class EmployeeStatusWindow : MonoBehaviour
         }
     }
 
-    //소 미션 셋팅 => 이 친구가 계속 안됨
+    //소 미션 셋팅(init)
     private void SetSmallMission()
     {
         //Debug.Log("EmployeeStatusWindow 의 GetMissionSize : " + employee.GetMissionSize());
@@ -219,7 +220,7 @@ public class EmployeeStatusWindow : MonoBehaviour
         Set_smallMission_achievement_UI();
         clearSmallMissionLock = true;
 
-        //오브젝트 풀링? => 7
+        //소 미션 오브젝트 풀링 => 7
         for (j = 0; j < small_mission_size && j < Employee.MAX_SMALL_MISSION_SIZE; j++)
         {
             smallMission_PoolObjects[j].SetActive(true);
@@ -235,24 +236,33 @@ public class EmployeeStatusWindow : MonoBehaviour
         {
             smallMission_PoolObjects[j].SetActive(false);
         }
+        BanSmallCheckMission();
     }
 
     /// //////////////////프로퍼티 - small_mission_current_size
     public void Check_smallmission_achievement(int index, bool check)
     {
         Mission mission = employee.GetMission(0);
+        if (check)
+        {
+            if(employee.Stamina >= 10)
+            {
+                mission.SetAchievement(index, check);
+                employee.SetStamina(employee.Stamina - 10);
+            }
+            else
+            {
+                Debug.Log("체력이 부족합니다.");
+                return;
+            }
 
-        //10은 그냥 적은거
-        if(employee.Stamina >= 10)
+        }
+        else //체크 해제
         {
             mission.SetAchievement(index, check);
-            employee.SetStamina(employee.Stamina - 10);
+            employee.SetStamina(employee.Stamina + 10);
         }
-        else
-        {
-            Debug.Log("체력이 부족합니다.");
-            return;
-        }
+        
         if (mission.GetAchievementClearCount() != small_mission_size)
             employee.SetAllMissionToServer(GameManager.instance.Nickname, employee.ID);
 
@@ -272,14 +282,50 @@ public class EmployeeStatusWindow : MonoBehaviour
         //Debug.Log("미션 완료 횟수 : " + small_mission_achievement);
         processBar_text.text = ((float)small_mission_achievement * 100 / small_mission_size).ToString() + "%";
     }
+
+    //
+    public void BanSmallCheckMission()
+    {
+        bool isBan = true;
+        if (employee == null)
+        {
+            return;
+        }
+        if (employee.GetMissionSize() == 0)
+        {
+            return;
+        }
+
+        if (employee.Stamina >= 10)
+        {
+            isBan = false;
+        }
+        for (int j = 0; j < small_mission_size && j < Employee.MAX_SMALL_MISSION_SIZE; j++)
+        {
+            Toggle t = smallMission_PoolObjects[j].GetComponent<Toggle>();
+            if (isBan)
+            {
+                //토글이 체크 안되어있다면 비활성화
+                if(!t.isOn)
+                    t.interactable = false;
+            }
+            else
+            {
+                t.interactable = true;
+            }
+        }
+        
+    }
     
     public void SetStaminaBarUI(int employee_id, int value)
     {
         if (employee == null)
             return;
+        
         if(employee.ID == employee_id)
             staminaBar.SetValue(value);
     }
+    
     public void SetMentalBarUI(int employee_id, int value)
     {
         if (employee == null)

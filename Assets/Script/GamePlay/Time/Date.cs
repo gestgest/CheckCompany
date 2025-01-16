@@ -83,6 +83,9 @@ public class Date
                 
             }
             
+            //임시 디버깅용 회복 함수
+            EmployeeController.instance.AddStamina(70);
+            Debug.Log("체력 회복");
             AddWeek(before);
         }
         get
@@ -129,9 +132,6 @@ public class Date
                 minute %= 60;
 
             }
-            //임시 디버깅용 회복 함수
-            EmployeeController.instance.AddStamina(10);
-            Debug.Log("체력 회복");
             SetDateToServer(DateToJSON());
         }
         get

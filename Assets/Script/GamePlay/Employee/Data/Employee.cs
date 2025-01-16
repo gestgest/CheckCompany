@@ -58,6 +58,7 @@ public class Employee
             stamina = max_stamina;
 
         EmployeeController.instance.SetStaminaBarUI(ID, stamina);
+        EmployeeController.instance.BanSmallCheckMission();
         
         if(toServer)
             SetStaminaToServer(GameManager.instance.Nickname, id);

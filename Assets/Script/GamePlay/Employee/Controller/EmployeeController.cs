@@ -146,7 +146,11 @@ public class EmployeeController : MonoBehaviour
     public void SetMentalBarUI(int employee_id, int value)
     {
         employeeStatusWindow.SetMentalBarUI(employee_id, value);
+    }
 
+    public void BanSmallCheckMission()
+    {
+        employeeStatusWindow.BanSmallCheckMission();
     }
     
     #region SERVER
