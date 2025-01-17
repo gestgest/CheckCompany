@@ -13,6 +13,7 @@ public class GamePanelManager : PanelManager
     [SerializeField] private Animator panel_animator;
 
     const int POOL_MAX_SIZE = 5;
+
     protected override void Start()
     {
         base.Start();
@@ -28,7 +29,6 @@ public class GamePanelManager : PanelManager
 
     void SwitchingInfo(int index)
     {
-        //Debug.Log("GamePanelManager 의 SwitchingInfo 인덱스: " + index);
         Panel panel = panels[index].GetComponent<Panel>();
         //top 정보 수정
         icon.sprite = panel.GetSprite();
