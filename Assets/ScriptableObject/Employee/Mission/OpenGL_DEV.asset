@@ -16,4 +16,6 @@ MonoBehaviour:
   mission_type: 4
   missionName: "OpenGL \uAC1C\uBC1C"
   icon: {fileID: 21300000, guid: 78f9e7097600a4f4db4ac1634e8a9492, type: 3}
-  small_missions: []
+  small_missions:
+  - "OpenGL \uAC15\uC758 \uB4E3\uAE30"
+  - "OpenGL \uC5D4\uC9C4 \uAC1C\uBC1C"

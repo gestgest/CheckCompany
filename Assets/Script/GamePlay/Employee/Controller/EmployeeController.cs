@@ -105,7 +105,6 @@ public class EmployeeController : MonoBehaviour
 
     public void CreateEmployee(Employee e)
     {
-        
         SetEmployeeToServer(e);
         employees.Add(e);
         CreateEmployeeElementUI(e);
