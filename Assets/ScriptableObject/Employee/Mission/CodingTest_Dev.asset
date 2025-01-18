@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: CodingTest_Dev
   m_EditorClassIdentifier: 
   ID: 0
-  mission_type: 0
+  mission_type: 3
   missionName: "\uCF54\uB529\uD14C\uC2A4\uD2B8 \uBB38\uC81C \uC900\uBE44"
   icon: {fileID: 21300000, guid: c22cde84417c61144a0722b8f7231dbf, type: 3}
   small_missions:
   - "\uCF54\uB529\uD14C\uC2A4\uD2B8 \uB2E8\uACC4 \uBB38\uC81C \uD480\uAE30"
+  - "\uCF54\uB529\uD14C\uC2A4\uD2B8 \uBCF5\uC2B5 \uBB38\uC81C \uD480\uAE30"
   - "\uCF54\uB529\uD14C\uC2A4\uD2B8 \uBCF5\uC2B5 \uBB38\uC81C \uD480\uAE30"
