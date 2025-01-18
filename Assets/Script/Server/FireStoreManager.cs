@@ -35,7 +35,7 @@ public class FireStoreManager : MonoBehaviour
 
             //이거 스타트가 아닌 로그인 이후 작동해야 한다. 
             if(GameManager.instance != null)
-                GameManager.instance.Init(); //=> 대충 서버에서 데이터 들어오는 함수
+                GameManager.instance.GameStart(); //=> 대충 서버에서 데이터 들어오는 함수
         });
     }
 
@@ -64,6 +64,34 @@ public class FireStoreManager : MonoBehaviour
         //db.Collection("GamePlayUser").AddAsync(user).ContinueWithOnMainThread(task =>
         //db.Collection(collection_name).Document(document_name).SetAsync(data).ContinueWithOnMainThread(task =>
         db.Collection(collection_name).Document(document_name).UpdateAsync(data).ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted)
+            {
+                Debug.Log(collection_name +"/" + document_name + "/" + key  +  " : 데이터 입력 성공");
+            }
+            else
+            {
+                Debug.LogError("Error adding data: " + task.Exception);
+            }
+        });
+    }
+
+    public void SetNewFirestoreData(string collection_name, string document_name, string key, object value)
+    {
+        // 저장할 데이터
+        Dictionary<string, object> data = new Dictionary<string, object>
+        {
+            { key, value }
+        };
+        /*
+            { key, value },
+            { key, value }
+        */
+        //일단 employees에 Employee가 들어있어야 한다
+        
+        // "users" 컬렉션에 새로운 문서 생성
+        //db.Collection("GamePlayUser").AddAsync(user).ContinueWithOnMainThread(task =>
+        db.Collection(collection_name).Document(document_name).SetAsync(data).ContinueWithOnMainThread(task =>
         {
             if (task.IsCompleted)
             {

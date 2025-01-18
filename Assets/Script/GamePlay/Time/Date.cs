@@ -249,7 +249,7 @@ public class Date
     public void SetDateToServer(Dictionary<string, object> data)
     {
         FireStoreManager.instance.SetFirestoreData("GamePlayUser",
-            GameManager.instance.Nickname ,
+            GameManager.instance.Nickname,
             "date",
             data
         );

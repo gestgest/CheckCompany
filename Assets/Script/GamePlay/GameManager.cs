@@ -49,8 +49,8 @@ public class GameManager : MonoBehaviour
         date = new Date();
         //SetDateUI();
     }
-
-    public async void Init()
+    
+    public async void GameStart()
     {
         //Auth로 가져오고
         auth = FirebaseAuth.DefaultInstance;
@@ -81,7 +81,6 @@ public class GameManager : MonoBehaviour
         Dictionary<string, object> employees = (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "employees");
         EmployeeController.instance.GetEmployeesFromJSON(employees);
         //employees get
-
     }
 
     #region property
