@@ -14,7 +14,7 @@ PluginImporter:
     Android:
       enabled: 1
       settings:
-        AndroidLibraryDependee: -1
+        AndroidLibraryDependee: UnityLibrary
         AndroidSharedLibraryType: Executable
         CPU: ARMv7
     Any:

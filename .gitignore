@@ -10,6 +10,9 @@
 /[Aa]ssets/Editor Default Resources/
 /[Aa]ssets/GeneratedLocalRepo/
 /[Aa]ssets/Plugins/
+/[Aa]ssets/StreamingAssets/
+
+/.utmp
 
 /[Ll]ibrary/
 /[Tt]emp/

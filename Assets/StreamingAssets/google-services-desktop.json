@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "38511068629",
     "project_id": "unitycheckcompany",
-    "storage_bucket": "unitycheckcompany.firebasestorage.app"
+    "storage_bucket": "unitycheckcompany.appspot.com"
   },
   "client": [
     {
