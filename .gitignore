@@ -2,7 +2,15 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
+/[Aa]ssets/Adaptive Performance/
+/[Aa]ssets/AddressableAssetsData/
 /[Aa]ssets/ExternPackage/
+/[Aa]ssets/ExternalDependencyManager/
+/[Aa]ssets/Firebase/
+/[Aa]ssets/Editor Default Resources/
+/[Aa]ssets/GeneratedLocalRepo/
+/[Aa]ssets/Plugins/
+
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
