@@ -17,7 +17,7 @@ public class RecruitmentElement : MonoBehaviour
 
 
     [SerializeField] private GameObject applicant_Prefab;
-    private Transform layout_parent;
+    [SerializeField] private Transform layout_parent;
     private VerticalLayoutGroup parent_VLG;
 
 
@@ -33,9 +33,10 @@ public class RecruitmentElement : MonoBehaviour
         layout_parent = transform.parent; //부모 가져오기
         parent_VLG = layout_parent.GetComponent<VerticalLayoutGroup>(); //부모의 layout 가져오기
 
+        //RerollPanel();
         //icon.sprite
-
     }
+    
 
     private void Update()
     {
@@ -68,6 +69,7 @@ public class RecruitmentElement : MonoBehaviour
             CreateEmployeeObject(recruitment.GetApplicant(i));
         }
         SelectionApplicantSort();
+        //RerollPanel();
     }
 
     /// <summary>
@@ -79,6 +81,8 @@ public class RecruitmentElement : MonoBehaviour
         SetApplicantsNumber(recruitment.GetApplicantCount()); //지원자 수
         CreateEmployeeObject(employee);
         SelectionApplicantSort();
+
+        //RerollPanel();
     }
 
     public void SetRecruitment(Recruitment recruitment) //나중에 매개변수를 Recruitment으로 해라 ㅇㅇ
@@ -180,8 +184,10 @@ public class RecruitmentElement : MonoBehaviour
     //dropButton, 배치관리자가 제대로 안되는거 방지
     private void RerollPanel()
     {
+        //LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)parent_VLG.transform);
         parent_VLG.childControlHeight = false;
         parent_VLG.childControlHeight = true;
+        Debug.Log("배치관리자 리롤"); 
     }
 
 

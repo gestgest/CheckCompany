@@ -66,8 +66,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 12645ebf3f1269b42928eef51a0f2124, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -846,6 +846,7 @@ MonoBehaviour:
   applicantNumber_Text: {fileID: 2106845460131550434}
   applicantsPanel: {fileID: 2106845461655963815}
   applicant_Prefab: {fileID: 3574423401577469288, guid: 6f8bd351da971344abb7d815ff2ca37b, type: 3}
+  layout_parent: {fileID: 0}
 --- !u!114 &7520629813391628149
 MonoBehaviour:
   m_ObjectHideFlags: 0

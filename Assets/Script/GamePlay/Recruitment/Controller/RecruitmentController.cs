@@ -80,10 +80,11 @@ public class RecruitmentController : MonoBehaviour
         //recruitmentContent.SetRecruitment(employeeTypeIcons[(int)r.GetEmployeeType()], r.GetDay(), r.GetSize(), i)
         recruitmentContent.Init();
         recruitmentContent.SetRecruitment(r);
-        recruitmentContent.SetApplicant(); //그리기
-
+        
         recruitmentObjects.Add(recruitmentObject);
         recruitmentObject.transform.SetParent(view.transform);
+
+        recruitmentContent.SetApplicant(); //그리기
     }
 
     //추가하는 함수
