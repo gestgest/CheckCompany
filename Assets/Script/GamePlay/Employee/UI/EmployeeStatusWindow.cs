@@ -84,7 +84,7 @@ public class EmployeeStatusWindow : MonoBehaviour
         }
         //이미지는 패스
         ageText.text = "나이 : " + employee.Age.ToString() + "살";
-        salaryText.text = "연봉 : " + (employee.Salary * 12).ToString() + "원";
+        salaryText.text = "연봉 : " + (employee.Salary * 12 / 10000).ToString() + "만원";
         careerPeriodText.text = "경력 기간 : " + employee.CareerPeriod.ToString() + "개월";
         timeText.text = "근무시간 : " + employee._WorkTime.start.ToString() + " ~ " + employee._WorkTime.end.ToString();
         
@@ -107,8 +107,15 @@ public class EmployeeStatusWindow : MonoBehaviour
     public void AddMissionToMiniWindow()
     {
         //나중에 개발자에 따라 기술에 따라 필터링기능 넣을 예정 ★★★★
+
+        //기존의 gameObject는 초기화 예정  => pool링 해야하나?
+        for (int i = 0; i < addMissionElement_parent.transform.childCount; i++)
+        {
+            //자식제거함수
+            Destroy(addMissionElement_parent.GetChild(i).gameObject);
+        }
+        
         //missions 개수만큼 addMissionElement_prefab 생성
-        //어,,, 이 미션은 controller로 가져와야 한다
         for (int i = 0; i < MissionController.instance.GetMissionSize(); i++)
         {
             GameObject addMissionElement = Instantiate(addMissionElement_prefab);
@@ -191,7 +198,8 @@ public class EmployeeStatusWindow : MonoBehaviour
         if (employee.GetMission(0).GetAchievementClearCount() == small_mission_size)
         {
             //디버깅용 돈 주는 이벤트
-            GameManager.instance.SetMoney(GameManager.instance.Money + 10000);
+            GameManager.instance.SetMoney(GameManager.instance.Money + 30000 
+                * employee.GetMission(0).GetMissionSO().GetSmallMissions().Length);
             RemoveMission(0);
         }
     }
@@ -247,7 +255,6 @@ public class EmployeeStatusWindow : MonoBehaviour
         {
             if(employee.Stamina >= 10)
             {
-                mission.SetAchievement(index, check);
                 employee.SetStamina(employee.Stamina - 10);
             }
             else
@@ -255,14 +262,13 @@ public class EmployeeStatusWindow : MonoBehaviour
                 Debug.Log("체력이 부족합니다.");
                 return;
             }
-
         }
         else //체크 해제
         {
-            mission.SetAchievement(index, check);
             employee.SetStamina(employee.Stamina + 10);
         }
-        
+        mission.SetAchievement(index, check);
+
         if (mission.GetAchievementClearCount() != small_mission_size)
             employee.SetAllMissionToServer(GameManager.instance.Nickname, employee.ID);
 

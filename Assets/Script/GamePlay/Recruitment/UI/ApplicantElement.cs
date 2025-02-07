@@ -27,7 +27,7 @@ public class ApplicantElement : MonoBehaviour
         //icon
         name_text.text = employee.Name;
         age_text.text = employee.Age.ToString() + "살";
-        salary_text.text = employee.Salary.ToString() + "만원";
+        salary_text.text = (employee.Salary / 10000).ToString()  + "만원";
         careerPeriod_text.text = employee.CareerPeriod.ToString() + "개월";
 
         Button button = GetComponent<Button>();

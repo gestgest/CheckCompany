@@ -2397,6 +2397,9 @@ MonoBehaviour:
   missions:
   - {fileID: 11400000, guid: adcaf5836866e294f98185669a974d3a, type: 2}
   - {fileID: 11400000, guid: e96617f3d45cd2244b0d8796ed0f6868, type: 2}
+  - {fileID: 11400000, guid: cab6d5aa0aa12d548a1ad39e5f18282b, type: 2}
+  - {fileID: 11400000, guid: 2685789906c7b3543958d01f115ee168, type: 2}
+  - {fileID: 11400000, guid: d8ec57516a8daf5439ed6b5654d8a97a, type: 2}
 --- !u!1 &388333794
 GameObject:
   m_ObjectHideFlags: 0
@@ -8907,7 +8910,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ec1fbf39c8835142b35fda844d698e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panelInfo: {fileID: 11400000, guid: 0edce15f03b6a3744b90cd6bda872a4b, type: 2}
+  panelInfo: {fileID: 11400000, guid: 352892ce7d28ddf449db745f5cdddd28, type: 2}
 --- !u!114 &1110578336
 MonoBehaviour:
   m_ObjectHideFlags: 0

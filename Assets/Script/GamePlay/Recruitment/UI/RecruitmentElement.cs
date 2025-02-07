@@ -151,7 +151,7 @@ public class RecruitmentElement : MonoBehaviour
         employee.Max_Mental = 100;
         employee.Mental = 100;
         employee.CareerPeriod = 12; //1 year
-        employee.Salary = 100; //월 100만원
+        employee.Salary = 1000000; //월 100만원
         employee._EmployeeSO = RecruitmentController.instance.GetRecruitmentEmployeeSO(
             RecruitmentController.instance.Search_Recruitment_Index(recruitment.GetID())
         );
@@ -177,14 +177,21 @@ public class RecruitmentElement : MonoBehaviour
     public void SwitchPanel()
     {
         applicantsPanel.SetActive(!(applicantsPanel.activeSelf));
-        RerollPanel();
+        StartCoroutine(LoadingRerollPanel());
     }
 
+    IEnumerator LoadingRerollPanel()
+    {
+        yield return new WaitForSeconds(0.05f);
+        RerollPanel();
+    }
 
     //dropButton, 배치관리자가 제대로 안되는거 방지
     private void RerollPanel()
     {
         //LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)parent_VLG.transform);
+        // parent_VLG.CalculateLayoutInputVertical();
+        // parent_VLG.SetLayoutVertical();
         parent_VLG.childControlHeight = false;
         parent_VLG.childControlHeight = true;
         Debug.Log("배치관리자 리롤"); 

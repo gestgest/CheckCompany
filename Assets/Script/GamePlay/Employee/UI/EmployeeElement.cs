@@ -44,7 +44,7 @@ public class EmployeeElement : MonoBehaviour
     }
     private void SetCost(int cost)
     {
-        costUI.text = cost.ToString();
+        costUI.text = (cost / 10000).ToString() + "만원";
     }
 
 

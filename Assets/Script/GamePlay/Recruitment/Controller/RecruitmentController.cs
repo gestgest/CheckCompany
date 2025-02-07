@@ -58,11 +58,7 @@ public class RecruitmentController : MonoBehaviour
     //초기 채용공고 리스트 보여주는 함수
     public void InitRecruitments()
     {
-        id = 0;
-        if(recruitments.Count != 0)
-        {
-            id = recruitments[recruitments.Count - 1].GetID() + 1;
-        }
+        SetID();
         
         for(int i = 0; i < recruitments.Count; i++)
         {
@@ -100,13 +96,23 @@ public class RecruitmentController : MonoBehaviour
         recruitment.SetID(id++);
         //SetCost()
         
+        Debug.Log(recruitment.GetID());
         recruitments.Add(recruitment);
-        Add_server_recruitment_index(recruitment.GetID());
+        Add_server_recruitment_index(Search_Recruitment_Index(recruitment.GetID()));
 
         CreateRecruitmentObject(recruitment);
     }
 
     #region Property
+
+    public void SetID()
+    {
+        id = 0;
+        if(recruitments.Count != 0)
+        {
+            id = recruitments[recruitments.Count - 1].GetID() + 1;
+        }
+    }
     public void SetEmployeeType(int index)
     {
         employeeTypeIndex = index;

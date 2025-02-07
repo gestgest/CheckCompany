@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -58,6 +59,10 @@ public class FirebaseAuthManager : MonoBehaviour
 
         auth.StateChanged += AuthStatusChanged;
         AuthStatusChanged(this, null);
+    }
+
+    private void Update()
+    {
     }
 
     void AuthStatusChanged(object sender, System.EventArgs eventArgs)
@@ -223,11 +228,8 @@ public class FirebaseAuthManager : MonoBehaviour
                     Debug.Log("회원가입 성공");
 
                     //user 닉네임 Document
-                    fireStoreManager.SetFirestoreData("User", user.Email, "nickname", name);
-                    
-                    //초기값 설정
-                    fireStoreManager.SetFirestoreData("GamePlayUser", name, "money", 0);
-
+                    fireStoreManager.SetNewFirestoreData("User", user.Email, "nickname", name);
+                    GamePlayerInit(name);
                     PanelManager.instance.SwitchingPanel(1); //로그인 화면으로
                 }
 
@@ -240,5 +242,16 @@ public class FirebaseAuthManager : MonoBehaviour
     public void SceneLoad()
     {
         sceneLoader.SceneLoad();
+    }
+    
+    //초기값 설정
+    private void GamePlayerInit(string name)
+    {
+        fireStoreManager.SetNewFirestoreData("GamePlayUser", name, "money", 0);
+        fireStoreManager.SetFirestoreData("GamePlayUser", name, "employee_count", 0);
+        Date date = new Date();
+        fireStoreManager.SetFirestoreData("GamePlayUser", name, "date", date.DateToJSON());
+        fireStoreManager.SetFirestoreData("GamePlayUser", name, "recruitments", new Dictionary<string, object>());
+        fireStoreManager.SetFirestoreData("GamePlayUser", name, "employees",  new Dictionary<string, object>());
     }
 }
