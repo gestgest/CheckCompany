@@ -7,18 +7,20 @@ using UnityEngine;
 public class Todo_Mission
 {
     private int ID;
-    private MissionType mission_type = MissionType.NONE;
+    private EmployeeType mission_type = EmployeeType.DEVELOPER;
     private string missionName;
     private int iconID;
     private List<string> small_missions;
+    private int level; //easy, medium, hard, very hard
 
-    public Todo_Mission(int id, int _type, string _name, int iconID, List<string> small_missions)
+    public Todo_Mission(int id, int _type, string _name, int iconID, int level, List<string> small_missions)
     {
         this.small_missions = new List<string>();
         this.ID = id;
-        this.mission_type = (MissionType)(_type);
+        this.mission_type = (EmployeeType)(_type);
         this.missionName = _name;
         this.iconID = iconID;
+        this.level = level;
 
         for (int i = 0; i < small_missions.Count; i++)
         {
@@ -27,7 +29,7 @@ public class Todo_Mission
     }
 
 
-    public MissionType GetMissionType()
+    public EmployeeType GetMissionType()
     {
         return mission_type;
     }
@@ -62,6 +64,10 @@ public class Todo_Mission
         return result;
     }
 }
+
+//EmployeeType
+
+/*
 public enum MissionType
 {
     NONE = 0, //비어있는 상태
@@ -73,3 +79,4 @@ public enum MissionType
     APP_DEV = 6, //앱개발
     DATA_ANALYSIS = 7, //데이터 분석
 }
+*/

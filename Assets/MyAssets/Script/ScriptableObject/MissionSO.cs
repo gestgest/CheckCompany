@@ -7,14 +7,14 @@ using UnityEngine.UI;
 public class MissionSO : ScriptableObject
 {
     [SerializeField] private int ID;
-    [SerializeField] private MissionType mission_type = MissionType.NONE;
+    [SerializeField] private EmployeeType employeeType = EmployeeType.DEVELOPER;
     [SerializeField] private string missionName;
     [SerializeField] private Sprite icon;
     [SerializeField] private string[] small_missions;
 
-    public MissionType GetMissionType()
+    public EmployeeType GetEmployeeType()
     {
-        return mission_type;
+        return employeeType;
     }
     public Sprite GetIcon()
     {

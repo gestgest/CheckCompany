@@ -35,7 +35,7 @@ public class MissionController : MonoBehaviour
         small_missions.Add("새로운 기술");
         small_missions.Add("기능 추가");
         //예시 미션도 넣을까?
-        Add_TodoMission(new Todo_Mission(0, 2, "유니티", 0, small_missions));
+        Add_TodoMission(new Todo_Mission(0, 2, "유니티", 0, 0, small_missions));
 
 
     }
