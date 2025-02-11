@@ -18,7 +18,7 @@ public class MissionElementUI : MonoBehaviour, IPointerEnterHandler, IPointerExi
     [SerializeField] private UnityEngine.UI.Image icon;
 
 
-    private MissionSO mission;
+    private Todo_Mission mission;
 
     RectTransform rf;
 
@@ -68,7 +68,7 @@ public class MissionElementUI : MonoBehaviour, IPointerEnterHandler, IPointerExi
     //ㄴ 2) 미션이 없는 경우 => 미션 생성해주는 미니창
 
     //아이콘 설정
-    public void SetValue(MissionSO m)
+    public void SetValue(Todo_Mission m)
     {
         mission = m;
         icon.sprite = m.GetIcon();

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Mission
 {
-    private MissionSO m_SO;
+    private Todo_Mission m_SO;
 
     //달성률
     //생각해보니 달성률이 아니라 각각의 미션 달성을 true false 해야할듯
@@ -22,9 +22,9 @@ public class Mission
         
     */
     public Mission()  { }
-    public Mission(MissionSO missionSO)
+    public Mission(Todo_Mission missionSO)
     {
-        SetMissionSO(missionSO);
+        SetTodo_Mission(missionSO);
     }
 
     #region SERVER
@@ -33,7 +33,7 @@ public class Mission
     {
         //id 탐색
         int id = Convert.ToInt32(mission["id"]);
-        SetMissionSO(MissionController.instance.GetMission(id));
+        SetTodo_Mission(MissionController.instance.GetMission(id));
         
         List<object> achievementList_tmp = (List<object>)mission["achievementList"];
         for (int i = 0; i < achievementList_tmp.Count; i++)
@@ -60,16 +60,16 @@ public class Mission
     #endregion
     #region PROPERTIES
 
-    public MissionSO GetMissionSO()
+    public Todo_Mission GetTodo_Mission()
     {
         return m_SO;
     }
 
-    public void SetMissionSO(MissionSO missionSO)
+    public void SetTodo_Mission(Todo_Mission missionSO)
     {
         m_SO = missionSO;
         mission_id = m_SO.GetID();
-        achievementList = new bool[missionSO.GetSmallMissions().Length];
+        achievementList = new bool[missionSO.GetSmallMissions().Count];
         
         // 애초에 0 Debug.Log("achievementList : " + achievementList.Count);
         

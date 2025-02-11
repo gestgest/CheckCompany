@@ -140,7 +140,7 @@ public class EmployeeStatusWindow : MonoBehaviour
         //     SetSmallMission();
     }
 
-    public void AddMission(MissionSO m)
+    public void AddMission(Todo_Mission m)
     {
         Mission mission = new Mission(m);
         employee.AddMission(mission);
@@ -165,8 +165,8 @@ public class EmployeeStatusWindow : MonoBehaviour
             Mission mission = employee.GetMission(i);
 
             //?
-            if (mission.GetMissionSO().GetMissionType() != MissionType.NONE)
-                missionUIs[i].SetValue(mission.GetMissionSO());
+            if (mission.GetTodo_Mission().GetMissionType() != MissionType.NONE)
+                missionUIs[i].SetValue(mission.GetTodo_Mission());
         }
 
         for (int i = missionSize; i < Employee.MAX_MISSION_SIZE; i++)
@@ -199,7 +199,7 @@ public class EmployeeStatusWindow : MonoBehaviour
         {
             //디버깅용 돈 주는 이벤트
             GameManager.instance.SetMoney(GameManager.instance.Money + 30000 
-                * employee.GetMission(0).GetMissionSO().GetSmallMissions().Length);
+                * employee.GetMission(0).GetTodo_Mission().GetSmallMissions().Count);
             RemoveMission(0);
         }
     }
@@ -221,10 +221,10 @@ public class EmployeeStatusWindow : MonoBehaviour
         }
 
         Mission mission = employee.GetMission(0);
-        string[] missions_text = mission.GetMissionSO().GetSmallMissions();
+        List<string> missions_text = mission.GetTodo_Mission().GetSmallMissions();
         int j;
         
-        small_mission_size = missions_text.Length;
+        small_mission_size = missions_text.Count;
         Set_smallMission_achievement_UI();
         clearSmallMissionLock = true;
 

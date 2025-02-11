@@ -35,16 +35,3 @@ public class MissionSO : ScriptableObject
     }
 }
 
-
-public enum MissionType
-{
-    NONE = 0, //비어있는 상태
-    SQL_DEV = 1, //SQL 개발
-    CLIENT_DEV = 2, //클라이언트 개발
-    CODING_TEST = 3,
-    ENGINE_DEV = 4, //엔진개발
-    WEB_FRONT_DEV = 5, //프론트엔드
-    APP_DEV = 6, //앱개발
-    DATA_ANALYSIS = 7, //데이터 분석
-
-}
