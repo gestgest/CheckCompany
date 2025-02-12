@@ -163,10 +163,10 @@ public class EmployeeStatusWindow : MonoBehaviour
         for (int i = 0; i < missionSize; i++)
         {
             Mission mission = employee.GetMission(i);
+            missionUIs[i].SetValue(mission.GetTodo_Mission());
 
             //?  null 값이라면
             //if (mission.GetTodo_Mission().GetMissionType() != EmployeeType.NONE)
-                //missionUIs[i].SetValue(mission.GetTodo_Mission());
         }
 
         for (int i = missionSize; i < Employee.MAX_MISSION_SIZE; i++)
