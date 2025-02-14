@@ -68,7 +68,7 @@ public class Mission
     public void SetTodo_Mission(Todo_Mission todo_mission)
     {
         this.todo_mission = todo_mission;
-        mission_id = this.todo_mission.GetID();
+        mission_id = this.todo_mission.ID;
         achievementList = new bool[todo_mission.GetSmallMissions().Count];
         
         // 애초에 0 Debug.Log("achievementList : " + achievementList.Count);

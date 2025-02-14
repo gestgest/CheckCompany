@@ -19,11 +19,6 @@ public class Todo_Mission
         this.small_missions = new List<string>();
     }
 
-    public void SetID(int id)
-    {
-        this.id = id;
-    }
-
     public Todo_Mission(int id, int _type, string _name, int iconID, int level, List<string> small_missions)
     {
         this.small_missions = new List<string>();
@@ -40,6 +35,11 @@ public class Todo_Mission
         }
     }
 
+    public int ID
+    {
+        get => id;
+        set => id = value;
+    }
 
     public EmployeeType GetMissionType()
     {
@@ -56,11 +56,6 @@ public class Todo_Mission
     public string GetName()
     {
         return missionName;
-    }
-
-    public int GetID()
-    {
-        return id;
     }
 
     public Dictionary<string, object> GetTodoMission_ToJSON()

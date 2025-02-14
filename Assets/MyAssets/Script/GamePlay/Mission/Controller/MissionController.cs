@@ -87,7 +87,7 @@ public class MissionController : MonoBehaviour
 
             Todo_Mission todo_Mission = new Todo_Mission();
 
-            todo_Mission.SetID(Convert.ToInt32(todo_mission.Key));
+            todo_Mission.ID = Convert.ToInt32(todo_mission.Key);
             todo_Mission.SetMissionFromJSON(tmp);
             Add_TodoMission(todo_Mission);
 
@@ -97,4 +97,36 @@ public class MissionController : MonoBehaviour
         }
 
     }
+    
+    
+    #region BINARY_SEARCH
+    //binary_search
+    public int Search_Employee_Index(int id)
+    {
+        int index = Binary_Search_Employee_Index(0, todo_missions.Count - 1, id);
+        if (todo_missions[index].ID == id)
+        {
+            return index;
+        }
+        return -1;
+    }
+
+    private int Binary_Search_Employee_Index(int start, int end, int id)
+    {
+        if (start > end)
+        {
+            return start;
+        }
+        int mid = (start + end) / 2;
+        if (id > todo_missions[mid].ID)
+        {
+            return Binary_Search_Employee_Index(mid + 1, end, id);
+        }
+        else
+        {
+            return Binary_Search_Employee_Index(start, mid - 1, id);
+        }
+    }
+
+    #endregion
 }

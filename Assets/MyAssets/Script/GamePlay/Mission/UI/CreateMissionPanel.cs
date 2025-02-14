@@ -90,7 +90,7 @@ public class CreateMissionPanel : Panel
 
         MissionController.instance.Add_TodoMission(todo_mission);
         Mission_Count_ToServer(MissionController.instance.GetMissionCount());
-        TodoMission_ToServer(todo_mission.GetTodoMission_ToJSON(), todo_mission.GetID());
+        TodoMission_ToServer(todo_mission.GetTodoMission_ToJSON(), todo_mission.ID);
         GamePanelManager.instance.Back_Nav_Panel();
     }
 
