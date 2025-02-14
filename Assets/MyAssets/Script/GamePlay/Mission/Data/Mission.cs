@@ -5,16 +5,16 @@ using UnityEngine;
 
 public class Mission
 {
-    private Todo_Mission m_SO;
+    private Todo_Mission todo_mission;
 
     //달성률
     //생각해보니 달성률이 아니라 각각의 미션 달성을 true false 해야할듯
     private bool [] achievementList; //small_missions 사이즈만큼 할당
     private int achievementClearCount;
     
-    int mission_id; 
-    //어떤 미션을 가지고 있는지 => 나중에 미션 컨트롤러에서 m_SO를 가져오기 위한
-    
+    int mission_id;
+    //어떤 미션을 가지고 있는지 => 나중에 미션 컨트롤러에서 todo_mission를 가져오기 위한
+
     /*
     mission
     - achievementList : bool<List>
@@ -62,14 +62,14 @@ public class Mission
 
     public Todo_Mission GetTodo_Mission()
     {
-        return m_SO;
+        return todo_mission;
     }
 
-    public void SetTodo_Mission(Todo_Mission missionSO)
+    public void SetTodo_Mission(Todo_Mission todo_mission)
     {
-        m_SO = missionSO;
-        mission_id = m_SO.GetID();
-        achievementList = new bool[missionSO.GetSmallMissions().Count];
+        this.todo_mission = todo_mission;
+        mission_id = this.todo_mission.GetID();
+        achievementList = new bool[todo_mission.GetSmallMissions().Count];
         
         // 애초에 0 Debug.Log("achievementList : " + achievementList.Count);
         

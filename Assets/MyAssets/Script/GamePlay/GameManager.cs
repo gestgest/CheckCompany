@@ -75,7 +75,10 @@ public class GameManager : MonoBehaviour
         date.GetDateFromJSON((Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "date"));
         SetDateUI();
 
-        MissionController.instance.Init();
+        MissionController.instance.Init(
+            (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "todo_missions"),
+            Convert.ToInt32(await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "todo_mission_count"))
+        );
 
         Dictionary<string,object> recruitments = (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "recruitments");
         RecruitmentController.instance.GetRecruitmentsFromServer(recruitments);

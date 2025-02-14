@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,17 +7,28 @@ using UnityEngine;
 //MissionSO를 Todo_Mission으로 교체 => 동적으로 생성가능
 public class Todo_Mission
 {
-    private int ID;
-    private EmployeeType mission_type = EmployeeType.DEVELOPER;
+    private int id;
+    private EmployeeType mission_type = EmployeeType.DEVELOPER; //회복, 지능, 기술, 명상 이런식으로 해야하나
     private string missionName;
     private int iconID;
-    private List<string> small_missions;
     private int level; //easy, medium, hard, very hard
+    private List<string> small_missions;
+
+    public Todo_Mission() 
+    {
+        this.small_missions = new List<string>();
+    }
+
+    public void SetID(int id)
+    {
+        this.id = id;
+    }
 
     public Todo_Mission(int id, int _type, string _name, int iconID, int level, List<string> small_missions)
     {
         this.small_missions = new List<string>();
-        this.ID = id;
+
+        this.id = id;
         this.mission_type = (EmployeeType)(_type);
         this.missionName = _name;
         this.iconID = iconID;
@@ -48,20 +60,35 @@ public class Todo_Mission
 
     public int GetID()
     {
-        return ID;
+        return id;
     }
 
-    public Dictionary<string, object> Get_TodoMission_ToJSON()
+    public Dictionary<string, object> GetTodoMission_ToJSON()
     {
         Dictionary<string, object> result = new Dictionary<string, object>
         {
             { "type", (int)mission_type },
             { "name", missionName },
-            { "icon", (int)iconID },
+            { "icon", iconID },
+            { "level", level },
             { "small_missions", small_missions }, //배열임
         };
 
         return result;
+    }
+
+
+    public void SetMissionFromJSON(Dictionary<string, object> data)
+    {
+        mission_type = (EmployeeType)(Convert.ToInt32(data["type"]));
+        missionName = (string)data["name"];
+        iconID = Convert.ToInt32(data["icon"]);
+        level = Convert.ToInt32(data["level"]);
+        List<object> sm_tmp = (List<object>)data["small_missions"];
+        for (int i = 0; i < sm_tmp.Count; i++) 
+        {
+            small_missions.Add((string)sm_tmp[i]);
+        }
     }
 }
 

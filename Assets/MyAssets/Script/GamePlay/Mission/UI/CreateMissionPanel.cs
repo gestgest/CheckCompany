@@ -65,7 +65,6 @@ public class CreateMissionPanel : Panel
         }
         
         List<string> small_missions = new List<string>();
-        Debug.Log(smallMission_size);
 
         //smallMission_InputFields => small_missions
         for (int i = 0; i < smallMission_size; i++)
@@ -74,14 +73,13 @@ public class CreateMissionPanel : Panel
                 .GetComponent<TMP_InputField>().text;
             if (small_mission == "")
             {
-                Debug.Log("엄준식은 죽었다");
                 return;
             }
             small_missions.Add(small_mission);
         }
 
         Todo_Mission todo_mission = new Todo_Mission(
-            MissionController.instance.GetAndIncrementID(),
+            MissionController.instance.GetAndIncrementCount(),
             employee_type,
             title_InputField.text,
             0, //iconID
@@ -89,7 +87,34 @@ public class CreateMissionPanel : Panel
             small_missions
         );
         
-        Debug.Log("엄준식은 살아있다");
+
         MissionController.instance.Add_TodoMission(todo_mission);
+        Mission_Count_ToServer(MissionController.instance.GetMissionCount());
+        TodoMission_ToServer(todo_mission.GetTodoMission_ToJSON(), todo_mission.GetID());
+        GamePanelManager.instance.Back_Nav_Panel();
     }
+
+    //Server
+
+    private void TodoMission_ToServer(Dictionary<string, object> data, int id)
+    {
+        FireStoreManager.instance.SetFirestoreData(
+            "GamePlayUser",
+            GameManager.instance.Nickname,
+            "todo_missions." + id.ToString(),
+            data
+        );
+    }
+
+    //미션 총합 아이디 서버에 저장
+    private void Mission_Count_ToServer(int mission_count)
+    {
+        FireStoreManager.instance.SetFirestoreData(
+            "GamePlayUser",
+            GameManager.instance.Nickname,
+            "todo_mission_count",
+            mission_count
+        );
+    }
+
 }
