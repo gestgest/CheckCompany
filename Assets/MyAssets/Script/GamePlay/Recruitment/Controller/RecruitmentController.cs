@@ -21,6 +21,8 @@ public class RecruitmentController : MonoBehaviour
     [SerializeField] private GameObject view; //parent
     [SerializeField] private TextMeshProUGUI costText;
     [SerializeField] private EmployeeNameSO employeeNameSO;
+    
+    [SerializeField] private MultiLayoutGroup multiLayoutGroup;
 
     //채용 정보 [버튼을 누르면 함수를 호출해서 tmp처럼 대신 넣는 느낌]
     private int employeeTypeIndex = 0; //0,1,2,3
@@ -222,8 +224,11 @@ public class RecruitmentController : MonoBehaviour
 
     public GameObject GetRecruitmentObject(int index) 
     {
-        Debug.Log(index);
         return recruitmentObjects[index];
+    }
+    public GameObject GetLastRecruitmentObject() 
+    {
+        return recruitmentObjects[recruitmentObjects.Count - 1];
     }
 
     #endregion

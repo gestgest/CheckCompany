@@ -1,8 +1,11 @@
+using System;
+using System.Collections;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEngine.UI;
 
 public class CreateMissionPanel : Panel
 {
@@ -10,12 +13,17 @@ public class CreateMissionPanel : Panel
     [SerializeField] private RadioButtonGroup radioGroup;
 
     [SerializeField] private GameObject [] smallMissions;
-
-
+    [SerializeField] private MultiLayoutGroup layoutGroup;
+    
     //이미지? => 정말 나중에 만들 예정 => 지금은 그냥 0으로 default
     private int employee_type; //이걸로 dev, QA인지 분류할 수 있지 않을까
     private int level;
     private int smallMission_size;
+
+    void Awake()
+    {
+        layoutGroup = GetComponent<MultiLayoutGroup>();
+    }
 
     private void OnEnable()
     {
@@ -25,6 +33,8 @@ public class CreateMissionPanel : Panel
             DeleteSmallMission();
         }
     }
+
+
     public void SetLevel(int level)
     {
         this.level = level;
@@ -38,20 +48,25 @@ public class CreateMissionPanel : Panel
     //소미션 추가하는 버튼 함수 (최대 7번)
     public void AddSmallMission()
     {
+        
         if (smallMission_size == Employee.MAX_SMALL_MISSION_SIZE)
             return;
         smallMissions[smallMission_size].SetActive(true);
         smallMission_size++;
-        //smallMission_InputFields_parent
+        
+        layoutGroup.SetBeforePosY();
     }
     public void DeleteSmallMission()
     {
+        
         if (smallMission_size <= 1)
             return;
         smallMission_size--;
         smallMissions[smallMission_size].transform.GetChild(0)
             .GetComponent<TMP_InputField>().text = "";
         smallMissions[smallMission_size].SetActive(false);
+        
+        layoutGroup.SetBeforePosY();
     }
 
 

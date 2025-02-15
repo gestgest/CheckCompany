@@ -18,7 +18,8 @@ public class RecruitmentElement : MonoBehaviour
 
     [SerializeField] private GameObject applicant_Prefab;
     [SerializeField] private Transform layout_parent;
-    private VerticalLayoutGroup parent_VLG;
+    
+   private MultiLayoutGroup multiLayoutGroup;
 
 
     //지원자 정보 리스트
@@ -31,9 +32,13 @@ public class RecruitmentElement : MonoBehaviour
         recruitment.Init();
         Init();
         layout_parent = transform.parent; //부모 가져오기
-        parent_VLG = layout_parent.GetComponent<VerticalLayoutGroup>(); //부모의 layout 가져오기
-
-        //RerollPanel();
+        multiLayoutGroup = layout_parent.GetComponent<MultiLayoutGroup>(); //부모의 layout 가져오기
+        
+        multiLayoutGroup.SetDownObjectPos(
+            RecruitmentController.instance
+                .GetLastRecruitmentObject()
+                .GetComponent<RectTransform>()
+        );
         //icon.sprite
     }
     
@@ -43,7 +48,7 @@ public class RecruitmentElement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.T))
         {
             Debug.Log("RecruitmentElement : T 버튼 누름");
-            RerollPanel();
+            RerollScreen();
         }
     }
 
@@ -51,7 +56,6 @@ public class RecruitmentElement : MonoBehaviour
     {
         if(applicant_objects == null)
             applicant_objects = new List<GameObject>();
-
     }
 
     /// <summary>
@@ -69,7 +73,8 @@ public class RecruitmentElement : MonoBehaviour
             CreateEmployeeObject(recruitment.GetApplicant(i));
         }
         SelectionApplicantSort();
-        //RerollPanel();
+
+        //RerollScreen();
     }
 
     /// <summary>
@@ -107,6 +112,7 @@ public class RecruitmentElement : MonoBehaviour
     public void RemoveRecruitment()
     {
         RecruitmentController.instance.RemoveRecruitment(recruitment.GetID());
+        RerollScreen();
         Destroy(gameObject);
         //이 오브젝트 제거
     }
@@ -177,24 +183,17 @@ public class RecruitmentElement : MonoBehaviour
     public void SwitchPanel()
     {
         applicantsPanel.SetActive(!(applicantsPanel.activeSelf));
-        StartCoroutine(LoadingRerollPanel());
+        RerollScreen();
     }
 
-    IEnumerator LoadingRerollPanel()
+    private void RerollScreen()
     {
-        yield return new WaitForSeconds(0.05f);
-        RerollPanel();
-    }
-
-    //dropButton, 배치관리자가 제대로 안되는거 방지
-    private void RerollPanel()
-    {
-        //LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)parent_VLG.transform);
-        // parent_VLG.CalculateLayoutInputVertical();
-        // parent_VLG.SetLayoutVertical();
-        parent_VLG.childControlHeight = false;
-        parent_VLG.childControlHeight = true;
-        Debug.Log("배치관리자 리롤"); 
+        multiLayoutGroup.SetDownObjectPos(
+            RecruitmentController.instance
+                .GetLastRecruitmentObject()
+                .GetComponent<RectTransform>()
+        );
+        multiLayoutGroup.SetBeforePosY();
     }
 
 
