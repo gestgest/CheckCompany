@@ -644,7 +644,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   verticalLayoutGroup: {fileID: 1446717957}
-  downObejct_RectTransform: {fileID: 207787867}
 --- !u!1 &108730763
 GameObject:
   m_ObjectHideFlags: 0
@@ -2908,7 +2907,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   verticalLayoutGroup: {fileID: 329780245}
-  downObejct_RectTransform: {fileID: 0}
 --- !u!1 &344223071
 GameObject:
   m_ObjectHideFlags: 0
@@ -5159,7 +5157,7 @@ MonoBehaviour:
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
-  m_ChildControlHeight: 1
+  m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0

@@ -34,12 +34,13 @@ public class RecruitmentElement : MonoBehaviour
         layout_parent = transform.parent; //부모 가져오기
         multiLayoutGroup = layout_parent.GetComponent<MultiLayoutGroup>(); //부모의 layout 가져오기
         
-        multiLayoutGroup.SetDownObjectPos(
-            RecruitmentController.instance
-                .GetLastRecruitmentObject()
-                .GetComponent<RectTransform>()
-        );
+        // multiLayoutGroup.SetParentObjectPos(
+        //     RecruitmentController.instance
+        //         .GetLastRecruitmentObject()
+        //         .GetComponent<RectTransform>()
+        // );
         //icon.sprite
+        multiLayoutGroup.RerollScreen();
     }
     
 
@@ -188,12 +189,7 @@ public class RecruitmentElement : MonoBehaviour
 
     private void RerollScreen()
     {
-        multiLayoutGroup.SetDownObjectPos(
-            RecruitmentController.instance
-                .GetLastRecruitmentObject()
-                .GetComponent<RectTransform>()
-        );
-        multiLayoutGroup.SetBeforePosY();
+        multiLayoutGroup.RerollScreen();
     }
 
 

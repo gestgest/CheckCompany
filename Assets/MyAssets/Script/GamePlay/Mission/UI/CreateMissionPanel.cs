@@ -54,7 +54,7 @@ public class CreateMissionPanel : Panel
         smallMissions[smallMission_size].SetActive(true);
         smallMission_size++;
         
-        layoutGroup.SetBeforePosY();
+        layoutGroup.RerollScreen();
     }
     public void DeleteSmallMission()
     {
@@ -66,7 +66,7 @@ public class CreateMissionPanel : Panel
             .GetComponent<TMP_InputField>().text = "";
         smallMissions[smallMission_size].SetActive(false);
         
-        layoutGroup.SetBeforePosY();
+        layoutGroup.RerollScreen();
     }
 
 
