@@ -14,6 +14,7 @@ public class MultiLayoutGroup : MonoBehaviour
 
     public void RerollScreen()
     {
+        Canvas.ForceUpdateCanvases();
         LayoutRebuilder.ForceRebuildLayoutImmediate(parentRectTransform);
         // verticalLayoutGroup.enabled = false;
         // verticalLayoutGroup.enabled = true;
