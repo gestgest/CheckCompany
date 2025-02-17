@@ -9,16 +9,13 @@ public class MultiLayoutGroup : MonoBehaviour
     [SerializeField] private VerticalLayoutGroup verticalLayoutGroup;
     [SerializeField] private RectTransform parentRectTransform;
     
-    private float before_pos_h = 0;
-    private int changeCount = 0;
-
     public void RerollScreen()
     {
         Canvas.ForceUpdateCanvases();
         LayoutRebuilder.ForceRebuildLayoutImmediate(parentRectTransform);
+        //Debug.Log("리롤"); 
         // verticalLayoutGroup.enabled = false;
         // verticalLayoutGroup.enabled = true;
-        Debug.Log("리롤"); 
         //changeCount = 1;
         //before_pos_h = parentLayout.sizeDelta.y;
     }
