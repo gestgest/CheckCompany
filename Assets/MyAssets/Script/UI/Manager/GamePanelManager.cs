@@ -4,64 +4,54 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using Unity.VisualScripting;
+using System;
 
 public class GamePanelManager : PanelManager
 {
     [SerializeField] private Image icon;
     [SerializeField] private TextMeshProUGUI title;
-    [SerializeField] private Button[] buttons;
     [SerializeField] private Animator panel_animator;
+    [SerializeField] private Button [] bottom_buttons;
 
     const int POOL_MAX_SIZE = 5;
 
     protected override void Start()
     {
         base.Start();
+
+        for(int i = 0; i < bottom_buttons.Length; i++)
+        {
+            Panel panel = panels[i].GetComponent<Panel>();
+            //panel 
+        }
         
         SwitchingInfo(0);
     }
 
-    public override void SwitchingPanel(int index)
+    public override void SwitchingPanel(int main_index)
     {
-        SwitchingInfo(index);
-        base.SwitchingPanel(index);
+        SwitchingInfo(main_index);
+        base.SwitchingPanel(main_index);
     }
 
+
+    //Panel 정보 수정 => panel만 수정
     void SwitchingInfo(int index)
     {
         Panel panel = panels[index].GetComponent<Panel>();
+
         //top 정보 수정
         icon.sprite = panel.GetSprite();
         this.title.text = panel.GetTitle();
-        int parent_height = panels[set_index].GetComponent<Panel>().Get_panel_height();
-        int height = panel.Get_panel_height();
+
+
 
         //이미지
-        if(parent_height == height && height != 0) {
-            return;
-        }
+        //if(parent_height == height && height != 0) {
+        //    return;
+        //}
 
-        //bottom 버튼 정보 수정 [이미지]
-        PanelSO[] panelInfos = panel.GetButtons();
-
-        for (int i = 0; i < panelInfos.Length; i++)
-        {
-            buttons[i].gameObject.SetActive(true);
-
-            buttons[i].transform.GetChild(0).GetComponent<Image>().sprite = panelInfos[i].GetIcon();
-            int panel_index = panelInfos[i].GetIndex();
-
-            bool isNav = height < panelInfos[i].GetHeight();
-            //클릭하면 이벤트 추가
-            buttons[i].onClick.RemoveAllListeners();
-            buttons[i].onClick.AddListener(() => { Click_Button_Panel(panel_index, isNav); });
-        }
-
-        for (int i = panelInfos.Length; i < POOL_MAX_SIZE; i++)
-        {
-            buttons[i].gameObject.SetActive(false);
-        }
-
+        //네비게이션 스택 제거
     }
 
     public void TransformPanel()

@@ -151,6 +151,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1106018430}
+  - {fileID: 1747650251}
+  - {fileID: 1110578334}
+  - {fileID: 122420079}
+  - {fileID: 2066266584}
+  - {fileID: 221784517}
   m_Father: {fileID: 463659565}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -756,7 +761,7 @@ RectTransform:
   - {fileID: 1065091065}
   - {fileID: 488100413}
   - {fileID: 953503602}
-  m_Father: {fileID: 463659565}
+  m_Father: {fileID: 19920659}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -910,7 +915,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 924f5ea40f5c9ab47b64cdbe5167b639, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7c26b3537ac041d41888431eaa21039b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2030,8 +2035,10 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 463659565}
+  m_Children:
+  - {fileID: 741635674}
+  - {fileID: 1081635825}
+  m_Father: {fileID: 19920659}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3749,7 +3756,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 364957546}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 511141746}
+        m_TargetAssemblyTypeName: GamePanelManager, Assembly-CSharp
+        m_MethodName: SwitchingPanel
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &364957546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3865,7 +3884,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 924f5ea40f5c9ab47b64cdbe5167b639, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e7310e460236b7542b717bd8a84c85d0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5340,7 +5359,7 @@ GameObject:
   - component: {fileID: 463659567}
   - component: {fileID: 463659566}
   m_Layer: 5
-  m_Name: Panels
+  m_Name: MainPanels
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5358,17 +5377,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 19920659}
+  - {fileID: 1128792564}
+  - {fileID: 67827081}
   - {fileID: 289924993}
   - {fileID: 1556699440}
-  - {fileID: 19920659}
-  - {fileID: 1747650251}
-  - {fileID: 1110578334}
-  - {fileID: 122420079}
-  - {fileID: 2066266584}
-  - {fileID: 221784517}
-  - {fileID: 741635674}
-  - {fileID: 1081635825}
-  - {fileID: 67827081}
   m_Father: {fileID: 438792695}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -6290,13 +6303,13 @@ MonoBehaviour:
   panel_parent: {fileID: 463659565}
   icon: {fileID: 1431139184}
   title: {fileID: 576199158}
-  buttons:
+  panel_animator: {fileID: 438792696}
+  bottom_buttons:
   - {fileID: 364957545}
   - {fileID: 1578562220}
   - {fileID: 1126643351}
   - {fileID: 855242062}
   - {fileID: 1422666449}
-  panel_animator: {fileID: 438792696}
 --- !u!1 &512347914
 GameObject:
   m_ObjectHideFlags: 0
@@ -9089,7 +9102,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 924f5ea40f5c9ab47b64cdbe5167b639, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 915a265b2bef5f8419c8a9036b9d24de, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -9807,12 +9820,12 @@ RectTransform:
   m_Children:
   - {fileID: 291015016}
   - {fileID: 1757425782}
-  m_Father: {fileID: 463659565}
+  m_Father: {fileID: 221784517}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 980, y: 870}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &741635676
 MonoBehaviour:
@@ -10875,7 +10888,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 855242063}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 511141746}
+        m_TargetAssemblyTypeName: GamePanelManager, Assembly-CSharp
+        m_MethodName: SwitchingPanel
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &855242063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13715,12 +13740,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 463659565}
+  m_Father: {fileID: 221784517}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 980, y: 870}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1081635826
 MonoBehaviour:
@@ -14197,7 +14222,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1235076672}
-  m_Father: {fileID: 463659565}
+  m_Father: {fileID: 19920659}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -14460,7 +14485,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1126643352}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 511141746}
+        m_TargetAssemblyTypeName: GamePanelManager, Assembly-CSharp
+        m_MethodName: SwitchingPanel
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1126643352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14655,6 +14692,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1127287199}
   m_CullTransparentMesh: 1
+--- !u!1 &1128792563
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1128792564}
+  - component: {fileID: 1128792565}
+  m_Layer: 5
+  m_Name: MissionPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1128792564
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128792563}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 463659565}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1128792565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128792563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ae7812a42d2e804eb534cf7c12fa9de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelInfo: {fileID: 0}
+  subPanels: []
 --- !u!1 &1134582093
 GameObject:
   m_ObjectHideFlags: 0
@@ -17777,7 +17864,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1422666450}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 511141746}
+        m_TargetAssemblyTypeName: GamePanelManager, Assembly-CSharp
+        m_MethodName: SwitchingPanel
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 4
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1422666450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20004,7 +20103,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1578562221}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 511141746}
+        m_TargetAssemblyTypeName: GamePanelManager, Assembly-CSharp
+        m_MethodName: SwitchingPanel
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1578562221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22485,7 +22596,7 @@ RectTransform:
   - {fileID: 1379430367}
   - {fileID: 1888836744}
   - {fileID: 820207131}
-  m_Father: {fileID: 463659565}
+  m_Father: {fileID: 19920659}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -24246,7 +24357,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 924f5ea40f5c9ab47b64cdbe5167b639, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0ccc508108fa6ed4fa11b4a467d7f609, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -25710,7 +25821,7 @@ GameObject:
   - component: {fileID: 2066266584}
   - component: {fileID: 2066266585}
   m_Layer: 5
-  m_Name: MissionPanel
+  m_Name: EmployeeMissionPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25735,7 +25846,7 @@ RectTransform:
   - {fileID: 917189721}
   - {fileID: 634420865}
   - {fileID: 936718804}
-  m_Father: {fileID: 463659565}
+  m_Father: {fileID: 19920659}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -25812,7 +25923,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 924f5ea40f5c9ab47b64cdbe5167b639, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 24a764452d616584bbf783ec64a0ff79, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

@@ -10,7 +10,10 @@ public class PanelManager : MonoBehaviour
     protected List<GameObject> panels;
 
     Stack<int> nav_panel_stack;
-    protected int set_index;
+    protected int main_index;
+    protected int sub_index = -1; //안 쓰면 -1
+    protected int mini_index = -1; //안 쓰면 -1
+
 
     // => 다른 싱글톤처럼 new로 하면 MonoBehaviour와 같은 클래스가 문제를 일으킬 수 있다.
     //유니티식 싱글톤
@@ -43,40 +46,56 @@ public class PanelManager : MonoBehaviour
         {
             panels[i].SetActive(false);
         }
-        set_index = 0;
-        panels[set_index].SetActive(true);
+        main_index = 0;
+        panels[main_index].SetActive(true);
+    }
+    
+    //
+    public virtual void SwitchingPanel(int main_index)
+    {
+        //대충 panels에 들어가고
+        OffPanel(main_index, sub_index, mini_index);
+        OnPanel(main_index, sub_index, mini_index);
+
+        this.main_index = main_index;
     }
 
-    public virtual void SwitchingPanel(int index)
+    public void OnPanel(int main_index, int sub_index, int mini_index)
     {
-        panels[set_index].SetActive(false);
-        panels[index].SetActive(true);
-        set_index = index;
+        panels[main_index].SetActive(true);
+
+    }
+
+    public void OffPanel(int main_index, int sub_index, int mini_index)
+    {
+        panels[this.main_index].SetActive(false);
+        //panels.GetComponent<Panel>().SetSub
     }
 
     //direction가 1이면 오른쪽, -1이면 왼쪽
     public void NextPanel(int direction)
     {
-        panels[set_index].SetActive(false);
+        panels[main_index].SetActive(false);
 
-        set_index += direction;
-        if (set_index < 0)
+        main_index += direction;
+        if (main_index < 0)
         {
-            set_index += panels.Count;
+            main_index += panels.Count;
         }
-        set_index %= panels.Count;
+        main_index %= panels.Count;
 
-        panels[set_index].SetActive(true);
+        panels[main_index].SetActive(true);
     }
 
     //뒤로가기 제외
     public void Click_Button_Panel(int index, bool isNav)
     {
         if(isNav){
-            Push_nav_panel_stack(set_index);
+            Push_nav_panel_stack(main_index);
         }
         SwitchingPanel(index);
     }
+
 
     public void Back_Nav_Panel()
     {
@@ -99,6 +118,9 @@ public class PanelManager : MonoBehaviour
         nav_panel_stack.Push(index);
     }
     //
+
+
+
 
     public Panel GetPanel(int index)
     {

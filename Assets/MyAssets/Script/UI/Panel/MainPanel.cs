@@ -1,6 +1,10 @@
 using UnityEngine;
 
-public class MainPanel
+public class MainPanel : Panel
 {
+    [SerializeField] private SubPanel [] subPanels;
+
+
+
     
 }

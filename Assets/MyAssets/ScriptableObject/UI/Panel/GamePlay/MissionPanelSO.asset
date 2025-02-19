@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b428c833e0947649a42d554dc523171, type: 3}
-  m_Name: CreateMissionPanelSO
+  m_Name: MissionPanelSO
   m_EditorClassIdentifier: 
-  title: "\uBBF8\uC158 \uC0DD\uC131"
-  icon: {fileID: 21300000, guid: 915a265b2bef5f8419c8a9036b9d24de, type: 3}
+  title: "\uBBF8\uC158"
+  icon: {fileID: 21300000, guid: e7310e460236b7542b717bd8a84c85d0, type: 3}
   type: 0

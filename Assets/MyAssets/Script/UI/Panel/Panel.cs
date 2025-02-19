@@ -85,16 +85,4 @@ public class Panel : MonoBehaviour
     {
         return panelInfo.GetTitle();
     }
-    public PanelSO [] GetButtons()
-    {
-        return panelInfo.GetButtons();
-    }
-    public int Get_panel_index()
-    {
-        return panelInfo.GetIndex();
-    }
-    public int Get_panel_height()
-    {
-        return panelInfo.GetHeight();
-    }
 }
