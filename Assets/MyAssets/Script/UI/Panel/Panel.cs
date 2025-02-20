@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +16,12 @@ public class Panel : MonoBehaviour
 
     int index;
 
-    public virtual void Start()
+    protected virtual void OnEnable()
+    {
+        
+    }
+
+    protected virtual void Start()
     {
         selected_objects = new List<Selectable>();
         selected_parent = transform;

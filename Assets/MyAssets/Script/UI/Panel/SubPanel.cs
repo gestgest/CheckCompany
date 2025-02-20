@@ -2,6 +2,12 @@ using UnityEngine;
 
 public class SubPanel : Panel
 {
-
-    //뒤로가기 기능이 있음
+    [SerializeField] private MiniPanel [] miniPanels;
+    [SerializeField] private GameObject background;
+    
+    public override void SwitchingPanel(int index)
+    {
+        miniPanels[index].gameObject.SetActive(true);
+        background.SetActive(true);
+    }
 }

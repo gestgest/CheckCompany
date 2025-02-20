@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MiniPanel
+public class MiniPanel : Panel
 {
     
 }

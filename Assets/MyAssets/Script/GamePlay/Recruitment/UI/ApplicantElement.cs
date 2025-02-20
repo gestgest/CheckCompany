@@ -18,6 +18,7 @@ public class ApplicantElement : MonoBehaviour
 
     private void Start()
     {
+        //이거를 바꿔야 함
         applicantPanel = GamePanelManager.instance.GetPanel(8) as ApplicantPanel;
     }
 
@@ -27,14 +28,16 @@ public class ApplicantElement : MonoBehaviour
         //icon
         name_text.text = employee.Name;
         age_text.text = employee.Age.ToString() + "살";
-        salary_text.text = (employee.Salary / 10000).ToString()  + "만원";
+        salary_text.text = (employee.Salary / 10000).ToString() + "만원";
         careerPeriod_text.text = employee.CareerPeriod.ToString() + "개월";
 
         Button button = GetComponent<Button>();
 
         //버튼 누르면 이동
-        button.onClick.AddListener(() => { PanelManager.instance.Click_Button_Panel(8, true); applicantPanel.SetID(employee.ID, recruitment_id); });
+        button.onClick.AddListener(() =>
+        {
+            PanelManager.instance.Click_Button_Panel(8, true);
+            applicantPanel.SetID(employee.ID, recruitment_id);
+        });
     }
-
-
 }

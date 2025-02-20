@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine.UI;
 
-public class CreateMissionPanel : Panel
+public class CreateMissionPanel : MainPanel
 {
     [SerializeField] private TMP_InputField title_InputField;
     [SerializeField] private RadioButtonGroup radioGroup;
@@ -25,8 +25,9 @@ public class CreateMissionPanel : Panel
         layoutGroup = GetComponent<MultiLayoutGroup>();
     }
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         smallMission_size = 7;
         for (int i = 1; i < smallMissions.Length; i++)
         {
