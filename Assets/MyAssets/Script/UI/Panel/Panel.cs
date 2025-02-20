@@ -15,7 +15,7 @@ public class Panel : MonoBehaviour
 
     int index;
 
-    void Start()
+    public virtual void Start()
     {
         selected_objects = new List<Selectable>();
         selected_parent = transform;
@@ -53,6 +53,12 @@ public class Panel : MonoBehaviour
         }
     }
 
+    public virtual void SwitchingPanel(int index)
+    {
+
+    }
+
+    #region PROPERTY
     public int Index
     {
         get { return index; }
@@ -85,4 +91,5 @@ public class Panel : MonoBehaviour
     {
         return panelInfo.GetTitle();
     }
+    #endregion
 }

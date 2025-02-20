@@ -22,6 +22,10 @@ public class GamePanelManager : PanelManager
         for(int i = 0; i < bottom_buttons.Length; i++)
         {
             Panel panel = panels[i].GetComponent<Panel>();
+
+            //버튼 이미지설정
+            Transform button_transform = bottom_buttons[i].transform.GetChild(0);
+            button_transform.GetComponent<Image>().sprite = panel.GetSprite();
             //panel 
         }
         
