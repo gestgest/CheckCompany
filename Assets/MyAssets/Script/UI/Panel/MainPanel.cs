@@ -28,4 +28,8 @@ public class MainPanel : Panel
         set_index = index;
     }
 
+    public Panel GetPanel(int index)
+    {
+        return subPanels[index];
+    }
 }

@@ -49,9 +49,14 @@ public class PanelManager : MonoBehaviour
         main_index = 0;
         panels[main_index].SetActive(true);
     }
-    
+
+    //버튼용
+    public void SwitchPanelFromButton(int index)
+    {
+        SwitchingPanel(index);
+    }
     //
-    public virtual void SwitchingPanel(int main_index)
+    public virtual void SwitchingPanel(int main_index, int sub_index = -1, int mini_index = -1)
     {
         //대충 panels에 들어가고
         OffPanel(main_index, sub_index, mini_index);
@@ -60,7 +65,7 @@ public class PanelManager : MonoBehaviour
         this.main_index = main_index;
     }
 
-    public void OnPanel(int main_index, int sub_index, int mini_index)
+    public void OnPanel(int main_index, int sub_index , int mini_index)
     {
         panels[main_index].SetActive(true);
 
@@ -88,12 +93,12 @@ public class PanelManager : MonoBehaviour
     }
 
     //뒤로가기 제외
-    public void Click_Button_Panel(int index, bool isNav)
+    public void Click_Button_Panel(bool isNav, int main_index, int sub_index = -1, int mini_index = -1)
     {
         if(isNav){
             Push_nav_panel_stack(main_index);
         }
-        SwitchingPanel(index);
+        SwitchingPanel(main_index, sub_index, mini_index);
     }
 
 
@@ -122,9 +127,26 @@ public class PanelManager : MonoBehaviour
 
 
 
-    public Panel GetPanel(int index)
+    public Panel GetPanel(int main_index, int sub_index = -1, int mini_index = -1)
     {
-        return panels[index].GetComponent<Panel>();
+        Panel panel = panels[main_index].GetComponent<Panel>(); //메인
+
+        if (sub_index == -1) 
+        {
+            return panel;
+        }
+        MainPanel mainPanel = panel as MainPanel;
+        
+        panel = mainPanel.GetPanel(sub_index); //서브
+        if (mini_index == -1)
+        {
+            return panel;
+        }
+        
+        SubPanel subPanel = panel as SubPanel;
+        panel = subPanel.GetPanel(mini_index); //미니
+
+        return panel;
     }
     //
 }

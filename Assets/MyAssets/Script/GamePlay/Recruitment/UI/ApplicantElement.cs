@@ -19,7 +19,7 @@ public class ApplicantElement : MonoBehaviour
     private void Start()
     {
         //이거를 바꿔야 함
-        applicantPanel = GamePanelManager.instance.GetPanel(8) as ApplicantPanel;
+        applicantPanel = GamePanelManager.instance.GetPanel(0,2,0) as ApplicantPanel;
     }
 
     // Init 급
@@ -36,7 +36,7 @@ public class ApplicantElement : MonoBehaviour
         //버튼 누르면 이동
         button.onClick.AddListener(() =>
         {
-            PanelManager.instance.Click_Button_Panel(8, true);
+            PanelManager.instance.Click_Button_Panel(true,0 , 2 , 0);
             applicantPanel.SetID(employee.ID, recruitment_id);
         });
     }

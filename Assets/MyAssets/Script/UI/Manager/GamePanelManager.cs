@@ -32,16 +32,17 @@ public class GamePanelManager : PanelManager
         SwitchingInfo(0);
     }
 
-    public override void SwitchingPanel(int main_index)
+    public override void SwitchingPanel(int main_index, int sub_index = -1, int mini_index = -1)
     {
         SwitchingInfo(main_index);
-        base.SwitchingPanel(main_index);
+        base.SwitchingPanel(main_index, sub_index, mini_index);
     }
 
 
     //Panel 정보 수정 => panel만 수정
     void SwitchingInfo(int index)
     {
+        //panel 
         Panel panel = panels[index].GetComponent<Panel>();
 
         //top 정보 수정
