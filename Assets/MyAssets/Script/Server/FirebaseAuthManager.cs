@@ -230,7 +230,7 @@ public class FirebaseAuthManager : MonoBehaviour
                     //user 닉네임 Document
                     fireStoreManager.SetNewFirestoreData("User", user.Email, "nickname", name);
                     GamePlayerInit(name);
-                    PanelManager.instance.SwitchingPanel(1); //로그인 화면으로
+                    PanelManager.instance.SwitchingPanelFromInt(1); //로그인 화면으로
                 }
 
             }

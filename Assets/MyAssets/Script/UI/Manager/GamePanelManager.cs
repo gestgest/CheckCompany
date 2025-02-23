@@ -29,28 +29,36 @@ public class GamePanelManager : PanelManager
             //panel 
         }
         
-        SwitchingInfo(0);
+        indexList.Clear();
+        indexList.Add(0);
+        SwitchingInfo(indexList);
     }
 
-    public override void SwitchingPanel(int main_index, int sub_index = -1, int mini_index = -1)
+    
+    public override void SwitchingPanelFromInt(int main_index)
     {
-        SwitchingInfo(main_index);
-        base.SwitchingPanel(main_index, sub_index, mini_index);
+        OffPanel(indexList);
+        indexList.Clear();
+        indexList.Add(main_index);
+        SwitchingPanel(indexList);
+    }
+    public override void SwitchingPanel(List<int> indexList)
+    {
+        SwitchingInfo(indexList);
+        base.SwitchingPanel(indexList);
     }
 
 
     //Panel 정보 수정 => panel만 수정
-    void SwitchingInfo(int index)
+    void SwitchingInfo(List<int> indexList)
     {
         //panel 
-        Panel panel = panels[index].GetComponent<Panel>();
+        Panel panel = GetPanel(indexList);
 
         //top 정보 수정
         icon.sprite = panel.GetSprite();
         this.title.text = panel.GetTitle();
-
-
-
+        
         //이미지
         //if(parent_height == height && height != 0) {
         //    return;

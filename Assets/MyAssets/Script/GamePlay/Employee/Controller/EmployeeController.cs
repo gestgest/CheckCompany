@@ -15,7 +15,7 @@ public class EmployeeController : MonoBehaviour
     [SerializeField] private GameObject employeePrefab;
     [SerializeField] private GameObject parent;
     [SerializeField] private EmployeeStatusWindow employeeStatusWindow; //이거를 subPanel로 바꿀 수 없나
-    [SerializeField] private SubPanel employeeSubPanel;
+    [SerializeField] private Panel employeePanel;
     [SerializeField] private PanelSO employeeStatusPanelSO;
     
     private void Awake()
@@ -87,7 +87,7 @@ public class EmployeeController : MonoBehaviour
     private void ShowEmployeeStatusWindow(int id)
     {
         //EmployeeStatusWindow 호출
-        employeeSubPanel.SwitchingPanel(0);
+        employeePanel.SwitchingPanel(0);
         //PanelManager.instance.Click_Button_Panel(5, true);
 
         //Debug.Log("직원 아이디" + id);

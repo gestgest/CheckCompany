@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine.UI;
 
-public class CreateMissionPanel : MainPanel
+public class CreateMissionPanel : Panel
 {
     [SerializeField] private TMP_InputField title_InputField;
     [SerializeField] private RadioButtonGroup radioGroup;

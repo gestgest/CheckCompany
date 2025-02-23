@@ -7,12 +7,10 @@ public class PanelManager : MonoBehaviour
 {
     public static PanelManager instance;
     [SerializeField] private Transform panel_parent;
-    protected List<GameObject> panels;
+    protected List<Panel> panels;
 
     Stack<int> nav_panel_stack;
-    protected int main_index;
-    protected int sub_index = -1; //안 쓰면 -1
-    protected int mini_index = -1; //안 쓰면 -1
+    protected List<int> indexList;
 
 
     // => 다른 싱글톤처럼 new로 하면 MonoBehaviour와 같은 클래스가 문제를 일으킬 수 있다.
@@ -33,72 +31,91 @@ public class PanelManager : MonoBehaviour
     protected virtual void Start()
     {
         nav_panel_stack = new Stack<int>();
-        panels = new List<GameObject>();
-
+        panels = new List<Panel>();
+        indexList = new List<int>();
 
         //Panel 리스트에 넣어서 
         for (int i = 0; i < panel_parent.childCount; i++)
         {
-            panels.Add(panel_parent.GetChild(i).gameObject);
+            panels.Add(panel_parent.GetChild(i)
+                .gameObject.GetComponent<Panel>()
+            );
         }
 
         for (int i = 0; i < panels.Count; i++)
         {
-            panels[i].SetActive(false);
+            panels[i].gameObject.SetActive(false);
         }
-        main_index = 0;
-        panels[main_index].SetActive(true);
+        
+        indexList.Add(0);
+        panels[0].gameObject.SetActive(true);
+    }
+    public virtual void SwitchingPanelFromInt(int main_index)
+    {
+        indexList.Clear();
+        indexList.Add(main_index);
+        OnPanel(indexList);
     }
 
-    //버튼용
-    public void SwitchPanelFromButton(int index)
-    {
-        SwitchingPanel(index);
-    }
     //
-    public virtual void SwitchingPanel(int main_index, int sub_index = -1, int mini_index = -1)
+    public virtual void SwitchingPanel(List<int> indexList)
     {
         //대충 panels에 들어가고
-        OffPanel(main_index, sub_index, mini_index);
-        OnPanel(main_index, sub_index, mini_index);
-
-        this.main_index = main_index;
+        OffPanel(this.indexList);
+        SetIndexList(indexList);
+        OnPanel(indexList);
     }
 
-    public void OnPanel(int main_index, int sub_index , int mini_index)
+    public void OnPanel(List<int> indexList)
     {
-        panels[main_index].SetActive(true);
+        Panel panel = panels[indexList[0]];
+        panel.gameObject.SetActive(true);
 
+        for (int i = 1; i < indexList.Count; i++)
+        {
+            panel.SwitchingPanel(indexList[i]);
+            panel = panel.GetPanel(indexList[i]);
+        }
     }
 
-    public void OffPanel(int main_index, int sub_index, int mini_index)
+    public void OffPanel(List<int> indexList)
     {
-        panels[this.main_index].SetActive(false);
-        //panels.GetComponent<Panel>().SetSub
+        //이거를 굳이?
+        Panel panel = panels[indexList[0]];
+        panel.gameObject.SetActive(false);
+        
+        
+        for (int i = 1; i < indexList.Count; i++)
+        {
+            panel = panel.GetPanel(indexList[i]);
+            panel.gameObject.SetActive(false);
+            
+            //tmp_panel = get뭐시기
+        }
     }
 
     //direction가 1이면 오른쪽, -1이면 왼쪽
     public void NextPanel(int direction)
     {
-        panels[main_index].SetActive(false);
+        panels[indexList[0]].gameObject.SetActive(false);
 
-        main_index += direction;
-        if (main_index < 0)
+        indexList[0] += direction;
+        if (indexList[0] < 0)
         {
-            main_index += panels.Count;
+            indexList[0] += panels.Count;
         }
-        main_index %= panels.Count;
+        indexList[0] %= panels.Count;
 
-        panels[main_index].SetActive(true);
+        panels[indexList[0]].gameObject.SetActive(true);
     }
 
     //뒤로가기 제외
-    public void Click_Button_Panel(bool isNav, int main_index, int sub_index = -1, int mini_index = -1)
+    public void Click_Button_Panel(bool isNav, List<int> indexList)
     {
         if(isNav){
-            Push_nav_panel_stack(main_index);
+            Push_nav_panel_stack(indexList[0]);
         }
-        SwitchingPanel(main_index, sub_index, mini_index);
+        SwitchingPanel(indexList);
     }
 
 
@@ -107,7 +124,9 @@ public class PanelManager : MonoBehaviour
         int num = Pop_nav_panel_stack();
         //Debug.Log("pop의 index : " + num);
         
-        SwitchingPanel(num);
+        indexList.Clear();
+        indexList.Add(num);
+        SwitchingPanel(indexList);
     }
 
     protected int Pop_nav_panel_stack()
@@ -126,25 +145,28 @@ public class PanelManager : MonoBehaviour
 
 
 
-
-    public Panel GetPanel(int main_index, int sub_index = -1, int mini_index = -1)
+    void SetIndexList(List<int> indexList)
     {
-        Panel panel = panels[main_index].GetComponent<Panel>(); //메인
+        //메모리 참조 방지를 위해 얉은 복사
+        if (indexList == this.indexList)
+            return;
+        (this.indexList).Clear();
 
-        if (sub_index == -1) 
+        for (int i = 0; i < indexList.Count; i++)
         {
-            return panel;
+            this.indexList.Add(indexList[i]);
         }
-        MainPanel mainPanel = panel as MainPanel;
-        
-        panel = mainPanel.GetPanel(sub_index); //서브
-        if (mini_index == -1)
+    }
+
+
+    public Panel GetPanel(List<int> indexList)
+    {
+        Panel panel = panels[indexList[0]];
+
+        for (int i = 1; i < indexList.Count; i++)
         {
-            return panel;
+            panel = panel.GetPanel(indexList[i]);
         }
-        
-        SubPanel subPanel = panel as SubPanel;
-        panel = subPanel.GetPanel(mini_index); //미니
 
         return panel;
     }

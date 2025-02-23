@@ -1,11 +1,30 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MiniPanel : Panel
 {
-    [SerializeField] private MiniPanel [] miniPanels;
+    private GameObject background;
+    
+
+    void Awake()
+    {
+        background = transform.parent.gameObject;
+        hasMini = true;
+    }
+    protected override void OnEnable()
+    {
+        
+        background.SetActive(true);
+    }
+
+    protected void OnDisable()
+    {
+        background.SetActive(false);
+    }
 
     public override void SwitchingPanel(int index)
     {
-        miniPanels[index].gameObject.SetActive(true);
+        //background.SetActive(true);
     }
 }
