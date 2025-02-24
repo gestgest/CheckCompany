@@ -71,6 +71,8 @@ public class PanelManager : MonoBehaviour
         Panel panel = panels[indexList[0]];
         panel.gameObject.SetActive(true);
 
+        DebugList(indexList);
+
         for (int i = 1; i < indexList.Count; i++)
         {
             panel.SwitchingPanel(indexList[i]);
@@ -82,14 +84,14 @@ public class PanelManager : MonoBehaviour
     {
         //이거를 굳이?
         Panel panel = panels[indexList[0]];
-        panel.gameObject.SetActive(false);
+        panel.OffPanel();
         
         
         for (int i = 1; i < indexList.Count; i++)
         {
             panel = panel.GetPanel(indexList[i]);
-            panel.gameObject.SetActive(false);
-            
+            panel.OffPanel();
+
             //tmp_panel = get뭐시기
         }
     }
@@ -150,6 +152,7 @@ public class PanelManager : MonoBehaviour
         //메모리 참조 방지를 위해 얉은 복사
         if (indexList == this.indexList)
             return;
+
         (this.indexList).Clear();
 
         for (int i = 0; i < indexList.Count; i++)
@@ -170,5 +173,13 @@ public class PanelManager : MonoBehaviour
 
         return panel;
     }
+
     //
+    void DebugList(List<int> indexList)
+    {
+        for (int i = 0; i < indexList.Count; i++)
+        {
+            Debug.Log(indexList[i]);
+        }
+    }
 }

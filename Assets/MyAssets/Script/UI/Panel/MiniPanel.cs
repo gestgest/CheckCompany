@@ -12,19 +12,21 @@ public class MiniPanel : Panel
         background = transform.parent.gameObject;
         hasMini = true;
     }
-    protected override void OnEnable()
+    public override void SwitchingPanel(int index)
     {
-        
+        background.SetActive(true);
+        //background.SetActive(true);
+    }
+    public override void OnPanel()
+    {
+        base.OnPanel();
         background.SetActive(true);
     }
 
-    protected void OnDisable()
-    {
-        background.SetActive(false);
-    }
 
-    public override void SwitchingPanel(int index)
+    public override void OffPanel()
     {
-        //background.SetActive(true);
+        base.OffPanel();
+        background.SetActive(false);
     }
 }

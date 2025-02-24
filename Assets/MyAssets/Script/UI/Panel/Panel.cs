@@ -69,7 +69,7 @@ public class Panel : MonoBehaviour
     {
         if (this.index != -1)
         {
-            panels[this.index].gameObject.SetActive(false);
+            panels[this.index].OffPanel();
         }
 
         if (index >= panels.Length)
@@ -78,7 +78,16 @@ public class Panel : MonoBehaviour
         }
 
         this.index = index;
-        panels[index].gameObject.SetActive(true);
+        panels[index].OnPanel();
+    }
+
+    public virtual void OnPanel()
+    {
+        gameObject.SetActive(true);
+    }
+    public virtual void OffPanel()
+    {
+        gameObject.SetActive(false);
     }
 
     #region PROPERTY
