@@ -44,7 +44,10 @@ public class GamePanelManager : PanelManager
     }
     public override void SwitchingPanel(List<int> indexList)
     {
-        SwitchingInfo(indexList);
+        Panel before_panel = GetPanel(this.indexList);
+        if(!before_panel.GetHasMini())
+            SwitchingInfo(indexList);
+        
         base.SwitchingPanel(indexList);
     }
 

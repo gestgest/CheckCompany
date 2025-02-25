@@ -139,5 +139,10 @@ public class Panel : MonoBehaviour
         return panels[index];
     }
 
+    public bool GetHasMini()
+    {
+        return hasMini;
+    }
+
     #endregion
 }

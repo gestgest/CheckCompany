@@ -71,8 +71,6 @@ public class PanelManager : MonoBehaviour
         Panel panel = panels[indexList[0]];
         panel.gameObject.SetActive(true);
 
-        DebugList(indexList);
-
         for (int i = 1; i < indexList.Count; i++)
         {
             panel.SwitchingPanel(indexList[i]);

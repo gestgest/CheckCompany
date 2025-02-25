@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class MiniPanel : Panel
 {
-    private GameObject background;
+    [SerializeField] private GameObject background;
     
 
     void Awake()
     {
-        background = transform.parent.gameObject;
+        //background = transform.parent.gameObject;
         hasMini = true;
     }
     public override void SwitchingPanel(int index)
