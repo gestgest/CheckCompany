@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ApplicantPanel : Panel
+public class ApplicantPanel : MiniPanel
 {
     //private Button xButton;
     //private Button yButton;

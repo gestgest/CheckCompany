@@ -25,8 +25,9 @@ public class CreateMissionPanel : Panel
         layoutGroup = GetComponent<MultiLayoutGroup>();
     }
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         smallMission_size = 7;
         for (int i = 1; i < smallMissions.Length; i++)
         {

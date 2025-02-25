@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,10 +16,16 @@ public class ApplicantElement : MonoBehaviour
     //int recruitment_id;
 
     private long applicant_id;
+    private List<int> indexList;
 
     private void Start()
     {
-        applicantPanel = GamePanelManager.instance.GetPanel(8) as ApplicantPanel;
+        indexList = new List<int>(); 
+        indexList.Add(0);
+        indexList.Add(2);
+        indexList.Add(0);
+        //이거를 바꿔야 함
+        applicantPanel = GamePanelManager.instance.GetPanel(indexList) as ApplicantPanel;
     }
 
     // Init 급
@@ -27,14 +34,16 @@ public class ApplicantElement : MonoBehaviour
         //icon
         name_text.text = employee.Name;
         age_text.text = employee.Age.ToString() + "살";
-        salary_text.text = (employee.Salary / 10000).ToString()  + "만원";
+        salary_text.text = (employee.Salary / 10000).ToString() + "만원";
         careerPeriod_text.text = employee.CareerPeriod.ToString() + "개월";
 
         Button button = GetComponent<Button>();
 
         //버튼 누르면 이동
-        button.onClick.AddListener(() => { PanelManager.instance.Click_Button_Panel(8, true); applicantPanel.SetID(employee.ID, recruitment_id); });
+        button.onClick.AddListener(() =>
+        {
+            PanelManager.instance.Click_Button_Panel(true, indexList);
+            applicantPanel.SetID(employee.ID, recruitment_id);
+        });
     }
-
-
 }
