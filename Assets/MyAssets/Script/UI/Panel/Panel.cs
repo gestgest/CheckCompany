@@ -27,6 +27,7 @@ public class Panel : MonoBehaviour
         selected_objects = new List<Selectable>();
         selected_parent = transform;
 
+        //버튼 같은 선택가능한 오브젝트
         for (int i = 0; i < selected_parent.childCount; i++)
         {
             Selectable sel = selected_parent.GetChild(i).GetComponent<Selectable>();
