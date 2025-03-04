@@ -21,7 +21,6 @@ public class PanelSO : ScriptableObject
 
 public enum PanelType
 {
-    Main = 1,
-    Sub = 1,
+    Main = 0,
     Mini = 1,
 }

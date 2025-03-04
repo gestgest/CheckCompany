@@ -33,7 +33,8 @@ public class Mission
     {
         //id 탐색
         int id = Convert.ToInt32(mission["id"]);
-        SetTodo_Mission(MissionController.instance.GetMission(id));
+        int index = MissionController.instance.Search_Employee_Index(id);
+        SetTodo_Mission(MissionController.instance.GetMission(index));
         
         List<object> achievementList_tmp = (List<object>)mission["achievementList"];
         for (int i = 0; i < achievementList_tmp.Count; i++)

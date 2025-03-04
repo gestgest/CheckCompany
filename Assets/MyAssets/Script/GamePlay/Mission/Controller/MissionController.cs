@@ -46,9 +46,9 @@ public class MissionController : MonoBehaviour
     {
         return mission_count;
     }
-    public Todo_Mission GetMission(int id)
+    public Todo_Mission GetMission(int index)
     {
-        return todo_missions[id];
+        return todo_missions[index];
     }
 
     public Sprite GetIcon(int index)
