@@ -58,6 +58,11 @@ public class Todo_Mission
         return missionName;
     }
 
+    public int GetLevel()
+    {
+        return level;
+    }
+
     public Dictionary<string, object> GetTodoMission_ToJSON()
     {
         Dictionary<string, object> result = new Dictionary<string, object>

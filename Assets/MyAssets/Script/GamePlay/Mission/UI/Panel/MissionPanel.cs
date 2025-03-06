@@ -36,13 +36,11 @@ public class MissionPanel : Panel
 
     private void EditPanelOn(int id)
     {
-        Debug.Log(id);
         int index = MissionController.instance.Search_Employee_Index(id);
-        Debug.Log(index);
 
         //editPanel에게 값 전달
-        missionEditPanel.SetMission(MissionController.instance.GetMission(index));
         GamePanelManager.instance.SwitchingPanel(editPanelIndex);
+        missionEditPanel.SetMission(MissionController.instance.GetMission(index));
         //missionEditPanel.gameObject.SetActive(true);
     }
 }

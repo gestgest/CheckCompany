@@ -49,7 +49,6 @@ public class CreateMissionPanel : Panel
     //소미션 추가하는 버튼 함수 (최대 7번)
     public void AddSmallMission()
     {
-        
         if (smallMission_size == Employee.MAX_SMALL_MISSION_SIZE)
             return;
         smallMissions[smallMission_size].SetActive(true);

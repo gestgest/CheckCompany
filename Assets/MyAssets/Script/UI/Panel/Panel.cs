@@ -24,6 +24,7 @@ public class Panel : MonoBehaviour
 
     protected virtual void Start()
     {
+        CloseAllPanels();
         selected_objects = new List<Selectable>();
         selected_parent = transform;
 
@@ -82,6 +83,13 @@ public class Panel : MonoBehaviour
         panels[index].OnPanel();
     }
 
+    public virtual void CloseAllPanels()
+    {
+        for (int i = 0; i < panels.Length; i++)
+        {
+            panels[i].OffPanel();
+        }
+    }
     public virtual void OnPanel()
     {
         gameObject.SetActive(true);
