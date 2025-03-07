@@ -7,6 +7,7 @@ public class MissionPanel : Panel
     [SerializeField] private Transform missionParent;
     [SerializeField] private EditPanel missionEditPanel;
 
+    List<GameObject> missionObjects = new List<GameObject>();
     private List<int> editPanelIndex;
     
     protected override void Start()
@@ -25,13 +26,20 @@ public class MissionPanel : Panel
     {
         //Todo_Mission 만들기
         GameObject missionObject = Instantiate(missionPrefab, missionParent);
-
+        
+        missionObjects.Add(missionObject);
         TodoMissionElementUI missionElementUI = missionObject.GetComponent<TodoMissionElementUI>();
         missionElementUI.SetMission(todoMission);
         
         //Debug.Log(todoMission.ID);
         //editPanel 들어가는 함수를 missionElementUI에 투입
         missionElementUI.AddEventListener(() => { EditPanelOn(todoMission.ID); });
+    }
+
+    public void RemoveMissionObject(int index)
+    {
+        Destroy(missionObjects[index]);
+        missionObjects.RemoveAt(index);
     }
 
     private void EditPanelOn(int id)

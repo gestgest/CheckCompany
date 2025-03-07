@@ -19,6 +19,8 @@ public class EditPanel : Panel
 
     //소미션
     private int smallMission_size;
+
+    private int mission_id;
     //나중에 직원도 넣을 예정
 
     void Awake()
@@ -29,10 +31,11 @@ public class EditPanel : Panel
     //init
     public void SetMission(Todo_Mission todoMission)
     {
+        mission_id = todoMission.ID;
         //값 넣기
         title.text = todoMission.GetName();
-        employeeTypeGroup.SetToggle((int)todoMission.GetMissionType());
-        levelGroup.SetToggle(todoMission.GetLevel());
+        employeeTypeGroup.SetIndex((int)todoMission.GetMissionType());
+        levelGroup.SetIndex(todoMission.GetLevel());
 
 
         int _smallMission_size = 7;
@@ -54,6 +57,16 @@ public class EditPanel : Panel
             AddSmallMission();
             smallMissions[i].transform.GetChild(0).GetComponent<TMP_InputField>().text = _smallMissions[i];
         }
+    }
+
+    List<string> GetSmallMissions_text()
+    {
+        List<string> _smallMissions = new List<string>();
+        for (int i = 0; i < smallMission_size; i++)
+        {
+            _smallMissions.Add(smallMissions[i].transform.GetChild(0).GetComponent<TMP_InputField>().text);
+        }
+        return _smallMissions;
     }
 
     public void DeleteSmallMission()
@@ -82,10 +95,35 @@ public class EditPanel : Panel
     //최종적으로 값을 서버에 수정
     public void EditMission()
     {
+        Todo_Mission todo_mission = new Todo_Mission(
+            id: mission_id,
+            employeeTypeGroup.GetIndex(),
+            title.text,
+            0, //iconID
+            levelGroup.GetIndex(),
+            GetSmallMissions_text()
+        );
+        
+        FireStoreManager.instance.SetFirestoreData(
+            "GamePlayUser",
+            GameManager.instance.Nickname,
+            "todo_missions." + mission_id.ToString(),
+            todo_mission.GetTodoMission_ToJSON()
+        );
+        
+        //back 네비 Panel
     }
 
     //최종적으로 서버에 있는 미션 삭제
     public void DeleteMission()
     {
+        MissionController.instance.Remove_TodoMission(mission_id);
+        FireStoreManager.instance.DeleteFirestoreDataKey(
+            "GamePlayUser",
+            GameManager.instance.Nickname,
+            "todo_missions." + mission_id
+        );
+        
+        //back 네비 Panel
     }
 }

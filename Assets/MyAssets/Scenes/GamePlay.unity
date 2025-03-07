@@ -629,7 +629,19 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1963349253}
+        m_TargetAssemblyTypeName: CustomRadioButtonGroup, Assembly-CSharp
+        m_MethodName: SetToggle
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1 &19920658
 GameObject:
@@ -935,7 +947,19 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1963349253}
+        m_TargetAssemblyTypeName: CustomRadioButtonGroup, Assembly-CSharp
+        m_MethodName: SetToggle
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
 --- !u!1 &47677716
 GameObject:
@@ -3042,9 +3066,9 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 67827085}
-        m_TargetAssemblyTypeName: CreateMissionPanel, Assembly-CSharp
-        m_MethodName: SetLevel
+      - m_Target: {fileID: 48490508}
+        m_TargetAssemblyTypeName: CustomRadioButtonGroup, Assembly-CSharp
+        m_MethodName: SetToggle
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6917,6 +6941,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 42da2db40431f944a8ff9708300488a6, type: 3}
   - {fileID: 21300000, guid: 1e318fa03637cd747be6f4b6f744a425, type: 3}
   - {fileID: 21300000, guid: cf579be53edf3554399dcd88d76d5537, type: 3}
+  mission_panel: {fileID: 248255120}
 --- !u!1 &380815689
 GameObject:
   m_ObjectHideFlags: 0
@@ -7843,9 +7868,9 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 67827085}
-        m_TargetAssemblyTypeName: CreateMissionPanel, Assembly-CSharp
-        m_MethodName: SetLevel
+      - m_Target: {fileID: 48490508}
+        m_TargetAssemblyTypeName: CustomRadioButtonGroup, Assembly-CSharp
+        m_MethodName: SetToggle
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -15323,9 +15348,9 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 67827085}
-        m_TargetAssemblyTypeName: CreateMissionPanel, Assembly-CSharp
-        m_MethodName: SetLevel
+      - m_Target: {fileID: 48490508}
+        m_TargetAssemblyTypeName: CustomRadioButtonGroup, Assembly-CSharp
+        m_MethodName: SetToggle
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -24686,7 +24711,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1372838179}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1208356401}
+        m_TargetAssemblyTypeName: EditPanel, Assembly-CSharp
+        m_MethodName: EditMission
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1372838179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25218,9 +25255,9 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 67827085}
-        m_TargetAssemblyTypeName: CreateMissionPanel, Assembly-CSharp
-        m_MethodName: SetLevel
+      - m_Target: {fileID: 48490508}
+        m_TargetAssemblyTypeName: CustomRadioButtonGroup, Assembly-CSharp
+        m_MethodName: SetToggle
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -27796,7 +27833,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1523607634}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1208356401}
+        m_TargetAssemblyTypeName: EditPanel, Assembly-CSharp
+        m_MethodName: DeleteMission
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1523607634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32925,7 +32974,19 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1963349253}
+        m_TargetAssemblyTypeName: CustomRadioButtonGroup, Assembly-CSharp
+        m_MethodName: SetToggle
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1 &1834351114
 GameObject:
@@ -37553,7 +37614,19 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1963349253}
+        m_TargetAssemblyTypeName: CustomRadioButtonGroup, Assembly-CSharp
+        m_MethodName: SetToggle
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1 &2059868566
 GameObject:

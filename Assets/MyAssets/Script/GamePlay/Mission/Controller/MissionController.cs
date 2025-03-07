@@ -10,8 +10,9 @@ public class MissionController : MonoBehaviour
 
     //이미지 리스트?
     [SerializeField] private Sprite [] icons;
+    [SerializeField] private MissionPanel mission_panel;
     private List<Todo_Mission> todo_missions;
-
+    
 
     private void Awake()
     {
@@ -74,6 +75,15 @@ public class MissionController : MonoBehaviour
     public void Add_TodoMission(Todo_Mission todo_mission)
     {
         todo_missions.Add(todo_mission);
+    }
+    public void Remove_TodoMission(int id)
+    {
+        int index = Search_Employee_Index(id);
+        if (index != -1)
+        {
+            todo_missions.RemoveAt(index);
+            mission_panel.RemoveMissionObject(index);
+        }
     }
 
 
