@@ -34,14 +34,14 @@ public class GamePanelManager : PanelManager
         SwitchingInfo(indexList);
     }
 
-    
-    public override void SwitchingPanelFromInt(int main_index)
-    {
-        OffPanel(indexList);
-        indexList.Clear();
-        indexList.Add(main_index);
-        SwitchingPanel(indexList);
-    }
+    //
+    // public override void SwitchingPanelFromInt(int main_index)
+    // {
+    //     OffPanel(indexList);
+    //     indexList.Clear();
+    //     indexList.Add(main_index);
+    //     SwitchingPanel(indexList);
+    // }
     public override void SwitchingPanel(List<int> indexList)
     {
         Panel before_panel = GetPanel(this.indexList);

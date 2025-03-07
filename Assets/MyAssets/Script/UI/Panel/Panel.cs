@@ -15,7 +15,7 @@ public class Panel : MonoBehaviour
     private Transform selected_parent; //부모 오브젝트
     private List<Selectable> selected_objects; //선택 오브젝트들
 
-    int index;
+    int index = -1;
     [SerializeField] protected bool hasMini;
 
     protected virtual void OnEnable()
@@ -54,7 +54,7 @@ public class Panel : MonoBehaviour
         }
 
         index = -1;
-        if(!hasMini)
+        if (!hasMini)
             SwitchingPanel(0);
     }
 
@@ -67,6 +67,7 @@ public class Panel : MonoBehaviour
         }
     }
 
+    //자식 index 온
     public virtual void SwitchingPanel(int index)
     {
         if (this.index != -1)
@@ -90,12 +91,18 @@ public class Panel : MonoBehaviour
             panels[i].OffPanel();
         }
     }
+
     public virtual void OnPanel()
     {
         gameObject.SetActive(true);
+        if (!hasMini)
+            SwitchingPanel(0); //무조건 Panel 초기 넣자.
     }
+
     public virtual void OffPanel()
     {
+        if (this.index != -1)
+            panels[this.index].OffPanel();
         gameObject.SetActive(false);
     }
 
