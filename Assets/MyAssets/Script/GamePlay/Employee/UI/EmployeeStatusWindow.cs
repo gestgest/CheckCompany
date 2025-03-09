@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEngine.Serialization;
 
 
 //MonoBehaviour 대신 Panel해야하나?
@@ -19,8 +20,8 @@ public class EmployeeStatusWindow : MonoBehaviour
     [SerializeField] private TextMeshProUGUI careerPeriodText;
     [SerializeField] private TextMeshProUGUI timeText;
     
-    [SerializeField] private Bar staminaBar;
-    [SerializeField] private Bar mentalBar;
+    [FormerlySerializedAs("staminaBar")] [SerializeField] private Gauge staminaGauge;
+    [FormerlySerializedAs("mentalBar")] [SerializeField] private Gauge mentalGauge;
     
     
     //MissionPanel
@@ -53,6 +54,8 @@ public class EmployeeStatusWindow : MonoBehaviour
     private int small_mission_size; // 이거 제거 예정이었으나 그냥 호출 한번하고 계속 보관하는 용도
     bool clearSmallMissionLock = false;
 
+
+    private static int WIDTH = 250;
 
     void Awake()
     {
@@ -88,8 +91,8 @@ public class EmployeeStatusWindow : MonoBehaviour
         careerPeriodText.text = "경력 기간 : " + employee.CareerPeriod.ToString() + "개월";
         timeText.text = "근무시간 : " + employee._WorkTime.start.ToString() + " ~ " + employee._WorkTime.end.ToString();
         
-        staminaBar.Init(employee.Stamina, employee.Max_Stamina);
-        mentalBar.Init(employee.Mental, employee.Max_Mental);
+        staminaGauge.Init(employee.Stamina, employee.Max_Stamina, WIDTH);
+        mentalGauge.Init(employee.Mental, employee.Max_Mental, WIDTH);
         
         SetMissionUI(); //
         AddMissionToMiniWindow();
@@ -329,7 +332,7 @@ public class EmployeeStatusWindow : MonoBehaviour
             return;
         
         if(employee.ID == employee_id)
-            staminaBar.SetValue(value);
+            staminaGauge.SetValue(value);
     }
     
     public void SetMentalBarUI(int employee_id, int value)
@@ -338,6 +341,6 @@ public class EmployeeStatusWindow : MonoBehaviour
             return;
         
         if(employee.ID == employee_id)
-            staminaBar.SetValue(value);
+            staminaGauge.SetValue(value);
     }
 }
