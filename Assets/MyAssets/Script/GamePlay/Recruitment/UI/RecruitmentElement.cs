@@ -19,7 +19,7 @@ public class RecruitmentElement : MonoBehaviour
     [SerializeField] private GameObject applicant_Prefab;
     [SerializeField] private Transform layout_parent;
     
-   private MultiLayoutGroup multiLayoutGroup;
+   private MultiLayoutGroup _multiLayoutGroup;
 
 
     //지원자 정보 리스트
@@ -32,7 +32,7 @@ public class RecruitmentElement : MonoBehaviour
         recruitment.Init();
         Init();
         layout_parent = transform.parent; //부모 가져오기
-        multiLayoutGroup = layout_parent.GetComponent<MultiLayoutGroup>(); //부모의 layout 가져오기
+        _multiLayoutGroup = layout_parent.GetComponent<MultiLayoutGroup>(); //부모의 layout 가져오기
         
         // multiLayoutGroup.SetParentObjectPos(
         //     RecruitmentController.instance
@@ -40,7 +40,7 @@ public class RecruitmentElement : MonoBehaviour
         //         .GetComponent<RectTransform>()
         // );
         //icon.sprite
-        multiLayoutGroup.RerollScreen();
+        _multiLayoutGroup.RerollScreen();
     }
     
 
@@ -189,7 +189,7 @@ public class RecruitmentElement : MonoBehaviour
 
     private void RerollScreen()
     {
-        multiLayoutGroup.RerollScreen();
+        _multiLayoutGroup.RerollScreen();
     }
 
 

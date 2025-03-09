@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using Firebase.Firestore;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 //채용 공고 컨트롤러
@@ -22,7 +23,7 @@ public class RecruitmentController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI costText;
     [SerializeField] private EmployeeNameSO employeeNameSO;
     
-    [SerializeField] private MultiLayoutGroup multiLayoutGroup;
+    [FormerlySerializedAs("childLayoutGroup")] [SerializeField] private MultiLayoutGroup multiLayoutGroup;
 
     //채용 정보 [버튼을 누르면 함수를 호출해서 tmp처럼 대신 넣는 느낌]
     private int employeeTypeIndex = 0; //0,1,2,3

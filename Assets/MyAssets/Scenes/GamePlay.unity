@@ -1371,8 +1371,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40958b6619c6d78468bad9b7eb3a8864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  verticalLayoutGroup: {fileID: 1446717957}
-  parentRectTransform: {fileID: 1446717956}
 --- !u!1 &68360739
 GameObject:
   m_ObjectHideFlags: 0
@@ -2092,8 +2090,8 @@ MonoBehaviour:
   salaryText: {fileID: 356356487}
   careerPeriodText: {fileID: 1419031916}
   timeText: {fileID: 1373346877}
-  staminaBar: {fileID: 753942242}
-  mentalBar: {fileID: 356618032}
+  staminaGauge: {fileID: 753942242}
+  mentalGauge: {fileID: 356618032}
   missionObjectParent: {fileID: 1806534797}
   descriptionPanel: {fileID: 634420864}
   addMissionMiniWindow: {fileID: 936718803}
@@ -5458,8 +5456,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40958b6619c6d78468bad9b7eb3a8864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  verticalLayoutGroup: {fileID: 329780245}
-  parentRectTransform: {fileID: 329780244}
 --- !u!1 &344223071
 GameObject:
   m_ObjectHideFlags: 0
@@ -22038,8 +22034,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40958b6619c6d78468bad9b7eb3a8864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  verticalLayoutGroup: {fileID: 1615664621}
-  parentRectTransform: {fileID: 1615664619}
 --- !u!1 &1228135710
 GameObject:
   m_ObjectHideFlags: 0

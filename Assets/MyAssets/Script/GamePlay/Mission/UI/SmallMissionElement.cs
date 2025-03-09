@@ -6,7 +6,8 @@ public class SmallMissionElement : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI title;
     [SerializeField] private Toggle my_toggle;
-    [SerializeField] private Gauge gauge;
+    
+    private Gauge gauge;
 
     public void SetGague(Gauge gauge)
     {
@@ -22,6 +23,7 @@ public class SmallMissionElement : MonoBehaviour
             title.color = Color.gray;
             //gage 값 전달
             gauge.AddValue(1);
+            
             if (gauge.GetValue() >= gauge.GetMaxValue())
             {
                 //미션 다 했다는 이야기

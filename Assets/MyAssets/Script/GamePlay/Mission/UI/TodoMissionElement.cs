@@ -3,6 +3,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class TodoMissionElement : MonoBehaviour
@@ -22,13 +23,15 @@ public class TodoMissionElement : MonoBehaviour
 
     private List<GameObject> smallMissionObjects = new List<GameObject>();
     
+    [SerializeField] private MultiLayoutGroup multiLayoutGroup;
     private bool isShowContent = false;
     private static int WIDTH = 800;
+    private static int SMALLMISSION_HEIGHT = 100;
     
-
     //<summary> 미션 지정 : init</summary>
     public void SetMission(Todo_Mission todoMission)
     {
+        multiLayoutGroup = GetComponent<MultiLayoutGroup>();
         this.todoMission = todoMission;
 
         title.text = todoMission.GetName();
@@ -47,7 +50,7 @@ public class TodoMissionElement : MonoBehaviour
 
     public void AddEventListener(UnityAction listener)
     {
-        Button button = this.GetComponent<Button>();
+        Button button = this.GetComponentInChildren<Button>();
         button.onClick.AddListener(listener);
     }
 
@@ -58,7 +61,7 @@ public class TodoMissionElement : MonoBehaviour
         
         smallMissionObjects.Add(smallMissionObject);
         smallMissionElement.SetGague(gauge);
-        //SmallObject안에 Gauge 오브젝트 넣어야 함
+        multiLayoutGroup.AddOnHeight(SMALLMISSION_HEIGHT); //
     }
 
     public void SwitchingDownContent()
@@ -75,5 +78,7 @@ public class TodoMissionElement : MonoBehaviour
         {
             Dropbox.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
         }
+        
+        multiLayoutGroup.SwitchingScreen();
     }
 }
