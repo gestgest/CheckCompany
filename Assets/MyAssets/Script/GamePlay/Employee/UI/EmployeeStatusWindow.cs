@@ -25,7 +25,7 @@ public class EmployeeStatusWindow : MonoBehaviour
     
     //MissionPanel
     [SerializeField] private GameObject missionObjectParent; //5개
-    private MissionElementUI[] missionUIs; //5개 
+    private MissionIconElement[] missionUIs; //5개 
     //나중에 MissionElementUI에서 클릭 하면 바로바로 여기서 미션을 가져와야 함
     // ㄴ 원래 이거였지만 어쩌다 보니 바뀜
 
@@ -57,12 +57,12 @@ public class EmployeeStatusWindow : MonoBehaviour
     void Awake()
     {
         rf_dPanel = descriptionPanel.GetComponent<RectTransform>();
-        missionUIs = new MissionElementUI[Employee.MAX_MISSION_SIZE];
+        missionUIs = new MissionIconElement[Employee.MAX_MISSION_SIZE];
 
         for (int i = 0; i < missionObjectParent.transform.childCount; i++)
         {
             Transform mObj = missionObjectParent.transform.GetChild(i);
-            missionUIs[i] = mObj.GetComponent<MissionElementUI>();
+            missionUIs[i] = mObj.GetComponent<MissionIconElement>();
         }
     }
 

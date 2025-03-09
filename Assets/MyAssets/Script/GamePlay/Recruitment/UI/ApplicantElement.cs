@@ -42,7 +42,7 @@ public class ApplicantElement : MonoBehaviour
         //버튼 누르면 이동
         button.onClick.AddListener(() =>
         {
-            PanelManager.instance.Click_Button_Panel(true, indexList);
+            PanelManager.instance.SwitchingSubPanel(true, indexList);
             applicantPanel.SetID(employee.ID, recruitment_id);
         });
     }

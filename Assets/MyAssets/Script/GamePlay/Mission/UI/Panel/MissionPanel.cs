@@ -22,13 +22,13 @@ public class MissionPanel : Panel
         editPanelIndex.Add(1);
     }
 
-    private void CreateTodoMissionObject(Todo_Mission todoMission)
+    public void CreateTodoMissionObject(Todo_Mission todoMission)
     {
         //Todo_Mission 만들기
         GameObject missionObject = Instantiate(missionPrefab, missionParent);
         
         missionObjects.Add(missionObject);
-        TodoMissionElementUI missionElementUI = missionObject.GetComponent<TodoMissionElementUI>();
+        TodoMissionElement missionElementUI = missionObject.GetComponent<TodoMissionElement>();
         missionElementUI.SetMission(todoMission);
         
         //Debug.Log(todoMission.ID);
@@ -46,8 +46,9 @@ public class MissionPanel : Panel
     {
         int index = MissionController.instance.Search_Employee_Index(id);
 
+        GamePanelManager.instance.SwitchingSubPanel(true, editPanelIndex);
+
         //editPanel에게 값 전달
-        GamePanelManager.instance.SwitchingPanel(editPanelIndex);
         missionEditPanel.SetMission(MissionController.instance.GetMission(index));
         //missionEditPanel.gameObject.SetActive(true);
     }

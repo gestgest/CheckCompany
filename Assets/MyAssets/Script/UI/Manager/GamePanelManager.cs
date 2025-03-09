@@ -13,6 +13,8 @@ public class GamePanelManager : PanelManager
     [SerializeField] private Animator panel_animator;
     [SerializeField] private Button [] bottom_buttons;
 
+    [SerializeField] private Button backButton;
+
     const int POOL_MAX_SIZE = 5;
 
     protected override void Start()
@@ -34,14 +36,11 @@ public class GamePanelManager : PanelManager
         SwitchingInfo(indexList);
     }
 
-    //
-    // public override void SwitchingPanelFromInt(int main_index)
-    // {
-    //     OffPanel(indexList);
-    //     indexList.Clear();
-    //     indexList.Add(main_index);
-    //     SwitchingPanel(indexList);
-    // }
+    public override void SwitchingPanelFromInt(int main_index)
+    {
+        base.SwitchingPanelFromInt(main_index);
+        SwitchingInfo(indexList);
+    }
     public override void SwitchingPanel(List<int> indexList)
     {
         Panel before_panel = GetPanel(this.indexList);
@@ -62,12 +61,6 @@ public class GamePanelManager : PanelManager
         icon.sprite = panel.GetSprite();
         this.title.text = panel.GetTitle();
         
-        //이미지
-        //if(parent_height == height && height != 0) {
-        //    return;
-        //}
-
-        //네비게이션 스택 제거
     }
 
     public void TransformPanel()
@@ -75,5 +68,45 @@ public class GamePanelManager : PanelManager
         panel_animator.SetTrigger("isExpand");
     }
 
+    /// <summary> stack 갯수에 따라 On/OFF </summary>
+    private void UpdateNavButtonState()
+    {
+        if (nav_panel_index_stack.Count == 0)
+        {
+            //대충 네비 버튼 비활성화
+            backButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            //대충 네비 버튼 활성화
+            backButton.gameObject.SetActive(true);
+        }
+    }
+
+    #region STACK
+
+
+    protected override void ClearNavStack()
+    {
+        base.ClearNavStack();
+        //nav_panel_index_stack.Clear();
+        UpdateNavButtonState();
+    }
+
+    protected override void Push_NavPanelStack(List<int> indexList)
+    {
+        base.Push_NavPanelStack(indexList);
+        //Debug.Log("push의 index : " + index);
+        //nav_panel_index_stack.Push(indexList);
+        UpdateNavButtonState();
+    }
+
+    protected override List<int> Pop_NavPanelStack()
+    {
+        List<int> result = base.Pop_NavPanelStack();
+        UpdateNavButtonState();
+        return result;
+    }
+    #endregion
 
 }

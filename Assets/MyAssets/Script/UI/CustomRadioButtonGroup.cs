@@ -11,6 +11,7 @@ public class CustomRadioButtonGroup : MonoBehaviour
     [SerializeField] private List<Toggle> toggles;
 
     private int set_index;
+    private bool isLock = false;
     private void Awake()
     {
         toggles = new List<Toggle>();
@@ -26,30 +27,28 @@ public class CustomRadioButtonGroup : MonoBehaviour
 
     public void SetToggle(int index)
     {
-        if (this.set_index == index)
-        {
-            if (!toggles[set_index].isOn)
-            {
-                toggles[set_index].isOn = true;
-            }
+        if(isLock)
             return;
-        }
 
+        isLock = true;
         toggles[this.set_index].isOn = false;
+        isLock = false;
+
         //SetAllTogglesOff();
         //toggles[index].isOn = true;
         this.set_index = index;
     }
     public void SetIndex(int index)
     {
+        isLock = true;
         SetAllTogglesOff();
         this.set_index = index;
         toggles[index].isOn = true;
+        isLock = false;
     }
 
     private void SetAllTogglesOff()
     {
-        Debug.Log("엄준식");
         for (int i = 0; i < toggles.Count; i++)
         {
             toggles[i].isOn = false;

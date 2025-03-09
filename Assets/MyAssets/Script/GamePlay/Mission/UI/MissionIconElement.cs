@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 using Unity.VisualScripting;
 
 //미션 아이콘 스크립트
-public class MissionElementUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class MissionIconElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private int id;
     [SerializeField] EmployeeStatusWindow employeeStatusWindow;

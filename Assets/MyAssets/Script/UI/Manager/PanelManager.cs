@@ -9,7 +9,7 @@ public class PanelManager : MonoBehaviour
     [SerializeField] private Transform panel_parent;
     protected List<Panel> panels;
 
-    Stack<int> nav_panel_stack;
+    protected Stack<List<int>> nav_panel_index_stack;
     protected List<int> indexList;
 
 
@@ -30,7 +30,7 @@ public class PanelManager : MonoBehaviour
 
     protected virtual void Start()
     {
-        nav_panel_stack = new Stack<int>();
+        nav_panel_index_stack = new Stack<List<int>>();
         panels = new List<Panel>();
         indexList = new List<int>();
 
@@ -50,12 +50,15 @@ public class PanelManager : MonoBehaviour
         indexList.Add(0);
         panels[0].OnPanel();
     }
+
+    //메인 버튼 Panel 이동
     public virtual void SwitchingPanelFromInt(int main_index)
     {
         OffPanel(indexList);
         indexList.Clear();
         indexList.Add(main_index);
         OnPanel(indexList);
+        ClearNavStack();
     }
 
     //
@@ -109,39 +112,35 @@ public class PanelManager : MonoBehaviour
         panels[indexList[0]].gameObject.SetActive(true);
     }
 
-    //뒤로가기 제외
-    public void Click_Button_Panel(bool isNav, List<int> indexList)
+    //뒤로가기 제외 => Panel 이동, subPanel끼리 이동할 경우에만
+    public void SwitchingSubPanel(bool isNav, List<int> indexList)
     {
         if(isNav){
-            Push_nav_panel_stack(indexList[0]);
+            Push_NavPanelStack(this.indexList); //이전 panel 값 nav 저장
         }
         SwitchingPanel(indexList);
     }
 
 
+    //뒤로가기 버튼
     public void Back_Nav_Panel()
     {
-        int num = Pop_nav_panel_stack();
+        OffPanel(indexList);
+        //원래 없어도 되지만
+        if (nav_panel_index_stack.Count == 0)
+        {
+            Debug.Log("이 메세지가 나오면 안됨");
+            return;
+        }
+        List<int> output = Pop_NavPanelStack();
         //Debug.Log("pop의 index : " + num);
         
-        indexList.Clear();
-        indexList.Add(num);
+        SetIndexList(output);
         SwitchingPanel(indexList);
     }
 
-    protected int Pop_nav_panel_stack()
-    {
-        if(nav_panel_stack.Count == 0)
-            return 0;
-        return nav_panel_stack.Pop();
-    }
 
-    protected void Push_nav_panel_stack(int index)
-    {
-        //Debug.Log("push의 index : " + index);
-        nav_panel_stack.Push(index);
-    }
-    //
+    #region PROPERTY
 
     void SetIndexList(List<int> indexList)
     {
@@ -175,12 +174,33 @@ public class PanelManager : MonoBehaviour
         return panel;
     }
 
-    //
-    void DebugList(List<int> indexList)
+    #endregion
+
+
+
+    #region STACK
+    protected virtual void ClearNavStack()
     {
-        for (int i = 0; i < indexList.Count; i++)
-        {
-            Debug.Log(indexList[i]);
-        }
+        nav_panel_index_stack.Clear();
+        //NavButtonSwitching();
     }
+
+    protected virtual void Push_NavPanelStack(List<int> indexList)
+    {
+        //어쩔 수 없이 가비지컬렉션으로 제거해야 함
+
+        List<int> tmp = new List<int>();
+        for(int i = 0; i < indexList.Count; i++)
+            tmp.Add(indexList[i]);
+
+        //Debug.Log("push의 index : " + index);
+        nav_panel_index_stack.Push(tmp);
+        //NavButtonSwitching();
+    }
+
+    protected virtual List<int> Pop_NavPanelStack()
+    {
+        return nav_panel_index_stack.Pop();
+    }
+    #endregion
 }

@@ -1345,6 +1345,7 @@ MonoBehaviour:
   panelInfo: {fileID: 11400000, guid: b97579edfb26f854eb2efdb44e593021, type: 2}
   panels: []
   hasMini: 0
+  missionPanel: {fileID: 248255120}
   title_InputField: {fileID: 2006799269}
   smallMissions:
   - {fileID: 171032298}
@@ -1355,6 +1356,9 @@ MonoBehaviour:
   - {fileID: 1203399159}
   - {fileID: 1995947359}
   layoutGroup: {fileID: 0}
+  toggles:
+  - {fileID: 540816421}
+  - {fileID: 258212149}
 --- !u!114 &67827086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9614,6 +9618,7 @@ MonoBehaviour:
   - {fileID: 1126643351}
   - {fileID: 855242062}
   - {fileID: 1422666449}
+  backButton: {fileID: 1022317060}
 --- !u!1 &512347914
 GameObject:
   m_ObjectHideFlags: 0
@@ -17661,9 +17666,9 @@ MonoBehaviour:
     m_Bottom: 0
   m_ChildAlignment: 0
   m_Spacing: 0
-  m_ChildForceExpandWidth: 0
-  m_ChildForceExpandHeight: 0
-  m_ChildControlWidth: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 1
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
@@ -18506,7 +18511,7 @@ GameObject:
   - component: {fileID: 1022317061}
   - component: {fileID: 1022317060}
   m_Layer: 5
-  m_Name: Back_Button
+  m_Name: BackButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30245,7 +30250,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC0DD\uC131"
+  m_text: "\uC218\uC815"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a86e432e412245347936fc9d40f2b33b, type: 2}
   m_sharedMaterial: {fileID: 6826935973061072578, guid: a86e432e412245347936fc9d40f2b33b, type: 2}

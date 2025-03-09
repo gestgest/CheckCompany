@@ -72,6 +72,7 @@ public class Panel : MonoBehaviour
     {
         if (this.index != -1)
         {
+            //Debug.Log(this.index);
             panels[this.index].OffPanel();
         }
 
