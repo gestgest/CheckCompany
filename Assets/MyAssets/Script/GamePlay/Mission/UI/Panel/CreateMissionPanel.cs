@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine.UI;
 
 public class CreateMissionPanel : Panel
@@ -12,7 +13,7 @@ public class CreateMissionPanel : Panel
     [SerializeField] private TMP_InputField title_InputField;
 
     [SerializeField] private GameObject [] smallMissions;
-    [SerializeField] private MultiLayoutGroup layoutGroup;
+    [SerializeField] private MultiLayoutGroup layoutGroup; //제일 아래 Layout
     [SerializeField] private Toggle[] toggles;
 
 
@@ -21,16 +22,23 @@ public class CreateMissionPanel : Panel
     private int employee_type; //이걸로 dev, QA인지 분류할 수 있지 않을까
     private int level;
     private int smallMission_size;
+    private bool isFirst = true;
 
-    void Awake()
-    {
-        layoutGroup = GetComponent<MultiLayoutGroup>();
-    }
+    private static int SMALL_MISSION_HEIGHT = 30;
+
 
     protected override void OnEnable()
     {
         base.OnEnable();
+        if(!isFirst)
+            Init();
+    }
+
+    protected override void Start()
+    {
+        base.Start();
         Init();
+        isFirst = false;
     }
 
     void Init()
@@ -43,6 +51,7 @@ public class CreateMissionPanel : Panel
         }
 
         smallMission_size = 7;
+        layoutGroup.AddHeight(SMALL_MISSION_HEIGHT * smallMission_size);
         for (int i = 1; i < smallMissions.Length; i++)
         {
             DeleteSmallMission();
@@ -50,6 +59,9 @@ public class CreateMissionPanel : Panel
 
         smallMissions[0].transform.GetChild(0)
             .GetComponent<TMP_InputField>().text = "";
+        
+        layoutGroup.RerollScreen();
+        //layoutGroup.SwitchingScreen(true);
     }
 
 
@@ -71,11 +83,12 @@ public class CreateMissionPanel : Panel
         smallMissions[smallMission_size].SetActive(true);
         smallMission_size++;
         
+        layoutGroup.AddHeight(SMALL_MISSION_HEIGHT);
         layoutGroup.RerollScreen();
+        //layoutGroup.SwitchingScreen(true);
     }
     public void DeleteSmallMission()
     {
-        
         if (smallMission_size <= 1)
             return;
         smallMission_size--;
@@ -83,7 +96,9 @@ public class CreateMissionPanel : Panel
             .GetComponent<TMP_InputField>().text = "";
         smallMissions[smallMission_size].SetActive(false);
         
+        layoutGroup.AddHeight(-SMALL_MISSION_HEIGHT);
         layoutGroup.RerollScreen();
+        //layoutGroup.SwitchingScreen(true);
     }
 
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,20 +20,19 @@ public class RecruitmentElement : MonoBehaviour
     [SerializeField] private GameObject applicant_Prefab;
     [SerializeField] private Transform layout_parent;
     
-   private MultiLayoutGroup _multiLayoutGroup;
+    [SerializeField]private MultiLayoutGroup _multiLayoutGroup; //applicantsPanel
 
 
     //지원자 정보 리스트
     private Recruitment recruitment;
     private List<GameObject> applicant_objects;
 
-
+    private static int HEIGHT = 100;
     private void Start()
     {
         recruitment.Init();
         Init();
         layout_parent = transform.parent; //부모 가져오기
-        _multiLayoutGroup = layout_parent.GetComponent<MultiLayoutGroup>(); //부모의 layout 가져오기
         
         // multiLayoutGroup.SetParentObjectPos(
         //     RecruitmentController.instance
@@ -40,7 +40,7 @@ public class RecruitmentElement : MonoBehaviour
         //         .GetComponent<RectTransform>()
         // );
         //icon.sprite
-        _multiLayoutGroup.RerollScreen();
+        //_multiLayoutGroup.RerollScreen();
     }
     
 
@@ -49,7 +49,7 @@ public class RecruitmentElement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.T))
         {
             Debug.Log("RecruitmentElement : T 버튼 누름");
-            RerollScreen();
+            _multiLayoutGroup.RerollScreen();
         }
     }
 
@@ -58,6 +58,7 @@ public class RecruitmentElement : MonoBehaviour
         if(applicant_objects == null)
             applicant_objects = new List<GameObject>();
     }
+
 
     /// <summary>
     /// 한번에 그리는 함수
@@ -108,12 +109,15 @@ public class RecruitmentElement : MonoBehaviour
 
         tmp.transform.SetParent(applicantsPanel.transform);
         applicant_objects.Add(tmp);
+        
+        _multiLayoutGroup.AddOnHeight(HEIGHT);
     }
 
     public void RemoveRecruitment()
     {
         RecruitmentController.instance.RemoveRecruitment(recruitment.GetID());
-        RerollScreen();
+        _multiLayoutGroup.AddOnHeight(-HEIGHT);
+        _multiLayoutGroup.RerollScreen();
         Destroy(gameObject);
         //이 오브젝트 제거
     }
@@ -184,12 +188,12 @@ public class RecruitmentElement : MonoBehaviour
     public void SwitchPanel()
     {
         applicantsPanel.SetActive(!(applicantsPanel.activeSelf));
-        RerollScreen();
+        SwitchingScreen(applicantsPanel.activeSelf);
     }
 
-    private void RerollScreen()
+    private void SwitchingScreen(bool isShow)
     {
-        _multiLayoutGroup.RerollScreen();
+        _multiLayoutGroup.SwitchingScreen(isShow);
     }
 
 

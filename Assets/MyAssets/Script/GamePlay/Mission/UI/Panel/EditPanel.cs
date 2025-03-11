@@ -23,15 +23,11 @@ public class EditPanel : Panel
     private int mission_id;
     //나중에 직원도 넣을 예정
 
-    void Awake()
-    {
-        layoutGroup = GetComponent<MultiLayoutGroup>();
-    }
-
     //init
     public void SetMission(Todo_Mission todoMission)
     {
         mission_id = todoMission.ID;
+        
         //값 넣기
         title.text = todoMission.GetName();
         employeeTypeGroup.SetIndex((int)todoMission.GetMissionType());

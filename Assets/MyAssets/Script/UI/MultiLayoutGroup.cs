@@ -10,14 +10,32 @@ public class MultiLayoutGroup : MonoBehaviour
     RectTransform size; //자기 자신 size
     private float onHeight = 0;
     
-    private VerticalLayoutGroup layoutGroup;
     private MultiLayoutGroup _parentMultiLayout = null;
+    private VerticalLayoutGroup layoutGroup;
 
     private void Awake()
     {
         _parentMultiLayout = transform.parent.GetComponent<MultiLayoutGroup>();
         size = transform.GetComponent<RectTransform>();
-        layoutGroup = GetComponent<VerticalLayoutGroup>();
+        layoutGroup = transform.GetComponent<VerticalLayoutGroup>();
+
+        if (size == null)
+        {
+            Debug.Log(gameObject.name + " RectTransform 없다네");
+        }
+        else
+        {
+            Debug.Log(gameObject.name + " has RectTransform");
+        }
+        
+        if (layoutGroup == null)
+        {
+            Debug.Log(gameObject.name + " VerticalLayoutGroup 없다네");
+        }
+        else
+        {
+            Debug.Log(gameObject.name + " has VerticalLayoutGroup");
+        }
     }
 
     void Start()
@@ -27,7 +45,6 @@ public class MultiLayoutGroup : MonoBehaviour
         {
             onHeight += transform.GetChild(i).GetComponent<RectTransform>().sizeDelta.y;
         }
-        Debug.Log(gameObject.name + " : " + onHeight);
     }
 
     private void Update()
@@ -43,12 +60,10 @@ public class MultiLayoutGroup : MonoBehaviour
     {
         if (isOn)
         {
-            isOn = true;
             AddHeight(+onHeight);
         }
         else
         {
-            isOn = false;
             AddHeight(-onHeight);
         }
         RerollScreen();
@@ -58,31 +73,36 @@ public class MultiLayoutGroup : MonoBehaviour
         if (_parentMultiLayout == null)
         {
             Canvas.ForceUpdateCanvases();
-            
+
+            //LayoutRebuilder.ForceRebuildLayoutImmediate(size);
+            // if (layoutGroup == null)
+            // {
+            //     Debug.Log(gameObject.name + " ?");
+            //     layoutGroup = transform.GetComponent<VerticalLayoutGroup>();
+            // }
             layoutGroup.enabled = false;
             layoutGroup.enabled = true;
             return;
         }
-        //LayoutRebuilder.ForceRebuildLayoutImmediate(parentRectTransform);
         
         _parentMultiLayout.RerollScreen();
-        
-        
         //before_pos_h = parentLayout.sizeDelta.y;
     }
     
     public void AddHeight(float height)
     {
+        Debug.Log(gameObject.name + " : " + height);
         SetHeight(size.sizeDelta.y + height);
-    }
-    public void SetHeight(float height)
-    {
-        size.sizeDelta = new Vector2(size.sizeDelta.x, height);
+        
         if (_parentMultiLayout != null)
         {
             _parentMultiLayout.AddHeight(height);
             RerollScreen();
         }
+    }
+    public void SetHeight(float height)
+    {
+        size.sizeDelta = new Vector2(size.sizeDelta.x, height);
     }
 
     public void AddOnHeight(float height)

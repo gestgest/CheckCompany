@@ -47,6 +47,8 @@ public class TodoMissionElement : MonoBehaviour
         isShowContent = false;
         down_content.SetActive(isShowContent);
         Dropbox.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
+        
+        multiLayoutGroup.AddOnHeight(-SMALLMISSION_HEIGHT); //자기 MissionElement Button은 빼야함
 
         //SwitchingDownContent(); //down content 비활성화
         //버튼 이벤트는 따로 놨음

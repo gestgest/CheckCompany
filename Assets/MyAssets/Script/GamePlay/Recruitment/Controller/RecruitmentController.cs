@@ -23,8 +23,6 @@ public class RecruitmentController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI costText;
     [SerializeField] private EmployeeNameSO employeeNameSO;
     
-    [FormerlySerializedAs("childLayoutGroup")] [SerializeField] private MultiLayoutGroup multiLayoutGroup;
-
     //채용 정보 [버튼을 누르면 함수를 호출해서 tmp처럼 대신 넣는 느낌]
     private int employeeTypeIndex = 0; //0,1,2,3
     private int level = 0; //0,1,2
@@ -73,16 +71,16 @@ public class RecruitmentController : MonoBehaviour
     //Panel안에 채용 목록 띄워주는 함수
     private void CreateRecruitmentObject(Recruitment r)
     {
-        GameObject recruitmentObject = Instantiate(recruitmentPrefab, Vector3.zero, Quaternion.identity);
+        GameObject recruitmentObject = Instantiate(recruitmentPrefab);
         RecruitmentElement recruitmentContent = recruitmentObject.GetComponent<RecruitmentElement>();
-
+        
         //recruitmentContent.SetRecruitment(employeeTypeIcons[(int)r.GetEmployeeType()], r.GetDay(), r.GetSize(), i)
         recruitmentContent.Init();
         recruitmentContent.SetRecruitment(r);
         
         recruitmentObjects.Add(recruitmentObject);
         recruitmentObject.transform.SetParent(view.transform);
-
+        
         recruitmentContent.SetApplicant(); //그리기
     }
 
