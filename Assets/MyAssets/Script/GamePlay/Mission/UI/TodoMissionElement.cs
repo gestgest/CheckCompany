@@ -43,8 +43,12 @@ public class TodoMissionElement : MonoBehaviour
         }
         
         gauge.Init(0, todoMission.GetSmallMissions().Count, WIDTH);
-        isShowContent = true;
-        SwitchingDownContent(); //down content 비활성화
+
+        isShowContent = false;
+        down_content.SetActive(isShowContent);
+        Dropbox.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
+
+        //SwitchingDownContent(); //down content 비활성화
         //버튼 이벤트는 따로 놨음
     }
 
@@ -79,6 +83,6 @@ public class TodoMissionElement : MonoBehaviour
             Dropbox.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
         }
         
-        multiLayoutGroup.SwitchingScreen();
+        multiLayoutGroup.SwitchingScreen(isShowContent);
     }
 }
