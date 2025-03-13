@@ -60,12 +60,11 @@ public class MultiLayoutGroup : MonoBehaviour
 
     void Start()
     {
-
         //자식들 크기 저장
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            onHeight += transform.GetChild(i).GetComponent<RectTransform>().sizeDelta.y;
-        }
+        // for (int i = 0; i < transform.childCount; i++)
+        // {
+        //     AddOnHeight(transform.GetChild(i).GetComponent<RectTransform>().sizeDelta.y);
+        // }
     }
 
     private void Update()
@@ -87,7 +86,7 @@ public class MultiLayoutGroup : MonoBehaviour
         {
             AddHeight(-onHeight);
         }
-        RerollScreen();
+        //RerollScreen();
     }
     public void RerollScreen()
     {
@@ -101,7 +100,7 @@ public class MultiLayoutGroup : MonoBehaviour
             //    Debug.Log(gameObject.name + " ?");
             //    layoutGroup = transform.GetComponent<VerticalLayoutGroup>();
             //}
-            Debug.Log(gameObject.name + " : 엄준식");
+            //Debug.Log(gameObject.name + " : 엄준식");
 
             layoutGroup.enabled = false;
             layoutGroup.enabled = true;
@@ -114,7 +113,7 @@ public class MultiLayoutGroup : MonoBehaviour
     
     public void AddHeight(float height)
     {
-        Debug.Log(gameObject.name + " : " + height);
+        //Debug.Log(gameObject.name + " : " + height);
         SetHeight(size.sizeDelta.y + height);
         
         if (_parentMultiLayout != null)
@@ -130,17 +129,21 @@ public class MultiLayoutGroup : MonoBehaviour
 
     public void AddOnHeight(float height)
     {
-        onHeight += height;
-        //Debug.Log(onHeight);
-        if (_parentMultiLayout != null)
-        {
-            Debug.Log(height);
-            _parentMultiLayout.AddOnHeight(height);
-        }
-        else //부모인 경우
+        onHeight += height; //부모에게 안 줘도 됨 => 어차피 Add할때 줄거임
+        if (_parentMultiLayout == null)
         {
             RerollScreen();
         }
+    }
+
+    public float GetOnHeight()
+    {
+        return onHeight;
+    }
+
+    public float GetHeight()
+    {
+        return size.sizeDelta.y;
     }
     public bool GetIsInit()
     {

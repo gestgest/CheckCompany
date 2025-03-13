@@ -18,7 +18,7 @@ public class RecruitmentElement : MonoBehaviour
 
 
     [SerializeField] private GameObject applicant_Prefab;
-    [SerializeField] private Transform layout_parent;
+    private RectTransform layout_parent;
     
     [SerializeField]private MultiLayoutGroup _multiLayoutGroup; //applicantsPanel
 
@@ -30,10 +30,8 @@ public class RecruitmentElement : MonoBehaviour
     private static int HEIGHT = 100;
     private void Start()
     {
-        _multiLayoutGroup.Init();
         recruitment.Init();
-        Init();
-        layout_parent = transform.parent; //부모 가져오기
+        //Init();
 
         // multiLayoutGroup.SetParentObjectPos(
         //     RecruitmentController.instance
@@ -56,6 +54,19 @@ public class RecruitmentElement : MonoBehaviour
 
     public void Init()
     {
+        layout_parent = transform.parent.GetComponent<RectTransform>(); //부모 가져오기
+        _multiLayoutGroup.Init();
+        //_multiLayoutGroup.AddHeight(HEIGHT);
+        
+        //부모 디폴트 높이 추가
+        Vector2 v = layout_parent.sizeDelta;
+        v.y += HEIGHT;
+        layout_parent.sizeDelta = v;
+        
+        //_multiLayoutGroup.AddOnHeight(-HEIGHT);
+        //레이아웃 처음 만들때 자기 자신은 제외.
+        //자기 자신 더하는 함수는 LayoutGroup의 Start에서
+        
         if(applicant_objects == null)
             applicant_objects = new List<GameObject>();
     }
@@ -68,7 +79,6 @@ public class RecruitmentElement : MonoBehaviour
     {
         int applicant_size = recruitment.GetApplicantCount();
         SetApplicantsNumber(applicant_size); //지원자 수
-
 
         //오브젝트 생성
         for (int i = 0; i < applicant_size; i++)

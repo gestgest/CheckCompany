@@ -52,7 +52,8 @@ public class CreateMissionPanel : Panel
         }
 
         smallMission_size = 7;
-        layoutGroup.AddHeight(SMALL_MISSION_HEIGHT * smallMission_size);
+        Debug.Log(SMALL_MISSION_HEIGHT * smallMission_size - layoutGroup.GetHeight());
+        layoutGroup.AddHeight(SMALL_MISSION_HEIGHT * smallMission_size - layoutGroup.GetHeight());
         for (int i = 1; i < smallMissions.Length; i++)
         {
             DeleteSmallMission();
@@ -61,7 +62,7 @@ public class CreateMissionPanel : Panel
         smallMissions[0].transform.GetChild(0)
             .GetComponent<TMP_InputField>().text = "";
         
-        layoutGroup.RerollScreen();
+        //layoutGroup.RerollScreen();
         //layoutGroup.SwitchingScreen(true);
     }
 

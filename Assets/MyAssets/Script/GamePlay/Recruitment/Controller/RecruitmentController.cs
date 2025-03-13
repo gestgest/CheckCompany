@@ -75,7 +75,7 @@ public class RecruitmentController : MonoBehaviour
         RecruitmentElement recruitmentContent = recruitmentObject.GetComponent<RecruitmentElement>();
 
         //recruitmentContent.SetRecruitment(employeeTypeIcons[(int)r.GetEmployeeType()], r.GetDay(), r.GetSize(), i)
-        recruitmentContent.Init();
+        recruitmentContent.Init(); //여기에 multiLayoutGroup height값을 추가
         recruitmentContent.SetRecruitment(r);
 
         recruitmentObjects.Add(recruitmentObject);
