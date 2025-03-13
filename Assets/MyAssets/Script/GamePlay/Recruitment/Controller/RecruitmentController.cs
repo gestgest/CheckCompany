@@ -71,16 +71,16 @@ public class RecruitmentController : MonoBehaviour
     //Panel안에 채용 목록 띄워주는 함수
     private void CreateRecruitmentObject(Recruitment r)
     {
-        GameObject recruitmentObject = Instantiate(recruitmentPrefab);
+        GameObject recruitmentObject = Instantiate(recruitmentPrefab, view.transform);
         RecruitmentElement recruitmentContent = recruitmentObject.GetComponent<RecruitmentElement>();
-        
+
         //recruitmentContent.SetRecruitment(employeeTypeIcons[(int)r.GetEmployeeType()], r.GetDay(), r.GetSize(), i)
         recruitmentContent.Init();
         recruitmentContent.SetRecruitment(r);
-        
+
         recruitmentObjects.Add(recruitmentObject);
-        recruitmentObject.transform.SetParent(view.transform);
-        
+        //recruitmentObject.transform.SetParent(view.transform);
+
         recruitmentContent.SetApplicant(); //그리기
     }
 

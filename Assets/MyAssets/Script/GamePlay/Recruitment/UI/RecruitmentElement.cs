@@ -30,10 +30,11 @@ public class RecruitmentElement : MonoBehaviour
     private static int HEIGHT = 100;
     private void Start()
     {
+        _multiLayoutGroup.Init();
         recruitment.Init();
         Init();
         layout_parent = transform.parent; //부모 가져오기
-        
+
         // multiLayoutGroup.SetParentObjectPos(
         //     RecruitmentController.instance
         //         .GetLastRecruitmentObject()

@@ -12,35 +12,56 @@ public class MultiLayoutGroup : MonoBehaviour
     
     private MultiLayoutGroup _parentMultiLayout = null;
     private VerticalLayoutGroup layoutGroup;
+    bool isInit = false;
 
-    private void Awake()
+    //private void Awake()
+    //{
+    //    //tmi. Awake는 비활성화 되어도 실행되는 건가?
+    //    //ChatGPT 답변 : Awake는 생성되기 전에 호출하는 느낌이라 parent 지정을 아직 못한다.
+    //    //RecruitmentElement에서는 나중에 부모를 설정했다.
+    //    //
+    //}
+    //생성될때 
+    public void Init()
     {
         _parentMultiLayout = transform.parent.GetComponent<MultiLayoutGroup>();
         size = transform.GetComponent<RectTransform>();
         layoutGroup = transform.GetComponent<VerticalLayoutGroup>();
 
-        if (size == null)
+        isInit = true;
+        if (_parentMultiLayout == null)
         {
-            Debug.Log(gameObject.name + " RectTransform 없다네");
+            return;
         }
-        else
-        {
-            Debug.Log(gameObject.name + " has RectTransform");
-        }
-        
-        if (layoutGroup == null)
-        {
-            Debug.Log(gameObject.name + " VerticalLayoutGroup 없다네");
-        }
-        else
-        {
-            Debug.Log(gameObject.name + " has VerticalLayoutGroup");
-        }
+
+        if(!_parentMultiLayout.GetIsInit())
+            _parentMultiLayout.Init();
+
+
+        //if (size == null)
+        //{
+        //    Debug.Log(gameObject.name + " RectTransform 없다네");
+        //}
+        //else
+        //{
+        //    Debug.Log(gameObject.name + " has RectTransform");
+        //}
+
+        //if (layoutGroup == null)
+        //{
+        //    Debug.Log(gameObject.name + " VerticalLayoutGroup 없다네");
+        //}
+        //else
+        //{
+        //    Debug.Log(gameObject.name + " has VerticalLayoutGroup");
+        //}
     }
+
 
     void Start()
     {
-        //자식들 크기 비교
+
+        //자식들 크기 저장
         for (int i = 0; i < transform.childCount; i++)
         {
             onHeight += transform.GetChild(i).GetComponent<RectTransform>().sizeDelta.y;
@@ -75,11 +96,13 @@ public class MultiLayoutGroup : MonoBehaviour
             Canvas.ForceUpdateCanvases();
 
             //LayoutRebuilder.ForceRebuildLayoutImmediate(size);
-            // if (layoutGroup == null)
-            // {
-            //     Debug.Log(gameObject.name + " ?");
-            //     layoutGroup = transform.GetComponent<VerticalLayoutGroup>();
-            // }
+            //if (layoutGroup == null)
+            //{
+            //    Debug.Log(gameObject.name + " ?");
+            //    layoutGroup = transform.GetComponent<VerticalLayoutGroup>();
+            //}
+            Debug.Log(gameObject.name + " : 엄준식");
+
             layoutGroup.enabled = false;
             layoutGroup.enabled = true;
             return;
@@ -119,5 +142,8 @@ public class MultiLayoutGroup : MonoBehaviour
             RerollScreen();
         }
     }
-        
+    public bool GetIsInit()
+    {
+        return isInit;
+    }
 }

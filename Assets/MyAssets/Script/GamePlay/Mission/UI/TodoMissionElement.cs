@@ -32,6 +32,7 @@ public class TodoMissionElement : MonoBehaviour
     public void SetMission(Todo_Mission todoMission)
     {
         multiLayoutGroup = GetComponent<MultiLayoutGroup>();
+        multiLayoutGroup.Init();
         this.todoMission = todoMission;
 
         title.text = todoMission.GetName();

@@ -43,6 +43,7 @@ public class CreateMissionPanel : Panel
 
     void Init()
     {
+        layoutGroup.Init();
         title_InputField.text = "";
 
         for(int i = 0; i < toggles.Length; i++)

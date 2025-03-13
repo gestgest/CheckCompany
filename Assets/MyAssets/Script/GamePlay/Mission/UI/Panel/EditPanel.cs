@@ -15,7 +15,7 @@ public class EditPanel : Panel
     [SerializeField] private CustomRadioButtonGroup levelGroup;
     [SerializeField] private GameObject[] smallMissions;
 
-    [SerializeField] private MultiLayoutGroup layoutGroup;
+    [SerializeField] private MultiLayoutGroup multiLayoutGroup;
 
     //소미션
     private int smallMission_size;
@@ -23,9 +23,11 @@ public class EditPanel : Panel
     private int mission_id;
     //나중에 직원도 넣을 예정
 
-    //init
+    /// <summary> init </summary>
+    /// <param name="todoMission"></param>
     public void SetMission(Todo_Mission todoMission)
     {
+        multiLayoutGroup.Init();
         mission_id = todoMission.ID;
         
         //값 넣기
@@ -74,7 +76,7 @@ public class EditPanel : Panel
             .GetComponent<TMP_InputField>().text = "";
         smallMissions[smallMission_size].SetActive(false);
 
-        layoutGroup.RerollScreen();
+        multiLayoutGroup.RerollScreen();
     }
 
     //
@@ -85,7 +87,7 @@ public class EditPanel : Panel
         smallMissions[smallMission_size].SetActive(true);
         smallMission_size++;
 
-        layoutGroup.RerollScreen();
+        multiLayoutGroup.RerollScreen();
     }
 
     //최종적으로 값을 서버에 수정

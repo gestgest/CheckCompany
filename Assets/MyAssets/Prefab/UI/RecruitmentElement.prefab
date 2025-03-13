@@ -586,7 +586,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2106845461655963808}
   - component: {fileID: 1860386215873946266}
-  - component: {fileID: 1065298728086213490}
+  - component: {fileID: 3669712219086700055}
   m_Layer: 5
   m_Name: ApplicantsPanel
   m_TagString: Untagged
@@ -639,7 +639,7 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &1065298728086213490
+--- !u!114 &3669712219086700055
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -798,7 +798,7 @@ GameObject:
   - component: {fileID: 7905594477417860538}
   - component: {fileID: 6953637211032457177}
   - component: {fileID: 7520629813391628149}
-  - component: {fileID: 2805573179242707884}
+  - component: {fileID: 3130961415597106532}
   m_Layer: 5
   m_Name: RecruitmentElement
   m_TagString: Untagged
@@ -844,8 +844,8 @@ MonoBehaviour:
   applicantNumber_Text: {fileID: 2106845460131550434}
   applicantsPanel: {fileID: 2106845461655963815}
   applicant_Prefab: {fileID: 3574423401577469288, guid: 6f8bd351da971344abb7d815ff2ca37b, type: 3}
-  layout_parent: {fileID: 0}
-  _multiLayoutGroup: {fileID: 1065298728086213490}
+  layout_parent: {fileID: 7905594477417860538}
+  _multiLayoutGroup: {fileID: 3669712219086700055}
 --- !u!114 &7520629813391628149
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -872,7 +872,7 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &2805573179242707884
+--- !u!114 &3130961415597106532
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
