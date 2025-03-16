@@ -143,9 +143,9 @@ public class EmployeeStatusWindow : MonoBehaviour
         //     SetSmallMission();
     }
 
-    public void AddMission(Todo_Mission m)
+    public void AddMission(Mission m)
     {
-        Mission mission = new Mission(m);
+        UMUMUM mission = new UMUMUM(m);
         employee.AddMission(mission);
         employee.AddMissionToServer(mission, GameManager.instance.Nickname, employee.ID);
         addMissionMiniWindow.SetActive(false);
@@ -165,7 +165,7 @@ public class EmployeeStatusWindow : MonoBehaviour
         
         for (int i = 0; i < missionSize; i++)
         {
-            Mission mission = employee.GetMission(i);
+            UMUMUM mission = employee.GetMission(i);
             missionUIs[i].SetValue(mission.GetTodo_Mission());
 
             //?  null 값이라면
@@ -223,7 +223,7 @@ public class EmployeeStatusWindow : MonoBehaviour
             return;
         }
 
-        Mission mission = employee.GetMission(0);
+        UMUMUM mission = employee.GetMission(0);
         List<string> missions_text = mission.GetTodo_Mission().GetSmallMissions();
         int j;
         
@@ -253,7 +253,7 @@ public class EmployeeStatusWindow : MonoBehaviour
     /// //////////////////프로퍼티 - small_mission_current_size
     public void Check_smallmission_achievement(int index, bool check)
     {
-        Mission mission = employee.GetMission(0);
+        UMUMUM mission = employee.GetMission(0);
         if (check)
         {
             if(employee.Stamina >= 10)

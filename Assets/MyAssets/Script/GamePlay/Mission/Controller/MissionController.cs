@@ -11,7 +11,7 @@ public class MissionController : MonoBehaviour
     //이미지 리스트?
     [SerializeField] private Sprite [] icons;
     [SerializeField] private MissionPanel mission_panel;
-    private List<Todo_Mission> todo_missions;
+    private List<Mission> todo_missions;
     
 
     private void Awake()
@@ -27,7 +27,7 @@ public class MissionController : MonoBehaviour
     //서버 가져오는 함수 => 나중에 매개변수에 Dictionary<string, object> todo_missions와 id를 넣을 예정
     public void Init(Dictionary<string, object> data, int mission_count)
     {
-        todo_missions = new List<Todo_Mission>();
+        todo_missions = new List<Mission>();
         this.mission_count = mission_count;
         GetTodoMissionsFromJSON(data);
 
@@ -47,7 +47,7 @@ public class MissionController : MonoBehaviour
     {
         return mission_count;
     }
-    public Todo_Mission GetMission(int index)
+    public Mission GetMission(int index)
     {
         return todo_missions[index];
     }
@@ -57,7 +57,7 @@ public class MissionController : MonoBehaviour
         return icons[index];
     }
 
-    public List<Todo_Mission> GetMissions()
+    public List<Mission> GetMissions()
     {
         return todo_missions;
     }
@@ -72,7 +72,7 @@ public class MissionController : MonoBehaviour
         return todo_missions.Count;
     }
        
-    public void Add_TodoMission(Todo_Mission todo_mission)
+    public void Add_TodoMission(Mission todo_mission)
     {
         todo_missions.Add(todo_mission);
     }
@@ -95,7 +95,7 @@ public class MissionController : MonoBehaviour
         {
             Dictionary<string, object> tmp = (Dictionary<string, object>)(todo_mission.Value);
 
-            Todo_Mission todo_Mission = new Todo_Mission();
+            Mission todo_Mission = new Mission();
 
             todo_Mission.ID = Convert.ToInt32(todo_mission.Key);
             todo_Mission.SetMissionFromJSON(tmp);

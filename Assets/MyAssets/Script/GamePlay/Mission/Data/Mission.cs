@@ -1,121 +1,109 @@
+using NUnit.Framework;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//MissionSO를 Todo_Mission으로 교체 => 동적으로 생성가능
 public class Mission
 {
-    private Todo_Mission todo_mission;
+    private int id;
+    private EmployeeType mission_type = EmployeeType.DEVELOPER; //회복, 지능, 기술, 명상 이런식으로 해야하나
+    private string missionName;
+    private int iconID;
+    private int level; //easy, medium, hard, very hard
+    private List<string> small_missions;
 
-    //달성률
-    //생각해보니 달성률이 아니라 각각의 미션 달성을 true false 해야할듯
-    private bool [] achievementList; //small_missions 사이즈만큼 할당
-    private int achievementClearCount;
-    
-    int mission_id;
-    //어떤 미션을 가지고 있는지 => 나중에 미션 컨트롤러에서 todo_mission를 가져오기 위한
-
-    /*
-    mission
-    - achievementList : bool<List>
-    - id : number
-        
-    */
-    public Mission()  { }
-    public Mission(Todo_Mission missionSO)
+    public Mission() 
     {
-        SetTodo_Mission(missionSO);
+        this.small_missions = new List<string>();
     }
 
-    #region SERVER
-    //서버에서 가져온 JSON 타입을 Mission에 넣기
-    public void GetMissionFromJSON(Dictionary<string, object> mission)
+    public Mission(int id, int _type, string _name, int iconID, int level, List<string> small_missions)
     {
-        //id 탐색
-        int id = Convert.ToInt32(mission["id"]);
-        int index = MissionController.instance.Search_Employee_Index(id);
-        SetTodo_Mission(MissionController.instance.GetMission(index));
-        
-        List<object> achievementList_tmp = (List<object>)mission["achievementList"];
-        for (int i = 0; i < achievementList_tmp.Count; i++)
+        this.small_missions = new List<string>();
+
+        this.id = id;
+        this.mission_type = (EmployeeType)(_type);
+        this.missionName = _name;
+        this.iconID = iconID;
+        this.level = level;
+
+        for (int i = 0; i < small_missions.Count; i++)
         {
-            achievementList[i] = (bool)achievementList_tmp[i];
-            if (achievementList[i])
-            {
-                achievementClearCount++;
-            }
+            this.small_missions.Add(small_missions[i]);
         }
     }
 
-    //JSON으로 만들기 (서버 보내기)
-    public Dictionary<string, object> SetMissionToJSON()
+    public int ID
+    {
+        get => id;
+        set => id = value;
+    }
+
+    public EmployeeType GetMissionType()
+    {
+        return mission_type;
+    }
+    public Sprite GetIcon()
+    {
+        return MissionController.instance.GetIcon(iconID);
+    }
+    public List<string> GetSmallMissions()
+    {
+        return small_missions;
+    }
+    public string GetName()
+    {
+        return missionName;
+    }
+
+    public int GetLevel()
+    {
+        return level;
+    }
+
+    public Dictionary<string, object> GetTodoMission_ToJSON()
     {
         Dictionary<string, object> result = new Dictionary<string, object>
         {
-            {"achievementList", achievementList},
-            {"id", mission_id}
+            { "type", (int)mission_type },
+            { "name", missionName },
+            { "icon", iconID },
+            { "level", level },
+            { "small_missions", small_missions }, //배열임
         };
+
         return result;
     }
 
-    #endregion
-    #region PROPERTIES
 
-    public Todo_Mission GetTodo_Mission()
+    public void SetMissionFromJSON(Dictionary<string, object> data)
     {
-        return todo_mission;
-    }
-
-    public void SetTodo_Mission(Todo_Mission todo_mission)
-    {
-        this.todo_mission = todo_mission;
-        mission_id = this.todo_mission.ID;
-        achievementList = new bool[todo_mission.GetSmallMissions().Count];
-        
-        // 애초에 0 Debug.Log("achievementList : " + achievementList.Count);
-        
-        
-        SetAchievementAllFalse();
-    }
-
-    public bool GetAchievement(int index)
-    {
-        return achievementList[index];
-    }
-    public int GetAchievementClearCount()
-    {
-        return achievementClearCount;
-    }
-    
-    public void SetAchievement(int index, bool isAchieved)
-    {
-        //한번에 두번 호출
-        achievementList[index] = isAchieved;
-            
-        if (isAchieved)
+        mission_type = (EmployeeType)(Convert.ToInt32(data["type"]));
+        missionName = (string)data["name"];
+        iconID = Convert.ToInt32(data["icon"]);
+        level = Convert.ToInt32(data["level"]);
+        List<object> sm_tmp = (List<object>)data["small_missions"];
+        for (int i = 0; i < sm_tmp.Count; i++) 
         {
-            achievementClearCount++;
-        }
-        else
-        {
-            achievementClearCount--;
+            small_missions.Add((string)sm_tmp[i]);
         }
     }
-
-    public void SetAchievementAllFalse()
-    {
-        for(int i = 0; i < achievementList.Length; i++)
-        {
-            achievementList[i] = false;
-        }
-
-        achievementClearCount = 0;
-    }
-
-    public int GetMissionID()
-    {
-        return mission_id;
-    }
-    
-    #endregion
 }
+
+//EmployeeType
+
+/*
+public enum MissionType
+{
+    NONE = 0, //비어있는 상태
+    SQL_DEV = 1, //SQL 개발
+    CLIENT_DEV = 2, //클라이언트 개발
+    CODING_TEST = 3,
+    ENGINE_DEV = 4, //엔진개발
+    WEB_FRONT_DEV = 5, //프론트엔드
+    APP_DEV = 6, //앱개발
+    DATA_ANALYSIS = 7, //데이터 분석
+}
+*/

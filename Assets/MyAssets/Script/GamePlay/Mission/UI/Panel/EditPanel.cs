@@ -21,11 +21,13 @@ public class EditPanel : Panel
     private int smallMission_size;
 
     private int mission_id;
+    private static int SMALL_MISSION_HEIGHT = 30;
+
     //나중에 직원도 넣을 예정
 
     /// <summary> init </summary>
     /// <param name="todoMission"></param>
-    public void SetMission(Todo_Mission todoMission)
+    public void SetMission(Mission todoMission)
     {
         multiLayoutGroup.Init();
         mission_id = todoMission.ID;
@@ -38,6 +40,10 @@ public class EditPanel : Panel
 
         int _smallMission_size = 7;
         smallMission_size = _smallMission_size;
+
+        //height를 210으로 만들어야함
+        multiLayoutGroup.AddHeight(SMALL_MISSION_HEIGHT * smallMission_size - multiLayoutGroup.GetHeight());
+
         for (int i = 1; i < _smallMission_size; i++)
         {
             DeleteSmallMission();
@@ -76,7 +82,8 @@ public class EditPanel : Panel
             .GetComponent<TMP_InputField>().text = "";
         smallMissions[smallMission_size].SetActive(false);
 
-        multiLayoutGroup.RerollScreen();
+        multiLayoutGroup.AddHeight(-SMALL_MISSION_HEIGHT);
+        //multiLayoutGroup.RerollScreen();
     }
 
     //
@@ -87,13 +94,14 @@ public class EditPanel : Panel
         smallMissions[smallMission_size].SetActive(true);
         smallMission_size++;
 
-        multiLayoutGroup.RerollScreen();
+        multiLayoutGroup.AddHeight(SMALL_MISSION_HEIGHT);
+        //multiLayoutGroup.RerollScreen();
     }
 
     //최종적으로 값을 서버에 수정
     public void EditMission()
     {
-        Todo_Mission todo_mission = new Todo_Mission(
+        Mission todo_mission = new Mission(
             id: mission_id,
             employeeTypeGroup.GetIndex(),
             title.text,

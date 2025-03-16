@@ -9,7 +9,7 @@ public class AddMissionElementUI : MonoBehaviour
 {
     private EmployeeStatusWindow employeeStatusWindow;
 
-    [SerializeField] private Todo_Mission todo_mission;
+    [SerializeField] private Mission todo_mission;
     [SerializeField] private Image icon;
 
     //OnEnable하면 필터링 함수
@@ -19,7 +19,7 @@ public class AddMissionElementUI : MonoBehaviour
     {
         employeeStatusWindow.AddMission(todo_mission);
     }
-    public void SetMission(Todo_Mission todo_mission)
+    public void SetMission(Mission todo_mission)
     {
         this.todo_mission = todo_mission;
         icon.sprite = todo_mission.GetIcon();

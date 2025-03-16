@@ -1354,7 +1354,7 @@ MonoBehaviour:
   - {fileID: 1427249236}
   - {fileID: 1203399159}
   - {fileID: 1995947359}
-  layoutGroup: {fileID: 450677222}
+  multiLayoutGroup: {fileID: 450677222}
   toggles:
   - {fileID: 540816421}
   - {fileID: 258212149}
@@ -4235,6 +4235,7 @@ MonoBehaviour:
   missionPrefab: {fileID: 4904320000939938416, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
   missionParent: {fileID: 968920550}
   missionEditPanel: {fileID: 1208356401}
+  multiLayoutGroup: {fileID: 968920552}
 --- !u!1 &249294261
 GameObject:
   m_ObjectHideFlags: 0
@@ -7680,7 +7681,7 @@ GameObject:
   m_Component:
   - component: {fileID: 429678795}
   - component: {fileID: 429678797}
-  - component: {fileID: 429678796}
+  - component: {fileID: 429678798}
   m_Layer: 5
   m_Name: InputList
   m_TagString: Untagged
@@ -7712,22 +7713,8 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 80, y: 0}
-  m_SizeDelta: {x: 160, y: 210}
+  m_SizeDelta: {x: 160, y: 0}
   m_Pivot: {x: 0.5, y: 1}
---- !u!114 &429678796
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 429678794}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalFit: 0
-  m_VerticalFit: 2
 --- !u!114 &429678797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7754,6 +7741,18 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &429678798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 429678794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40958b6619c6d78468bad9b7eb3a8864, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &430060134
 GameObject:
   m_ObjectHideFlags: 0
@@ -17647,11 +17646,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 968920549}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Script: {fileID: 11500000, guid: 40958b6619c6d78468bad9b7eb3a8864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HorizontalFit: 0
-  m_VerticalFit: 2
 --- !u!1 &973629317
 GameObject:
   m_ObjectHideFlags: 0
@@ -21989,7 +21986,7 @@ MonoBehaviour:
   - {fileID: 1045436500}
   - {fileID: 1459208128}
   - {fileID: 1171399085}
-  multiLayoutGroup: {fileID: 0}
+  multiLayoutGroup: {fileID: 429678798}
 --- !u!1 &1228135710
 GameObject:
   m_ObjectHideFlags: 0
@@ -29324,7 +29321,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1615664619}
   - component: {fileID: 1615664621}
-  - component: {fileID: 1615664620}
   - component: {fileID: 1615664622}
   m_Layer: 5
   m_Name: SmallMissionGroup
@@ -29352,22 +29348,8 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 540, y: -480}
-  m_SizeDelta: {x: 160, y: 240}
+  m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 1}
---- !u!114 &1615664620
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1615664618}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalFit: 0
-  m_VerticalFit: 2
 --- !u!114 &1615664621
 MonoBehaviour:
   m_ObjectHideFlags: 0

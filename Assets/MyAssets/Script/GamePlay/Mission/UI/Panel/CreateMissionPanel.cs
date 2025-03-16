@@ -13,7 +13,7 @@ public class CreateMissionPanel : Panel
     [SerializeField] private TMP_InputField title_InputField;
 
     [SerializeField] private GameObject [] smallMissions;
-    [SerializeField] private MultiLayoutGroup layoutGroup; //제일 아래 Layout
+    [SerializeField] private MultiLayoutGroup multiLayoutGroup; //제일 아래 Layout => inputList
     [SerializeField] private Toggle[] toggles;
 
 
@@ -43,7 +43,7 @@ public class CreateMissionPanel : Panel
 
     void Init()
     {
-        layoutGroup.Init();
+        multiLayoutGroup.Init();
         title_InputField.text = "";
 
         for(int i = 0; i < toggles.Length; i++)
@@ -52,8 +52,8 @@ public class CreateMissionPanel : Panel
         }
 
         smallMission_size = 7;
-        Debug.Log(SMALL_MISSION_HEIGHT * smallMission_size - layoutGroup.GetHeight());
-        layoutGroup.AddHeight(SMALL_MISSION_HEIGHT * smallMission_size - layoutGroup.GetHeight());
+        //Debug.Log(SMALL_MISSION_HEIGHT * smallMission_size - layoutGroup.GetHeight());
+        multiLayoutGroup.AddHeight(SMALL_MISSION_HEIGHT * smallMission_size - multiLayoutGroup.GetHeight());
         for (int i = 1; i < smallMissions.Length; i++)
         {
             DeleteSmallMission();
@@ -85,8 +85,8 @@ public class CreateMissionPanel : Panel
         smallMissions[smallMission_size].SetActive(true);
         smallMission_size++;
         
-        layoutGroup.AddHeight(SMALL_MISSION_HEIGHT);
-        layoutGroup.RerollScreen();
+        multiLayoutGroup.AddHeight(SMALL_MISSION_HEIGHT);
+        //layoutGroup.RerollScreen();
         //layoutGroup.SwitchingScreen(true);
     }
     public void DeleteSmallMission()
@@ -98,8 +98,8 @@ public class CreateMissionPanel : Panel
             .GetComponent<TMP_InputField>().text = "";
         smallMissions[smallMission_size].SetActive(false);
         
-        layoutGroup.AddHeight(-SMALL_MISSION_HEIGHT);
-        layoutGroup.RerollScreen();
+        multiLayoutGroup.AddHeight(-SMALL_MISSION_HEIGHT);
+        //multiLayoutGroup.RerollScreen();
         //layoutGroup.SwitchingScreen(true);
     }
 
@@ -127,7 +127,7 @@ public class CreateMissionPanel : Panel
             small_missions.Add(small_mission);
         }
 
-        Todo_Mission todo_mission = new Todo_Mission(
+        Mission todo_mission = new Mission(
             MissionController.instance.GetAndIncrementCount(),
             employee_type,
             title_InputField.text,

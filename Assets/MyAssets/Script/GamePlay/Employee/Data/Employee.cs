@@ -22,7 +22,7 @@ public class Employee
     private WorkTime workTime;
     private EmployeeRank rank;
 
-    private Mission[] missions; //5개
+    private UMUMUM[] missions; //5개
     private int mission_size = 0;
 
     private bool isEmployee = false;
@@ -72,7 +72,7 @@ public class Employee
     public int Salary { get { return salary; } set { salary = value; } }
     public EmployeeRank _Rank { get { return rank; } set { rank = value; } }
     public WorkTime _WorkTime { get { return workTime; } set { workTime = value; } }
-    public Mission GetMission(int index) { return missions[index]; }
+    public UMUMUM GetMission(int index) { return missions[index]; }
     public bool Get_SmallMission_Achievement(int index) { return missions[0].GetAchievement(index); }
     public bool IsEmployee { get { return isEmployee; } set { isEmployee = value; } }
     //public bool GetSmallMissionAchievement(int index) { return false; }
@@ -81,7 +81,7 @@ public class Employee
     //미션 => 5개
     public Employee()
     {
-        missions = new Mission[MAX_MISSION_SIZE];
+        missions = new UMUMUM[MAX_MISSION_SIZE];
     }
 
     //소 미션 클리어 갯수 구하기 => Mission 함수의 GetAchievementClearCount를 이용해라 
@@ -107,7 +107,7 @@ public class Employee
 
     public int GetMissionSize() { return mission_size; }
 
-    public void AddMission(Mission m)
+    public void AddMission(UMUMUM m)
     {
         //꽉 차있다면 => 취소
         if (mission_size == Employee.MAX_MISSION_SIZE)
@@ -164,7 +164,7 @@ public class Employee
         }
     }
 
-    public void AddMissionToServer(Mission m, string nickname, int id)
+    public void AddMissionToServer(UMUMUM m, string nickname, int id)
     {
         FireStoreManager.instance.SetFirestoreData(
             "GamePlayUser",
@@ -245,7 +245,7 @@ public class Employee
             for (int i = 0; i < missions_tmp.Count; i++)
             {
                 Dictionary<string, object> mission_map = (Dictionary<string, object>)missions_tmp[i];
-                Mission mission = new Mission();
+                UMUMUM mission = new UMUMUM();
                 mission.GetMissionFromJSON(mission_map);
                 AddMission(mission);
             }

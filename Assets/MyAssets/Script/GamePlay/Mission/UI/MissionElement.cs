@@ -6,9 +6,9 @@ using UnityEngine.Events;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class TodoMissionElement : MonoBehaviour
+public class MissionElement : MonoBehaviour
 {
-    private Todo_Mission todoMission;
+    private Mission mission;
 
     [SerializeField] private TextMeshProUGUI title; 
     [SerializeField] private Image icon;
@@ -23,34 +23,34 @@ public class TodoMissionElement : MonoBehaviour
 
     private List<GameObject> smallMissionObjects = new List<GameObject>();
     
-    [SerializeField] private MultiLayoutGroup multiLayoutGroup;
+    private MultiLayoutGroup multiLayoutGroup;
     private bool isShowContent = false;
+
     private static int WIDTH = 800;
-    private static int SMALLMISSION_HEIGHT = 100;
+    private static int TODO_MISSION_HEIGHT = 100;
     
     //<summary> 미션 지정 : init</summary>
-    public void SetMission(Todo_Mission todoMission)
+    public void SetMission(Mission mission)
     {
         multiLayoutGroup = GetComponent<MultiLayoutGroup>();
         multiLayoutGroup.Init();
-        this.todoMission = todoMission;
+        this.mission = mission;
 
-        title.text = todoMission.GetName();
-        icon.sprite = todoMission.GetIcon();
-        
-        foreach(string smallMission in todoMission.GetSmallMissions())
+        title.text = mission.GetName();
+        icon.sprite = mission.GetIcon();
+
+        multiLayoutGroup.AddOnHeight(TODO_MISSION_HEIGHT); //게이지 크기 추가
+        foreach (string smallMission in mission.GetSmallMissions())
         {
             CreateSmallMissionObject(smallMission);
         }
         
-        gauge.Init(0, todoMission.GetSmallMissions().Count, WIDTH);
+        gauge.Init(0, mission.GetSmallMissions().Count, WIDTH);
 
         isShowContent = false;
         down_content.SetActive(isShowContent);
         Dropbox.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
         
-        multiLayoutGroup.AddOnHeight(-SMALLMISSION_HEIGHT); //자기 MissionElement Button은 빼야함
-
         //SwitchingDownContent(); //down content 비활성화
         //버튼 이벤트는 따로 놨음
     }
@@ -68,7 +68,7 @@ public class TodoMissionElement : MonoBehaviour
         
         smallMissionObjects.Add(smallMissionObject);
         smallMissionElement.SetGague(gauge);
-        multiLayoutGroup.AddOnHeight(SMALLMISSION_HEIGHT); //
+        multiLayoutGroup.AddOnHeight(TODO_MISSION_HEIGHT); //오브젝트 크기 부여
     }
 
     public void SwitchingDownContent()

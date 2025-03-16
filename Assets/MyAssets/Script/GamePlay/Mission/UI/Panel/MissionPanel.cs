@@ -7,13 +7,18 @@ public class MissionPanel : Panel
     [SerializeField] private Transform missionParent;
     [SerializeField] private EditPanel missionEditPanel;
 
+    [SerializeField] private MultiLayoutGroup multiLayoutGroup;
+
     List<GameObject> missionObjects = new List<GameObject>();
     private List<int> editPanelIndex;
-    
+
+    private static int MISSION_HEIGHT = 100;
+    private static int MISSION_SPACE_HEIGHT = 50;
+
     protected override void Start()
     {
         base.Start();
-        foreach (Todo_Mission mission in MissionController.instance.GetMissions())
+        foreach (Mission mission in MissionController.instance.GetMissions())
         {
             CreateTodoMissionObject(mission);
         }
@@ -22,15 +27,18 @@ public class MissionPanel : Panel
         editPanelIndex.Add(1);
     }
 
-    public void CreateTodoMissionObject(Todo_Mission todoMission)
+    public void CreateTodoMissionObject(Mission todoMission)
     {
         //Todo_Mission 만들기
         GameObject missionObject = Instantiate(missionPrefab, missionParent);
         
         missionObjects.Add(missionObject);
-        TodoMissionElement missionElementUI = missionObject.GetComponent<TodoMissionElement>();
+        MissionElement missionElementUI = missionObject.GetComponent<MissionElement>();
         missionElementUI.SetMission(todoMission);
-        
+
+        multiLayoutGroup.AddHeight(MISSION_HEIGHT);
+        multiLayoutGroup.AddHeight(MISSION_SPACE_HEIGHT);
+
         //Debug.Log(todoMission.ID);
         //editPanel 들어가는 함수를 missionElementUI에 투입
         missionElementUI.AddEventListener(() => { EditPanelOn(todoMission.ID); });
