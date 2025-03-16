@@ -16,7 +16,7 @@ public class MissionElement : MonoBehaviour
     [SerializeField] private GameObject down_content; //
     //List SmallMission 리스트
 
-    [SerializeField] private GameObject smallMissionPrefab;
+    [FormerlySerializedAs("smallMissionPrefab")] [SerializeField] private GameObject todoMissionPrefab;
     [SerializeField] private GameObject Dropbox;
     [SerializeField] private Transform parentContent;
     [SerializeField] private Gauge gauge;
@@ -61,13 +61,15 @@ public class MissionElement : MonoBehaviour
         button.onClick.AddListener(listener);
     }
 
-    private void CreateSmallMissionObject(string smallMission)
+    private void CreateSmallMissionObject(string smallMission, bool isDone = false)
     {
-        GameObject smallMissionObject = Instantiate(smallMissionPrefab, parentContent);
-        SmallMissionElement smallMissionElement = smallMissionObject.GetComponent<SmallMissionElement>();
+        GameObject todoMissionObject = Instantiate(todoMissionPrefab, parentContent);
+        TodoMissionElement todoMissionElement = todoMissionObject.GetComponent<TodoMissionElement>();
         
-        smallMissionObjects.Add(smallMissionObject);
-        smallMissionElement.SetGague(gauge);
+        
+        smallMissionObjects.Add(todoMissionObject);
+        todoMissionElement.SetTodoMission(smallMission, isDone);
+        todoMissionElement.SetGague(gauge);
         multiLayoutGroup.AddOnHeight(TODO_MISSION_HEIGHT); //오브젝트 크기 부여
     }
 

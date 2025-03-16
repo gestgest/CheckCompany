@@ -2,8 +2,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SmallMissionElement : MonoBehaviour
+public class TodoMissionElement : MonoBehaviour
 {
+    
     [SerializeField] private TextMeshProUGUI title;
     [SerializeField] private Toggle my_toggle;
     
@@ -12,6 +13,12 @@ public class SmallMissionElement : MonoBehaviour
     public void SetGague(Gauge gauge)
     {
         this.gauge = gauge;
+    }
+
+    public void SetTodoMission(string title, bool isDone)
+    {
+        this.title.text = title;
+        this.my_toggle.isOn = isDone;
     }
 
     ///<summary>대충 토글 상태에 따라 폰트 바꾸는 코드 </summary>
