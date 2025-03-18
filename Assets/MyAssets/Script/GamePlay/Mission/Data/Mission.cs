@@ -99,9 +99,9 @@ public class Mission
         //이거이거이거
         for (int i = 0; i < todo_missions.Count; i++) 
         {
-            Todo_Mission todo_mission;
+            Todo_Mission todo_mission = new Todo_Mission();
             todo_mission.Set_Todo_Mission(todo_missions[i]);
-            this.todo_missions.Add((string)sm_tmp[i]);
+            this.todo_missions.Add(todo_mission);
         }
     }
 }

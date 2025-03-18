@@ -16,12 +16,12 @@ public class MissionElement : MonoBehaviour
     [SerializeField] private GameObject down_content; //
     //List SmallMission 리스트
 
-    [FormerlySerializedAs("smallMissionPrefab")] [SerializeField] private GameObject todoMissionPrefab;
+    [SerializeField] private GameObject todoMissionPrefab;
     [SerializeField] private GameObject Dropbox;
     [SerializeField] private Transform parentContent;
     [SerializeField] private Gauge gauge;
 
-    private List<GameObject> smallMissionObjects = new List<GameObject>();
+    private List<GameObject> todo_mission_objects = new List<GameObject>();
     
     private MultiLayoutGroup multiLayoutGroup;
     private bool isShowContent = false;
@@ -40,13 +40,13 @@ public class MissionElement : MonoBehaviour
         icon.sprite = mission.GetIcon();
 
         multiLayoutGroup.AddOnHeight(TODO_MISSION_HEIGHT); //게이지 크기 추가
-        foreach (string smallMission in mission.GetTodoMissions())
+        foreach (Todo_Mission todoMission in mission.GetTodoMissions())
         {
-            if (smallMission == null)
+            if (todoMission == null)
             {
                 Debug.Log("엄");
             }
-            CreateSmallMissionObject(smallMission);
+            CreateSmallMissionObject(todoMission);
         }
         
         gauge.Init(0, mission.GetTodoMissions().Count, WIDTH);
@@ -65,14 +65,14 @@ public class MissionElement : MonoBehaviour
         button.onClick.AddListener(listener);
     }
 
-    private void CreateSmallMissionObject(string smallMission, bool isDone = false)
+    private void CreateSmallMissionObject(Todo_Mission todo_mission)
     {
         GameObject todoMissionObject = Instantiate(todoMissionPrefab, parentContent);
         TodoMissionElement todoMissionElement = todoMissionObject.GetComponent<TodoMissionElement>();
         
         
-        smallMissionObjects.Add(todoMissionObject);
-        todoMissionElement.SetTodoMission(smallMission, isDone);
+        todo_mission_objects.Add(todoMissionObject);
+        todoMissionElement.SetTodoMission(todo_mission);
         todoMissionElement.SetGague(gauge);
         multiLayoutGroup.AddOnHeight(TODO_MISSION_HEIGHT); //오브젝트 크기 부여
     }

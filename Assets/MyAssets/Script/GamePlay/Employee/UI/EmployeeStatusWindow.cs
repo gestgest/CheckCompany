@@ -224,10 +224,10 @@ public class EmployeeStatusWindow : MonoBehaviour
         }
 
         UMUMUM mission = employee.GetMission(0);
-        List<string> missions_text = mission.GetTodo_Mission().GetTodoMissions();
+        List<Todo_Mission> missions = mission.GetTodo_Mission().GetTodoMissions();
         int j;
         
-        small_mission_size = missions_text.Count;
+        small_mission_size = missions.Count;
         Set_smallMission_achievement_UI();
         clearSmallMissionLock = true;
 
@@ -238,7 +238,7 @@ public class EmployeeStatusWindow : MonoBehaviour
 
             smallMission_PoolObjects[j].GetComponent<Toggle>().isOn = employee.Get_SmallMission_Achievement(j);
             Text _text = smallMission_PoolObjects[j].GetComponentInChildren<Text>();
-            _text.text = missions_text[j];
+            _text.text = missions[j].Title;
         }
 
         clearSmallMissionLock = false;

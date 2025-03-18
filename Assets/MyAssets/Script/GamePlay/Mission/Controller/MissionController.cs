@@ -26,6 +26,13 @@ public class MissionController : MonoBehaviour
         Destroy(this);
     }
 
+    public void Init()
+    {
+        
+        if(missions == null)
+            missions = new List<Mission>();
+    }
+
     //서버 가져오는 함수 => 나중에 매개변수에 Dictionary<string, object> todo_missions와 id를 넣을 예정
     public void Init(Dictionary<string, object> data, int mission_count)
     {
@@ -76,6 +83,7 @@ public class MissionController : MonoBehaviour
        
     public void Add_TodoMission(Mission todo_mission)
     {
+        Init(); //나중에 없앨거
         missions.Add(todo_mission);
     }
     public void Remove_TodoMission(int id)

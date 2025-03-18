@@ -15,15 +15,10 @@ public class TodoMissionElement : MonoBehaviour
         this.gauge = gauge;
     }
 
-    public void SetTodoMission(string title, bool isDone)
+    public void SetTodoMission(Todo_Mission todoMission)
     {
-        Debug.Log("title : " + title);
-        if(this.title == null)
-        {
-            Debug.Log("umjun" );
-        }
-        this.title.text = title;
-        this.my_toggle.isOn = isDone;
+        this.title.text = todoMission.Title;
+        this.my_toggle.isOn = todoMission.IsDone;
     }
 
     ///<summary>대충 토글 상태에 따라 폰트 바꾸는 코드 </summary>

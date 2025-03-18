@@ -1346,7 +1346,7 @@ MonoBehaviour:
   hasMini: 0
   missionPanel: {fileID: 248255120}
   title_InputField: {fileID: 2006799269}
-  smallMissions:
+  todo_Mission_Objects:
   - {fileID: 171032298}
   - {fileID: 538473034}
   - {fileID: 344223071}
@@ -2755,7 +2755,7 @@ GameObject:
   - component: {fileID: 171032301}
   - component: {fileID: 171032300}
   m_Layer: 5
-  m_Name: SmallMission
+  m_Name: TodoMissionObject_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3506,7 +3506,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 80, y: -210}
+  m_AnchoredPosition: {x: 80, y: 0}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &207787868
@@ -5440,7 +5440,7 @@ GameObject:
   - component: {fileID: 344223074}
   - component: {fileID: 344223073}
   m_Layer: 5
-  m_Name: SmallMission (2)
+  m_Name: TodoMissionObject_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9783,7 +9783,7 @@ GameObject:
   - component: {fileID: 538473037}
   - component: {fileID: 538473036}
   m_Layer: 5
-  m_Name: SmallMission (1)
+  m_Name: TodoMissionObject_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10278,7 +10278,7 @@ GameObject:
   - component: {fileID: 568343168}
   - component: {fileID: 568343167}
   m_Layer: 5
-  m_Name: SmallMission (3)
+  m_Name: TodoMissionObject_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11859,7 +11859,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1208356401}
         m_TargetAssemblyTypeName: EditPanel, Assembly-CSharp
-        m_MethodName: DeleteSmallMission
+        m_MethodName: DeleteTodoMission
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -17734,7 +17734,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1208356401}
         m_TargetAssemblyTypeName: EditPanel, Assembly-CSharp
-        m_MethodName: DeleteSmallMission
+        m_MethodName: DeleteTodoMission
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -20835,7 +20835,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1208356401}
         m_TargetAssemblyTypeName: EditPanel, Assembly-CSharp
-        m_MethodName: DeleteSmallMission
+        m_MethodName: DeleteTodoMission
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -21777,7 +21777,7 @@ GameObject:
   - component: {fileID: 1203399162}
   - component: {fileID: 1203399161}
   m_Layer: 5
-  m_Name: SmallMission (5)
+  m_Name: TodoMissionObject_6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21978,14 +21978,7 @@ MonoBehaviour:
   title: {fileID: 1843250800}
   employeeTypeGroup: {fileID: 1963349253}
   levelGroup: {fileID: 48490508}
-  smallMissions:
-  - {fileID: 1392774839}
-  - {fileID: 963968534}
-  - {fileID: 1679888831}
-  - {fileID: 1333407234}
-  - {fileID: 1045436500}
-  - {fileID: 1459208128}
-  - {fileID: 1171399085}
+  todo_mission_textObject: []
   multiLayoutGroup: {fileID: 429678798}
 --- !u!1 &1228135710
 GameObject:
@@ -25737,7 +25730,7 @@ GameObject:
   - component: {fileID: 1427249239}
   - component: {fileID: 1427249238}
   m_Layer: 5
-  m_Name: SmallMission (4)
+  m_Name: TodoMissionObject_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26522,7 +26515,7 @@ GameObject:
   - component: {fileID: 1446717957}
   - component: {fileID: 1446717958}
   m_Layer: 5
-  m_Name: SmallMissionGroup
+  m_Name: TodoMissionGroup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32402,7 +32395,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1208356401}
         m_TargetAssemblyTypeName: EditPanel, Assembly-CSharp
-        m_MethodName: DeleteSmallMission
+        m_MethodName: DeleteTodoMission
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -34326,7 +34319,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1208356401}
         m_TargetAssemblyTypeName: EditPanel, Assembly-CSharp
-        m_MethodName: DeleteSmallMission
+        m_MethodName: DeleteTodoMission
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -36367,7 +36360,7 @@ GameObject:
   - component: {fileID: 1995947362}
   - component: {fileID: 1995947361}
   m_Layer: 5
-  m_Name: SmallMission (6)
+  m_Name: TodoMissionObject_7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37355,7 +37348,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1208356401}
         m_TargetAssemblyTypeName: EditPanel, Assembly-CSharp
-        m_MethodName: DeleteSmallMission
+        m_MethodName: DeleteTodoMission
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -38283,7 +38276,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1208356401}
         m_TargetAssemblyTypeName: EditPanel, Assembly-CSharp
-        m_MethodName: DeleteSmallMission
+        m_MethodName: DeleteTodoMission
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

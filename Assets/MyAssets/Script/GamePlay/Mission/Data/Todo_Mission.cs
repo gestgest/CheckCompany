@@ -1,19 +1,35 @@
 using System.Collections.Generic;
+using Firebase.Firestore;
 using UnityEngine;
 
+[FirestoreData]
 public class Todo_Mission
 {
-    string title;
-    bool isDone;
+    [FirestoreProperty]
+    public string Title { get; set; }
+    [FirestoreProperty]
+    public bool IsDone { get; set; }
 
+    public Todo_Mission()
+    {
+        
+    }
+    public Todo_Mission(string title, bool isDone = false)
+    {
+        this.Title = title;
+        this.IsDone = isDone;
+    }
+    
     public void Set_Todo_Mission(string title, bool isDone = false)
     {
-        this.title = title;
-        this.isDone = isDone;
+        this.Title = title;
+        this.IsDone = isDone;
     }
 
-    public void Set_Todo_Mission(Dictionary<string, object> data)
+    public void Set_Todo_Mission(object data)
     {
-        Set_Todo_Mission((string)data["title"], (bool)data["isDone"]);
+        Dictionary<string, object> tmp = data as Dictionary<string, object> ;
+        Set_Todo_Mission((string)tmp["Title"], (bool)tmp["IsDone"]);
     }
+
 }
