@@ -155,7 +155,7 @@ public class CreateMissionPanel : Panel
         FireStoreManager.instance.SetFirestoreData(
             "GamePlayUser",
             GameManager.instance.Nickname,
-            "todo_missions." + id.ToString(),
+            "missions." + id.ToString(),
             data
         );
     }
@@ -166,7 +166,7 @@ public class CreateMissionPanel : Panel
         FireStoreManager.instance.SetFirestoreData(
             "GamePlayUser",
             GameManager.instance.Nickname,
-            "todo_mission_count",
+            "mission_count",
             mission_count
         );
     }

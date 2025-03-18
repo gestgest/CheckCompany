@@ -49,7 +49,7 @@ public class EditPanel : Panel
             DeleteSmallMission();
         }
         
-        List<string> _smallMissions = todoMission.GetSmallMissions();
+        List<string> _smallMissions = todoMission.GetTodoMissions();
         _smallMission_size = _smallMissions.Count;
         
         smallMissions[0].transform.GetChild(0).GetComponent<TMP_InputField>().text = _smallMissions[0];

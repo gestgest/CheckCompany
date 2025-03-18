@@ -40,12 +40,16 @@ public class MissionElement : MonoBehaviour
         icon.sprite = mission.GetIcon();
 
         multiLayoutGroup.AddOnHeight(TODO_MISSION_HEIGHT); //게이지 크기 추가
-        foreach (string smallMission in mission.GetSmallMissions())
+        foreach (string smallMission in mission.GetTodoMissions())
         {
+            if (smallMission == null)
+            {
+                Debug.Log("엄");
+            }
             CreateSmallMissionObject(smallMission);
         }
         
-        gauge.Init(0, mission.GetSmallMissions().Count, WIDTH);
+        gauge.Init(0, mission.GetTodoMissions().Count, WIDTH);
 
         isShowContent = false;
         down_content.SetActive(isShowContent);

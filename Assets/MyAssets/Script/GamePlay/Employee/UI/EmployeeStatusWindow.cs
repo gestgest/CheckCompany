@@ -202,7 +202,7 @@ public class EmployeeStatusWindow : MonoBehaviour
         {
             //디버깅용 돈 주는 이벤트
             GameManager.instance.SetMoney(GameManager.instance.Money + 30000 
-                * employee.GetMission(0).GetTodo_Mission().GetSmallMissions().Count);
+                * employee.GetMission(0).GetTodo_Mission().GetTodoMissions().Count);
             RemoveMission(0);
         }
     }
@@ -224,7 +224,7 @@ public class EmployeeStatusWindow : MonoBehaviour
         }
 
         UMUMUM mission = employee.GetMission(0);
-        List<string> missions_text = mission.GetTodo_Mission().GetSmallMissions();
+        List<string> missions_text = mission.GetTodo_Mission().GetTodoMissions();
         int j;
         
         small_mission_size = missions_text.Count;

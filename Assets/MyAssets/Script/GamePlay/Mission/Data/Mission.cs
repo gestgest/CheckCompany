@@ -12,16 +12,23 @@ public class Mission
     private string missionName;
     private int iconID;
     private int level; //easy, medium, hard, very hard
-    private List<string> small_missions;
+    private List<Todo_Mission> todo_missions;
 
     public Mission() 
     {
-        this.small_missions = new List<string>();
+        this.todo_missions = new List<Todo_Mission>();
     }
 
-    public Mission(int id, int _type, string _name, int iconID, int level, List<string> small_missions)
+    /// <summary> 서버에서 가져오는 ?</summary>
+    /// <param name="id"></param>
+    /// <param name="_type"></param>
+    /// <param name="_name"></param>
+    /// <param name="iconID"></param>
+    /// <param name="level"></param>
+    /// <param name="todo_missions"></param>
+    public Mission(int id, int _type, string _name, int iconID, int level, List<Todo_Mission> todo_missions)
     {
-        this.small_missions = new List<string>();
+        //this.todo_missions = new List<Todo_Mission>();
 
         this.id = id;
         this.mission_type = (EmployeeType)(_type);
@@ -29,10 +36,11 @@ public class Mission
         this.iconID = iconID;
         this.level = level;
 
-        for (int i = 0; i < small_missions.Count; i++)
-        {
-            this.small_missions.Add(small_missions[i]);
-        }
+        this.todo_missions = todo_missions;
+        //for (int i = 0; i < todo_missions.Count; i++)
+        //{
+        //    this.todo_missions.Add(todo_missions[i]);
+        //}
     }
 
     public int ID
@@ -49,9 +57,9 @@ public class Mission
     {
         return MissionController.instance.GetIcon(iconID);
     }
-    public List<string> GetSmallMissions()
+    public List<Todo_Mission> GetTodoMissions()
     {
-        return small_missions;
+        return todo_missions;
     }
     public string GetName()
     {
@@ -71,23 +79,29 @@ public class Mission
             { "name", missionName },
             { "icon", iconID },
             { "level", level },
-            { "small_missions", small_missions }, //배열임
+            { "todo_missions", todo_missions }, //배열임
         };
 
         return result;
     }
 
-
+    /// <summary> 서버에서 가져오는 </summary>
+    /// <param name="data"></param>
     public void SetMissionFromJSON(Dictionary<string, object> data)
     {
         mission_type = (EmployeeType)(Convert.ToInt32(data["type"]));
         missionName = (string)data["name"];
         iconID = Convert.ToInt32(data["icon"]);
         level = Convert.ToInt32(data["level"]);
-        List<object> sm_tmp = (List<object>)data["small_missions"];
-        for (int i = 0; i < sm_tmp.Count; i++) 
+
+        List<object> todo_missions = (List<object>)data["todo_missions"];
+
+        //이거이거이거
+        for (int i = 0; i < todo_missions.Count; i++) 
         {
-            small_missions.Add((string)sm_tmp[i]);
+            Todo_Mission todo_mission;
+            todo_mission.Set_Todo_Mission(todo_missions[i]);
+            this.todo_missions.Add((string)sm_tmp[i]);
         }
     }
 }

@@ -17,6 +17,11 @@ public class TodoMissionElement : MonoBehaviour
 
     public void SetTodoMission(string title, bool isDone)
     {
+        Debug.Log("title : " + title);
+        if(this.title == null)
+        {
+            Debug.Log("umjun" );
+        }
         this.title.text = title;
         this.my_toggle.isOn = isDone;
     }

@@ -6,12 +6,14 @@ public class MissionController : MonoBehaviour
 {
     public static MissionController instance;
 
-    private int mission_count;
 
     //이미지 리스트?
     [SerializeField] private Sprite [] icons;
     [SerializeField] private MissionPanel mission_panel;
-    private List<Mission> todo_missions;
+    
+    
+    private List<Mission> missions;
+    private int mission_count;
     
 
     private void Awake()
@@ -27,7 +29,7 @@ public class MissionController : MonoBehaviour
     //서버 가져오는 함수 => 나중에 매개변수에 Dictionary<string, object> todo_missions와 id를 넣을 예정
     public void Init(Dictionary<string, object> data, int mission_count)
     {
-        todo_missions = new List<Mission>();
+        missions = new List<Mission>();
         this.mission_count = mission_count;
         GetTodoMissionsFromJSON(data);
 
@@ -49,7 +51,7 @@ public class MissionController : MonoBehaviour
     }
     public Mission GetMission(int index)
     {
-        return todo_missions[index];
+        return missions[index];
     }
 
     public Sprite GetIcon(int index)
@@ -59,7 +61,7 @@ public class MissionController : MonoBehaviour
 
     public List<Mission> GetMissions()
     {
-        return todo_missions;
+        return missions;
     }
 
     public int GetAndIncrementCount()
@@ -69,19 +71,19 @@ public class MissionController : MonoBehaviour
 
     public int GetMissionSize()
     {
-        return todo_missions.Count;
+        return missions.Count;
     }
        
     public void Add_TodoMission(Mission todo_mission)
     {
-        todo_missions.Add(todo_mission);
+        missions.Add(todo_mission);
     }
     public void Remove_TodoMission(int id)
     {
         int index = Search_Employee_Index(id);
         if (index != -1)
         {
-            todo_missions.RemoveAt(index);
+            missions.RemoveAt(index);
             mission_panel.RemoveMissionObject(index);
         }
     }
@@ -113,8 +115,8 @@ public class MissionController : MonoBehaviour
     //binary_search
     public int Search_Employee_Index(int id)
     {
-        int index = Binary_Search_Employee_Index(0, todo_missions.Count - 1, id);
-        if (todo_missions[index].ID == id)
+        int index = Binary_Search_Employee_Index(0, missions.Count - 1, id);
+        if (missions[index].ID == id)
         {
             return index;
         }
@@ -128,7 +130,7 @@ public class MissionController : MonoBehaviour
             return start;
         }
         int mid = (start + end) / 2;
-        if (id > todo_missions[mid].ID)
+        if (id > missions[mid].ID)
         {
             return Binary_Search_Employee_Index(mid + 1, end, id);
         }

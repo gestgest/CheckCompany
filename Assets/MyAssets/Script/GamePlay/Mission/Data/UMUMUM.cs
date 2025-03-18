@@ -71,7 +71,7 @@ public class UMUMUM
     {
         this.todo_mission = todo_mission;
         mission_id = this.todo_mission.ID;
-        achievementList = new bool[todo_mission.GetSmallMissions().Count];
+        achievementList = new bool[todo_mission.GetTodoMissions().Count];
         
         // 애초에 0 Debug.Log("achievementList : " + achievementList.Count);
         
