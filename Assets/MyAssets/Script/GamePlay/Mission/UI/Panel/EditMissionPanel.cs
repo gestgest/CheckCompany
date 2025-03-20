@@ -5,7 +5,7 @@ using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
-public class EditPanel : Panel
+public class EditMissionPanel : Panel
 {
     [SerializeField] private TMP_InputField title;
 
@@ -17,9 +17,11 @@ public class EditPanel : Panel
     [SerializeField] private GameObject[] todo_mission_textObject; //edittext todoMission 오브젝트들
 
     [SerializeField] private MultiLayoutGroup multiLayoutGroup;
+    
 
     //소미션
     private int todo_mission_size;
+    private List<bool> todo_missions_isdone;
 
     private int mission_id;
     private static int TODO_MISSION_HEIGHT = 30;
@@ -32,6 +34,7 @@ public class EditPanel : Panel
     {
         multiLayoutGroup.Init();
         mission_id = mission.ID;
+        todo_missions_isdone = new List<bool>();
 
         //값 넣기
         title.text = mission.GetName();
@@ -53,14 +56,19 @@ public class EditPanel : Panel
         List<Todo_Mission> _todo_missions = mission.GetTodoMissions();
         _todo_mission_size = _todo_missions.Count;
 
+        //텍스트 넣기
         todo_mission_textObject[0].transform.GetChild(0).GetComponent<TMP_InputField>().text =
             _todo_missions[0].Title;
+        todo_missions_isdone.Add(_todo_missions[0].IsDone);
+
         todo_mission_size = 1;
 
         for (int i = 1; i < _todo_mission_size; i++)
         {
+            todo_missions_isdone.Add(_todo_missions[i].IsDone);
+
             //오브젝트 생성
-            AddSmallMission();
+            AddTodoMission();
             todo_mission_textObject[i].transform.GetChild(0).GetComponent<TMP_InputField>().text =
                 _todo_missions[i].Title;
         }
@@ -71,11 +79,16 @@ public class EditPanel : Panel
         List<Todo_Mission> _todoMissions = new List<Todo_Mission>();
         for (int i = 0; i < todo_mission_size; i++)
         {
+            bool isDone = false;
+            if(i < todo_missions_isdone.Count)
+            {
+                isDone = todo_missions_isdone[i];
+            }
             //여기 isDone 매개변수 자체가 false임
             _todoMissions.Add(
                 new Todo_Mission(
                     todo_mission_textObject[i].transform.GetChild(0).GetComponent<TMP_InputField>().text
-                    , false
+                    , isDone
                 )
             );
         }
@@ -97,9 +110,9 @@ public class EditPanel : Panel
     }
 
     //
-    public void AddSmallMission()
+    public void AddTodoMission()
     {
-        if (todo_mission_size == Employee.MAX_SMALL_MISSION_SIZE)
+        if (todo_mission_size == Employee.MAX_TODO_MISSION_SIZE)
             return;
         todo_mission_textObject[todo_mission_size].SetActive(true);
         todo_mission_size++;
@@ -128,6 +141,7 @@ public class EditPanel : Panel
         );
 
         //back 네비 Panel
+        PanelManager.instance.Back_Nav_Panel();
     }
 
     //최종적으로 서버에 있는 미션 삭제
@@ -137,7 +151,7 @@ public class EditPanel : Panel
         FireStoreManager.instance.DeleteFirestoreDataKey(
             "GamePlayUser",
             GameManager.instance.Nickname,
-            "todo_missions." + mission_id
+            "missions." + mission_id
         );
 
         //back 네비 Panel

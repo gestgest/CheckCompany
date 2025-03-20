@@ -5,7 +5,7 @@ public class MissionPanel : Panel
 {
     [SerializeField] private GameObject missionPrefab;
     [SerializeField] private Transform missionParent;
-    [SerializeField] private EditPanel missionEditPanel;
+    [SerializeField] private EditMissionPanel missionEditPanel;
 
     [SerializeField] private MultiLayoutGroup multiLayoutGroup;
 

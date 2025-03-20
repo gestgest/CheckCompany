@@ -40,13 +40,11 @@ public class MissionElement : MonoBehaviour
         icon.sprite = mission.GetIcon();
 
         multiLayoutGroup.AddOnHeight(TODO_MISSION_HEIGHT); //게이지 크기 추가
+        int i = 0;
         foreach (Todo_Mission todoMission in mission.GetTodoMissions())
         {
-            if (todoMission == null)
-            {
-                Debug.Log("엄");
-            }
-            CreateSmallMissionObject(todoMission);
+            CreateTodoMissionObject(todoMission, i);
+            i++;
         }
         
         gauge.Init(0, mission.GetTodoMissions().Count, WIDTH);
@@ -65,14 +63,14 @@ public class MissionElement : MonoBehaviour
         button.onClick.AddListener(listener);
     }
 
-    private void CreateSmallMissionObject(Todo_Mission todo_mission)
+    private void CreateTodoMissionObject(Todo_Mission todo_mission, int todo_mission_id)
     {
         GameObject todoMissionObject = Instantiate(todoMissionPrefab, parentContent);
         TodoMissionElement todoMissionElement = todoMissionObject.GetComponent<TodoMissionElement>();
         
         
         todo_mission_objects.Add(todoMissionObject);
-        todoMissionElement.SetTodoMission(todo_mission);
+        todoMissionElement.SetTodoMission(todo_mission, mission.ID, todo_mission_id);
         todoMissionElement.SetGague(gauge);
         multiLayoutGroup.AddOnHeight(TODO_MISSION_HEIGHT); //오브젝트 크기 부여
     }

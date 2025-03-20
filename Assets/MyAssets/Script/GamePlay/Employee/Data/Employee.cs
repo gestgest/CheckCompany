@@ -29,7 +29,7 @@ public class Employee
     //private bool [] isClearSmallMission; acievement => Mission의 missions로 대체 
 
     public const int MAX_MISSION_SIZE = 5;
-    public const int MAX_SMALL_MISSION_SIZE = 7; //소미션
+    public const int MAX_TODO_MISSION_SIZE = 7; //소미션
 
     public int ID { get { return id; } set { id = value; } }
     public EmployeeSO _EmployeeSO { get { return employeeSO; } set { employeeSO = value; } }

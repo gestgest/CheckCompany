@@ -218,7 +218,7 @@ public class EmployeeStatusWindow : MonoBehaviour
             Set_smallMission_achievement_UI();
 
             //모두 소미션 오브젝트 비활성화
-            for (int i = 0; i < Employee.MAX_SMALL_MISSION_SIZE; i++)
+            for (int i = 0; i < Employee.MAX_TODO_MISSION_SIZE; i++)
                 smallMission_PoolObjects[i].SetActive(false);
             return;
         }
@@ -232,7 +232,7 @@ public class EmployeeStatusWindow : MonoBehaviour
         clearSmallMissionLock = true;
 
         //소 미션 오브젝트 풀링 => 7
-        for (j = 0; j < small_mission_size && j < Employee.MAX_SMALL_MISSION_SIZE; j++)
+        for (j = 0; j < small_mission_size && j < Employee.MAX_TODO_MISSION_SIZE; j++)
         {
             smallMission_PoolObjects[j].SetActive(true);
 
@@ -243,7 +243,7 @@ public class EmployeeStatusWindow : MonoBehaviour
 
         clearSmallMissionLock = false;
 
-        for (; j < Employee.MAX_SMALL_MISSION_SIZE; j++)
+        for (; j < Employee.MAX_TODO_MISSION_SIZE; j++)
         {
             smallMission_PoolObjects[j].SetActive(false);
         }
@@ -309,7 +309,7 @@ public class EmployeeStatusWindow : MonoBehaviour
         {
             isBan = false;
         }
-        for (int j = 0; j < small_mission_size && j < Employee.MAX_SMALL_MISSION_SIZE; j++)
+        for (int j = 0; j < small_mission_size && j < Employee.MAX_TODO_MISSION_SIZE; j++)
         {
             Toggle t = smallMission_PoolObjects[j].GetComponent<Toggle>();
             if (isBan)
