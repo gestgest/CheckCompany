@@ -133,12 +133,15 @@ public class EditMissionPanel : Panel
             Get_Todo_Missions()
         );
 
+        //서버 보내기
         FireStoreManager.instance.SetFirestoreData(
             "GamePlayUser",
             GameManager.instance.Nickname,
             "missions." + mission_id.ToString(),
-            mission.GetTodoMission_ToJSON()
+            mission.GetMission_ToJSON()
         );
+
+        //값을 미션 적용
 
         //back 네비 Panel
         PanelManager.instance.Back_Nav_Panel();

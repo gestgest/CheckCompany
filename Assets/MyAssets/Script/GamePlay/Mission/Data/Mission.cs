@@ -61,6 +61,11 @@ public class Mission
     {
         return todo_missions;
     }
+
+    public void Set_TodoMission_IsDone(int index, bool isDone)
+    {
+        todo_missions[index].IsDone = isDone;
+    }
     public string GetName()
     {
         return missionName;
@@ -71,7 +76,7 @@ public class Mission
         return level;
     }
 
-    public Dictionary<string, object> GetTodoMission_ToJSON()
+    public Dictionary<string, object> GetMission_ToJSON()
     {
         Dictionary<string, object> result = new Dictionary<string, object>
         {
