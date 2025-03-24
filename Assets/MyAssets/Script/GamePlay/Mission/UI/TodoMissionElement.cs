@@ -20,6 +20,12 @@ public class TodoMissionElement : MonoBehaviour
         this.gauge = gauge;
     }
 
+    private void Start()
+    {
+        ChangeGaugeStatus(true);
+    }
+
+    ///<summary>MissionPanel이나 CreateMissionPanel의 start에서 호출, 설정하는 함수</summary>
     public void SetTodoMission(Todo_Mission todoMission, int mission_id, int todo_mission_index)
     {
         this.title.text = todoMission.Title;
@@ -32,23 +38,33 @@ public class TodoMissionElement : MonoBehaviour
     ///<summary>대충 토글 상태에 따라 폰트 바꾸는 코드 </summary>
     public void UpdateTodoMissionStatus()
     {
-        if(isInit)
+        if (isInit)
         {
             return;
         }
+        ChangeGaugeStatus();
+        MissionToServer();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="isInit">클래스에 있는 isInit와 다르다</param>
+    private void ChangeGaugeStatus(bool isInit = false)
+    {
         if (my_toggle.isOn)
         {
             title.fontStyle = FontStyles.Italic;
             title.color = Color.gray;
             //gage 값 전달
             gauge.AddValue(1);
-            
+
             if (gauge.GetValue() >= gauge.GetMaxValue())
             {
                 //미션 다 했다는 이야기
             }
         }
-        else
+        else if(!isInit)
         {
             title.fontStyle = FontStyles.Normal;
             title.color = Color.black;
@@ -56,11 +72,13 @@ public class TodoMissionElement : MonoBehaviour
             gauge.AddValue(-1);
         }
         //취소선은 <s> 이걸로 하라는데
+    }
 
-        Mission mission = MissionController.instance.GetMission(MissionController.instance.Search_Employee_Index(mission_id));
-        
+    private void MissionToServer()
+    {
+        Mission mission = MissionController.instance.GetMission(MissionController.instance.Search_Mission_Index(mission_id));
+
         mission.Set_TodoMission_IsDone(todo_mission_index, my_toggle.isOn);
-        Debug.Log(my_toggle.isOn);
 
         //json이 아니라 배열 수정이다.
         FireStoreManager.instance.SetFirestoreData(
@@ -69,5 +87,6 @@ public class TodoMissionElement : MonoBehaviour
             "missions." + mission_id + ".todo_missions",
             mission.GetTodoMissions()
         );
+
     }
 }

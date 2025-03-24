@@ -152,6 +152,7 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
+
     enum Reputation
     {
         single = 0, //혼자하는 느낌

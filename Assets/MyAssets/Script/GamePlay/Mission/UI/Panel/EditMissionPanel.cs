@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -141,7 +142,14 @@ public class EditMissionPanel : Panel
             mission.GetMission_ToJSON()
         );
 
-        //값을 미션 적용
+        //값을 미션 적용, 이후 모든 오브젝트 초기화
+        MissionController missionController = MissionController.instance;
+
+        int index = missionController.Search_Mission_Index(mission_id);
+        missionController.SetMission(mission, index);
+
+        //정해진 element를 설정하는 함수 => 리롤함수?
+        missionController.Reroll_MissionElement(index);
 
         //back 네비 Panel
         PanelManager.instance.Back_Nav_Panel();

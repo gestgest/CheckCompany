@@ -26,6 +26,7 @@ public class MissionController : MonoBehaviour
         Destroy(this);
     }
 
+    //나중에 없앨 함수
     public void Init()
     {
         
@@ -36,7 +37,10 @@ public class MissionController : MonoBehaviour
     //서버 가져오는 함수 => 나중에 매개변수에 Dictionary<string, object> todo_missions와 id를 넣을 예정
     public void Init(Dictionary<string, object> data, int mission_count)
     {
-        missions = new List<Mission>();
+        if(missions == null)
+        {
+            missions = new List<Mission>();
+        }
         this.mission_count = mission_count;
         GetTodoMissionsFromJSON(data);
 
@@ -48,7 +52,6 @@ public class MissionController : MonoBehaviour
         //small_missions.Add("기능 추가");
         //예시 미션도 넣을까?
         //Add_TodoMission(new Todo_Mission(0, 2, "유니티", 0, 0, small_missions));
-
     }
     
 
@@ -60,6 +63,12 @@ public class MissionController : MonoBehaviour
     {
         return missions[index];
     }
+    public void SetMission(Mission mission, int index)
+    {
+        missions[index] = mission;
+    }
+
+
 
     public Sprite GetIcon(int index)
     {
@@ -81,14 +90,19 @@ public class MissionController : MonoBehaviour
         return missions.Count;
     }
        
+    public MissionPanel GetMissionPanel()
+    {
+        return mission_panel;
+    }
+
+
     public void Add_TodoMission(Mission todo_mission)
     {
-        Init(); //나중에 없앨거
         missions.Add(todo_mission);
     }
     public void Remove_TodoMission(int id)
     {
-        int index = Search_Employee_Index(id);
+        int index = Search_Mission_Index(id);
         if (index != -1)
         {
             missions.RemoveAt(index);
@@ -96,10 +110,16 @@ public class MissionController : MonoBehaviour
         }
     }
 
+    public void Reroll_MissionElement(int index)
+    {
+        mission_panel.SetMissionObject(missions[index], index);
+    }
 
+
+    /// <summary>미션 서버(json)에서 가져오는 함수</summary>
+    /// <param name="data"></param>
     private void GetTodoMissionsFromJSON(Dictionary<string, object> data)
     {
-
         //id와 id 리스트들
         foreach (KeyValuePair<string, object> todo_mission in data)
         {
@@ -121,9 +141,9 @@ public class MissionController : MonoBehaviour
     
     #region BINARY_SEARCH
     //binary_search
-    public int Search_Employee_Index(int id)
+    public int Search_Mission_Index(int id)
     {
-        int index = Binary_Search_Employee_Index(0, missions.Count - 1, id);
+        int index = Binary_Search_Mission_Index(0, missions.Count - 1, id);
         if (missions[index].ID == id)
         {
             return index;
@@ -131,7 +151,7 @@ public class MissionController : MonoBehaviour
         return -1;
     }
 
-    private int Binary_Search_Employee_Index(int start, int end, int id)
+    private int Binary_Search_Mission_Index(int start, int end, int id)
     {
         if (start > end)
         {
@@ -140,11 +160,11 @@ public class MissionController : MonoBehaviour
         int mid = (start + end) / 2;
         if (id > missions[mid].ID)
         {
-            return Binary_Search_Employee_Index(mid + 1, end, id);
+            return Binary_Search_Mission_Index(mid + 1, end, id);
         }
         else
         {
-            return Binary_Search_Employee_Index(start, mid - 1, id);
+            return Binary_Search_Mission_Index(start, mid - 1, id);
         }
     }
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 public class MissionPanel : Panel
@@ -9,7 +10,7 @@ public class MissionPanel : Panel
 
     [SerializeField] private MultiLayoutGroup multiLayoutGroup;
 
-    List<GameObject> missionObjects = new List<GameObject>();
+    List<MissionElement> missionElementObjects = new List<MissionElement>();
     private List<int> editPanelIndex;
 
     private static int MISSION_HEIGHT = 100;
@@ -32,8 +33,8 @@ public class MissionPanel : Panel
         //Todo_Mission 만들기
         GameObject missionObject = Instantiate(missionPrefab, missionParent);
         
-        missionObjects.Add(missionObject);
         MissionElement missionElementUI = missionObject.GetComponent<MissionElement>();
+        missionElementObjects.Add(missionElementUI);
         missionElementUI.SetMission(todoMission);
 
         multiLayoutGroup.AddHeight(MISSION_HEIGHT);
@@ -46,13 +47,17 @@ public class MissionPanel : Panel
 
     public void RemoveMissionObject(int index)
     {
-        Destroy(missionObjects[index]);
-        missionObjects.RemoveAt(index);
+        Destroy(missionElementObjects[index]);
+        missionElementObjects.RemoveAt(index);
     }
 
+    /// <summary>
+    /// 정해진 미션을 editPanel로 옮기는 함수
+    /// </summary>
+    /// <param name="id"></param>
     private void EditPanelOn(int id)
     {
-        int index = MissionController.instance.Search_Employee_Index(id);
+        int index = MissionController.instance.Search_Mission_Index(id);
 
         GamePanelManager.instance.SwitchingSubPanel(true, editPanelIndex);
 
@@ -60,4 +65,39 @@ public class MissionPanel : Panel
         missionEditPanel.SetMission(MissionController.instance.GetMission(index));
         //missionEditPanel.gameObject.SetActive(true);
     }
+
+    public void SetMissionObject(Mission mission, int index)
+    {
+        missionElementObjects[index].SetMission(mission, false);
+    }
+
+
+    #region BINARY_SEARCH
+    public int Search_MissionObject_Index(int id)
+    {
+        int index = Binary_Search_MissionObject_Index(0, missionElementObjects.Count - 1, id);
+        if (missionElementObjects[index].GetMission().ID == id)
+        {
+            return index;
+        }
+        return -1;
+    }
+
+    private int Binary_Search_MissionObject_Index(int start, int end, int id)
+    {
+        if (start > end)
+        {
+            return start;
+        }
+        int mid = (start + end) / 2;
+        if (id > missionElementObjects[mid].GetMission().ID)
+        {
+            return Binary_Search_MissionObject_Index(mid + 1, end, id);
+        }
+        else
+        {
+            return Binary_Search_MissionObject_Index(start, mid - 1, id);
+        }
+    }
+    #endregion
 }

@@ -16,6 +16,8 @@ public class Gauge : MonoBehaviour
         SetValue(value);
     }
 
+
+    #region PROPERTY
     public void SetValue(int value)
     {
         this.value = value;
@@ -37,9 +39,6 @@ public class Gauge : MonoBehaviour
     {
         SetValue(this.value + value);
     }
-
-    #region PROPERTY
-
     public int GetValue()
     {
         return value;

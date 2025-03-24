@@ -34,7 +34,7 @@ public class UMUMUM
     {
         //id 탐색
         int id = Convert.ToInt32(mission["id"]);
-        int index = MissionController.instance.Search_Employee_Index(id);
+        int index = MissionController.instance.Search_Mission_Index(id);
         SetTodo_Mission(MissionController.instance.GetMission(index));
         
         List<object> achievementList_tmp = (List<object>)mission["achievementList"];

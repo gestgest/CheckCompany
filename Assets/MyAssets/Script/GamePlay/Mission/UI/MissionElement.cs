@@ -10,7 +10,7 @@ public class MissionElement : MonoBehaviour
 {
     private Mission mission;
 
-    [SerializeField] private TextMeshProUGUI title; 
+    [SerializeField] private TextMeshProUGUI title;
     [SerializeField] private Image icon;
 
     [SerializeField] private GameObject down_content; //
@@ -22,15 +22,15 @@ public class MissionElement : MonoBehaviour
     [SerializeField] private Gauge gauge;
 
     private List<GameObject> todo_mission_objects = new List<GameObject>();
-    
+
     private MultiLayoutGroup multiLayoutGroup;
     private bool isShowContent = false;
 
     private static int WIDTH = 800;
     private static int TODO_MISSION_HEIGHT = 100;
-    
-    //<summary> 미션 지정 : init</summary>
-    public void SetMission(Mission mission)
+
+    //<summary> 미션 지정 : init, 미션 edit</summary>
+    public void SetMission(Mission mission, bool isInit = true)
     {
         multiLayoutGroup = GetComponent<MultiLayoutGroup>();
         multiLayoutGroup.Init();
@@ -40,22 +40,36 @@ public class MissionElement : MonoBehaviour
         icon.sprite = mission.GetIcon();
 
         multiLayoutGroup.AddOnHeight(TODO_MISSION_HEIGHT); //게이지 크기 추가
-        int i = 0;
+
+        int i;
+        
+        //초기가 아닌 경우 미션 오브젝트들 초기화
+        if(!isInit)
+        {
+            for (i = 0; i < todo_mission_objects.Count; i++)
+            {
+                Destroy(todo_mission_objects[i]);
+            }
+            todo_mission_objects.Clear();
+        }
+
+        i = 0;
         foreach (Todo_Mission todoMission in mission.GetTodoMissions())
         {
             CreateTodoMissionObject(todoMission, i);
             i++;
         }
-        
+
         gauge.Init(0, mission.GetTodoMissions().Count, WIDTH);
 
         isShowContent = false;
         down_content.SetActive(isShowContent);
         Dropbox.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
-        
+
         //SwitchingDownContent(); //down content 비활성화
         //버튼 이벤트는 따로 놨음
     }
+
 
     public void AddEventListener(UnityAction listener)
     {
@@ -67,8 +81,8 @@ public class MissionElement : MonoBehaviour
     {
         GameObject todoMissionObject = Instantiate(todoMissionPrefab, parentContent);
         TodoMissionElement todoMissionElement = todoMissionObject.GetComponent<TodoMissionElement>();
-        
-        
+
+
         todo_mission_objects.Add(todoMissionObject);
         todoMissionElement.SetTodoMission(todo_mission, mission.ID, todo_mission_id);
         todoMissionElement.SetGague(gauge);
@@ -89,7 +103,13 @@ public class MissionElement : MonoBehaviour
         {
             Dropbox.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
         }
-        
+
         multiLayoutGroup.SwitchingScreen(isShowContent);
     }
+
+    public Mission GetMission()
+    {
+        return mission;
+    }
+
 }

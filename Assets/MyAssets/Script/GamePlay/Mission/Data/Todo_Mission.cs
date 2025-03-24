@@ -24,6 +24,8 @@ public class Todo_Mission
     {
         this.Title = title;
         this.IsDone = isDone;
+
+        //토글 isOn
     }
 
     public void Set_Todo_Mission(object data)
