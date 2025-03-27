@@ -10,8 +10,8 @@ public class MissionPanel : Panel
 
     [SerializeField] private MultiLayoutGroup multiLayoutGroup;
 
-    List<MissionElement> missionElementObjects = new List<MissionElement>();
-    private List<int> editPanelIndex;
+    protected List<MissionElement> missionElementObjects = new List<MissionElement>();
+    protected List<int> editPanelIndex; 
 
     private static int MISSION_HEIGHT = 100;
     private static int MISSION_SPACE_HEIGHT = 50;
@@ -21,11 +21,10 @@ public class MissionPanel : Panel
         base.Start();
         foreach (Mission mission in MissionController.instance.GetMissions())
         {
-            CreateTodoMissionObject(mission);
+            if (!mission.GetIsDone())
+                CreateTodoMissionObject(mission);
         }
-        editPanelIndex = new List<int>();
-        editPanelIndex.Add(1);
-        editPanelIndex.Add(1);
+        CreateEditPanelIndex();
     }
 
     public void CreateTodoMissionObject(Mission todoMission)
@@ -43,6 +42,16 @@ public class MissionPanel : Panel
         //Debug.Log(todoMission.ID);
         //editPanel 들어가는 함수를 missionElementUI에 투입
         missionElementUI.AddEventListener(() => { EditPanelOn(todoMission.ID); });
+    }
+
+    /// <summary>
+    /// EditPanel index 리스트 추가하는 함수
+    /// </summary>
+    protected void CreateEditPanelIndex()
+    {
+        editPanelIndex = new List<int>();
+        editPanelIndex.Add(1);
+        editPanelIndex.Add(1);
     }
 
     public void RemoveMissionObject(int index)

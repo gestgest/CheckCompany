@@ -62,6 +62,18 @@ public class Mission
         return todo_missions;
     }
 
+    public bool GetIsDone()
+    {
+        for (int i = 0; i < todo_missions.Count; i++)
+        {
+            if (!todo_missions[i].IsDone)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
     public void Set_TodoMission_IsDone(int index, bool isDone)
     {
         todo_missions[index].IsDone = isDone;
