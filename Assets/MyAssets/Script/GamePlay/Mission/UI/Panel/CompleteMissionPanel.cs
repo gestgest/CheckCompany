@@ -11,7 +11,12 @@ public class CompleteMissionPanel : MissionPanel
         foreach (Mission mission in MissionController.instance.GetMissions())
         {
             if (mission.GetIsDone())
-                CreateTodoMissionObject(mission);
+                CreateMissionElementObject(mission);
+        }
+        
+        for (int i = GetMissionCount(); i < MISSION_MAX_SIZE; i++)
+        {
+            missionElementPoolObjects[i].gameObject.SetActive(false);
         }
 
         CreateEditPanelIndex();
@@ -19,7 +24,7 @@ public class CompleteMissionPanel : MissionPanel
 
     void DeleteMission()
     {
-                
+        
     }
     
     

@@ -5,64 +5,96 @@ using UnityEngine;
 public class MissionPanel : Panel
 {
     [SerializeField] private GameObject missionPrefab;
-    [SerializeField] private Transform missionParent;
     [SerializeField] private EditMissionPanel missionEditPanel;
 
     [SerializeField] private MultiLayoutGroup multiLayoutGroup;
 
-    protected List<MissionElement> missionElementObjects = new List<MissionElement>();
+    //pool링 예정
+    [SerializeField] protected MissionElement [] missionElementPoolObjects = new MissionElement[MISSION_MAX_SIZE];
+    private int mission_count = 0; //현재 미션 카운트
     protected List<int> editPanelIndex; 
 
-    private static int MISSION_HEIGHT = 100;
-    private static int MISSION_SPACE_HEIGHT = 50;
+    protected const int MISSION_MAX_SIZE = 20;
+    private const int MISSION_HEIGHT = 100;
+    private const int MISSION_SPACE_HEIGHT = 50;
 
     protected override void Start()
     {
         base.Start();
+        // List<Mission> missions = MissionController.instance.GetMissions();
+        // for (i = 0; i < missions.Count; i++)
+        // {
+        //     if (!missions[i].GetIsDone())
+        //         CreateMissionElementObject(missions[i]);
+        // }
+        // for (; i < MISSION_MAX_SIZE; i++)
+        // {
+        //     missionElementPoolObjects[i].gameObject.SetActive(false);
+        // }
+
         foreach (Mission mission in MissionController.instance.GetMissions())
         {
             if (!mission.GetIsDone())
-                CreateTodoMissionObject(mission);
+                CreateMissionElementObject(mission);
+        }
+        
+        for (int i = mission_count; i < MISSION_MAX_SIZE; i++)
+        {
+            missionElementPoolObjects[i].gameObject.SetActive(false);
         }
         CreateEditPanelIndex();
     }
 
-    public void CreateTodoMissionObject(Mission todoMission)
-    {
-        //Todo_Mission 만들기
-        GameObject missionObject = Instantiate(missionPrefab, missionParent);
-        
-        MissionElement missionElementUI = missionObject.GetComponent<MissionElement>();
-        missionElementObjects.Add(missionElementUI);
-        missionElementUI.SetMission(todoMission);
-
-        multiLayoutGroup.AddHeight(MISSION_HEIGHT);
-        multiLayoutGroup.AddHeight(MISSION_SPACE_HEIGHT);
-
-        //Debug.Log(todoMission.ID);
-        //editPanel 들어가는 함수를 missionElementUI에 투입
-        missionElementUI.AddEventListener(() => { EditPanelOn(todoMission.ID); });
-    }
-
-    /// <summary>
-    /// EditPanel index 리스트 추가하는 함수
-    /// </summary>
+    /// <summary> EditPanel index 리스트 추가하는 함수 </summary>
     protected void CreateEditPanelIndex()
     {
         editPanelIndex = new List<int>();
         editPanelIndex.Add(1);
         editPanelIndex.Add(1);
     }
-
-    public void RemoveMissionObject(int index)
+    
+    public void CreateMissionElementObject(Mission mission)
     {
-        Destroy(missionElementObjects[index]);
-        missionElementObjects.RemoveAt(index);
+        //Todo_Mission 만들기
+        //GameObject missionObject = Instantiate(missionPrefab, missionParent);
+        
+        missionElementPoolObjects[mission_count].gameObject.SetActive(true);
+        MissionElement missionElementUI = missionElementPoolObjects[mission_count];
+        missionElementUI.SetMission(mission); //미션 지정
+
+        multiLayoutGroup.AddHeight(MISSION_HEIGHT);
+        multiLayoutGroup.AddHeight(MISSION_SPACE_HEIGHT);
+
+        //Debug.Log(todoMission.ID);
+        //editPanel 들어가는 함수를 missionElementUI에 투입
+        missionElementUI.AddEventListener(() => { EditPanelOn(mission.ID); });
+        mission_count++;
     }
 
-    /// <summary>
-    /// 정해진 미션을 editPanel로 옮기는 함수
-    /// </summary>
+    public void AddMissionElementObject(Mission mission)
+    {
+        CreateMissionElementObject(mission);
+        SelectionMissionObjectSort(); //정렬
+    }
+    
+    /// <summary> 미션 오브젝트 제거하는 함수 </summary>
+    /// <param name="index">인덱스</param>
+    public void RemoveMissionObject(int index)
+    {
+        //한 칸씩 땡기기
+        mission_count--;
+        for (int i = index; i < mission_count; i++)
+        {
+            missionElementPoolObjects[i] = missionElementPoolObjects[i + 1];
+        }
+        missionElementPoolObjects[mission_count].gameObject.SetActive(false); 
+        
+        //GamePanelManager.instance.SwitchingPanelFromInt(1); //missionPanel로 전환
+    }
+
+    
+    
+    /// <summary> 정해진 미션을 editPanel로 옮기는 함수 </summary>
     /// <param name="id"></param>
     private void EditPanelOn(int id)
     {
@@ -77,15 +109,19 @@ public class MissionPanel : Panel
 
     public void SetMissionObject(Mission mission, int index)
     {
-        missionElementObjects[index].SetMission(mission, false);
+        missionElementPoolObjects[index].SetMission(mission, false);
     }
 
+    public int GetMissionCount()
+    {
+        return mission_count;
+    }
 
     #region BINARY_SEARCH
     public int Search_MissionObject_Index(int id)
     {
-        int index = Binary_Search_MissionObject_Index(0, missionElementObjects.Count - 1, id);
-        if (missionElementObjects[index].GetMission().ID == id)
+        int index = Binary_Search_MissionObject_Index(0, missionElementPoolObjects.Length - 1, id);
+        if (missionElementPoolObjects[index].GetMission().ID == id)
         {
             return index;
         }
@@ -99,7 +135,7 @@ public class MissionPanel : Panel
             return start;
         }
         int mid = (start + end) / 2;
-        if (id > missionElementObjects[mid].GetMission().ID)
+        if (id > missionElementPoolObjects[mid].GetMission().ID)
         {
             return Binary_Search_MissionObject_Index(mid + 1, end, id);
         }
@@ -109,4 +145,43 @@ public class MissionPanel : Panel
         }
     }
     #endregion
+    
+    //미션 오브젝트 정렬하는 함수
+    
+    private void SelectionMissionObjectSort()
+    {
+        //O(n^2) => 나중에 다른 정렬로 바꾸지 않을까
+        for(int i = 0; i < mission_count; i++)
+        {
+            for (int j = i + 1; j < mission_count; j++)
+            {
+                if (missionElementPoolObjects[i].GetMission().ID >
+                    missionElementPoolObjects[j].GetMission().ID)
+                {
+                    SwitchMissionElementObject(i, j);
+
+                    // Transform a = missionElementPoolObjects[i].transform;
+                    // int a_index = a.GetSiblingIndex();
+                    // Transform b = missionElementPoolObjects[j].transform;
+                    // int b_index = b.GetSiblingIndex();
+                    //
+                    // //Debug.Log("a : " +a_index);
+                    // //Debug.Log("b : " +b_index);
+                    // b.SetSiblingIndex(a_index);
+                    // a.SetSiblingIndex(b_index);
+                    //
+                    // GameObject tmp_object = applicant_objects[i];
+                    // applicant_objects[i] = applicant_objects[j];
+                    // applicant_objects[j] = tmp_object;
+                }
+            }
+        }
+    }
+    
+    public void SwitchMissionElementObject(int i, int j)
+    {
+        MissionElement tmp = missionElementPoolObjects[i];
+        missionElementPoolObjects[i] = missionElementPoolObjects[j];
+        missionElementPoolObjects[j] = tmp;
+    }
 }

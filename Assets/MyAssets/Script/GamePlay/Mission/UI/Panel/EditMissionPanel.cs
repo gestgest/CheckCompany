@@ -156,15 +156,15 @@ public class EditMissionPanel : Panel
     }
 
     //최종적으로 서버에 있는 미션 삭제
-    public void DeleteMission()
+    public void RemoveMission()
     {
-        MissionController.instance.Remove_TodoMission(mission_id);
+        MissionController.instance.RemoveMission(mission_id);
         FireStoreManager.instance.DeleteFirestoreDataKey(
             "GamePlayUser",
             GameManager.instance.Nickname,
             "missions." + mission_id
         );
 
-        //back 네비 Panel
+        PanelManager.instance.Back_Nav_Panel();
     }
 }

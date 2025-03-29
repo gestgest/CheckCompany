@@ -10,6 +10,7 @@ public class MissionController : MonoBehaviour
     //이미지 리스트?
     [SerializeField] private Sprite [] icons;
     [SerializeField] private MissionPanel mission_panel;
+    [SerializeField] private CompleteMissionPanel complete_mission_panel;
     
     
     private List<Mission> missions;
@@ -95,12 +96,17 @@ public class MissionController : MonoBehaviour
         return mission_panel;
     }
 
-
-    public void Add_TodoMission(Mission todo_mission)
+    public CompleteMissionPanel GetCompleteMissionPanel()
     {
-        missions.Add(todo_mission);
+        return complete_mission_panel;
     }
-    public void Remove_TodoMission(int id)
+
+
+    public void AddMission(Mission mission)
+    {
+        missions.Add(mission);
+    }
+    public void RemoveMission(int id)
     {
         int index = Search_Mission_Index(id);
         if (index != -1)
@@ -108,6 +114,7 @@ public class MissionController : MonoBehaviour
             missions.RemoveAt(index);
             mission_panel.RemoveMissionObject(index);
         }
+        PanelManager.instance.Back_Nav_Panel();
     }
 
     public void Reroll_MissionElement(int index)
@@ -129,7 +136,7 @@ public class MissionController : MonoBehaviour
 
             todo_Mission.ID = Convert.ToInt32(todo_mission.Key);
             todo_Mission.SetMissionFromJSON(tmp);
-            Add_TodoMission(todo_Mission);
+            AddMission(todo_Mission);
 
             //여기서 Todo_Mission 생성하고 SetFromJSON 각각
             //EmployeeSO employeeSO = RecruitmentController.instance.GetEmployeeSO(Convert.ToInt32(tmp["employeeType"]));

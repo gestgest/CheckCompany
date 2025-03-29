@@ -14,7 +14,7 @@ public class MissionElement : MonoBehaviour
     [SerializeField] private Image icon;
 
     [SerializeField] private GameObject down_content; //
-    //List SmallMission 리스트
+    //List TodoMission 리스트
 
     [SerializeField] private GameObject todoMissionPrefab;
     [SerializeField] private GameObject Dropbox;
@@ -44,14 +44,11 @@ public class MissionElement : MonoBehaviour
         int i;
         
         //초기가 아닌 경우 미션 오브젝트들 초기화
-        if(!isInit)
+        for (i = 0; i < todo_mission_objects.Count; i++)
         {
-            for (i = 0; i < todo_mission_objects.Count; i++)
-            {
-                Destroy(todo_mission_objects[i]);
-            }
-            todo_mission_objects.Clear();
+            Destroy(todo_mission_objects[i]);
         }
+        todo_mission_objects.Clear();
 
         i = 0;
         foreach (Todo_Mission todoMission in mission.GetTodoMissions())

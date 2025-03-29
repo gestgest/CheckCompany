@@ -78,7 +78,6 @@ public struct Recruitment
     #region UI
     public void SwitchApplicant(int i, int j)
     {
-
         Employee tmp = applicants[i];
         applicants[i] = applicants[j];
         applicants[j] = tmp;

@@ -8,6 +8,7 @@ public class TodoMissionElement : MonoBehaviour
     [SerializeField] private TextMeshProUGUI title;
     [SerializeField] private Toggle my_toggle;
 
+    private MissionController mc;
     private int mission_id;
     private int todo_mission_index;
 
@@ -22,7 +23,8 @@ public class TodoMissionElement : MonoBehaviour
 
     private void Start()
     {
-        ChangeGaugeStatus(true);
+        mc = MissionController.instance;
+        ChangeGaugeStatus(false);
     }
 
     ///<summary>MissionPanel이나 CreateMissionPanel의 start에서 호출, 설정하는 함수</summary>
@@ -35,7 +37,7 @@ public class TodoMissionElement : MonoBehaviour
         isInit = false;
     }
 
-    ///<summary>대충 토글 상태에 따라 폰트 바꾸는 코드 </summary>
+    ///<summary>대충 토글 상태에 따라 폰트 바꾸는 코드 => 토글 </summary>
     public void UpdateTodoMissionStatus()
     {
         if (isInit)
@@ -49,8 +51,8 @@ public class TodoMissionElement : MonoBehaviour
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="isInit">클래스에 있는 isInit와 다르다</param>
-    private void ChangeGaugeStatus(bool isInit = false)
+    /// <param name="isGage">게이지 값을 변경 가능한지</param>
+    private void ChangeGaugeStatus(bool isGage = true)
     {
         if (my_toggle.isOn)
         {
@@ -59,15 +61,37 @@ public class TodoMissionElement : MonoBehaviour
             //gage 값 전달
             gauge.AddValue(1);
 
-            if (gauge.GetValue() >= gauge.GetMaxValue())
+            //게이지가 다 채워졌으면 => Complete
+            if (gauge.GetValue() >= gauge.GetMaxValue() && isGage)
             {
-                //미션 다 했다는 이야기
+                int mission_index = mc.Search_Mission_Index(mission_id);
+                Mission mission = mc.GetMission(mission_index);
+                
+                mission.Set_TodoMission_IsDone(todo_mission_index, my_toggle.isOn);
+
+                //현재 미션은 제거, 완료된 미션에 온
+                mc.GetMissionPanel().RemoveMissionObject(mission_index);
+                mc.GetCompleteMissionPanel().AddMissionElementObject(mc.GetMission(mission_index));
             }
         }
-        else if(!isInit)
+        else if(isGage)
         {
             title.fontStyle = FontStyles.Normal;
             title.color = Color.black;
+
+            //완료된 것을 미 완성으로 수정
+            if (gauge.GetValue() >= gauge.GetMaxValue())
+            {
+                int mission_index = mc.Search_Mission_Index(mission_id);
+                Mission mission = mc.GetMission(mission_index);
+                
+                mission.Set_TodoMission_IsDone(todo_mission_index, my_toggle.isOn);
+
+                //현재 미션은 제거, 완료된 미션에 온
+                mc.GetCompleteMissionPanel().RemoveMissionObject(mission_index);
+                mc.GetMissionPanel().AddMissionElementObject(mc.GetMission(mission_index));
+            }
+            
             //gage 값 전달
             gauge.AddValue(-1);
         }
@@ -76,9 +100,8 @@ public class TodoMissionElement : MonoBehaviour
 
     private void MissionToServer()
     {
-        Mission mission = MissionController.instance.GetMission(MissionController.instance.Search_Mission_Index(mission_id));
-
-        mission.Set_TodoMission_IsDone(todo_mission_index, my_toggle.isOn);
+        Mission mission = mc.GetMission(MissionController.instance.Search_Mission_Index(mission_id));
+        //mission.Set_TodoMission_IsDone(todo_mission_index, my_toggle.isOn);
 
         //json이 아니라 배열 수정이다.
         FireStoreManager.instance.SetFirestoreData(
@@ -87,6 +110,5 @@ public class TodoMissionElement : MonoBehaviour
             "missions." + mission_id + ".todo_missions",
             mission.GetTodoMissions()
         );
-
     }
 }

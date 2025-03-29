@@ -140,11 +140,11 @@ public class CreateMissionPanel : Panel
         );
         
 
-        MissionController.instance.Add_TodoMission(todo_mission);
+        MissionController.instance.AddMission(todo_mission);
         Mission_Count_ToServer(MissionController.instance.GetMissionCount());
         TodoMission_ToServer(todo_mission.GetMission_ToJSON(), todo_mission.ID);
 
-        missionPanel.CreateTodoMissionObject(todo_mission); //
+        missionPanel.CreateMissionElementObject(todo_mission); //
         //missionPanel.OnPanel(); => 이거 자체가 서브 미션 Panel이라 전환이 안됨
 
         //초기화

@@ -36,25 +36,6 @@ public class MultiLayoutGroup : MonoBehaviour
 
         if(!_parentMultiLayout.GetIsInit())
             _parentMultiLayout.Init();
-
-
-        //if (size == null)
-        //{
-        //    Debug.Log(gameObject.name + " RectTransform 없다네");
-        //}
-        //else
-        //{
-        //    Debug.Log(gameObject.name + " has RectTransform");
-        //}
-
-        //if (layoutGroup == null)
-        //{
-        //    Debug.Log(gameObject.name + " VerticalLayoutGroup 없다네");
-        //}
-        //else
-        //{
-        //    Debug.Log(gameObject.name + " has VerticalLayoutGroup");
-        //}
     }
 
 
