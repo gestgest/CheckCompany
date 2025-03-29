@@ -50,20 +50,19 @@ public class MultiLayoutGroup : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.W))
-        {
-            Debug.Log(gameObject.name + " : " + onHeight);
-        }
-
+        // if(Input.GetKeyDown(KeyCode.W))
+        // {
+        //     Debug.Log(gameObject.name + " : " + onHeight);
+        // }
     }
 
-    public void SwitchingScreen(bool isOn)
+    public void SwitchingScreen(bool isOn, bool isValueChange = true)
     {
         if (isOn)
         {
             AddHeight(+onHeight);
         }
-        else
+        else if(isValueChange)
         {
             AddHeight(-onHeight);
         }
@@ -94,7 +93,7 @@ public class MultiLayoutGroup : MonoBehaviour
     
     public void AddHeight(float height)
     {
-        //Debug.Log(gameObject.name + " : " + height);
+        Debug.Log(gameObject.name + " : " + height);
         SetHeight(size.sizeDelta.y + height);
         
         if (_parentMultiLayout != null)

@@ -18,10 +18,6 @@ public class Panel : MonoBehaviour
     int index = -1;
     [SerializeField] protected bool hasMini;
 
-    protected virtual void OnEnable()
-    {
-    }
-
     protected virtual void Start()
     {
         CloseAllPanels();

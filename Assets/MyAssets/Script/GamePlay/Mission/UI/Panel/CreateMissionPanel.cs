@@ -28,9 +28,8 @@ public class CreateMissionPanel : Panel
     private static int TODO_MISSION_HEIGHT = 30;
 
 
-    protected override void OnEnable()
+    protected void OnEnable()
     {
-        base.OnEnable();
         if(!isFirst)
             Init();
     }

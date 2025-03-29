@@ -18,9 +18,19 @@ public class MissionPanel : Panel
     private const int MISSION_HEIGHT = 100;
     private const int MISSION_SPACE_HEIGHT = 50;
 
-    protected override void Start()
+    
+    protected virtual void OnEnable()
     {
-        base.Start();
+        //Layout값 초기화
+        if(mission_count != 0)
+            multiLayoutGroup.AddHeight(-multiLayoutGroup.GetHeight());
+
+        mission_count = 0;
+        for (int i = 0; i < MISSION_MAX_SIZE; i++)
+        {
+            missionElementPoolObjects[i].gameObject.SetActive(false);
+        }
+        //base.Start();
         // List<Mission> missions = MissionController.instance.GetMissions();
         // for (i = 0; i < missions.Count; i++)
         // {
@@ -31,6 +41,7 @@ public class MissionPanel : Panel
         // {
         //     missionElementPoolObjects[i].gameObject.SetActive(false);
         // }
+        
 
         foreach (Mission mission in MissionController.instance.GetMissions())
         {
@@ -89,6 +100,9 @@ public class MissionPanel : Panel
         }
         missionElementPoolObjects[mission_count].gameObject.SetActive(false); 
         
+        multiLayoutGroup.AddHeight(-MISSION_HEIGHT);
+        multiLayoutGroup.AddHeight(-MISSION_SPACE_HEIGHT);
+        
         //GamePanelManager.instance.SwitchingPanelFromInt(1); //missionPanel로 전환
     }
 
@@ -115,6 +129,10 @@ public class MissionPanel : Panel
     public int GetMissionCount()
     {
         return mission_count;
+    }
+    public void SetMissionCount(int value)
+    {
+        mission_count = value;
     }
 
     #region BINARY_SEARCH

@@ -5,8 +5,14 @@ using UnityEngine;
 public class CompleteMissionPanel : MissionPanel
 {
     //start => 
-    protected override void Start()
+    protected override void OnEnable()
     {
+        SetMissionCount(0);
+        for (int i = 0; i < MISSION_MAX_SIZE; i++)
+        {
+            missionElementPoolObjects[i].gameObject.SetActive(false);
+        }
+        
         //base.Start();
         foreach (Mission mission in MissionController.instance.GetMissions())
         {
