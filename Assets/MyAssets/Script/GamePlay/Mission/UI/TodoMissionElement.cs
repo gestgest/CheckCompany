@@ -72,6 +72,10 @@ public class TodoMissionElement : MonoBehaviour
                 //현재 미션은 제거, 완료된 미션에 온
                 mc.GetMissionPanel().RemoveMissionObject(mission_index);
                 mc.GetCompleteMissionPanel().AddMissionElementObject(mc.GetMission(mission_index));
+
+                //미션 보상 받기 => 디버깅
+                GameManager.instance.SetMoney(GameManager.instance.Money + 10000);
+
             }
         }
         else if(isGage)

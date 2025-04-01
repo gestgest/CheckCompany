@@ -88,6 +88,7 @@ public class Mission
         return level;
     }
 
+    //서버 가져오기
     public Dictionary<string, object> GetMission_ToJSON()
     {
         Dictionary<string, object> result = new Dictionary<string, object>
