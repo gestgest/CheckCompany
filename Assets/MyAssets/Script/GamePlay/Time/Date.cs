@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 
+//그냥 자료형으로 하자 그냥
 public class Date
 {
     int year;
@@ -23,14 +24,16 @@ public class Date
         minute = 1;
     }
     #region PROPERTY
-    public int Year 
-    { 
+    public virtual int Year
+    {
         set
-    { 
-        year = value;
-    } get { return year; } }
+        {
+            year = value;
+        }
+        get { return year; }
+    }
 
-    public int Month
+    public virtual int Month //1~12
     {
         set
         {
@@ -40,16 +43,6 @@ public class Date
                 Year++;
                 Month %= 12;
             }
-
-            //월급 차감
-            if (EmployeeController.instance.PayEmployees())
-            {
-                Debug.Log("월급 차감");
-            }
-            else
-            {
-                Debug.Log("월급이 없습니다");
-            }
         }
         get
         {
@@ -57,52 +50,55 @@ public class Date
         }
     }
 
-    public int Day
+    public virtual int Day
     {
         set
         {
+            //10일 => 5일, before = 10일
             int before = day;
-            
+
+            //day = 5일
             day = value;
-            before = day - before;
+            int dis = day - before; //음수면 음수값이 나옴
 
-
+            //매우 큰 day가 들어오면
             while (true)
             {
-                int day_leapYear = addDay_LeapYear();
-                if (day > MONTH_DAY[month - 1] + day_leapYear)
+                int day_leapYear = addDay_LeapYear(Year, Month);
+                if (Day > MONTH_DAY[Month - 1] + day_leapYear)
                 {
-                    Day %= MONTH_DAY[month - 1] + day_leapYear;
+                    Day %= MONTH_DAY[Month - 1] + day_leapYear;
 
                     Month++;
+                }
+                else if(Day < 0) //
+                {
+                    Month--;
+                    day_leapYear = addDay_LeapYear(Year, Month);
+                    Day = MONTH_DAY[Month - 1] + day_leapYear + Day + 1;
                 }
                 else
                 {
                     break;
                 }
-                
             }
-            
-            //임시 디버깅용 회복 함수
-            EmployeeController.instance.AddStamina(70);
-            Debug.Log("체력 회복");
-            AddWeek(before);
+            AddWeek(dis);
         }
         get
         {
-            return day; 
-        } 
-        
+            return day;
+        }
     }
-    public Week _Week { set { week = value; } get { return week; } }
 
-    private void AddWeek(int day)
+    public virtual Week _Week { set { week = value; } get { return week; } }
+
+    public void AddWeek(int day)
     {
-        day = (day + (int)week) % 7;
-        week = (Week)day;
+        day = (day + (int)_Week) % 7;
+        _Week = (Week)day;
     }
 
-    public int Hour
+    public virtual int Hour
     {
         set
         {
@@ -112,8 +108,6 @@ public class Date
                 Day += hour / 24;
                 hour %= 24;
             }
-
-
         }
         get
         {
@@ -121,7 +115,7 @@ public class Date
         }
     }
 
-    public int Minute
+    public virtual int Minute
     {
         set
         {
@@ -130,13 +124,11 @@ public class Date
             {
                 Hour += minute / 60;
                 minute %= 60;
-
             }
-            SetDateToServer(DateToJSON());
         }
         get
         {
-            return minute; 
+            return minute;
         }
     }
 
@@ -144,10 +136,10 @@ public class Date
     {
         //기존 값이랑 값 비교 해야함
 
-        Day = dateTime.Day;
-        Month = dateTime.Month;
-        Year = dateTime.Year;
-        _Week = dateTime.DayOfWeek switch
+        day = dateTime.Day;
+        month = dateTime.Month;
+        year = dateTime.Year;
+        week = dateTime.DayOfWeek switch
         {
             DayOfWeek.Monday => Week.MON,
             DayOfWeek.Tuesday => Week.TUE,
@@ -158,31 +150,32 @@ public class Date
             DayOfWeek.Sunday => Week.SUN,
             _ => week
         };
-        Hour = dateTime.Hour;
-        Minute = dateTime.Minute;
+        hour = dateTime.Hour;
+        minute = dateTime.Minute;
     }
+
     #endregion
 
-    private static int[] MONTH_DAY =
+    public static int[] MONTH_DAY =
     {
         31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
     };
 
-    private int addDay_LeapYear()
+    public static int addDay_LeapYear(int year, int month)
     {
-        if (Month != 2)
+        if (month != 2)
         {
             return 0;
         }
-        if (Year % 400 == 0)
+        if (year % 400 == 0)
         {
             return 1;
         }
-        if (Year % 100 == 0)
+        if (year % 100 == 0)
         {
             return 0;
         }
-        if (Year % 4 == 0)
+        if (year % 4 == 0)
         {
             return 1;
         }
@@ -194,99 +187,10 @@ public class Date
         return Year + "년 " 
                     + Month + "월 " 
                     + Day + "일 " 
-                    + _Week + "요일 " 
+                    + week + "요일 " 
                     + Hour + "시 " 
                     + Minute + "분";
     }
-
-    #region SERVER
-
-    //너무 데이터 낭비 아닐까 => year가 바뀌면 year만 수정하는 느낌으로
-    //근데 또 그러기엔 여러번 서버에 전송하는 느낌
-    public Dictionary<string, object> DateToJSON()
-    {
-        Dictionary<string, object> result = new Dictionary<string, object>()
-        {
-            { "year", year },
-            { "month", month },
-            { "day", day },
-            { "week", (int)week },
-            { "hour", hour },
-            { "minute", minute }
-        };
-        
-        return result;
-    }
-    public Dictionary<string, object>  YearToJSON()
-    {
-        Dictionary<string, object> result = new Dictionary<string, object>()
-        {
-            { "year", year },
-        };
-        
-        return result;
-    }
-
-    public Dictionary<string, object>  MonthToJSON()
-    {
-        Dictionary<string, object> result = new Dictionary<string, object>()
-        {
-            { "month", month },
-        };
-        
-        return result;
-    }
-
-    public Dictionary<string, object>  DayToJSON()
-    {
-        Dictionary<string, object> result = new Dictionary<string, object>()
-        {
-            { "day", day },
-            { "week", (int)week },
-        };
-        
-        return result;
-    }
-
-    public Dictionary<string, object> HourToJSON()
-    {
-        Dictionary<string, object> result = new Dictionary<string, object>()
-        {
-            { "hour", hour },
-        };
-        
-        return result;
-    }
-
-    public Dictionary<string, object>  MinuteToJSON()
-    {
-        Dictionary<string, object> result = new Dictionary<string, object>()
-        {
-            { "minute", minute }
-        };
-        
-        return result;
-    }
-
-    public void SetDateToServer(Dictionary<string, object> data)
-    {
-        FireStoreManager.instance.SetFirestoreData("GamePlayUser",
-            GameManager.instance.Nickname,
-            "date",
-            data
-        );
-    }
-    public void GetDateFromJSON(Dictionary<string, object> data)
-    {
-        year = Convert.ToInt32(data["year"]);
-        month = Convert.ToInt32(data["month"]);
-        day = Convert.ToInt32(data["day"]);
-        week = (Week)Convert.ToInt32(data["week"]);
-        hour = Convert.ToInt32(data["hour"]);
-        minute = Convert.ToInt32(data["minute"]);
-    }
-
-    #endregion
 }
 
 public enum Week
