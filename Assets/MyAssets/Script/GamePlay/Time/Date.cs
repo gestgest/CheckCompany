@@ -139,6 +139,28 @@ public class Date
             return minute; 
         }
     }
+
+    public void SetDate(System.DateTime dateTime)
+    {
+        //기존 값이랑 값 비교 해야함
+
+        Day = dateTime.Day;
+        Month = dateTime.Month;
+        Year = dateTime.Year;
+        _Week = dateTime.DayOfWeek switch
+        {
+            DayOfWeek.Monday => Week.MON,
+            DayOfWeek.Tuesday => Week.TUE,
+            DayOfWeek.Wednesday => Week.WED,
+            DayOfWeek.Thursday => Week.THU,
+            DayOfWeek.Friday => Week.FRI,
+            DayOfWeek.Saturday => Week.SAT,
+            DayOfWeek.Sunday => Week.SUN,
+            _ => week
+        };
+        Hour = dateTime.Hour;
+        Minute = dateTime.Minute;
+    }
     #endregion
 
     private static int[] MONTH_DAY =
