@@ -42,11 +42,14 @@ public class CalendarPanel : Panel
         int dis_day = tmp.Day - 1;
 
         tmp.Day -= dis_day; //1일
-        tmp.Day -= ((int)tmp._Week + 1) % 7; //일요일로 맞추기 위해서 -1을 해줘야함
-        //만약 6이면 끝, 0이면 -1
+        //Debug.Log("기기긱" + tmp._Week + ", " + tmp.Day);
 
+        //Debug.Log("기기긱" + tmp._Week + ", " + tmp.Day);
+        tmp.Day -= ((int)tmp._Week + 1) % 7;
+        //화요일 1 => 31일로 가야하니까 -2를 해야함
+        //ㄴ 인줄 알았지만 1일에서 추가로 1을 더 빼야함
+        //만약 토요일이라면 0인데? 만약 일요일이라면 -1? 인데?
 
-        Debug.Log(tmp.Day);
         SetCalendar(tmp);
     }
 
@@ -57,22 +60,62 @@ public class CalendarPanel : Panel
     /// <param name="day"></param>
     void SetCalendar(Date date)
     {
-        int count = 0; //요
-        //끝까지
-        for (int i = date.Day; i <= Date.MONTH_DAY[date.Month - 1] + Date.addDay_LeapYear(date.Year, date.Month); i++)
+        //초기화
+        for (int i = 0; i < weekObjects.Length; i++)
+        {
+            weekObjects[i].SetActive(false);
+        }
+        
+        int count = 0; //주
+
+        
+        //1이 아닌 경우 
+        if (date.Day != 1)
+        {
+            count = ForCalendarElement(date, count);
+        }
+
+        count = ForCalendarElement(date, count);
+        
+        //이후 토요일이 아니라면 토요일까지 채우기
+        for (; Week.SUN != date._Week ; date.Day++)
         {
             if (count % 7 == 0)
             {
                 weekObjects[count / 7].SetActive(true);
             }
-            SetCalendarContent(count / 7, count % 7, i);
+            SetCalendarContent(count / 7, date);
 
             //세팅
             count++;
         }
     }
-    void SetCalendarContent(int y,int x, int day)
+
+    int ForCalendarElement(Date date, int count)
     {
-        weekObjects[y].transform.GetChild(x).GetComponent<CalendarElement>().SetDay(day);
+        int max = Date.MONTH_DAY[date.Month - 1] + Date.addDay_LeapYear(date.Year, date.Month);
+        //중심 월
+        for (int i = date.Day; i <= max; i++)
+        {
+            //Debug.Log(date._Week);
+
+            if (count % 7 == 0)
+            {
+                weekObjects[count / 7].SetActive(true);
+            }
+            SetCalendarContent(count / 7, date);
+
+            //세팅
+            count++;
+            date.Day++;
+        }
+
+        return count;
+    }
+    void SetCalendarContent(int y, Date date)
+    {
+        int x = ((int)date._Week + 1) % 7;
+        //Debug.Log("y : " + y + ", x : "+  date.Day);
+        weekObjects[y].transform.GetChild(x).GetComponent<CalendarElement>().SetDay(date.Day);
     }
 }

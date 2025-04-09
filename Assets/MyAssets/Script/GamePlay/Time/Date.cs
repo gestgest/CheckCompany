@@ -23,13 +23,12 @@ public class Date
         hour = 1;
         minute = 1;
     }
+
     #region PROPERTY
+
     public virtual int Year
     {
-        set
-        {
-            year = value;
-        }
+        set { year = value; }
         get { return year; }
     }
 
@@ -44,53 +43,59 @@ public class Date
                 Month %= 12;
             }
         }
-        get
-        {
-            return month;
-        }
+        get { return month; }
     }
 
     public virtual int Day
     {
         set
         {
-            //10일 => 5일, before = 10일
+            //day--
             int before = day;
 
             //day = 5일
-            day = value;
+            day = value; //0 이하는 음수
+            
             int dis = day - before; //음수면 음수값이 나옴
 
-            //매우 큰 day가 들어오면
+            //Debug.Log("정 답을 알려줘 - day : " + day + ", before : " + before + ", dis : " + dis);
+            if (dis < 0)
+            {
+                //sunday는 
+                dis = 7 - (-dis % 7);
+            }
+
             while (true)
             {
+                //매우 큰 day가 들어오면
                 int day_leapYear = addDay_LeapYear(Year, Month);
-                if (Day > MONTH_DAY[Month - 1] + day_leapYear)
+                if (day > MONTH_DAY[Month - 1] + day_leapYear)
                 {
-                    Day %= MONTH_DAY[Month - 1] + day_leapYear;
-
-                    Month++;
+                    day -= MONTH_DAY[Month - 1] + day_leapYear;
+                    Month++; //위치 바꾸지 마라
                 }
-                else if(Day < 0) //
+                else if (day <= 0) //0이어도 음수값이라 
                 {
                     Month--;
                     day_leapYear = addDay_LeapYear(Year, Month);
-                    Day = MONTH_DAY[Month - 1] + day_leapYear + Day + 1;
+                    day += MONTH_DAY[Month - 1] + day_leapYear;
                 }
                 else
                 {
                     break;
                 }
             }
+
             AddWeek(dis);
         }
-        get
-        {
-            return day;
-        }
+        get { return day; }
     }
 
-    public virtual Week _Week { set { week = value; } get { return week; } }
+    public virtual Week _Week
+    {
+        set { week = value; }
+        get { return week; }
+    }
 
     public void AddWeek(int day)
     {
@@ -109,10 +114,7 @@ public class Date
                 hour %= 24;
             }
         }
-        get
-        {
-            return hour;
-        }
+        get { return hour; }
     }
 
     public virtual int Minute
@@ -126,10 +128,7 @@ public class Date
                 minute %= 60;
             }
         }
-        get
-        {
-            return minute;
-        }
+        get { return minute; }
     }
 
     public void SetDate(System.DateTime dateTime)
@@ -167,33 +166,43 @@ public class Date
         {
             return 0;
         }
+
         if (year % 400 == 0)
         {
             return 1;
         }
+
         if (year % 100 == 0)
         {
             return 0;
         }
+
         if (year % 4 == 0)
         {
             return 1;
         }
+
         return 0;
     }
 
     public override string ToString()
     {
-        return Year + "년 " 
-                    + Month + "월 " 
-                    + Day + "일 " 
-                    + week + "요일 " 
-                    + Hour + "시 " 
+        return Year + "년 "
+                    + Month + "월 "
+                    + Day + "일 "
+                    + week + "요일 "
+                    + Hour + "시 "
                     + Minute + "분";
     }
 }
 
 public enum Week
-{            
-    MON, TUE, WED, THU, FRI, SAT, SUN
+{
+    MON,
+    TUE,
+    WED,
+    THU,
+    FRI,
+    SAT,
+    SUN
 }
