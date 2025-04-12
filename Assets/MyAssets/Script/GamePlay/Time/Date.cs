@@ -25,22 +25,30 @@ public class Date
     }
 
     #region PROPERTY
-
+    //헷갈리지 않기 위해 set은 protected로 설정하자.
+    //괜히 외부에서 Year++ 이런거 쓰면 골치아프다 
     public virtual int Year
     {
-        set { year = value; }
+        protected set { year = value; }
         get { return year; }
     }
 
     public virtual int Month //1~12
     {
-        set
+        protected set
         {
             month = value;
             if (month > 12)
             {
                 Year++;
-                Month %= 12;
+                month %= 12;
+            }
+
+            //0월 => 12월
+            if (month < 1)
+            {
+                Year--;
+                month = month + 12;
             }
         }
         get { return month; }
@@ -93,7 +101,7 @@ public class Date
 
     public virtual Week _Week
     {
-        set { week = value; }
+        protected set { week = value; }
         get { return week; }
     }
 
@@ -105,7 +113,7 @@ public class Date
 
     public virtual int Hour
     {
-        set
+        protected set
         {
             hour = value;
             if (hour >= 24)
@@ -152,6 +160,17 @@ public class Date
         hour = dateTime.Hour;
         minute = dateTime.Minute;
     }
+    
+    //얇은 복사
+    public void SetDate(Date date)
+    {
+        day = date.Day;
+        month = date.Month;
+        year = date.Year;
+        week = date._Week;
+        hour = date.Hour;
+        minute = date.Minute;
+    }
 
     #endregion
 
@@ -183,6 +202,36 @@ public class Date
         }
 
         return 0;
+    }
+
+    public void AddYear(int year)
+    {
+        //양수
+        for (int i = 0; i < year; i++)
+        {
+            AddMonth(12);
+        }
+        //음수
+        for (int i = 0; i < - year; i++)
+        {
+            AddMonth(-12);
+        }
+    }
+    
+    //달을 더하거나 빼는 기능.
+    //3 - 1월 31일 => 2월 31일 반례 해결 용
+    public void AddMonth(int month)
+    {
+        //양수
+        for (int i = 0; i < month; i++)
+        {
+            Day = Day + (MONTH_DAY[this.month - 1] + addDay_LeapYear(year, month));
+        }
+        //음수
+        for (int i = 0; i < - month; i++)
+        {
+            Day = Day - (MONTH_DAY[this.month - 1] + addDay_LeapYear(year, month));
+        }
     }
 
     public override string ToString()

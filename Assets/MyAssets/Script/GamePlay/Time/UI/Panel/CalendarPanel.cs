@@ -21,6 +21,26 @@ public class CalendarPanel : Panel
 
         UpdateCalendarStatus();
     }
+    
+    //UI
+    #region Button
+
+    public void SetDate(int year, int month)
+    {
+        currentDate.AddMonth(month - currentDate.Month);
+        currentDate.AddYear(year - currentDate.Year);
+    }
+    
+    /// <summary>달력 상단바의 왼쪽 오른쪽 버튼. </summary>
+    /// <param name="month">더하는 월 값</param>
+    public void AddMonth(int month)
+    {
+        currentDate.AddMonth(month);
+        UpdateCalendarStatus();
+    }
+    
+    #endregion
+    
 
     //상태 업데이트
     void UpdateCalendarStatus()
@@ -37,7 +57,7 @@ public class CalendarPanel : Panel
     void SetFirstSunday()
     {
         Date tmp = new Date();
-        tmp.SetDate(System.DateTime.Now);
+        tmp.SetDate(currentDate);
 
         int dis_day = tmp.Day - 1;
 
@@ -90,7 +110,7 @@ public class CalendarPanel : Panel
             count++;
         }
     }
-
+    
     int ForCalendarElement(Date date, int count)
     {
         int max = Date.MONTH_DAY[date.Month - 1] + Date.addDay_LeapYear(date.Year, date.Month);
