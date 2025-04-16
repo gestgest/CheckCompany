@@ -7,7 +7,14 @@ public class CalendarElement : MonoBehaviour
 
     public void SetDay(int day)
     {
+        dayText.color = Color.black;
         dayText.text = day.ToString();
+    }
+
+    public void SetToday()
+    {
+        //폰트를 초록색으로
+        dayText.color = Color.green;
     }
 
 

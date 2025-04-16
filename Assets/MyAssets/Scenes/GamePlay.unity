@@ -3125,7 +3125,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 136125360}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 750088974}
+        m_TargetAssemblyTypeName: CalendarMiniPanel, Assembly-CSharp
+        m_MethodName: AddYear
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: -1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &136125360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13299,7 +13311,7 @@ GameObject:
   - component: {fileID: 513786914}
   - component: {fileID: 513786913}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17983,7 +17995,7 @@ GameObject:
   - component: {fileID: 666427791}
   - component: {fileID: 666427790}
   m_Layer: 5
-  m_Name: Button
+  m_Name: CheckButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18052,7 +18064,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 666427791}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 750088974}
+        m_TargetAssemblyTypeName: CalendarMiniPanel, Assembly-CSharp
+        m_MethodName: SetDate
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &666427791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18548,7 +18572,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 684423192}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 750088974}
+        m_TargetAssemblyTypeName: CalendarMiniPanel, Assembly-CSharp
+        m_MethodName: AddMonth
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &684423192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20173,7 +20209,7 @@ RectTransform:
   - {fileID: 670112443}
   - {fileID: 1665267095}
   - {fileID: 666427789}
-  m_Father: {fileID: 1717632569}
+  m_Father: {fileID: 1756319861}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -20234,6 +20270,9 @@ MonoBehaviour:
   panels: []
   hasMini: 1
   background: {fileID: 1717632568}
+  year_text: {fileID: 670112444}
+  month_text: {fileID: 1665267096}
+  calendarPanel: {fileID: 815653526}
 --- !u!1 &753846695
 GameObject:
   m_ObjectHideFlags: 0
@@ -20539,7 +20578,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 755353597}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 750088974}
+        m_TargetAssemblyTypeName: CalendarMiniPanel, Assembly-CSharp
+        m_MethodName: AddYear
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &755353597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21034,6 +21085,7 @@ RectTransform:
   - {fileID: 283579615}
   - {fileID: 1525967482}
   - {fileID: 1717632569}
+  - {fileID: 1756319861}
   m_Father: {fileID: 863975154}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -21084,8 +21136,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panelInfo: {fileID: 11400000, guid: e1e914f40ab9322418222f19388f3c59, type: 2}
-  panels: []
-  hasMini: 0
+  panels:
+  - {fileID: 750088974}
+  hasMini: 1
   dateText: {fileID: 710171104}
   weekObjects:
   - {fileID: 2077249489}
@@ -39258,7 +39311,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 0}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 815653526}
+        m_TargetAssemblyTypeName: CalendarPanel, Assembly-CSharp
+        m_MethodName: SwitchingMiniPanel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!222 &1550463128
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -44740,6 +44805,42 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
   m_PrefabInstance: {fileID: 1755273241}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1756319860
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1756319861}
+  m_Layer: 5
+  m_Name: MiniPanels
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1756319861
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1756319860}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 750088971}
+  m_Father: {fileID: 815653523}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 635}
+  m_SizeDelta: {x: 1080, y: 2340}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1756367491
 GameObject:
   m_ObjectHideFlags: 0
@@ -45345,7 +45446,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1777038477}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 750088974}
+        m_TargetAssemblyTypeName: CalendarMiniPanel, Assembly-CSharp
+        m_MethodName: AddMonth
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: -1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1777038477
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53834,11 +53947,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5243127675918490630, guid: ef3f4c91cf9cae249b1c6ed3fbf29e87, type: 3}
       propertyPath: m_Name
-      value: MiniPanels
+      value: Background
       objectReference: {fileID: 0}
     - target: {fileID: 5243127675918490630, guid: ef3f4c91cf9cae249b1c6ed3fbf29e87, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8037801010729141495, guid: ef3f4c91cf9cae249b1c6ed3fbf29e87, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -53870,10 +53983,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 92410001910663012, guid: ef3f4c91cf9cae249b1c6ed3fbf29e87, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 750088971}
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ef3f4c91cf9cae249b1c6ed3fbf29e87, type: 3}
 --- !u!1001 &7976065944622760667

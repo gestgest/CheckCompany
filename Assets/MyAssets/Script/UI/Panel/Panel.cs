@@ -15,7 +15,8 @@ public class Panel : MonoBehaviour
     private Transform selected_parent; //부모 오브젝트
     private List<Selectable> selected_objects; //선택 오브젝트들
 
-    int index = -1;
+    private int select_index;
+    int panel_index = -1;
     [SerializeField] protected bool hasMini;
 
     protected virtual void Start()
@@ -40,7 +41,6 @@ public class Panel : MonoBehaviour
             EventTrigger.Entry entry = new EventTrigger.Entry();
             entry.eventID = EventTriggerType.PointerClick;
 
-            int select_index = selected_objects.Count;
             // 클릭 시 호출할 메서드를 설정합니다.
             entry.callback.AddListener((eventData) => { GetSelectIndex(sel, select_index); });
 
@@ -48,8 +48,9 @@ public class Panel : MonoBehaviour
             // EventTrigger에 클릭 이벤트 항목을 추가합니다.
             trigger.triggers.Add(entry);
         }
-
-        index = -1;
+        
+        select_index = selected_objects.Count; //일부로 소문자로 함
+        panel_index = -1;
         if (!hasMini)
             SwitchingPanel(0);
     }
@@ -59,17 +60,17 @@ public class Panel : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            Index++;
+            Select_Index++;
         }
     }
 
     //자식 index 온
     public virtual void SwitchingPanel(int index)
     {
-        if (this.index != -1)
+        if (this.panel_index != -1)
         {
             //Debug.Log(this.index);
-            panels[this.index].OffPanel();
+            panels[this.panel_index].OffPanel();
         }
 
         if (index >= panels.Length)
@@ -77,7 +78,7 @@ public class Panel : MonoBehaviour
             return;
         }
 
-        this.index = index;
+        this.panel_index = index;
         panels[index].OnPanel();
     }
 
@@ -92,44 +93,44 @@ public class Panel : MonoBehaviour
     public virtual void OnPanel()
     {
         gameObject.SetActive(true);
+        //나중에 이거 바꿔야함 hasMini가 아닌 자식의 objectType
         if (!hasMini)
             SwitchingPanel(0); //무조건 Panel 초기 넣자.
     }
 
     public virtual void OffPanel()
     {
-        if (this.index != -1)
-            panels[this.index].OffPanel();
+        Debug.Log(this.panel_index);
+        if (this.panel_index != -1)
+            panels[this.panel_index].OffPanel();
         gameObject.SetActive(false);
     }
 
     #region PROPERTY
 
-    public int Index
+    public int Select_Index
     {
-        get { return index; }
+        get { return select_index; }
         set
         {
-            index = value;
-            //Debug.Log("Panel 함수 : 끼루루" + index);
+            select_index = value;
             if (selected_objects.Count == 0)
             {
                 return;
             }
 
             //out of bound 해결
-            if (selected_objects.Count <= index)
+            if (selected_objects.Count <= select_index)
             {
-                index -= selected_objects.Count;
+                select_index -= selected_objects.Count;
             }
-
-            selected_objects[index].Select();
+            selected_objects[select_index].Select();
         }
     }
 
     public void GetSelectIndex(Selectable selectable, int i)
     {
-        Index = i;
+        Select_Index = i;
     }
 
     public Sprite GetSprite()

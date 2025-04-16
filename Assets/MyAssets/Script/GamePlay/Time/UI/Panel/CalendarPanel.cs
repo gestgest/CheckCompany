@@ -27,8 +27,10 @@ public class CalendarPanel : Panel
 
     public void SetDate(int year, int month)
     {
-        currentDate.AddMonth(month - currentDate.Month);
         currentDate.AddYear(year - currentDate.Year);
+        currentDate.AddMonth(month - currentDate.Month);
+        
+        UpdateCalendarStatus();
     }
     
     /// <summary>달력 상단바의 왼쪽 오른쪽 버튼. </summary>
@@ -37,6 +39,14 @@ public class CalendarPanel : Panel
     {
         currentDate.AddMonth(month);
         UpdateCalendarStatus();
+    }
+
+    //상단바 누르면
+    public void SwitchingMiniPanel()
+    {
+        SwitchingPanel(0);
+        panels[0].GetComponent<CalendarMiniPanel>()
+            .SetValue(currentDate.Year, currentDate.Month);
     }
     
     #endregion
@@ -137,5 +147,20 @@ public class CalendarPanel : Panel
         int x = ((int)date._Week + 1) % 7;
         //Debug.Log("y : " + y + ", x : "+  date.Day);
         weekObjects[y].transform.GetChild(x).GetComponent<CalendarElement>().SetDay(date.Day);
+        
+        System.DateTime today = System.DateTime.Now;
+        
+        //Debug.Log(date.Day);
+        //오늘이라면
+        if (
+            date.Year == today.Year 
+            &&date.Month == today.Month
+            && date.Day == today.Day
+        )
+        {
+            weekObjects[y].transform.GetChild(x).GetComponent<CalendarElement>().SetToday();
+        }
+        
+        
     }
 }
