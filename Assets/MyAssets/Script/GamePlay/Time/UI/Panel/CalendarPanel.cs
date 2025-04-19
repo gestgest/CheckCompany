@@ -146,7 +146,7 @@ public class CalendarPanel : Panel
     {
         int x = ((int)date._Week + 1) % 7;
         //Debug.Log("y : " + y + ", x : "+  date.Day);
-        weekObjects[y].transform.GetChild(x).GetComponent<CalendarElement>().SetDay(date.Day);
+        weekObjects[y].transform.GetChild(x).GetComponent<CalendarElement>().SetDay(date.Year, date.Month, date.Day);
         
         System.DateTime today = System.DateTime.Now;
         

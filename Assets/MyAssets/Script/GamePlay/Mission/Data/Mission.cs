@@ -107,6 +107,11 @@ public class Mission
         return level;
     }
 
+    public Date GetDoneDate()
+    {
+        return doneDate;
+    }
+
     //서버 보내기
     public Dictionary<string, object> GetMission_ToJSON()
     {
