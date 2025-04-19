@@ -16,8 +16,7 @@ public class Todo_Mission
     }
     public Todo_Mission(string title, bool isDone = false)
     {
-        this.Title = title;
-        this.IsDone = isDone;
+        Set_Todo_Mission(title, isDone);
     }
     
     public void Set_Todo_Mission(string title, bool isDone = false)

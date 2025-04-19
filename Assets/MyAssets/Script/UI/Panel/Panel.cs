@@ -100,7 +100,6 @@ public class Panel : MonoBehaviour
 
     public virtual void OffPanel()
     {
-        Debug.Log(this.panel_index);
         if (this.panel_index != -1)
             panels[this.panel_index].OffPanel();
         gameObject.SetActive(false);

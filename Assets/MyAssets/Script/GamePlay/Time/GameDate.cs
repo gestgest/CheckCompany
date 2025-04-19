@@ -10,7 +10,7 @@ public class GameDate : Date
         {
             return base.Month;
         }
-        protected set
+        set
         {
             base.Month = value;
 

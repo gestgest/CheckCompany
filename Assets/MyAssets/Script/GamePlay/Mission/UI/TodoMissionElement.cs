@@ -68,14 +68,15 @@ public class TodoMissionElement : MonoBehaviour
                 Mission mission = mc.GetMission(mission_index);
                 
                 mission.Set_TodoMission_IsDone(todo_mission_index, my_toggle.isOn);
-
-                //현재 미션은 제거, 완료된 미션에 온
+                
+                
+                
+                //현재 미션은 제거, 완료된 미션에 온 => 그냥 Enable할때마다 쿼리로 받아야 할듯
                 mc.GetMissionPanel().RemoveMissionObject(mission_index);
                 mc.GetCompleteMissionPanel().AddMissionElementObject(mc.GetMission(mission_index));
 
                 //미션 보상 받기 => 디버깅
                 GameManager.instance.SetMoney(GameManager.instance.Money + 10000);
-
             }
         }
         else if(isGage)
@@ -114,5 +115,17 @@ public class TodoMissionElement : MonoBehaviour
             "missions." + mission_id + ".todo_missions",
             mission.GetTodoMissions()
         );
+
+        //완료됐다면 완료된 날짜
+        if (mission.GetIsDone())
+        {
+            //json이 아니라 배열 수정이다.
+            FireStoreManager.instance.SetFirestoreData(
+                "GamePlayUser",
+                GameManager.instance.Nickname,
+                "missions." + mission_id + ".doneDate",
+                mission.DateToJSON()
+            );
+        }
     }
 }

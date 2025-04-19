@@ -29,13 +29,13 @@ public class Date
     //괜히 외부에서 Year++ 이런거 쓰면 골치아프다 
     public virtual int Year
     {
-        protected set { year = value; }
+        set { year = value; }
         get { return year; }
     }
 
     public virtual int Month //1~12
     {
-        protected set
+        set
         {
             month = value;
             if (month > 12)
