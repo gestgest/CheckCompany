@@ -47,14 +47,6 @@ public class CompleteMissionPanel : MissionPanel
 
     public void SetQueryDate(Date date)
     {
-        if (queryDate == null)
-        {
-            Debug.Log("잉");
-        }
-        if (queryDate == null)
-        {
-            Debug.Log("엥");
-        }
         queryDate.Year = date.Year;
         queryDate.Month = date.Month;
         queryDate.Day = date.Day;
