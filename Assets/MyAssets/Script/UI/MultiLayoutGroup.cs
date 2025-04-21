@@ -93,7 +93,7 @@ public class MultiLayoutGroup : MonoBehaviour
     
     public void AddHeight(float height)
     {
-        Debug.Log(gameObject.name + " : " + height);
+        //Debug.Log(gameObject.name + " : " + height);
         SetHeight(size.sizeDelta.y + height);
         
         if (_parentMultiLayout != null)

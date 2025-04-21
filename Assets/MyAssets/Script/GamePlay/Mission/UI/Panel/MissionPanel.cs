@@ -19,6 +19,7 @@ public class MissionPanel : Panel
     private const int MISSION_SPACE_HEIGHT = 50;
 
     
+    //그냥 활성화할때마다 쿼리해야할듯
     protected virtual void OnEnable()
     {
         //Layout값 초기화
