@@ -30,7 +30,6 @@ public class MissionController : MonoBehaviour
     //나중에 없앨 함수
     public void Init()
     {
-        
         if(missions == null)
             missions = new List<Mission>();
     }
@@ -42,17 +41,15 @@ public class MissionController : MonoBehaviour
         {
             missions = new List<Mission>();
         }
+
         this.mission_count = mission_count;
+        //null처리
+        if (mission_count == 0)
+        {
+            MissionCountToServer();
+        }
+        
         GetTodoMissionsFromJSON(data);
-
-        //List<string> small_missions = new List<string>();
-
-        //제거할 기능
-        //small_missions.Add("버그 해결");
-        //small_missions.Add("새로운 기술");
-        //small_missions.Add("기능 추가");
-        //예시 미션도 넣을까?
-        //Add_TodoMission(new Todo_Mission(0, 2, "유니티", 0, 0, small_missions));
     }
     
 
@@ -142,7 +139,17 @@ public class MissionController : MonoBehaviour
             //EmployeeSO employeeSO = RecruitmentController.instance.GetEmployeeSO(Convert.ToInt32(tmp["employeeType"]));
             //Employee employee = new EmployeeBuilder().BuildEmployee(employeeSO);
         }
-
+    }
+    
+    //미션 총합 아이디 서버에 저장
+    public void MissionCountToServer()
+    {
+        FireStoreManager.instance.SetFirestoreData(
+            "GamePlayUser",
+            GameManager.instance.Nickname,
+            "mission_count",
+            mission_count
+        );
     }
     
     

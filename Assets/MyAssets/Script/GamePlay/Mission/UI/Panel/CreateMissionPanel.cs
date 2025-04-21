@@ -140,7 +140,8 @@ public class CreateMissionPanel : Panel
         
 
         MissionController.instance.AddMission(todo_mission);
-        Mission_Count_ToServer(MissionController.instance.GetMissionCount());
+        MissionController.instance.MissionCountToServer();
+        
         TodoMission_ToServer(todo_mission.GetMission_ToJSON(), todo_mission.ID);
 
         missionPanel.CreateMissionElementObject(todo_mission); //
@@ -162,15 +163,5 @@ public class CreateMissionPanel : Panel
         );
     }
 
-    //미션 총합 아이디 서버에 저장
-    private void Mission_Count_ToServer(int mission_count)
-    {
-        FireStoreManager.instance.SetFirestoreData(
-            "GamePlayUser",
-            GameManager.instance.Nickname,
-            "mission_count",
-            mission_count
-        );
-    }
 
 }

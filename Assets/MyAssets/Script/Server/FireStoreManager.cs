@@ -131,6 +131,12 @@ public class FireStoreManager : MonoBehaviour
             }
         });
 
+        //key값이 없는 경우
+        if (!result.ContainsKey(key))
+        {
+            return null;
+        }
+        
         return result[key];
     }
 }
