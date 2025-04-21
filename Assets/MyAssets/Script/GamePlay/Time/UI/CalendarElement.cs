@@ -13,12 +13,11 @@ public class CalendarElement : MonoBehaviour
         date = new Date();
     }
 
-    public void SetDay(int year, int month,int day)
+    public void SetDay(int year, int month, int day)
     {
 
         dayText.color = Color.black;
         dayText.text = day.ToString();
-
 
         date.Year = year;
         date.Month = month;
@@ -34,7 +33,6 @@ public class CalendarElement : MonoBehaviour
     //버튼 => 쿼리 전환
     public void QueryDate()
     {
-        //
         List<int> panel_index = new List<int>();
 
         panel_index.Add(1);

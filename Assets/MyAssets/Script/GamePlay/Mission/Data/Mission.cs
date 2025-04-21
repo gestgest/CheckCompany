@@ -19,6 +19,7 @@ public class Mission
     
     public Mission() 
     {
+        doneDate = new Date();
         this.todo_missions = new List<Todo_Mission>();
     }
 

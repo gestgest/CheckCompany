@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.Build.Pipeline;
@@ -7,6 +8,11 @@ public class CompleteMissionPanel : MissionPanel
 {
     private Date queryDate;
     private bool isQuery = false;
+
+    private void Awake()
+    {
+        queryDate = new Date();
+    }
 
     //start => 
     protected override void OnEnable()
@@ -41,6 +47,14 @@ public class CompleteMissionPanel : MissionPanel
 
     public void SetQueryDate(Date date)
     {
+        if (queryDate == null)
+        {
+            Debug.Log("잉");
+        }
+        if (queryDate == null)
+        {
+            Debug.Log("엥");
+        }
         queryDate.Year = date.Year;
         queryDate.Month = date.Month;
         queryDate.Day = date.Day;
