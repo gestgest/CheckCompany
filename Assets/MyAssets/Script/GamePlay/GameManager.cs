@@ -63,16 +63,34 @@ public class GameManager : MonoBehaviour
         }
         Debug.Log(user.Email);
 
-
         //서버에게 number 받는 거는 무조건 long 으로 해야한다, ToInt32
         //타입이 64비트가 나온다. => 8바이트 => long
         //int는 4바이트
+        //convert로 하면 null이 0으로 바뀌어진다
 
-        //user.Email으로 쿼리 만들고
+        //user.Email으로 쿼리 만들고 => null 처리 안함 => 그냥 
         nickname = (string)await fireStoreManager.GetFirestoreData("User", user.Email, "nickname");
-        SetMoney((long)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "money"), false);
-        employee_count = Convert.ToInt32(await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "employee_count"));
-        date.GetDateFromJSON((Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "date"));
+
+        long money;
+        money = (long)(await fireStoreManager.GetFirestoreData("User", user.Email, "money") ?? (long)0);
+        SetMoney(money, false);
+
+        object tmp_employee_count =
+            Convert.ToInt32(await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "employee_count"));
+
+        if (tmp_employee_count == null)
+        {
+            Employee_count = 0;
+        }
+        else
+        {
+            employee_count = Convert.ToInt32(tmp_employee_count);
+        }
+        
+        
+        date.GetDateFromJSON(
+            (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "date")
+        );
         SetDateUI();
 
         //MissionController.instance.Init();
@@ -82,10 +100,10 @@ public class GameManager : MonoBehaviour
         );
 
         Dictionary<string,object> recruitments = (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "recruitments");
-        RecruitmentController.instance.GetRecruitmentsFromServer(recruitments);
+        RecruitmentController.instance.RecruitmentsFromJSON(recruitments);
 
         Dictionary<string, object> employees = (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "employees");
-        EmployeeController.instance.GetEmployeesFromJSON(employees);
+        EmployeeController.instance.EmployeesFromJSON(employees);
     }
 
     #region property
@@ -96,7 +114,10 @@ public class GameManager : MonoBehaviour
 
     public void SetMoney(long value, bool toServer = true)
     {
-        //Debug.Log("돈 서버에게 입력 받음 : " + value);
+        if (value == 0)
+        {
+            toServer = true;
+        }
         money = value;
 
         if(toServer)
@@ -113,7 +134,6 @@ public class GameManager : MonoBehaviour
         get { return employee_count; }
         set
         {
-            //Debug.Log("돈 서버에게 입력 받음 : " + value);
             employee_count = value;
             fireStoreManager.SetFirestoreData(
                 "GamePlayUser",

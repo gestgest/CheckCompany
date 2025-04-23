@@ -48,8 +48,12 @@ public class MissionController : MonoBehaviour
         {
             MissionCountToServer();
         }
+        if (data == null)
+        {
+            return;
+        }
         
-        GetTodoMissionsFromJSON(data);
+        MissionsFromJSON(data);
     }
     
 
@@ -122,19 +126,21 @@ public class MissionController : MonoBehaviour
 
     /// <summary>미션 서버(json)에서 가져오는 함수</summary>
     /// <param name="data"></param>
-    private void GetTodoMissionsFromJSON(Dictionary<string, object> data)
+    private void MissionsFromJSON(Dictionary<string, object> data)
     {
         //id와 id 리스트들
         foreach (KeyValuePair<string, object> todo_mission in data)
         {
+            //만약에 속성 한두개가 없다면? => oh...
             Dictionary<string, object> tmp = (Dictionary<string, object>)(todo_mission.Value);
 
-            Mission todo_Mission = new Mission();
+            Mission mission = new Mission();
 
-            todo_Mission.ID = Convert.ToInt32(todo_mission.Key);
-            todo_Mission.SetMissionFromJSON(tmp);
-            AddMission(todo_Mission);
-
+            mission.ID = Convert.ToInt32(todo_mission.Key);
+            mission.SetMissionFromJSON(tmp);
+            AddMission(mission);
+            
+            
             //여기서 Todo_Mission 생성하고 SetFromJSON 각각
             //EmployeeSO employeeSO = RecruitmentController.instance.GetEmployeeSO(Convert.ToInt32(tmp["employeeType"]));
             //Employee employee = new EmployeeBuilder().BuildEmployee(employeeSO);

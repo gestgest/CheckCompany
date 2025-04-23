@@ -15,14 +15,14 @@ public class GameDate : Date
             base.Month = value;
 
             //월급 차감
-            if (EmployeeController.instance.PayEmployees())
-            {
-                Debug.Log("월급 차감");
-            }
-            else
-            {
-                Debug.Log("월급이 없습니다");
-            }
+            // if (EmployeeController.instance.PayEmployees())
+            // {
+            //     Debug.Log("월급 차감");
+            // }
+            // else
+            // {
+            //     Debug.Log("월급이 없습니다");
+            // }
         }
     }
 
@@ -55,7 +55,8 @@ public class GameDate : Date
         }
     }
 
-
+    
+    
     #region SERVER
 
     //너무 데이터 낭비 아닐까 => year가 바뀌면 year만 수정하는 느낌으로
@@ -135,6 +136,13 @@ public class GameDate : Date
     }
     public void GetDateFromJSON(Dictionary<string, object> data)
     {
+        if (data == null)
+        {
+            SetDate();
+            SetDateToServer(DateToJSON());
+            return;
+        }
+        
         Year = Convert.ToInt32(data["year"]);
         Month = Convert.ToInt32(data["month"]);
         Day = Convert.ToInt32(data["day"]);

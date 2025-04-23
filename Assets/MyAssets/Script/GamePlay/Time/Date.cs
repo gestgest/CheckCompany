@@ -16,12 +16,7 @@ public class Date
 
     public Date()
     {
-        year = 1;
-        month = 1;
-        day = 1;
-        week = Week.MON;
-        hour = 1;
-        minute = 1;
+        SetDate();
     }
 
     #region PROPERTY
@@ -137,6 +132,12 @@ public class Date
             }
         }
         get { return minute; }
+    }
+    
+    public void SetDate()
+    {
+        System.DateTime today = System.DateTime.Now;
+        SetDate(today);
     }
 
     public void SetDate(System.DateTime dateTime)

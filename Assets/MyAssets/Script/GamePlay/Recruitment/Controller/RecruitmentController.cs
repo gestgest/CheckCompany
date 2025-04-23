@@ -203,18 +203,21 @@ public class RecruitmentController : MonoBehaviour
     {
         return recruitments[id];
     }
-    public void GetRecruitmentsFromServer(Dictionary<string, object> serverRecruitments) //server 예정
+    public void RecruitmentsFromJSON(Dictionary<string, object> serverRecruitments) //server 예정
     {
         if(this.recruitments == null)
             this.recruitments = new List<Recruitment>();
 
-
-        //map형태의 recruitments를 list로 변환
-        foreach (KeyValuePair<string, object> serverRecruitment in serverRecruitments)
+        // null 처리
+        if (serverRecruitments != null)
         {
-            Recruitment recruitment = new Recruitment();
-            recruitment.JSONToRecruitment(serverRecruitment);
-            this.recruitments.Add(recruitment);
+            //map형태의 recruitments를 list로 변환
+            foreach (KeyValuePair<string, object> serverRecruitment in serverRecruitments)
+            {
+                Recruitment recruitment = new Recruitment();
+                recruitment.JSONToRecruitment(serverRecruitment);
+                this.recruitments.Add(recruitment);
+            }
         }
 
         InitRecruitments();

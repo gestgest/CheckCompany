@@ -175,11 +175,15 @@ public class EmployeeController : MonoBehaviour
     }
 
     //고용된 직원 서버 자료들을 인 게임으로 가져오는 함수
-    public void GetEmployeesFromJSON(Dictionary<string, object> serverEmployees)
+    public void EmployeesFromJSON(Dictionary<string, object> serverEmployees)
     {
         if (this.employees == null)
             this.employees = new List<Employee>();
 
+        if (serverEmployees == null)
+        {
+            return;
+        }
 
         //map형태의 employees를 list로 변환
         foreach (KeyValuePair<string, object> serverEmployee in serverEmployees)
@@ -192,7 +196,6 @@ public class EmployeeController : MonoBehaviour
             employee.GetEmployeeFromJSON(serverEmployee);
             this.employees.Add(employee);
         }
-
         InitEmployeeSet();
     }
 
