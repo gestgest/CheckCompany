@@ -1,28 +1,22 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 using System;
-using Firebase.Firestore;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
-//채용 공고 컨트롤러
-public class RecruitmentController : MonoBehaviour
+public class RecruitmentsSO
 {
-    public static RecruitmentController instance;
     //채용 리스트
     List<Recruitment> recruitments;
     List<GameObject> recruitmentObjects; //RecruitmentElement
     int id = 0; //생성하려는 recruitment id
-    
-    [SerializeField] List<EmployeeSO> employeeSOs; 
+
+    [SerializeField] List<EmployeeSO> employeeSOs;
     [SerializeField] private GameObject recruitmentPrefab;
     [SerializeField] private GameObject view; //parent
     [SerializeField] private TextMeshProUGUI costText;
     [SerializeField] private EmployeeNameSO employeeNameSO;
-    
+
     //채용 정보 [버튼을 누르면 함수를 호출해서 tmp처럼 대신 넣는 느낌]
     private int employeeTypeIndex = 0; //0,1,2,3
     private int level = 0; //0,1,2
@@ -30,15 +24,6 @@ public class RecruitmentController : MonoBehaviour
     private int cost; //코스트 => 게임 오브젝트도 가져와서 설정해야 할 거 같은데
 
 
-    private void Awake()
-    {
-        if(instance == null)
-        {
-            instance = this;
-            return;
-        }
-        Destroy(gameObject);
-    }
 
     private void Start()
     {
@@ -57,8 +42,8 @@ public class RecruitmentController : MonoBehaviour
     public void InitRecruitments()
     {
         SetID();
-        
-        for(int i = 0; i < recruitments.Count; i++)
+
+        for (int i = 0; i < recruitments.Count; i++)
         {
             Recruitment r = recruitments[i];
             CreateRecruitmentObject(r);
@@ -68,7 +53,7 @@ public class RecruitmentController : MonoBehaviour
     //Panel안에 채용 목록 띄워주는 함수
     private void CreateRecruitmentObject(Recruitment r)
     {
-        GameObject recruitmentObject = Instantiate(recruitmentPrefab, view.transform);
+        GameObject recruitmentObject = GameObject.Instantiate(recruitmentPrefab, view.transform);
         RecruitmentElement recruitmentContent = recruitmentObject.GetComponent<RecruitmentElement>();
 
         //recruitmentContent.SetRecruitment(employeeTypeIcons[(int)r.GetEmployeeType()], r.GetDay(), r.GetSize(), i)
@@ -93,7 +78,7 @@ public class RecruitmentController : MonoBehaviour
         recruitment.SetDay(period);
         recruitment.SetID(id++);
         //SetCost()
-        
+
         Debug.Log(recruitment.GetID());
         recruitments.Add(recruitment);
         Add_server_recruitment_index(Search_Recruitment_Index(recruitment.GetID()));
@@ -106,7 +91,7 @@ public class RecruitmentController : MonoBehaviour
     public void SetID()
     {
         id = 0;
-        if(recruitments.Count != 0)
+        if (recruitments.Count != 0)
         {
             id = recruitments[recruitments.Count - 1].GetID() + 1;
         }
@@ -190,7 +175,7 @@ public class RecruitmentController : MonoBehaviour
         //서버 연동
         Remove_server_recruitment_index(id);
     }
-    
+
     public EmployeeSO GetEmployeeSO(int index)
     {
         return employeeSOs[index];
@@ -202,7 +187,7 @@ public class RecruitmentController : MonoBehaviour
     }
     public void RecruitmentsFromJSON(Dictionary<string, object> serverRecruitments) //server 예정
     {
-        if(this.recruitments == null)
+        if (this.recruitments == null)
             this.recruitments = new List<Recruitment>();
 
         // null 처리
@@ -221,11 +206,11 @@ public class RecruitmentController : MonoBehaviour
     }
 
 
-    public GameObject GetRecruitmentObject(int index) 
+    public GameObject GetRecruitmentObject(int index)
     {
         return recruitmentObjects[index];
     }
-    public GameObject GetLastRecruitmentObject() 
+    public GameObject GetLastRecruitmentObject()
     {
         return recruitmentObjects[recruitmentObjects.Count - 1];
     }
@@ -240,7 +225,7 @@ public class RecruitmentController : MonoBehaviour
         //};
 
         FireStoreManager.instance.SetFirestoreData("GamePlayUser",
-            GameManager.instance.Nickname ,
+            GameManager.instance.Nickname,
             "recruitments." + index.ToString(),
             recruitments[index].RecruitmentToJSON()
         );
@@ -255,11 +240,11 @@ public class RecruitmentController : MonoBehaviour
     {
         FireStoreManager.instance.DeleteFirestoreDataKey(
             "GamePlayUser",
-            GameManager.instance.Nickname, 
+            GameManager.instance.Nickname,
             "recruitments." + id.ToString()
         );
     }
-    
+
     //Recruitment 이진탐색
     public int Search_Recruitment_Index(int id)
     {
@@ -287,5 +272,5 @@ public class RecruitmentController : MonoBehaviour
             return Binary_Search_Recruitment_Index(start, mid - 1, id);
         }
     }
-    
+
 }
