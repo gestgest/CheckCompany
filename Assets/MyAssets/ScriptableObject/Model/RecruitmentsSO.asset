@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe763679315f670478ddf5084e50579d, type: 3}
+  m_Name: RecruitmentsSO
+  m_EditorClassIdentifier: 
+  employeeSOs:
+  - {fileID: 11400000, guid: 8bc37c78e20212d479e6b29330ed631b, type: 2}
+  - {fileID: 11400000, guid: 15d3cddb1b549ac41b194a5de5f12099, type: 2}
+  - {fileID: 11400000, guid: 88e98f653e9e18e45a87d95530a15dcb, type: 2}
+  - {fileID: 11400000, guid: 972b68f653f37a847a90135cbc2220a2, type: 2}
+  recruitmentPrefab: {fileID: 8974342152770559031, guid: 32efdf2fedeb42c45ac036900fd03e16, type: 3}
+  view: {fileID: 0}
+  costText: {fileID: 0}
+  employeeNameSO: {fileID: 11400000, guid: b1872c501f9b97343a92b3e8f02cb4c0, type: 2}

@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using System;
 using Random = UnityEngine.Random;
 
-public class RecruitmentsSO
+
+[CreateAssetMenu(fileName = "RecruitmentsSO", menuName = "ScriptableObject/Model/RecruitmentsSO")]
+
+public class RecruitmentsSO : ScriptableObject
 {
     //채용 리스트
     List<Recruitment> recruitments;
