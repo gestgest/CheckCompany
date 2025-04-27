@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using UnityEditor;
 
 static class EditorMenus
@@ -10,3 +12,4 @@ static class EditorMenus
     }
     
 }
+#endif

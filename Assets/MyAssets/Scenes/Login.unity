@@ -650,6 +650,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panelInfo: {fileID: 11400000, guid: 5f42a7c208910f74a9ce88053ef2a84a, type: 2}
+  panels: []
+  hasMini: 0
 --- !u!1 &358003487
 GameObject:
   m_ObjectHideFlags: 0
@@ -3830,6 +3832,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panelInfo: {fileID: 11400000, guid: 0269c1dedf684ae4b9dfc4832a3342aa, type: 2}
+  panels: []
+  hasMini: 0
 --- !u!1 &1687055536
 GameObject:
   m_ObjectHideFlags: 0
@@ -4041,8 +4045,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1361042015}
-        m_TargetAssemblyTypeName: Window, Assembly-CSharp
-        m_MethodName: SwitchingPanel
+        m_TargetAssemblyTypeName: PanelManager, Assembly-CSharp
+        m_MethodName: SwitchingPanelFromInt
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4127,7 +4131,6 @@ MonoBehaviour:
   passwordRegisterTextField: {fileID: 1136172256}
   confirmPasswordRegisterTextField: {fileID: 1414258959}
   sceneLoader: {fileID: 322734083}
-  parent_window: {fileID: 1361042015}
 --- !u!4 &1751107973
 Transform:
   m_ObjectHideFlags: 0
@@ -4661,8 +4664,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1361042015}
-        m_TargetAssemblyTypeName: Window, Assembly-CSharp
-        m_MethodName: SwitchingPanel
+        m_TargetAssemblyTypeName: PanelManager, Assembly-CSharp
+        m_MethodName: SwitchingPanelFromInt
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5261,6 +5264,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panelInfo: {fileID: 11400000, guid: aa35914ff244d9f4e8018fc3f6a9fcd7, type: 2}
+  panels: []
+  hasMini: 0
 --- !u!1 &2001523967
 GameObject:
   m_ObjectHideFlags: 0
@@ -5838,7 +5843,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a44bd993097f2384ea94ca61d80c3a23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

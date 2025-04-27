@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using UnityEditor;
 using UnityEngine;
 using System;
@@ -36,3 +38,4 @@ public class EditorTab
         }
     }
 }
+#endif
