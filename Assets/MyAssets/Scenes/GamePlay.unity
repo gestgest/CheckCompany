@@ -11401,6 +11401,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 438792695}
+  - component: {fileID: 438792696}
   m_Layer: 5
   m_Name: Frame
   m_TagString: Untagged
@@ -11429,6 +11430,28 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 1170}
   m_Pivot: {x: 0.5, y: 0}
+--- !u!95 &438792696
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 438792694}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 81a800d6524b7984482a2246e743be1b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &441347691
 GameObject:
   m_ObjectHideFlags: 0
@@ -13109,7 +13132,7 @@ MonoBehaviour:
   panel_parent: {fileID: 463659565}
   icon: {fileID: 1431139184}
   title: {fileID: 576199158}
-  panel_animator: {fileID: 0}
+  panel_animator: {fileID: 438792696}
   bottom_buttons:
   - {fileID: 364957545}
   - {fileID: 1578562220}
