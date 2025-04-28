@@ -22,6 +22,9 @@ public class RecruitmentElement : MonoBehaviour
     
     [SerializeField]private MultiLayoutGroup _multiLayoutGroup; //applicantsPanel
 
+    //Manager
+    [SerializeField] private RecruitmentsSO recruitmentsSO;
+
 
     //지원자 정보 리스트
     private Recruitment recruitment;
@@ -30,7 +33,8 @@ public class RecruitmentElement : MonoBehaviour
     private static int HEIGHT = 100;
     private void Start()
     {
-        recruitment.Init();
+        recruitment.Init(recruitmentsSO);
+
         //Init();
 
         // multiLayoutGroup.SetParentObjectPos(
@@ -126,7 +130,7 @@ public class RecruitmentElement : MonoBehaviour
 
     public void RemoveRecruitment()
     {
-        RecruitmentController.instance.RemoveRecruitment(recruitment.GetID());
+        recruitmentsSO.RemoveRecruitment(recruitment.GetID());
         _multiLayoutGroup.AddOnHeight(-HEIGHT);
         _multiLayoutGroup.RerollScreen();
         Destroy(gameObject);
@@ -174,8 +178,8 @@ public class RecruitmentElement : MonoBehaviour
         employee.Mental = 100;
         employee.CareerPeriod = 12; //1 year
         employee.Salary = 1000000; //월 100만원
-        employee._EmployeeSO = RecruitmentController.instance.GetRecruitmentEmployeeSO(
-            RecruitmentController.instance.Search_Recruitment_Index(recruitment.GetID())
+        employee._EmployeeSO = recruitmentsSO.GetRecruitmentEmployeeSO(
+            recruitmentsSO.Search_Recruitment_Index(recruitment.GetID())
         );
         //(int)(recruitment.GetEmployeeSO().GetEmployeeType()
 

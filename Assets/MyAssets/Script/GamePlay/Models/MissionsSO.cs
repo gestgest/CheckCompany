@@ -2,47 +2,42 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MissionController : MonoBehaviour
+[CreateAssetMenu(fileName = "MissionsSO", menuName = "ScriptableObject/Model/MissionsSO")]
+public class MissionsSO : ScriptableObject
 {
-    public static MissionController instance;
-
-
     //이미지 리스트?
-    [SerializeField] private Sprite [] icons;
-    [SerializeField] private MissionPanel mission_panel;
-    [SerializeField] private CompleteMissionPanel complete_mission_panel;
-    
-    
+    [SerializeField] private Sprite[] icons;
+
+    //init
+    private MissionPanel missionPanel;
+    private CompleteMissionPanel completeMissionPanel;
+
+
     private List<Mission> missions;
     private int mission_count;
-    
 
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            return;
-        }
-        Destroy(this);
-    }
 
     //나중에 없앨 함수
-    public void Init()
+    public void Init(MissionPanel missionPanel, CompleteMissionPanel completeMissionPanel)
     {
-        if(missions == null)
+        if (missions == null)
             missions = new List<Mission>();
+
+        this.missionPanel = missionPanel;
+        this.completeMissionPanel = completeMissionPanel;
+
     }
 
     //서버 가져오는 함수 => 나중에 매개변수에 Dictionary<string, object> todo_missions와 id를 넣을 예정
-    public void Init(Dictionary<string, object> data, int mission_count)
+    public void SetMissionData(Dictionary<string, object> data, int mission_count)
     {
-        if(missions == null)
+        if (missions == null)
         {
             missions = new List<Mission>();
         }
 
         this.mission_count = mission_count;
+
         //null처리
         if (mission_count == 0)
         {
@@ -52,10 +47,11 @@ public class MissionController : MonoBehaviour
         {
             return;
         }
-        
-        MissionsFromJSON(data);
+
+
+        JSONToMissions(data);
     }
-    
+
 
     public int GetMissionCount()
     {
@@ -91,15 +87,15 @@ public class MissionController : MonoBehaviour
     {
         return missions.Count;
     }
-       
+
     public MissionPanel GetMissionPanel()
     {
-        return mission_panel;
+        return missionPanel;
     }
 
     public CompleteMissionPanel GetCompleteMissionPanel()
     {
-        return complete_mission_panel;
+        return completeMissionPanel;
     }
 
 
@@ -113,21 +109,26 @@ public class MissionController : MonoBehaviour
         if (index != -1)
         {
             missions.RemoveAt(index);
-            mission_panel.RemoveMissionObject(index);
+            missionPanel.RemoveMissionObject(index);
         }
         PanelManager.instance.Back_Nav_Panel();
     }
 
     public void Reroll_MissionElement(int index)
     {
-        mission_panel.SetMissionObject(missions[index], index);
+        missionPanel.SetMissionObject(missions[index], index);
     }
 
 
     /// <summary>미션 서버(json)에서 가져오는 함수</summary>
     /// <param name="data"></param>
-    private void MissionsFromJSON(Dictionary<string, object> data)
+    private void JSONToMissions(Dictionary<string, object> data)
     {
+        if(data == null)
+        { 
+            return;
+        }
+
         //id와 id 리스트들
         foreach (KeyValuePair<string, object> todo_mission in data)
         {
@@ -139,14 +140,14 @@ public class MissionController : MonoBehaviour
             mission.ID = Convert.ToInt32(todo_mission.Key);
             mission.SetMissionFromJSON(tmp);
             AddMission(mission);
-            
-            
+
+
             //여기서 Todo_Mission 생성하고 SetFromJSON 각각
             //EmployeeSO employeeSO = RecruitmentController.instance.GetEmployeeSO(Convert.ToInt32(tmp["employeeType"]));
             //Employee employee = new EmployeeBuilder().BuildEmployee(employeeSO);
         }
     }
-    
+
     //미션 총합 아이디 서버에 저장
     public void MissionCountToServer()
     {
@@ -157,8 +158,8 @@ public class MissionController : MonoBehaviour
             mission_count
         );
     }
-    
-    
+
+
     #region BINARY_SEARCH
     //binary_search
     public int Search_Mission_Index(int id)

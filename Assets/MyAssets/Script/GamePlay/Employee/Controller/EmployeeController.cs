@@ -17,6 +17,8 @@ public class EmployeeController : MonoBehaviour
     [SerializeField] private EmployeeStatusWindow employeeStatusWindow; //이거를 subPanel로 바꿀 수 없나
     [SerializeField] private Panel employeePanel;
     [SerializeField] private PanelSO employeeStatusPanelSO;
+
+    [SerializeField] private RecruitmentsSO recruitmentsSO;
     
     private void Awake()
     {
@@ -190,7 +192,7 @@ public class EmployeeController : MonoBehaviour
         {
             Dictionary<string, object> tmp = (Dictionary<string, object>)(serverEmployee.Value);
 
-            EmployeeSO employeeSO = RecruitmentController.instance.GetEmployeeSO(Convert.ToInt32(tmp["employeeType"]));
+            EmployeeSO employeeSO = recruitmentsSO.GetEmployeeSO(Convert.ToInt32(tmp["employeeType"]));
             Employee employee = new EmployeeBuilder().BuildEmployee(employeeSO);
 
             employee.GetEmployeeFromJSON(serverEmployee);

@@ -10,11 +10,14 @@ public struct Recruitment
     int level;
     List<Employee> applicants;
     private EmployeeSO employeeSO;
+    private RecruitmentsSO recruitmentsSO;
     
-    public void Init()
+    public void Init(RecruitmentsSO recruitmentsSO)
     {
         if(applicants == null)
             applicants = new List<Employee>();
+
+        this.recruitmentsSO = recruitmentsSO;
     }
 
 
@@ -120,7 +123,7 @@ public struct Recruitment
             { "day", day },
             //{ "id", id },
             { "level", level },
-            { "applicants", GetApplicantsToJson()},
+            { "applicants", ApplicantsToJson()},
             { "employeeType", (int)employeeSO.GetEmployeeType() },
         };
         //EmployeeToJSON
@@ -128,7 +131,7 @@ public struct Recruitment
     }
 
     //employees를 JSON으로
-    public Dictionary<string, Dictionary<string, object>> GetApplicantsToJson() 
+    public Dictionary<string, Dictionary<string, object>> ApplicantsToJson() 
     {
         Dictionary<string, Dictionary<string, object>> result = new Dictionary<string, Dictionary<string, object>>();
 
@@ -149,7 +152,7 @@ public struct Recruitment
 
 
     //Recruitment 값 입력
-    public void JSONToRecruitment(KeyValuePair<string, object> data)
+    public void RecruitmentFromJSON(KeyValuePair<string, object> data, RecruitmentsSO recruitmentsSO)
     {
         this.SetID(int.Parse(data.Key));
 
@@ -157,11 +160,11 @@ public struct Recruitment
         //디버깅
         this.SetDay(Convert.ToInt32(keyValues["day"]));
         this.SetLevel(Convert.ToInt32(keyValues["level"]));
-        this.SetEmployeeSO(RecruitmentController.instance.GetEmployeeSO(
+        this.SetEmployeeSO(recruitmentsSO.GetEmployeeSO(
             Convert.ToInt32(keyValues["employeeType"]
         )));
 
-        Init();
+        Init(recruitmentsSO);
 
         foreach (KeyValuePair<string, object> serverApplicant in (Dictionary<string, object>)keyValues["applicants"])
         {

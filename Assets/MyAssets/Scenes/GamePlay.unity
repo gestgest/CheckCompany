@@ -3486,59 +3486,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3607736533060247424, guid: b3dfcc7f2ccc35d40a8a900250732e11, type: 3}
   m_PrefabInstance: {fileID: 143113340}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &143977382
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 143977383}
-  - component: {fileID: 143977384}
-  m_Layer: 0
-  m_Name: RecruitmentController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &143977383
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 143977382}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 853192603}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &143977384
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 143977382}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae1591fb0a3505640aa927fb2600f8ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  employeeSOs:
-  - {fileID: 11400000, guid: 8bc37c78e20212d479e6b29330ed631b, type: 2}
-  - {fileID: 11400000, guid: 15d3cddb1b549ac41b194a5de5f12099, type: 2}
-  - {fileID: 11400000, guid: 88e98f653e9e18e45a87d95530a15dcb, type: 2}
-  - {fileID: 11400000, guid: 972b68f653f37a847a90135cbc2220a2, type: 2}
-  recruitmentPrefab: {fileID: 8974342152770559031, guid: 32efdf2fedeb42c45ac036900fd03e16, type: 3}
-  view: {fileID: 329780243}
-  costText: {fileID: 1475385537}
-  employeeNameSO: {fileID: 11400000, guid: b1872c501f9b97343a92b3e8f02cb4c0, type: 2}
 --- !u!1 &148915108
 GameObject:
   m_ObjectHideFlags: 0
@@ -9971,8 +9918,8 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RecruitmentController, Assembly-CSharp
+      - m_Target: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
+        m_TargetAssemblyTypeName: RecruitmentsSO, Assembly-CSharp
         m_MethodName: Setperiod
         m_Mode: 3
         m_Arguments:
@@ -11537,8 +11484,8 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RecruitmentController, Assembly-CSharp
+      - m_Target: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
+        m_TargetAssemblyTypeName: RecruitmentsSO, Assembly-CSharp
         m_MethodName: Setperiod
         m_Mode: 3
         m_Arguments:
@@ -13189,6 +13136,7 @@ MonoBehaviour:
   employeeStatusWindow: {fileID: 122420082}
   employeePanel: {fileID: 1106018435}
   employeeStatusPanelSO: {fileID: 11400000, guid: 2422b8b1e26db9d43a1504abd3f2f96f, type: 2}
+  recruitmentsSO: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
 --- !u!1001 &513321112
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16023,6 +15971,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ui_manager: {fileID: 511141745}
   fireStoreManager: {fileID: 1311823163}
+  recruitmentsSO: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
+  missionsSO: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
+  recruitmentView: {fileID: 329780243}
+  recrutmentCostText: {fileID: 1475385537}
+  mission_panel: {fileID: 248255120}
+  complete_mission_panel: {fileID: 873169011}
 --- !u!1 &606009176
 GameObject:
   m_ObjectHideFlags: 0
@@ -19985,6 +19939,7 @@ MonoBehaviour:
   panels: []
   hasMini: 1
   background: {fileID: 983607706}
+  recruitmentsSO: {fileID: 0}
 --- !u!1 &744651055
 GameObject:
   m_ObjectHideFlags: 0
@@ -21534,8 +21489,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 143977384}
-        m_TargetAssemblyTypeName: RecruitmentController, Assembly-CSharp
+      - m_Target: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
+        m_TargetAssemblyTypeName: RecruitmentsSO, Assembly-CSharp
         m_MethodName: AddRecruitment
         m_Mode: 1
         m_Arguments:
@@ -21843,7 +21798,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 143977383}
   - {fileID: 512347915}
   - {fileID: 377234036}
   m_Father: {fileID: 602332988}
@@ -27128,8 +27082,8 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RecruitmentController, Assembly-CSharp
+      - m_Target: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
+        m_TargetAssemblyTypeName: RecruitmentsSO, Assembly-CSharp
         m_MethodName: SetLevel
         m_Mode: 3
         m_Arguments:
@@ -31047,6 +31001,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 755c2e04b1bc15f41873a639cd94c057, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recruitmentsSO: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
 --- !u!1 &1203399159
 GameObject:
   m_ObjectHideFlags: 0
@@ -34167,8 +34122,8 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RecruitmentController, Assembly-CSharp
+      - m_Target: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
+        m_TargetAssemblyTypeName: RecruitmentsSO, Assembly-CSharp
         m_MethodName: Setperiod
         m_Mode: 3
         m_Arguments:
@@ -46155,8 +46110,8 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RecruitmentController, Assembly-CSharp
+      - m_Target: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
+        m_TargetAssemblyTypeName: RecruitmentsSO, Assembly-CSharp
         m_MethodName: SetLevel
         m_Mode: 3
         m_Arguments:
@@ -52446,14 +52401,14 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RecruitmentController, Assembly-CSharp
+      - m_Target: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
+        m_TargetAssemblyTypeName: RecruitmentsSO, Assembly-CSharp
         m_MethodName: SetLevel
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 3
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0

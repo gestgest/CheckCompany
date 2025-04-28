@@ -35,7 +35,7 @@ public class FireStoreManager : MonoBehaviour
 
             //이거 스타트가 아닌 로그인 이후 작동해야 한다. 
             if(GameManager.instance != null)
-                GameManager.instance.GameStart(); //=> 대충 서버에서 데이터 들어오는 함수
+                GameManager.instance.GameServerStart(); //=> 대충 서버에서 데이터 들어오는 함수
         });
     }
 

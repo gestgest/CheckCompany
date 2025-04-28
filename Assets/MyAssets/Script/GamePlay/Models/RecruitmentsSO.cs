@@ -5,7 +5,6 @@ using Random = UnityEngine.Random;
 
 
 [CreateAssetMenu(fileName = "RecruitmentsSO", menuName = "ScriptableObject/Model/RecruitmentsSO")]
-
 public class RecruitmentsSO : ScriptableObject
 {
     //채용 리스트
@@ -13,11 +12,14 @@ public class RecruitmentsSO : ScriptableObject
     List<GameObject> recruitmentObjects; //RecruitmentElement
     int id = 0; //생성하려는 recruitment id
 
-    [SerializeField] List<EmployeeSO> employeeSOs;
+    [SerializeField] List<EmployeeSO> employeeSOs; //employee 특징
     [SerializeField] private GameObject recruitmentPrefab;
-    [SerializeField] private GameObject view; //parent
-    [SerializeField] private TextMeshProUGUI costText;
     [SerializeField] private EmployeeNameSO employeeNameSO;
+
+    //init로 넣어야 할 정보
+    private GameObject view; //parent
+    private TextMeshProUGUI costText;
+
 
     //채용 정보 [버튼을 누르면 함수를 호출해서 tmp처럼 대신 넣는 느낌]
     private int employeeTypeIndex = 0; //0,1,2,3
@@ -40,8 +42,14 @@ public class RecruitmentsSO : ScriptableObject
         //ShowRecruitments();
     }
 
+    public void Init(GameObject view, TextMeshProUGUI costText)
+    {
+        this.view = view;
+        this.costText = costText;
+    }
+
     //초기 채용공고 리스트 보여주는 함수
-    public void InitRecruitments()
+    public void ShowRecruitments()
     {
         SetID();
 
@@ -72,7 +80,7 @@ public class RecruitmentsSO : ScriptableObject
     public void AddRecruitment()
     {
         Recruitment recruitment = new Recruitment();
-        recruitment.Init();
+        recruitment.Init(this);
 
         //버튼 정보 가져오기 디버깅
         recruitment.SetEmployeeSO(employeeSOs[employeeTypeIndex]);
@@ -83,7 +91,7 @@ public class RecruitmentsSO : ScriptableObject
 
         Debug.Log(recruitment.GetID());
         recruitments.Add(recruitment);
-        Add_server_recruitment_index(Search_Recruitment_Index(recruitment.GetID()));
+        AddServerRecruitmentIndex(Search_Recruitment_Index(recruitment.GetID()));
 
         CreateRecruitmentObject(recruitment);
     }
@@ -187,6 +195,7 @@ public class RecruitmentsSO : ScriptableObject
     {
         return recruitments[id];
     }
+    
     public void RecruitmentsFromJSON(Dictionary<string, object> serverRecruitments) //server 예정
     {
         if (this.recruitments == null)
@@ -199,12 +208,12 @@ public class RecruitmentsSO : ScriptableObject
             foreach (KeyValuePair<string, object> serverRecruitment in serverRecruitments)
             {
                 Recruitment recruitment = new Recruitment();
-                recruitment.JSONToRecruitment(serverRecruitment);
+                recruitment.RecruitmentFromJSON(serverRecruitment, this);
                 this.recruitments.Add(recruitment);
             }
         }
 
-        InitRecruitments();
+        ShowRecruitments();
     }
 
 
@@ -219,7 +228,7 @@ public class RecruitmentsSO : ScriptableObject
 
     #endregion
 
-    public void Add_server_recruitment_index(int index) //recruit 인덱스만 서버 동기화 => Firestore 배열 Add 기능만 있음
+    public void AddServerRecruitmentIndex(int index) //recruit 인덱스만 서버 동기화 => Firestore 배열 Add 기능만 있음
     {
         //Dictionary<string, object> data = new Dictionary<string, object>
         //{

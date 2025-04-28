@@ -7,6 +7,8 @@ using TMPro;
 //나중에 dropbox 인터페이스 만들 예정 [소공] => 채용 공고 드롭박스 클래스
 public class RecruitmentDropbox : MonoBehaviour
 {
+    [SerializeField] private RecruitmentsSO recruitmentsSO;
+
     TMP_Dropdown dropdown;
     void Start()
     {
@@ -19,7 +21,7 @@ public class RecruitmentDropbox : MonoBehaviour
     void DropdownChanged(TMP_Dropdown change_dropdown)
     {
         //대충 controller의 함수 조절
-        RecruitmentController.instance.SetEmployeeType(change_dropdown.value);
+        recruitmentsSO.SetEmployeeType(change_dropdown.value);
     }
 
 }

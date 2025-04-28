@@ -6,11 +6,12 @@ public class ApplicantPanel : MiniPanel
     //private Button xButton;
     //private Button yButton;
 
+    [SerializeField] RecruitmentsSO recruitmentsSO;
+
     private int applicant_id; //직원 index
     private int recruitment_id; //채용공고 index
     //private RecruitmentElement recruitmentElement; //지원자 리스트가 있음
     //전역으로 가져오는 RecruitmentController
-
 
     public void SetID(int applicant_id, int recruitment_id)
     {
@@ -52,8 +53,8 @@ public class ApplicantPanel : MiniPanel
 
     private RecruitmentElement GetRecruitmentElement()
     {
-        int index = RecruitmentController.instance.Search_Recruitment_Index(recruitment_id);
-        RecruitmentElement recruitmentElement = RecruitmentController.instance.GetRecruitmentObject(index).GetComponent<RecruitmentElement>();
+        int index = recruitmentsSO.Search_Recruitment_Index(recruitment_id);
+        RecruitmentElement recruitmentElement = recruitmentsSO.GetRecruitmentObject(index).GetComponent<RecruitmentElement>();
 
         return recruitmentElement;
     }

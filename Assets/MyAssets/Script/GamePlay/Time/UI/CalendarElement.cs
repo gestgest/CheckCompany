@@ -7,6 +7,7 @@ public class CalendarElement : MonoBehaviour
 {
     Date date;
     [SerializeField] private TextMeshProUGUI dayText;
+    [SerializeField] private MissionsSO missionsSO;
 
     private void Awake()
     {
@@ -38,7 +39,7 @@ public class CalendarElement : MonoBehaviour
         panel_index.Add(1);
         panel_index.Add(2); //edit
 
-        MissionController.instance.GetCompleteMissionPanel().SetQueryDate(date);
+        missionsSO.GetCompleteMissionPanel().SetQueryDate(date);
         GamePanelManager.instance.SwitchingPanel(panel_index);
     }
 
