@@ -44,6 +44,10 @@ public class EmployeeStatusWindow : MonoBehaviour
     //MissionPanel의 Mission
     [SerializeField] private GameObject[] smallMission_PoolObjects; //풀링용 오브젝트 (7개)
     [SerializeField] private GameObject smallMission_prefab; //토글
+
+    [Header("Model")]
+    [SerializeField] private MissionsSO missionsSO;
+
     
     private Employee employee;
     // ㄴ Mission : 미션 목록들은 여기에 있다 ****************
@@ -119,7 +123,7 @@ public class EmployeeStatusWindow : MonoBehaviour
         }
         
         //missions 개수만큼 addMissionElement_prefab 생성
-        for (int i = 0; i < MissionController.instance.GetMissionSize(); i++)
+        for (int i = 0; i < missionsSO.GetMissionSize(); i++)
         {
             GameObject addMissionElement = Instantiate(addMissionElement_prefab);
 
@@ -128,7 +132,7 @@ public class EmployeeStatusWindow : MonoBehaviour
 
             //SetMission 함수 실행
             AddMissionElementUI element = addMissionElement.GetComponent<AddMissionElementUI>();
-            element.SetMission(MissionController.instance.GetMission(i));
+            element.SetMission(missionsSO.GetMission(i));
             element.SetEmployeeStatusWindow(this.GetComponent<EmployeeStatusWindow>());
         }
     }

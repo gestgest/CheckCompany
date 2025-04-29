@@ -8,6 +8,8 @@ public class CompleteMissionPanel : MissionPanel
     private Date queryDate;
     private bool isQuery = false;
 
+    [SerializeField] private MissionsSO missionsSO;
+
     private void Awake()
     {
         queryDate = new Date();
@@ -23,7 +25,7 @@ public class CompleteMissionPanel : MissionPanel
         }
         
         //base.Start();
-        foreach (Mission mission in MissionController.instance.GetMissions())
+        foreach (Mission mission in missionsSO.GetMissions())
         {
             //만약 완료된 미션이 있는 경우(쿼리)
             if (mission.GetIsDone())

@@ -8,6 +8,8 @@ using UnityEngine.UIElements;
 
 public class EditMissionPanel : Panel
 {
+    [SerializeField] private MissionsSO missionsSO;
+
     [SerializeField] private TMP_InputField title;
 
     //라디오버튼 그룹 두개
@@ -18,7 +20,8 @@ public class EditMissionPanel : Panel
     [SerializeField] private GameObject[] todo_mission_textObject; //edittext todoMission 오브젝트들
 
     [SerializeField] private MultiLayoutGroup multiLayoutGroup;
-    
+  
+
 
     //소미션
     private int todo_mission_size;
@@ -143,13 +146,13 @@ public class EditMissionPanel : Panel
         );
 
         //값을 미션 적용, 이후 모든 오브젝트 초기화
-        MissionController missionController = MissionController.instance;
+        
 
-        int index = missionController.Search_Mission_Index(mission_id);
-        missionController.SetMission(mission, index);
+        int index = missionsSO.Search_Mission_Index(mission_id);
+        missionsSO.SetMission(mission, index);
 
         //정해진 element를 설정하는 함수 => 리롤함수?
-        missionController.Reroll_MissionElement(index);
+        missionsSO.Reroll_MissionElement(index);
 
         //back 네비 Panel
         PanelManager.instance.Back_Nav_Panel();
@@ -158,7 +161,7 @@ public class EditMissionPanel : Panel
     //최종적으로 서버에 있는 미션 삭제
     public void RemoveMission()
     {
-        MissionController.instance.RemoveMission(mission_id);
+        missionsSO.RemoveMission(mission_id);
         FireStoreManager.instance.DeleteFirestoreDataKey(
             "GamePlayUser",
             GameManager.instance.Nickname,

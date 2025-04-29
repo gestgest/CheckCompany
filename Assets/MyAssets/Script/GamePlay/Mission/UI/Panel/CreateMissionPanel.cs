@@ -9,6 +9,8 @@ using UnityEngine.UI;
 
 public class CreateMissionPanel : Panel
 {
+    [SerializeField] private MissionsSO missionsSO;
+
     [SerializeField] private MissionPanel missionPanel;
 
     [SerializeField] private TMP_InputField title_InputField;
@@ -130,17 +132,17 @@ public class CreateMissionPanel : Panel
         //대충 
 
         Mission todo_mission = new Mission(
-            MissionController.instance.GetAndIncrementCount(),
+            missionsSO.GetAndIncrementCount(),
             employee_type,
             title_InputField.text,
             0, //iconID
             level,
             todo_Missions
         );
-        
 
-        MissionController.instance.AddMission(todo_mission);
-        MissionController.instance.MissionCountToServer();
+
+        missionsSO.AddMission(todo_mission);
+        missionsSO.MissionCountToServer();
         
         TodoMission_ToServer(todo_mission.GetMission_ToJSON(), todo_mission.ID);
 
