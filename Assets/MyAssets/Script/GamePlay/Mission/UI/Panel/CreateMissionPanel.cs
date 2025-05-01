@@ -9,6 +9,7 @@ using UnityEngine.UI;
 
 public class CreateMissionPanel : Panel
 {
+    [Header("SO")]
     [SerializeField] private MissionsSO missionsSO;
 
     [SerializeField] private MissionPanel missionPanel;
@@ -18,7 +19,6 @@ public class CreateMissionPanel : Panel
     [SerializeField] private GameObject [] todo_Mission_Objects;
     [SerializeField] private MultiLayoutGroup multiLayoutGroup; //제일 아래 Layout => inputList
     [SerializeField] private Toggle[] toggles;
-
 
     
     //이미지? => 정말 나중에 만들 예정 => 지금은 그냥 0으로 default
@@ -135,6 +135,7 @@ public class CreateMissionPanel : Panel
             missionsSO.GetAndIncrementCount(),
             employee_type,
             title_InputField.text,
+            missionsSO.GetIcon(0),
             0, //iconID
             level,
             todo_Missions

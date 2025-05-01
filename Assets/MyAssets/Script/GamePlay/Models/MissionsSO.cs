@@ -6,7 +6,7 @@ using UnityEngine;
 public class MissionsSO : ScriptableObject
 {
     //이미지 리스트?
-    [SerializeField] private Sprite[] icons;
+    [SerializeField] private IconsSO iconsSO;
 
     //init
     private MissionPanel missionPanel;
@@ -70,7 +70,7 @@ public class MissionsSO : ScriptableObject
 
     public Sprite GetIcon(int index)
     {
-        return icons[index];
+        return iconsSO.icons[index];
     }
 
     public List<Mission> GetMissions()

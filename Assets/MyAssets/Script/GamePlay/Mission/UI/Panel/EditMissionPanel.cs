@@ -8,10 +8,15 @@ using UnityEngine.UIElements;
 
 public class EditMissionPanel : Panel
 {
+    
+    [Header("SO")]
     [SerializeField] private MissionsSO missionsSO;
 
+    
     [SerializeField] private TMP_InputField title;
 
+
+    
     //라디오버튼 그룹 두개
     //ㄴ 나중에 SetMission때 활용
 
@@ -132,6 +137,7 @@ public class EditMissionPanel : Panel
             id: mission_id,
             employeeTypeGroup.GetIndex(),
             title.text,
+            missionsSO.GetIcon(0),
             0, //iconID
             levelGroup.GetIndex(),
             Get_Todo_Missions()
