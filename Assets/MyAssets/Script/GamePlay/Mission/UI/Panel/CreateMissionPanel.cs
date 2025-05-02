@@ -145,7 +145,7 @@ public class CreateMissionPanel : Panel
         missionsSO.AddMission(todo_mission);
         missionsSO.MissionCountToServer();
         
-        TodoMission_ToServer(todo_mission.GetMission_ToJSON(), todo_mission.ID);
+        TodoMission_ToServer(todo_mission.MissionToJSON(), todo_mission.ID);
 
         missionPanel.CreateMissionElementObject(todo_mission); //
         //missionPanel.OnPanel(); => 이거 자체가 서브 미션 Panel이라 전환이 안됨

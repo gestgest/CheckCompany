@@ -8,8 +8,6 @@ public class CompleteMissionPanel : MissionPanel
     private Date queryDate;
     private bool isQuery = false;
 
-    [SerializeField] private MissionsSO missionsSO;
-
     private void Awake()
     {
         queryDate = new Date();

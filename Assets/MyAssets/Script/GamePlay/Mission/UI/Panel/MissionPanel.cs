@@ -12,7 +12,7 @@ public class MissionPanel : Panel
     //pool링 예정
     [SerializeField] protected MissionElement [] missionElementPoolObjects = new MissionElement[MISSION_MAX_SIZE];
 
-    [SerializeField] private MissionsSO missionsSO;
+    [SerializeField] protected MissionsSO missionsSO;
 
 
     private int mission_count = 0; //현재 미션 카운트

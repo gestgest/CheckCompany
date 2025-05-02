@@ -138,7 +138,8 @@ public class MissionsSO : ScriptableObject
             Mission mission = new Mission();
 
             mission.ID = Convert.ToInt32(todo_mission.Key);
-            mission.SetMissionFromJSON(tmp);
+            mission.JSONToMission(tmp);
+            mission.SetIcon(GetIcon(Convert.ToInt32(tmp["icon"])));
             AddMission(mission);
 
 

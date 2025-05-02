@@ -2797,7 +2797,7 @@ MonoBehaviour:
   - {fileID: 1628016312}
   - {fileID: 1754490399}
   smallMission_prefab: {fileID: 1359309258578336218, guid: 074f8cbdcbd61574aafb7a4828beb8db, type: 3}
-  missionsSO: {fileID: 0}
+  missionsSO: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
 --- !u!114 &122420083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5784,7 +5784,7 @@ MonoBehaviour:
   - {fileID: 469735495}
   - {fileID: 513321113}
   - {fileID: 26392287}
-  missionsSO: {fileID: 0}
+  missionsSO: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
 --- !u!1 &249294261
 GameObject:
   m_ObjectHideFlags: 0
@@ -22534,8 +22534,7 @@ MonoBehaviour:
   - {fileID: 1131497531}
   - {fileID: 275946860}
   - {fileID: 345158740}
-  missionsSO: {fileID: 0}
-  missionsSO: {fileID: 0}
+  missionsSO: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
 --- !u!1001 &875819240
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31165,7 +31164,7 @@ MonoBehaviour:
   panelInfo: {fileID: 11400000, guid: 7bb1200649c2e8f46ba1ce397142c313, type: 2}
   panels: []
   hasMini: 0
-  missionsSO: {fileID: 0}
+  missionsSO: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
   title: {fileID: 1843250800}
   employeeTypeGroup: {fileID: 1963349253}
   levelGroup: {fileID: 48490508}

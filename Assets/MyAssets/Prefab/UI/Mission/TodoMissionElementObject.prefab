@@ -476,3 +476,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: {fileID: 1633237964460933825}
   my_toggle: {fileID: 1080800320367645077}
+  missionsSO: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}

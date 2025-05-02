@@ -40,6 +40,8 @@ public class Mission
         this.id = id;
         this.mission_type = (EmployeeType)(_type);
         this.missionName = _name;
+
+        this.icon = icon;
         this.iconID = iconID;
         this.level = level;
 
@@ -126,7 +128,7 @@ public class Mission
     }
 
     //서버 보내기
-    public Dictionary<string, object> GetMission_ToJSON()
+    public Dictionary<string, object> MissionToJSON()
     {
         Dictionary<string, object> result = new Dictionary<string, object>
         {
@@ -162,7 +164,7 @@ public class Mission
 
     /// <summary> 서버에서 가져오는 </summary>
     /// <param name="data"></param>
-    public void SetMissionFromJSON(Dictionary<string, object> data)
+    public void JSONToMission(Dictionary<string, object> data)
     {
         mission_type = (EmployeeType)(Convert.ToInt32(data["type"]));
         missionName = (string)data["name"];

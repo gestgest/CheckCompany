@@ -148,7 +148,7 @@ public class EditMissionPanel : Panel
             "GamePlayUser",
             GameManager.instance.Nickname,
             "missions." + mission_id.ToString(),
-            mission.GetMission_ToJSON()
+            mission.MissionToJSON()
         );
 
         //값을 미션 적용, 이후 모든 오브젝트 초기화
