@@ -2,43 +2,40 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 //직원 고용 관련 
-public class EmployeeController : MonoBehaviour
+[CreateAssetMenu(fileName = "EmployeeControllerSO", menuName = "ScriptableObject/Controller/EmployeeControllerSO")]
+public class EmployeeControllerSO : ScriptableObject
 {
-    public static EmployeeController instance;
+    [SerializeField] private GameObject employeePrefab;
+    
+    [Header("Controller")]
+    [SerializeField] private RecruitmentControllerSO recruitmentControllerSo;
+    
     //직원 목록
     List<Employee> employees;
     List<GameObject> employeeObjects;
 
-    [SerializeField] private GameObject employeePrefab;
-    [SerializeField] private GameObject parent;
-    [SerializeField] private EmployeeStatusWindow employeeStatusWindow; //이거를 subPanel로 바꿀 수 없나
-    [SerializeField] private Panel employeePanel;
-    [SerializeField] private PanelSO employeeStatusPanelSO;
-
-    [SerializeField] private RecruitmentsSO recruitmentsSO;
+    GameObject parent;
+    EmployeeStatusWindow employeeStatusWindow; //이거를 subPanel로 바꿀 수 없나
+    Panel employeePanel;
     
-    private void Awake()
+    public void Init(GameObject parent,
+        EmployeeStatusWindow employeeStatusWindow,
+        Panel employeePanel)
     {
-        if(instance == null)
-        {
-            instance = this;
-            return;
-        }
-        Destroy(gameObject);
-    }
-
-    private void Start()
-    {
+        this.parent = parent;
+        this.employeeStatusWindow = employeeStatusWindow;
+        this.employeePanel = employeePanel;
+        
         employees = new List<Employee>();
         employeeObjects = new List<GameObject>();
 
         InitEmployeeSet();
     }
-
-
+    
     //init함수
     private void InitEmployeeSet()
     {
@@ -48,6 +45,8 @@ public class EmployeeController : MonoBehaviour
             CreateEmployeeElementUI(e);
         }
     }
+
+    
 
 
     //show함수, index를 employees기준으로 하면 안된다. => 나중에 전체 ID로 바꿀 예정
@@ -151,9 +150,9 @@ public class EmployeeController : MonoBehaviour
         employeeStatusWindow.SetMentalBarUI(employee_id, value);
     }
 
-    public void BanSmallCheckMission()
+    public void BanCheckTodoMission()
     {
-        employeeStatusWindow.BanSmallCheckMission();
+        employeeStatusWindow.BanCheckTodoMission();
     }
     
     #region SERVER
@@ -192,10 +191,10 @@ public class EmployeeController : MonoBehaviour
         {
             Dictionary<string, object> tmp = (Dictionary<string, object>)(serverEmployee.Value);
 
-            EmployeeSO employeeSO = recruitmentsSO.GetEmployeeSO(Convert.ToInt32(tmp["employeeType"]));
-            Employee employee = new EmployeeBuilder().BuildEmployee(employeeSO);
+            EmployeeSO employeeSO = recruitmentControllerSo.GetEmployeeSO(Convert.ToInt32(tmp["employeeType"]));
+            Employee employee = new EmployeeBuilder().BuildEmployee(employeeSO, this);
 
-            employee.GetEmployeeFromJSON(serverEmployee);
+            employee.JSONToEmployee(serverEmployee);
             this.employees.Add(employee);
         }
         InitEmployeeSet();

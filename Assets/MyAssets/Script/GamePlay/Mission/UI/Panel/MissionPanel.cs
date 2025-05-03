@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class MissionPanel : Panel
 {
@@ -12,7 +13,7 @@ public class MissionPanel : Panel
     //pool링 예정
     [SerializeField] protected MissionElement [] missionElementPoolObjects = new MissionElement[MISSION_MAX_SIZE];
 
-    [SerializeField] protected MissionsSO missionsSO;
+    [FormerlySerializedAs("missionController")] [FormerlySerializedAs("missionsSO")] [SerializeField] protected MissionControllerSO missionControllerSo;
 
 
     private int mission_count = 0; //현재 미션 카운트
@@ -48,7 +49,7 @@ public class MissionPanel : Panel
         // }
         
 
-        foreach (Mission mission in missionsSO.GetMissions())
+        foreach (Mission mission in missionControllerSo.GetMissions())
         {
             if (!mission.GetIsDone())
                 CreateMissionElementObject(mission);
@@ -117,12 +118,12 @@ public class MissionPanel : Panel
     /// <param name="id"></param>
     private void EditPanelOn(int id)
     {
-        int index = missionsSO.Search_Mission_Index(id);
+        int index = missionControllerSo.Search_Mission_Index(id);
 
         GamePanelManager.instance.SwitchingSubPanel(true, editPanelIndex);
 
         //editPanel에게 값 전달
-        missionEditPanel.SetMission(missionsSO.GetMission(index));
+        missionEditPanel.SetMission(missionControllerSo.GetMission(index));
         //missionEditPanel.gameObject.SetActive(true);
     }
 

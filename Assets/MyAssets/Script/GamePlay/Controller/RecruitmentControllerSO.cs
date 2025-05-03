@@ -4,8 +4,8 @@ using TMPro;
 using Random = UnityEngine.Random;
 
 
-[CreateAssetMenu(fileName = "RecruitmentsSO", menuName = "ScriptableObject/Model/RecruitmentsSO")]
-public class RecruitmentsSO : ScriptableObject
+[CreateAssetMenu(fileName = "RecruitmentControllerSO", menuName = "ScriptableObject/Controller/RecruitmentControllerSO")]
+public class RecruitmentControllerSO : ScriptableObject
 {
     //채용 리스트
     List<Recruitment> recruitments;
@@ -28,22 +28,11 @@ public class RecruitmentsSO : ScriptableObject
     private int cost; //코스트 => 게임 오브젝트도 가져와서 설정해야 할 거 같은데
 
 
-
-    private void Start()
+    public void Init(GameObject view, TextMeshProUGUI costText)
     {
         recruitments = new List<Recruitment>();
         recruitmentObjects = new List<GameObject>();
-
-        //서버에서 recruitments 가져오는 함수() => 이미 init로 함
-
-        //dictionary => list로 변환하는 함수
-
-        //InitRecruitments(); //recruitments => 오브젝트
-        //ShowRecruitments();
-    }
-
-    public void Init(GameObject view, TextMeshProUGUI costText)
-    {
+        
         this.view = view;
         this.costText = costText;
     }
@@ -80,7 +69,7 @@ public class RecruitmentsSO : ScriptableObject
     public void AddRecruitment()
     {
         Recruitment recruitment = new Recruitment();
-        recruitment.Init(this);
+        recruitment.Init();
 
         //버튼 정보 가져오기 디버깅
         recruitment.SetEmployeeSO(employeeSOs[employeeTypeIndex]);
@@ -208,7 +197,7 @@ public class RecruitmentsSO : ScriptableObject
             foreach (KeyValuePair<string, object> serverRecruitment in serverRecruitments)
             {
                 Recruitment recruitment = new Recruitment();
-                recruitment.RecruitmentFromJSON(serverRecruitment, this);
+                recruitment.JSONToRecruitment(serverRecruitment, this);
                 this.recruitments.Add(recruitment);
             }
         }

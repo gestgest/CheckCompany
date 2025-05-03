@@ -249,7 +249,7 @@ public class FirebaseAuthManager : MonoBehaviour
     {
         fireStoreManager.SetNewFirestoreData("GamePlayUser", name, "money", 0);
         fireStoreManager.SetFirestoreData("GamePlayUser", name, "employee_count", 0);
-        GameDate date = new GameDate();
+        Date date = new Date();
         fireStoreManager.SetFirestoreData("GamePlayUser", name, "date", date.DateToJSON());
         fireStoreManager.SetFirestoreData("GamePlayUser", name, "recruitments", new Dictionary<string, object>());
         fireStoreManager.SetFirestoreData("GamePlayUser", name, "employees",  new Dictionary<string, object>());

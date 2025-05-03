@@ -873,6 +873,7 @@ MonoBehaviour:
   career: {fileID: 7451260808772709630}
   weight_speed: {fileID: 7451260808283607147}
   costUI: {fileID: 7451260809651480234}
+  _employeeControllerSO: {fileID: 11400000, guid: 6a695d970d94e0a4bb81e3e309e1fadf, type: 2}
 --- !u!114 &5557849269532494991
 MonoBehaviour:
   m_ObjectHideFlags: 0

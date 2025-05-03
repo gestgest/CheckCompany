@@ -1989,7 +1989,7 @@ MonoBehaviour:
   panelInfo: {fileID: 11400000, guid: b97579edfb26f854eb2efdb44e593021, type: 2}
   panels: []
   hasMini: 0
-  missionsSO: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
+  missionControllerSo: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
   missionPanel: {fileID: 248255120}
   title_InputField: {fileID: 2006799269}
   todo_Mission_Objects:
@@ -2797,7 +2797,7 @@ MonoBehaviour:
   - {fileID: 1628016312}
   - {fileID: 1754490399}
   smallMission_prefab: {fileID: 1359309258578336218, guid: 074f8cbdcbd61574aafb7a4828beb8db, type: 3}
-  missionsSO: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
+  missionControllerSo: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
 --- !u!114 &122420083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5784,7 +5784,7 @@ MonoBehaviour:
   - {fileID: 469735495}
   - {fileID: 513321113}
   - {fileID: 26392287}
-  missionsSO: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
+  missionControllerSo: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
 --- !u!1 &249294261
 GameObject:
   m_ObjectHideFlags: 0
@@ -13039,56 +13039,6 @@ MonoBehaviour:
   - {fileID: 855242062}
   - {fileID: 1422666449}
   backButton: {fileID: 1022317060}
---- !u!1 &512347914
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 512347915}
-  - component: {fileID: 512347916}
-  m_Layer: 0
-  m_Name: EmployeeController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &512347915
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 512347914}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 853192603}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &512347916
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 512347914}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dfa91f27f0350c045b42f74817cae502, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  employeePrefab: {fileID: 7451260809270566376, guid: 147f27304293a2e48a04f84d1cd21c44, type: 3}
-  parent: {fileID: 1490410352}
-  employeeStatusWindow: {fileID: 122420082}
-  employeePanel: {fileID: 1106018435}
-  employeeStatusPanelSO: {fileID: 11400000, guid: 2422b8b1e26db9d43a1504abd3f2f96f, type: 2}
-  recruitmentsSO: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
 --- !u!1001 &513321112
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15905,7 +15855,6 @@ Transform:
   m_Children:
   - {fileID: 2059868567}
   - {fileID: 511141744}
-  - {fileID: 853192603}
   - {fileID: 1311823162}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -15923,12 +15872,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ui_manager: {fileID: 511141745}
   fireStoreManager: {fileID: 1311823163}
-  recruitmentsSO: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
-  missionsSO: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
+  recruitmentControllerSO: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
+  missionControllerSO: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
+  employeeControllerSO: {fileID: 11400000, guid: 6a695d970d94e0a4bb81e3e309e1fadf, type: 2}
   recruitmentView: {fileID: 329780243}
   recrutmentCostText: {fileID: 1475385537}
   mission_panel: {fileID: 248255120}
   complete_mission_panel: {fileID: 873169011}
+  employeeParent: {fileID: 1490410352}
+  employeeStatusWindow: {fileID: 122420082}
+  employeePanel: {fileID: 122420083}
 --- !u!1 &606009176
 GameObject:
   m_ObjectHideFlags: 0
@@ -19891,7 +19844,8 @@ MonoBehaviour:
   panels: []
   hasMini: 1
   background: {fileID: 983607706}
-  recruitmentsSO: {fileID: 0}
+  recruitmentControllerSO: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
+  employeeControllerSO: {fileID: 11400000, guid: 6a695d970d94e0a4bb81e3e309e1fadf, type: 2}
 --- !u!1 &744651055
 GameObject:
   m_ObjectHideFlags: 0
@@ -21721,38 +21675,6 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   m_IsOn: 0
---- !u!1 &853192602
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 853192603}
-  m_Layer: 0
-  m_Name: Employee
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &853192603
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 853192602}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 512347915}
-  m_Father: {fileID: 602332988}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &853354017
 GameObject:
   m_ObjectHideFlags: 0
@@ -22534,7 +22456,7 @@ MonoBehaviour:
   - {fileID: 1131497531}
   - {fileID: 275946860}
   - {fileID: 345158740}
-  missionsSO: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
+  missionControllerSo: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
 --- !u!1001 &875819240
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30953,7 +30875,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 755c2e04b1bc15f41873a639cd94c057, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recruitmentsSO: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
+  recruitmentControllerSo: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
 --- !u!1 &1203399159
 GameObject:
   m_ObjectHideFlags: 0
@@ -31164,7 +31086,7 @@ MonoBehaviour:
   panelInfo: {fileID: 11400000, guid: 7bb1200649c2e8f46ba1ce397142c313, type: 2}
   panels: []
   hasMini: 0
-  missionsSO: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
+  missionControllerSo: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
   title: {fileID: 1843250800}
   employeeTypeGroup: {fileID: 1963349253}
   levelGroup: {fileID: 48490508}

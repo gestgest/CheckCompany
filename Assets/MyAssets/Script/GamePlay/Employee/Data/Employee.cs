@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Firebase.Firestore;
+using UnityEngine.Events;
 
 
 //public interface IEmployee
@@ -28,13 +29,19 @@ public class Employee
     private bool isEmployee = false;
     //private bool [] isClearSmallMission; acievement => Mission의 missions로 대체 
 
+    //Controller Function
+    private UnityAction<int, int> setStaminaBarUI;
+    private UnityAction banCheckTodoMission;
+    
     public const int MAX_MISSION_SIZE = 5;
     public const int MAX_TODO_MISSION_SIZE = 7; //소미션
 
+    #region PROPERTY
     public int ID { get { return id; } set { id = value; } }
     public EmployeeSO _EmployeeSO { get { return employeeSO; } set { employeeSO = value; } }
     public string Name { get { return employee_name; } set { employee_name = value; } }
     public int Age { get { return age; } set { age = value; } }
+    
     /*
     public int Stamina 
     {
@@ -51,14 +58,19 @@ public class Employee
     }
     */
     public int Stamina => stamina;
+
     public void SetStamina(int value, bool toServer = true)
     {
         stamina = value;
         if (stamina > max_stamina)
             stamina = max_stamina;
 
-        EmployeeController.instance.SetStaminaBarUI(ID, stamina);
-        EmployeeController.instance.BanSmallCheckMission();
+        if (setStaminaBarUI != null)
+        {
+            setStaminaBarUI.Invoke(ID, stamina);
+            banCheckTodoMission.Invoke();            
+        }
+
         
         if(toServer)
             SetStaminaToServer(GameManager.instance.Nickname, id);
@@ -75,35 +87,23 @@ public class Employee
     public UMUMUM GetMission(int index) { return missions[index]; }
     public bool Get_SmallMission_Achievement(int index) { return missions[0].GetAchievement(index); }
     public bool IsEmployee { get { return isEmployee; } set { isEmployee = value; } }
-    //public bool GetSmallMissionAchievement(int index) { return false; }
-
-    //기술
+    
+    #endregion
+    
     //미션 => 5개
-    public Employee()
+    /// <summary>생성자 </summary>
+    /// <param name="employeeControllerSO"> </param>
+    public Employee(EmployeeControllerSO employeeControllerSO = null)
     {
         missions = new UMUMUM[MAX_MISSION_SIZE];
-    }
-
-    //소 미션 클리어 갯수 구하기 => Mission 함수의 GetAchievementClearCount를 이용해라 
-    /*
-    public int GetIsClearSmallMissionSize() 
-    {
-        int count = 0;
-        if(mission_size == 0)
-            return count;
-
-        Mission mission = GetMission(0);
-        for(int i = 0; i < mission.GetMissionSO().GetSmallMissions().Length; i++)
+        if (employeeControllerSO == null)
         {
-            if(GetSmallMissionAchievement(i))
-            {
-                count++;
-            }
+            return;
         }
-        return count;
+        
+        setStaminaBarUI += employeeControllerSO.SetStaminaBarUI;
+        banCheckTodoMission += employeeControllerSO.BanCheckTodoMission;
     }
-    */
-
 
     public int GetMissionSize() { return mission_size; }
 
@@ -217,7 +217,7 @@ public class Employee
     }
 
     //서버에 받기
-    public void GetEmployeeFromJSON(KeyValuePair<string, object> employee)
+    public void JSONToEmployee(KeyValuePair<string, object> employee)
     {
         //0, (age, careerPeriod, name, rank, salary, worktime {start, end})
         ID = int.Parse(employee.Key);

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class ApplicantPanel : MiniPanel
@@ -6,7 +7,9 @@ public class ApplicantPanel : MiniPanel
     //private Button xButton;
     //private Button yButton;
 
-    [SerializeField] RecruitmentsSO recruitmentsSO;
+    //controller
+    [SerializeField] RecruitmentControllerSO recruitmentControllerSO;
+    [SerializeField] EmployeeControllerSO employeeControllerSO;
 
     private int applicant_id; //직원 index
     private int recruitment_id; //채용공고 index
@@ -41,7 +44,7 @@ public class ApplicantPanel : MiniPanel
         employee.IsEmployee = true;
         if(employee != null)
         {
-            EmployeeController.instance.CreateEmployee(employee);
+            employeeControllerSO.CreateEmployee(employee);
             recruitmentElement.RemoveApplicant(applicant_id);
         }
         PanelManager.instance.Back_Nav_Panel();
@@ -53,8 +56,8 @@ public class ApplicantPanel : MiniPanel
 
     private RecruitmentElement GetRecruitmentElement()
     {
-        int index = recruitmentsSO.Search_Recruitment_Index(recruitment_id);
-        RecruitmentElement recruitmentElement = recruitmentsSO.GetRecruitmentObject(index).GetComponent<RecruitmentElement>();
+        int index = recruitmentControllerSO.Search_Recruitment_Index(recruitment_id);
+        RecruitmentElement recruitmentElement = (recruitmentControllerSO.GetRecruitmentObject(index)).GetComponent<RecruitmentElement>();
 
         return recruitmentElement;
     }

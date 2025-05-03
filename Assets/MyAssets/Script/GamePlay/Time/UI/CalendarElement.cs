@@ -2,12 +2,13 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CalendarElement : MonoBehaviour
 {
     Date date;
     [SerializeField] private TextMeshProUGUI dayText;
-    [SerializeField] private MissionsSO missionsSO;
+    [FormerlySerializedAs("missionController")] [FormerlySerializedAs("missionsSO")] [SerializeField] private MissionControllerSO missionControllerSo;
 
     private void Awake()
     {
@@ -39,7 +40,7 @@ public class CalendarElement : MonoBehaviour
         panel_index.Add(1);
         panel_index.Add(2); //edit
 
-        missionsSO.GetCompleteMissionPanel().SetQueryDate(date);
+        missionControllerSo.GetCompleteMissionPanel().SetQueryDate(date);
         GamePanelManager.instance.SwitchingPanel(panel_index);
     }
 

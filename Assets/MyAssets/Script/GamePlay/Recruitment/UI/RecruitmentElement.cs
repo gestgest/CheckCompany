@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 //채용 칸 스크립트
@@ -22,8 +23,10 @@ public class RecruitmentElement : MonoBehaviour
     
     [SerializeField]private MultiLayoutGroup _multiLayoutGroup; //applicantsPanel
 
-    //Manager
-    [SerializeField] private RecruitmentsSO recruitmentsSO;
+    //Controller
+    [Header("Controller")]
+    [SerializeField] private RecruitmentControllerSO recruitmentControllerSo;
+    [SerializeField] private EmployeeControllerSO _employeeControllerSO;
 
 
     //지원자 정보 리스트
@@ -33,7 +36,7 @@ public class RecruitmentElement : MonoBehaviour
     private static int HEIGHT = 100;
     private void Start()
     {
-        recruitment.Init(recruitmentsSO);
+        recruitment.Init();
 
         //Init();
 
@@ -130,7 +133,7 @@ public class RecruitmentElement : MonoBehaviour
 
     public void RemoveRecruitment()
     {
-        recruitmentsSO.RemoveRecruitment(recruitment.GetID());
+        recruitmentControllerSo.RemoveRecruitment(recruitment.GetID());
         _multiLayoutGroup.AddOnHeight(-HEIGHT);
         _multiLayoutGroup.RerollScreen();
         Destroy(gameObject);
@@ -178,8 +181,8 @@ public class RecruitmentElement : MonoBehaviour
         employee.Mental = 100;
         employee.CareerPeriod = 12; //1 year
         employee.Salary = 1000000; //월 100만원
-        employee._EmployeeSO = recruitmentsSO.GetRecruitmentEmployeeSO(
-            recruitmentsSO.Search_Recruitment_Index(recruitment.GetID())
+        employee._EmployeeSO = recruitmentControllerSo.GetRecruitmentEmployeeSO(
+            recruitmentControllerSo.Search_Recruitment_Index(recruitment.GetID())
         );
         //(int)(recruitment.GetEmployeeSO().GetEmployeeType()
 

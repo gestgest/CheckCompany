@@ -10,14 +10,11 @@ public struct Recruitment
     int level;
     List<Employee> applicants;
     private EmployeeSO employeeSO;
-    private RecruitmentsSO recruitmentsSO;
     
-    public void Init(RecruitmentsSO recruitmentsSO)
+    public void Init()
     {
         if(applicants == null)
             applicants = new List<Employee>();
-
-        this.recruitmentsSO = recruitmentsSO;
     }
 
 
@@ -152,7 +149,7 @@ public struct Recruitment
 
 
     //Recruitment 값 입력
-    public void RecruitmentFromJSON(KeyValuePair<string, object> data, RecruitmentsSO recruitmentsSO)
+    public void JSONToRecruitment(KeyValuePair<string, object> data, RecruitmentControllerSO recruitmentControllerSO)
     {
         this.SetID(int.Parse(data.Key));
 
@@ -160,12 +157,13 @@ public struct Recruitment
         //디버깅
         this.SetDay(Convert.ToInt32(keyValues["day"]));
         this.SetLevel(Convert.ToInt32(keyValues["level"]));
-        this.SetEmployeeSO(recruitmentsSO.GetEmployeeSO(
+        this.SetEmployeeSO(recruitmentControllerSO.GetEmployeeSO(
             Convert.ToInt32(keyValues["employeeType"]
         )));
 
-        Init(recruitmentsSO);
+        Init();
 
+        //지원자
         foreach (KeyValuePair<string, object> serverApplicant in (Dictionary<string, object>)keyValues["applicants"])
         {
             //0, (age, careerPeriod, name, rank, salary, worktime {start, end})
@@ -173,7 +171,7 @@ public struct Recruitment
             Employee employee = new EmployeeBuilder().BuildEmployee(employeeSO);
             
 
-            employee.GetEmployeeFromJSON(serverApplicant); //가져오는 함수
+            employee.JSONToEmployee(serverApplicant); //가져오는 함수
             AddApplicant(employee);
 
             //그러니까 이거를 그려야한다

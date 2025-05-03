@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "MissionsSO", menuName = "ScriptableObject/Model/MissionsSO")]
-public class MissionsSO : ScriptableObject
+[CreateAssetMenu(fileName = "MissionControllerSO", menuName = "ScriptableObject/Controller/MissionControllerSO")]
+public class MissionControllerSO : ScriptableObject
 {
     //이미지 리스트?
     [SerializeField] private IconsSO iconsSO;

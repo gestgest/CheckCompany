@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe763679315f670478ddf5084e50579d, type: 3}
-  m_Name: RecruitmentsSO
+  m_Name: RCSO
   m_EditorClassIdentifier: 
   employeeSOs:
   - {fileID: 11400000, guid: 8bc37c78e20212d479e6b29330ed631b, type: 2}

@@ -9,8 +9,10 @@ using UnityEngine.UIElements;
 public class EditMissionPanel : Panel
 {
     
+    [FormerlySerializedAs("missionController")]
+    [FormerlySerializedAs("missionsSO")]
     [Header("SO")]
-    [SerializeField] private MissionsSO missionsSO;
+    [SerializeField] private MissionControllerSO missionControllerSo;
 
     
     [SerializeField] private TMP_InputField title;
@@ -137,7 +139,7 @@ public class EditMissionPanel : Panel
             id: mission_id,
             employeeTypeGroup.GetIndex(),
             title.text,
-            missionsSO.GetIcon(0),
+            missionControllerSo.GetIcon(0),
             0, //iconID
             levelGroup.GetIndex(),
             Get_Todo_Missions()
@@ -154,11 +156,11 @@ public class EditMissionPanel : Panel
         //값을 미션 적용, 이후 모든 오브젝트 초기화
         
 
-        int index = missionsSO.Search_Mission_Index(mission_id);
-        missionsSO.SetMission(mission, index);
+        int index = missionControllerSo.Search_Mission_Index(mission_id);
+        missionControllerSo.SetMission(mission, index);
 
         //정해진 element를 설정하는 함수 => 리롤함수?
-        missionsSO.Reroll_MissionElement(index);
+        missionControllerSo.Reroll_MissionElement(index);
 
         //back 네비 Panel
         PanelManager.instance.Back_Nav_Panel();
@@ -167,7 +169,7 @@ public class EditMissionPanel : Panel
     //최종적으로 서버에 있는 미션 삭제
     public void RemoveMission()
     {
-        missionsSO.RemoveMission(mission_id);
+        missionControllerSo.RemoveMission(mission_id);
         FireStoreManager.instance.DeleteFirestoreDataKey(
             "GamePlayUser",
             GameManager.instance.Nickname,

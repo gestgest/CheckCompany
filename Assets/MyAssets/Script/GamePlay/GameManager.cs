@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Firebase.Auth;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,11 +16,11 @@ public class GameManager : MonoBehaviour
     private FirebaseAuth auth;
     private FirebaseUser user;
 
-    //모델 리스트
-    [Header("Models")]
-    [SerializeField] RecruitmentsSO recruitmentsSO;
-    [SerializeField] MissionsSO missionsSO;
-
+    //컨트롤러 리스트
+    [Header("Controller")]
+    [SerializeField] RecruitmentControllerSO recruitmentControllerSO;
+    [SerializeField] MissionControllerSO missionControllerSO;
+    [SerializeField] EmployeeControllerSO employeeControllerSO;
 
     //init 리스트
     [Header("Recruitment")]
@@ -30,7 +31,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private MissionPanel mission_panel;
     [SerializeField] private CompleteMissionPanel complete_mission_panel;
 
-
+    [Header("Employee")]
+    [SerializeField] private GameObject employeeParent;
+    [SerializeField] private EmployeeStatusWindow employeeStatusWindow; //이거를 subPanel로 바꿀 수 없나
+    [SerializeField] private Panel employeePanel;
 
     private string nickname;
 
@@ -63,12 +67,13 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        recruitmentsSO.Init(recruitmentView, recrutmentCostText);
-        missionsSO.Init(mission_panel, complete_mission_panel);
-
+        recruitmentControllerSO.Init(recruitmentView, recrutmentCostText);
+        missionControllerSO.Init(mission_panel, complete_mission_panel);
+        employeeControllerSO.Init(employeeParent, employeeStatusWindow, employeePanel);
+        
+        date = new GameDate(employeeControllerSO.AddStamina);
         //절대로 LoginScene에 넣지마 => 메인 스레드 충돌 오류
         fireStoreManager.Init();
-        date = new GameDate();
         //SetDateUI();
     }
     
@@ -109,23 +114,22 @@ public class GameManager : MonoBehaviour
             employee_count = Convert.ToInt32(tmp_employee_count);
         }
         
-        
-        date.GetDateFromJSON(
-            (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "date")
-        );
-        SetDateUI();
-
         //MissionController.instance.Init();
-        missionsSO.SetMissionData(
+        missionControllerSO.SetMissionData(
             (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "missions"),
             Convert.ToInt32(await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "mission_count"))
         );
 
         Dictionary<string,object> recruitments = (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "recruitments");
-        recruitmentsSO.RecruitmentsFromJSON(recruitments);
+        recruitmentControllerSO.RecruitmentsFromJSON(recruitments);
 
         Dictionary<string, object> employees = (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "employees");
-        EmployeeController.instance.EmployeesFromJSON(employees);
+        employeeControllerSO.EmployeesFromJSON(employees);
+        
+        date.GetDateFromJSON(
+            (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "date")
+        );
+        SetDateUI();
     }
 
     #region property
@@ -183,7 +187,7 @@ public class GameManager : MonoBehaviour
     public void AddDateMinute(int value)
     {
         date.Minute += value;
-        recruitmentsSO.AddApplicants(60 / value);
+        recruitmentControllerSO.AddApplicants(60 / value);
         SetDateUI();
     }
 
