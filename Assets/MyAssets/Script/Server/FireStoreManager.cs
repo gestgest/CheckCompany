@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,13 +6,15 @@ using Firebase;
 using Firebase.Firestore;
 using Firebase.Extensions;
 using System.Threading.Tasks;
-
+using UnityEngine.Serialization;
 
 
 public class FireStoreManager : MonoBehaviour
 {
     static FirebaseFirestore db;
     public static FireStoreManager instance;
+    [SerializeField] DeleteFirebaseEventChannelSO deleteFirebaseEventChannelSO;
+    [SerializeField] SendFirebaseEventChannelSO sendFirebaseEventChannelSO;
 
     private void Awake()
     {
@@ -21,6 +24,12 @@ public class FireStoreManager : MonoBehaviour
             return;
         }
         Destroy(gameObject);
+    }
+
+    private void Start()
+    {
+        deleteFirebaseEventChannelSO.OnDeleteEvent.AddListener(DeleteFirestoreDataKey);
+        sendFirebaseEventChannelSO.OnSendEvent.AddListener(SetFirestoreData);
     }
 
     //이미 app과 db는 싱글톤이다.

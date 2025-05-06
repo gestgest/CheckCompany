@@ -32687,6 +32687,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a44bd993097f2384ea94ca61d80c3a23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deleteFirebaseEventChannelSO: {fileID: 11400000, guid: 7a1f9e67b78693248b645e9629191902, type: 2}
+  sendFirebaseEventChannelSO: {fileID: 11400000, guid: bc6e20a0b24975943a58a86b83f606ea, type: 2}
 --- !u!1 &1313963528
 GameObject:
   m_ObjectHideFlags: 0
