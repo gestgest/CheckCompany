@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public struct Recruitment
 {
@@ -10,11 +11,15 @@ public struct Recruitment
     int level;
     List<Employee> applicants;
     private EmployeeSO employeeSO;
+
+    public UnityAction<int, int> _onDeleteServerApplicant; //서버 지원자 제거 함수
     
-    public void Init()
+    public void Init(UnityAction<int, int> onDeleteServerApplicant)
     {
         if(applicants == null)
             applicants = new List<Employee>();
+
+        _onDeleteServerApplicant += onDeleteServerApplicant;
     }
 
 
@@ -60,9 +65,14 @@ public struct Recruitment
         applicants.Add(applicant);
     }
 
-    public void RemoveApplicant(int index)
+
+    /// <summary> 서버 포함 지원자 제거 함수 </summary>
+    /// <param name="applicant_id"></param>
+    /// <param name="applicant_index"></param>
+    public void RemoveApplicant(int applicant_id, int applicant_index)
     {
-        applicants.RemoveAt(index);
+        _onDeleteServerApplicant.Invoke(GetID(), applicant_id);
+        applicants.RemoveAt(applicant_index);
     }
 
     public int GetApplicantCount()
@@ -120,7 +130,7 @@ public struct Recruitment
             { "day", day },
             //{ "id", id },
             { "level", level },
-            { "applicants", GetApplicantsToJson()},
+            { "applicants", ApplicantsToJson()},
             { "employeeType", (int)employeeSO.GetEmployeeType() },
         };
         //EmployeeToJSON
@@ -128,7 +138,7 @@ public struct Recruitment
     }
 
     //employees를 JSON으로
-    public Dictionary<string, Dictionary<string, object>> GetApplicantsToJson() 
+    public Dictionary<string, Dictionary<string, object>> ApplicantsToJson() 
     {
         Dictionary<string, Dictionary<string, object>> result = new Dictionary<string, Dictionary<string, object>>();
 
@@ -139,7 +149,7 @@ public struct Recruitment
 
         for (int i = 0; i < applicants.Count; i++)
         {
-            result.Add(applicants[i].ID.ToString(), applicants[i].SetEmployeeToJSON());
+            result.Add(applicants[i].ID.ToString(), applicants[i].EmployeeToJSON());
             //result.applicants[i].EmployeeToJSON());
         }
 
@@ -149,7 +159,7 @@ public struct Recruitment
 
 
     //Recruitment 값 입력
-    public void JSONToRecruitment(KeyValuePair<string, object> data)
+    public void JSONToRecruitment(KeyValuePair<string, object> data, RecruitmentControllerSO rsSO, EmployeeControllerSO ecSO)
     {
         this.SetID(int.Parse(data.Key));
 
@@ -157,35 +167,27 @@ public struct Recruitment
         //디버깅
         this.SetDay(Convert.ToInt32(keyValues["day"]));
         this.SetLevel(Convert.ToInt32(keyValues["level"]));
-        this.SetEmployeeSO(RecruitmentController.instance.GetEmployeeSO(
+        this.SetEmployeeSO(rsSO.GetEmployeeSO(
             Convert.ToInt32(keyValues["employeeType"]
         )));
 
-        Init();
+        Init(rsSO.RemoveServerApplicant);
 
+        //지원자
         foreach (KeyValuePair<string, object> serverApplicant in (Dictionary<string, object>)keyValues["applicants"])
         {
             //0, (age, careerPeriod, name, rank, salary, worktime {start, end})
             //Switch문으로 해결 => emploeeSO로 구분
-            Employee employee = new EmployeeBuilder().BuildEmployee(employeeSO);
+            Employee employee = new EmployeeBuilder().BuildEmployee(employeeSO, ecSO, false);
             
 
-            employee.GetEmployeeFromJSON(serverApplicant); //가져오는 함수
+            employee.JSONToEmployee(serverApplicant); //가져오는 함수
             AddApplicant(employee);
 
             //그러니까 이거를 그려야한다
         }
     }
 
-    public void RemoveServerApplicant(int index)
-    {
-        string id = GetID().ToString(); 
-        FireStoreManager.instance.DeleteFirestoreDataKey(
-            "GamePlayUser",
-            GameManager.instance.Nickname,
-            "recruitments." + id + ".applicants." + index.ToString()
-        );
-    }
 
     #endregion
 }

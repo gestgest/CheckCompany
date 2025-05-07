@@ -1,21 +1,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using System;
 using Random = UnityEngine.Random;
 
-public class RecruitmentsSO
+
+[CreateAssetMenu(fileName = "RecruitmentControllerSO", menuName = "ScriptableObject/Controller/RecruitmentControllerSO")]
+public class RecruitmentControllerSO : ScriptableObject
 {
     //채용 리스트
     List<Recruitment> recruitments;
     List<GameObject> recruitmentObjects; //RecruitmentElement
     int id = 0; //생성하려는 recruitment id
 
-    [SerializeField] List<EmployeeSO> employeeSOs;
+    [SerializeField] List<EmployeeSO> employeeSOs; //employee 특징
     [SerializeField] private GameObject recruitmentPrefab;
-    [SerializeField] private GameObject view; //parent
-    [SerializeField] private TextMeshProUGUI costText;
     [SerializeField] private EmployeeNameSO employeeNameSO;
+
+    [Header("Controller")]
+    [SerializeField] private EmployeeControllerSO _employeeControllerSO;
+
+
+    [Header("ServerEvent")]
+    [SerializeField] private DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
+    [SerializeField] private SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
+
+    //init로 넣어야 할 정보
+    private GameObject view; //parent
+    private TextMeshProUGUI costText;
+
 
     //채용 정보 [버튼을 누르면 함수를 호출해서 tmp처럼 대신 넣는 느낌]
     private int employeeTypeIndex = 0; //0,1,2,3
@@ -24,22 +36,17 @@ public class RecruitmentsSO
     private int cost; //코스트 => 게임 오브젝트도 가져와서 설정해야 할 거 같은데
 
 
-
-    private void Start()
+    public void Init(GameObject view, TextMeshProUGUI costText)
     {
         recruitments = new List<Recruitment>();
         recruitmentObjects = new List<GameObject>();
-
-        //서버에서 recruitments 가져오는 함수() => 이미 init로 함
-
-        //dictionary => list로 변환하는 함수
-
-        //InitRecruitments(); //recruitments => 오브젝트
-        //ShowRecruitments();
+        
+        this.view = view;
+        this.costText = costText;
     }
 
     //초기 채용공고 리스트 보여주는 함수
-    public void InitRecruitments()
+    public void ShowRecruitments()
     {
         SetID();
 
@@ -70,7 +77,7 @@ public class RecruitmentsSO
     public void AddRecruitment()
     {
         Recruitment recruitment = new Recruitment();
-        recruitment.Init();
+        recruitment.Init(RemoveServerApplicant);
 
         //버튼 정보 가져오기 디버깅
         recruitment.SetEmployeeSO(employeeSOs[employeeTypeIndex]);
@@ -81,7 +88,7 @@ public class RecruitmentsSO
 
         Debug.Log(recruitment.GetID());
         recruitments.Add(recruitment);
-        Add_server_recruitment_index(Search_Recruitment_Index(recruitment.GetID()));
+        AddServerRecruitmentIndex(Search_Recruitment_Index(recruitment.GetID()));
 
         CreateRecruitmentObject(recruitment);
     }
@@ -166,6 +173,10 @@ public class RecruitmentsSO
         }
     }
 
+    /// <summary>
+    /// 서버 포함 제거
+    /// </summary>
+    /// <param name="id">recruitment_id</param>
     public void RemoveRecruitment(int id)
     {
         int index = Search_Recruitment_Index(id);
@@ -173,7 +184,7 @@ public class RecruitmentsSO
         recruitmentObjects.RemoveAt(index);
 
         //서버 연동
-        Remove_server_recruitment_index(id);
+        RemoveServerRecruitment(id);
     }
 
     public EmployeeSO GetEmployeeSO(int index)
@@ -185,7 +196,8 @@ public class RecruitmentsSO
     {
         return recruitments[id];
     }
-    public void RecruitmentsFromJSON(Dictionary<string, object> serverRecruitments) //server 예정
+    
+    public void JSONToRecruitments(Dictionary<string, object> serverRecruitments) //server 예정
     {
         if (this.recruitments == null)
             this.recruitments = new List<Recruitment>();
@@ -197,12 +209,12 @@ public class RecruitmentsSO
             foreach (KeyValuePair<string, object> serverRecruitment in serverRecruitments)
             {
                 Recruitment recruitment = new Recruitment();
-                recruitment.JSONToRecruitment(serverRecruitment);
+                recruitment.JSONToRecruitment(serverRecruitment, this, _employeeControllerSO);
                 this.recruitments.Add(recruitment);
             }
         }
 
-        InitRecruitments();
+        ShowRecruitments();
     }
 
 
@@ -217,33 +229,53 @@ public class RecruitmentsSO
 
     #endregion
 
-    public void Add_server_recruitment_index(int index) //recruit 인덱스만 서버 동기화 => Firestore 배열 Add 기능만 있음
-    {
-        //Dictionary<string, object> data = new Dictionary<string, object>
-        //{
-        //    { index.ToString(), recruitments[index].RecruitmentToJSON() }
-        //};
+    #region SERVER
 
-        FireStoreManager.instance.SetFirestoreData("GamePlayUser",
+    //recruitment
+    public void AddServerRecruitmentIndex(int index) //recruit 인덱스만 서버 동기화 => Firestore 배열 Add 기능만 있음
+    {
+        _sendFirebaseEventChannelSO.RaiseEvent(
+            "GamePlayUser",
             GameManager.instance.Nickname,
             "recruitments." + index.ToString(),
             recruitments[index].RecruitmentToJSON()
         );
-
         //recruitments.index => 
         //FieldValue.ArrayUnion(recruitments[index].RecruitmentToJSON()) //기존에 있는 배열에서 추가한 느낌
 
-        //user/
     }
 
-    public void Remove_server_recruitment_index(int id)
+    public void RemoveServerRecruitment(int id)
     {
-        FireStoreManager.instance.DeleteFirestoreDataKey(
+        _deleteFirebaseEventChannelSO.RaiseEvent(
             "GamePlayUser",
             GameManager.instance.Nickname,
             "recruitments." + id.ToString()
         );
     }
+
+    //applicant
+    public void RemoveServerApplicant(int recruitment_id, int applicant_id)
+    {
+        //recruitment의 id, applicant_id는 지원자의 id
+        string id = recruitment_id.ToString();
+        _deleteFirebaseEventChannelSO.RaiseEvent(
+            "GamePlayUser",
+            GameManager.instance.Nickname,
+            "recruitments." + id + ".applicants." + applicant_id.ToString()
+        );
+    }
+    public void SetServerApplicant(int recruitment_id, Employee applicant)
+    {
+        _sendFirebaseEventChannelSO.RaiseEvent("GamePlayUser",
+            GameManager.instance.Nickname,
+            "recruitments." + recruitment_id.ToString() + ".applicants." + applicant.ID,
+            applicant.EmployeeToJSON()
+        );
+    }
+
+
+    #endregion
 
     //Recruitment 이진탐색
     public int Search_Recruitment_Index(int id)

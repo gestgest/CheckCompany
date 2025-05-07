@@ -1,42 +1,47 @@
+using Firebase.Firestore;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 //직원 고용 관련 
-public class EmployeeController : MonoBehaviour
+[CreateAssetMenu(fileName = "EmployeeControllerSO", menuName = "ScriptableObject/Controller/EmployeeControllerSO")]
+public class EmployeeControllerSO : ScriptableObject
 {
-    public static EmployeeController instance;
+    [SerializeField] private GameObject employeePrefab;
+    
+    [Header("Controller")]
+    [SerializeField] private RecruitmentControllerSO recruitmentControllerSo;
+
+    [Header("ServerEvent")]
+    [SerializeField] private DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
+    [SerializeField] private SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
+
+
     //직원 목록
     List<Employee> employees;
     List<GameObject> employeeObjects;
 
-    [SerializeField] private GameObject employeePrefab;
-    [SerializeField] private GameObject parent;
-    [SerializeField] private EmployeeStatusWindow employeeStatusWindow; //이거를 subPanel로 바꿀 수 없나
-    [SerializeField] private Panel employeePanel;
-    [SerializeField] private PanelSO employeeStatusPanelSO;
+    GameObject parent;
+    EmployeeStatusWindow employeeStatusWindow; //이거를 subPanel로 바꿀 수 없나
+    Panel employeePanel;
     
-    private void Awake()
+    public void Init(GameObject parent,
+        EmployeeStatusWindow employeeStatusWindow,
+        Panel employeePanel)
     {
-        if(instance == null)
-        {
-            instance = this;
-            return;
-        }
-        Destroy(gameObject);
-    }
-
-    private void Start()
-    {
+        this.parent = parent;
+        this.employeeStatusWindow = employeeStatusWindow;
+        this.employeePanel = employeePanel;
+        
         employees = new List<Employee>();
         employeeObjects = new List<GameObject>();
 
         InitEmployeeSet();
     }
-
-
+    
     //init함수
     private void InitEmployeeSet()
     {
@@ -46,6 +51,8 @@ public class EmployeeController : MonoBehaviour
             CreateEmployeeElementUI(e);
         }
     }
+
+    
 
 
     //show함수, index를 employees기준으로 하면 안된다. => 나중에 전체 ID로 바꿀 예정
@@ -73,7 +80,7 @@ public class EmployeeController : MonoBehaviour
         if (index != -1)
         {
             employees.RemoveAt(index);
-            RemoveEmployeeToServer(id); //서버도 제거
+            RemoveServerEmployee(id); //서버도 제거
             Destroy(employeeObjects[index]);
             employeeObjects.RemoveAt(index);
         }
@@ -107,7 +114,7 @@ public class EmployeeController : MonoBehaviour
 
     public void CreateEmployee(Employee e)
     {
-        SetEmployeeToServer(e);
+        SetServerEmployee(e);
         employees.Add(e);
         CreateEmployeeElementUI(e);
         SelectionEmployeeSort();
@@ -149,29 +156,9 @@ public class EmployeeController : MonoBehaviour
         employeeStatusWindow.SetMentalBarUI(employee_id, value);
     }
 
-    public void BanSmallCheckMission()
+    public void BanCheckTodoMission()
     {
-        employeeStatusWindow.BanSmallCheckMission();
-    }
-    
-    #region SERVER
-    void SetEmployeeToServer(Employee e)
-    {
-        //서버에 
-        FireStoreManager.instance.SetFirestoreData("GamePlayUser",
-            GameManager.instance.Nickname,
-            "employees." + e.ID,
-            e.SetEmployeeToJSON()
-        );
-    }
-
-    void RemoveEmployeeToServer(int id)
-    {
-        FireStoreManager.instance.DeleteFirestoreDataKey(
-            "GamePlayUser",
-            GameManager.instance.Nickname, 
-            "employees." + id.ToString()
-        );
+        employeeStatusWindow.BanCheckTodoMission();
     }
 
     //고용된 직원 서버 자료들을 인 게임으로 가져오는 함수
@@ -190,13 +177,67 @@ public class EmployeeController : MonoBehaviour
         {
             Dictionary<string, object> tmp = (Dictionary<string, object>)(serverEmployee.Value);
 
-            EmployeeSO employeeSO = RecruitmentController.instance.GetEmployeeSO(Convert.ToInt32(tmp["employeeType"]));
-            Employee employee = new EmployeeBuilder().BuildEmployee(employeeSO);
+            EmployeeSO employeeSO = recruitmentControllerSo.GetEmployeeSO(Convert.ToInt32(tmp["employeeType"]));
+            Employee employee = new EmployeeBuilder().BuildEmployee(employeeSO, this, true);
 
-            employee.GetEmployeeFromJSON(serverEmployee);
+            employee.JSONToEmployee(serverEmployee);
             this.employees.Add(employee);
         }
         InitEmployeeSet();
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////서버
+    #region SERVER
+
+    //employee
+    void SetServerEmployee(Employee e)
+    {
+        _sendFirebaseEventChannelSO.RaiseEvent(
+            "GamePlayUser",
+            GameManager.instance.Nickname, 
+            "employees." + e.ID,
+            e.EmployeeToJSON()
+        );
+    }
+
+    void RemoveServerEmployee(int id)
+    {
+        _deleteFirebaseEventChannelSO.RaiseEvent(
+            "GamePlayUser",
+            GameManager.instance.Nickname,
+            "employees." + id.ToString()
+        );
+    }
+
+    public void RemoveAllServerMissions(string nickname, int id)
+    {
+        _sendFirebaseEventChannelSO.RaiseEvent(
+            "GamePlayUser",
+            nickname,
+            "employees." + id.ToString() + ".missions",
+            FieldValue.Delete
+        );
+    }
+    public void AddServerMission(UMUMUM m, string nickname, int id)
+    {
+        _sendFirebaseEventChannelSO.RaiseEvent(
+            "GamePlayUser",
+            nickname,
+            "employees." + id.ToString() + ".missions",
+            FieldValue.ArrayUnion(m.SetMissionToJSON())
+        );
+    }
+
+    public void SetServerStamina(string nickname, int id, int stamina)
+    {
+        string em = "employees.";
+        _sendFirebaseEventChannelSO.RaiseEvent(
+            "GamePlayUser",
+            nickname,
+            em + id.ToString() + ".stamina",
+            stamina
+        );
     }
 
     #endregion

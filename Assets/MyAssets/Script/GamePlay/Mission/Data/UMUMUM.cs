@@ -8,6 +8,8 @@ public class UMUMUM
 {
     private Mission todo_mission;
 
+    private MissionControllerSO _missionControllerSo;
+
     //달성률
     //생각해보니 달성률이 아니라 각각의 미션 달성을 true false 해야할듯
     private bool [] achievementList; //small_missions 사이즈만큼 할당
@@ -34,8 +36,8 @@ public class UMUMUM
     {
         //id 탐색
         int id = Convert.ToInt32(mission["id"]);
-        int index = MissionController.instance.Search_Mission_Index(id);
-        SetTodo_Mission(MissionController.instance.GetMission(index));
+        int index = _missionControllerSo.Search_Mission_Index(id);
+        SetTodo_Mission(_missionControllerSo.GetMission(index));
         
         List<object> achievementList_tmp = (List<object>)mission["achievementList"];
         for (int i = 0; i < achievementList_tmp.Count; i++)

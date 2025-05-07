@@ -1989,6 +1989,7 @@ MonoBehaviour:
   panelInfo: {fileID: 11400000, guid: b97579edfb26f854eb2efdb44e593021, type: 2}
   panels: []
   hasMini: 0
+  _missionControllerSO: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
   missionPanel: {fileID: 248255120}
   title_InputField: {fileID: 2006799269}
   todo_Mission_Objects:
@@ -2796,6 +2797,7 @@ MonoBehaviour:
   - {fileID: 1628016312}
   - {fileID: 1754490399}
   smallMission_prefab: {fileID: 1359309258578336218, guid: 074f8cbdcbd61574aafb7a4828beb8db, type: 3}
+  missionControllerSo: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
 --- !u!114 &122420083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3486,59 +3488,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3607736533060247424, guid: b3dfcc7f2ccc35d40a8a900250732e11, type: 3}
   m_PrefabInstance: {fileID: 143113340}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &143977382
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 143977383}
-  - component: {fileID: 143977384}
-  m_Layer: 0
-  m_Name: RecruitmentController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &143977383
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 143977382}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 853192603}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &143977384
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 143977382}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae1591fb0a3505640aa927fb2600f8ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  employeeSOs:
-  - {fileID: 11400000, guid: 8bc37c78e20212d479e6b29330ed631b, type: 2}
-  - {fileID: 11400000, guid: 15d3cddb1b549ac41b194a5de5f12099, type: 2}
-  - {fileID: 11400000, guid: 88e98f653e9e18e45a87d95530a15dcb, type: 2}
-  - {fileID: 11400000, guid: 972b68f653f37a847a90135cbc2220a2, type: 2}
-  recruitmentPrefab: {fileID: 8974342152770559031, guid: 32efdf2fedeb42c45ac036900fd03e16, type: 3}
-  view: {fileID: 329780243}
-  costText: {fileID: 1475385537}
-  employeeNameSO: {fileID: 11400000, guid: b1872c501f9b97343a92b3e8f02cb4c0, type: 2}
 --- !u!1 &148915108
 GameObject:
   m_ObjectHideFlags: 0
@@ -5835,6 +5784,7 @@ MonoBehaviour:
   - {fileID: 469735495}
   - {fileID: 513321113}
   - {fileID: 26392287}
+  missionControllerSo: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
 --- !u!1 &249294261
 GameObject:
   m_ObjectHideFlags: 0
@@ -6638,7 +6588,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -6690,7 +6640,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2700
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.z
@@ -7570,7 +7520,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -7622,7 +7572,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -900
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.z
@@ -7857,7 +7807,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -7909,7 +7859,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2850
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.z
@@ -9413,7 +9363,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -9465,7 +9415,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1500
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.z
@@ -9664,57 +9614,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 373943252}
   m_CullTransparentMesh: 1
---- !u!1 &377234035
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 377234036}
-  - component: {fileID: 377234037}
-  m_Layer: 0
-  m_Name: MissionController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &377234036
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 377234035}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 853192603}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &377234037
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 377234035}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25f10cdd785fb3c4b9a936b5c40c2534, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  icons:
-  - {fileID: 21300000, guid: 1020e824c0e16244792785c6eb93bf8a, type: 3}
-  - {fileID: 21300000, guid: 42da2db40431f944a8ff9708300488a6, type: 3}
-  - {fileID: 21300000, guid: 1e318fa03637cd747be6f4b6f744a425, type: 3}
-  - {fileID: 21300000, guid: cf579be53edf3554399dcd88d76d5537, type: 3}
-  mission_panel: {fileID: 248255120}
-  complete_mission_panel: {fileID: 873169011}
 --- !u!1 &380815689
 GameObject:
   m_ObjectHideFlags: 0
@@ -9971,8 +9870,8 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RecruitmentController, Assembly-CSharp
+      - m_Target: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
+        m_TargetAssemblyTypeName: RecruitmentsSO, Assembly-CSharp
         m_MethodName: Setperiod
         m_Mode: 3
         m_Arguments:
@@ -11537,8 +11436,8 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RecruitmentController, Assembly-CSharp
+      - m_Target: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
+        m_TargetAssemblyTypeName: RecruitmentsSO, Assembly-CSharp
         m_MethodName: Setperiod
         m_Mode: 3
         m_Arguments:
@@ -11801,7 +11700,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -11853,7 +11752,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.z
@@ -13140,55 +13039,6 @@ MonoBehaviour:
   - {fileID: 855242062}
   - {fileID: 1422666449}
   backButton: {fileID: 1022317060}
---- !u!1 &512347914
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 512347915}
-  - component: {fileID: 512347916}
-  m_Layer: 0
-  m_Name: EmployeeController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &512347915
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 512347914}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 853192603}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &512347916
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 512347914}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dfa91f27f0350c045b42f74817cae502, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  employeePrefab: {fileID: 7451260809270566376, guid: 147f27304293a2e48a04f84d1cd21c44, type: 3}
-  parent: {fileID: 1490410352}
-  employeeStatusWindow: {fileID: 122420082}
-  employeePanel: {fileID: 1106018435}
-  employeeStatusPanelSO: {fileID: 11400000, guid: 2422b8b1e26db9d43a1504abd3f2f96f, type: 2}
 --- !u!1001 &513321112
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13476,7 +13326,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -13528,7 +13378,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2400
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.z
@@ -13609,7 +13459,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -13661,7 +13511,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1200
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.z
@@ -13881,7 +13731,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -13933,7 +13783,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2250
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.z
@@ -16005,7 +15855,6 @@ Transform:
   m_Children:
   - {fileID: 2059868567}
   - {fileID: 511141744}
-  - {fileID: 853192603}
   - {fileID: 1311823162}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -16023,6 +15872,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ui_manager: {fileID: 511141745}
   fireStoreManager: {fileID: 1311823163}
+  recruitmentControllerSO: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
+  missionControllerSO: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
+  employeeControllerSO: {fileID: 11400000, guid: 6a695d970d94e0a4bb81e3e309e1fadf, type: 2}
+  recruitmentView: {fileID: 329780243}
+  recrutmentCostText: {fileID: 1475385537}
+  mission_panel: {fileID: 248255120}
+  complete_mission_panel: {fileID: 873169011}
+  employeeParent: {fileID: 1490410352}
+  employeeStatusWindow: {fileID: 122420082}
+  employeePanel: {fileID: 122420083}
+  _deleteFirebaseEventChannelSO: {fileID: 11400000, guid: 7a1f9e67b78693248b645e9629191902, type: 2}
+  _sendFirebaseEventChannelSO: {fileID: 11400000, guid: bc6e20a0b24975943a58a86b83f606ea, type: 2}
 --- !u!1 &606009176
 GameObject:
   m_ObjectHideFlags: 0
@@ -16415,7 +16276,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -16467,7 +16328,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -600
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.z
@@ -19985,6 +19846,8 @@ MonoBehaviour:
   panels: []
   hasMini: 1
   background: {fileID: 983607706}
+  recruitmentControllerSO: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
+  employeeControllerSO: {fileID: 11400000, guid: 6a695d970d94e0a4bb81e3e309e1fadf, type: 2}
 --- !u!1 &744651055
 GameObject:
   m_ObjectHideFlags: 0
@@ -21534,8 +21397,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 143977384}
-        m_TargetAssemblyTypeName: RecruitmentController, Assembly-CSharp
+      - m_Target: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
+        m_TargetAssemblyTypeName: RecruitmentsSO, Assembly-CSharp
         m_MethodName: AddRecruitment
         m_Mode: 1
         m_Arguments:
@@ -21814,40 +21677,6 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   m_IsOn: 0
---- !u!1 &853192602
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 853192603}
-  m_Layer: 0
-  m_Name: Employee
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &853192603
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 853192602}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 143977383}
-  - {fileID: 512347915}
-  - {fileID: 377234036}
-  m_Father: {fileID: 602332988}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &853354017
 GameObject:
   m_ObjectHideFlags: 0
@@ -22629,6 +22458,7 @@ MonoBehaviour:
   - {fileID: 1131497531}
   - {fileID: 275946860}
   - {fileID: 345158740}
+  missionControllerSo: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
 --- !u!1001 &875819240
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27128,8 +26958,8 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RecruitmentController, Assembly-CSharp
+      - m_Target: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
+        m_TargetAssemblyTypeName: RecruitmentsSO, Assembly-CSharp
         m_MethodName: SetLevel
         m_Mode: 3
         m_Arguments:
@@ -29289,7 +29119,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -29341,7 +29171,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2550
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.z
@@ -30625,7 +30455,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -30677,7 +30507,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -150
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.z
@@ -31047,6 +30877,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 755c2e04b1bc15f41873a639cd94c057, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recruitmentControllerSo: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
 --- !u!1 &1203399159
 GameObject:
   m_ObjectHideFlags: 0
@@ -31212,7 +31043,7 @@ GameObject:
   - component: {fileID: 1208356400}
   - component: {fileID: 1208356401}
   m_Layer: 5
-  m_Name: MissionEditPanel
+  m_Name: EditMissionPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31257,6 +31088,7 @@ MonoBehaviour:
   panelInfo: {fileID: 11400000, guid: 7bb1200649c2e8f46ba1ce397142c313, type: 2}
   panels: []
   hasMini: 0
+  _missionControllerSO: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
   title: {fileID: 1843250800}
   employeeTypeGroup: {fileID: 1963349253}
   levelGroup: {fileID: 48490508}
@@ -32546,7 +32378,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -32598,7 +32430,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -450
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.z
@@ -32857,6 +32689,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a44bd993097f2384ea94ca61d80c3a23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deleteFirebaseEventChannelSO: {fileID: 11400000, guid: 7a1f9e67b78693248b645e9629191902, type: 2}
+  sendFirebaseEventChannelSO: {fileID: 11400000, guid: bc6e20a0b24975943a58a86b83f606ea, type: 2}
 --- !u!1 &1313963528
 GameObject:
   m_ObjectHideFlags: 0
@@ -33239,7 +33073,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -33291,7 +33125,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -300
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.z
@@ -34167,8 +34001,8 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RecruitmentController, Assembly-CSharp
+      - m_Target: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
+        m_TargetAssemblyTypeName: RecruitmentsSO, Assembly-CSharp
         m_MethodName: Setperiod
         m_Mode: 3
         m_Arguments:
@@ -35263,7 +35097,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -35315,7 +35149,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1950
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.z
@@ -35577,7 +35411,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -39003,7 +38837,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -39055,7 +38889,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1650
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.z
@@ -40458,7 +40292,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -40510,7 +40344,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1350
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.z
@@ -43641,7 +43475,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -43693,7 +43527,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -750
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.z
@@ -46155,8 +45989,8 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RecruitmentController, Assembly-CSharp
+      - m_Target: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
+        m_TargetAssemblyTypeName: RecruitmentsSO, Assembly-CSharp
         m_MethodName: SetLevel
         m_Mode: 3
         m_Arguments:
@@ -50139,7 +49973,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -50191,7 +50025,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1050
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.z
@@ -51157,7 +50991,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2942464411319230971, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -51209,7 +51043,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1800
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7856664322541884571, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
       propertyPath: m_LocalPosition.z
@@ -52446,14 +52280,14 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RecruitmentController, Assembly-CSharp
+      - m_Target: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
+        m_TargetAssemblyTypeName: RecruitmentsSO, Assembly-CSharp
         m_MethodName: SetLevel
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 3
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0

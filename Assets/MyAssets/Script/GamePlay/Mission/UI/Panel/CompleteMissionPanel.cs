@@ -23,7 +23,7 @@ public class CompleteMissionPanel : MissionPanel
         }
         
         //base.Start();
-        foreach (Mission mission in MissionController.instance.GetMissions())
+        foreach (Mission mission in missionControllerSo.GetMissions())
         {
             //만약 완료된 미션이 있는 경우(쿼리)
             if (mission.GetIsDone())

@@ -44,6 +44,12 @@ public class EmployeeStatusWindow : MonoBehaviour
     //MissionPanel의 Mission
     [SerializeField] private GameObject[] smallMission_PoolObjects; //풀링용 오브젝트 (7개)
     [SerializeField] private GameObject smallMission_prefab; //토글
+
+    [FormerlySerializedAs("missionController")]
+    [FormerlySerializedAs("missionsSO")]
+    [Header("Model")]
+    [SerializeField] private MissionControllerSO missionControllerSo;
+
     
     private Employee employee;
     // ㄴ Mission : 미션 목록들은 여기에 있다 ****************
@@ -119,7 +125,7 @@ public class EmployeeStatusWindow : MonoBehaviour
         }
         
         //missions 개수만큼 addMissionElement_prefab 생성
-        for (int i = 0; i < MissionController.instance.GetMissionSize(); i++)
+        for (int i = 0; i < missionControllerSo.GetMissionSize(); i++)
         {
             GameObject addMissionElement = Instantiate(addMissionElement_prefab);
 
@@ -128,7 +134,7 @@ public class EmployeeStatusWindow : MonoBehaviour
 
             //SetMission 함수 실행
             AddMissionElementUI element = addMissionElement.GetComponent<AddMissionElementUI>();
-            element.SetMission(MissionController.instance.GetMission(i));
+            element.SetMission(missionControllerSo.GetMission(i));
             element.SetEmployeeStatusWindow(this.GetComponent<EmployeeStatusWindow>());
         }
     }
@@ -147,7 +153,6 @@ public class EmployeeStatusWindow : MonoBehaviour
     {
         UMUMUM mission = new UMUMUM(m);
         employee.AddMission(mission);
-        employee.AddMissionToServer(mission, GameManager.instance.Nickname, employee.ID);
         addMissionMiniWindow.SetActive(false);
         SetMissionUI();
 
@@ -247,7 +252,7 @@ public class EmployeeStatusWindow : MonoBehaviour
         {
             smallMission_PoolObjects[j].SetActive(false);
         }
-        BanSmallCheckMission();
+        BanCheckTodoMission();
     }
 
     /// //////////////////프로퍼티 - small_mission_current_size
@@ -293,7 +298,7 @@ public class EmployeeStatusWindow : MonoBehaviour
     }
 
     //
-    public void BanSmallCheckMission()
+    public void BanCheckTodoMission()
     {
         bool isBan = true;
         if (employee == null)

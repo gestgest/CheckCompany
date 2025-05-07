@@ -7,13 +7,18 @@ using TMPro;
 //UI Employee를 보여주는 요소
 public class EmployeeElement : MonoBehaviour
 {
-    //모델
+    //View
     [SerializeField] private Image icon; //유형
     [SerializeField] private TextMeshProUGUI employee_name; //
     [SerializeField] private TextMeshProUGUI career; //
     [SerializeField] private TextMeshProUGUI weight_speed; //업무속도 => 가중치
     [SerializeField] private TextMeshProUGUI costUI;
 
+    //Controller
+    [Header("Controller")]
+    [SerializeField] private EmployeeControllerSO _employeeControllerSO;
+    
+    
     public int ID { get; set; } //직원 아이디
 
     public void SetEmployee(Sprite sprite, string name, int career, int weight_speed, int cost, int id)
@@ -51,6 +56,6 @@ public class EmployeeElement : MonoBehaviour
     //싱글톤으로 Employee를 제거하는 함수
     public void RemoveEmployee()
     {
-        EmployeeController.instance.RemoveEmployee(ID);
+        _employeeControllerSO.RemoveEmployee(ID);
     }
 }

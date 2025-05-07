@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class MissionPanel : Panel
 {
@@ -11,13 +12,17 @@ public class MissionPanel : Panel
 
     //pool링 예정
     [SerializeField] protected MissionElement [] missionElementPoolObjects = new MissionElement[MISSION_MAX_SIZE];
+
+    [FormerlySerializedAs("missionController")] [FormerlySerializedAs("missionsSO")] [SerializeField] protected MissionControllerSO missionControllerSo;
+
+
     private int mission_count = 0; //현재 미션 카운트
     protected List<int> editPanelIndex; 
 
     protected const int MISSION_MAX_SIZE = 20;
     private const int MISSION_HEIGHT = 100;
     private const int MISSION_SPACE_HEIGHT = 50;
-
+    
     
     //그냥 활성화할때마다 쿼리해야할듯
     protected virtual void OnEnable()
@@ -32,7 +37,7 @@ public class MissionPanel : Panel
             missionElementPoolObjects[i].gameObject.SetActive(false);
         }
         //base.Start();
-        // List<Mission> missions = MissionController.instance.GetMissions();
+        // List<Mission> missions = missionsSO.GetMissions();
         // for (i = 0; i < missions.Count; i++)
         // {
         //     if (!missions[i].GetIsDone())
@@ -44,7 +49,7 @@ public class MissionPanel : Panel
         // }
         
 
-        foreach (Mission mission in MissionController.instance.GetMissions())
+        foreach (Mission mission in missionControllerSo.GetMissions())
         {
             if (!mission.GetIsDone())
                 CreateMissionElementObject(mission);
@@ -113,12 +118,12 @@ public class MissionPanel : Panel
     /// <param name="id"></param>
     private void EditPanelOn(int id)
     {
-        int index = MissionController.instance.Search_Mission_Index(id);
+        int index = missionControllerSo.Search_Mission_Index(id);
 
         GamePanelManager.instance.SwitchingSubPanel(true, editPanelIndex);
 
         //editPanel에게 값 전달
-        missionEditPanel.SetMission(MissionController.instance.GetMission(index));
+        missionEditPanel.SetMission(missionControllerSo.GetMission(index));
         //missionEditPanel.gameObject.SetActive(true);
     }
 

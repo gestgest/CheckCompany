@@ -11,13 +11,15 @@ public class Mission
     private EmployeeType mission_type = EmployeeType.DEVELOPER; //회복, 지능, 기술, 명상 이런식으로 해야하나
     private string missionName;
     private int iconID;
+    private Sprite icon;
+
     private int level; //easy, medium, hard, very hard
     private List<Todo_Mission> todo_missions;
 
     //private bool isDone = false; //전체 다 완료했는지 => 그냥 GetIsDone
     private Date doneDate;
-    
-    public Mission() 
+
+    public Mission()
     {
         doneDate = new Date();
         this.todo_missions = new List<Todo_Mission>();
@@ -30,13 +32,16 @@ public class Mission
     /// <param name="iconID"></param>
     /// <param name="level"></param>
     /// <param name="todo_missions"></param>
-    public Mission(int id, int _type, string _name, int iconID, int level, List<Todo_Mission> todo_missions)
+    public Mission(int id, int _type, string _name, Sprite icon, int iconID, int level,
+        List<Todo_Mission> todo_missions)
     {
         //this.todo_missions = new List<Todo_Mission>();
 
         this.id = id;
         this.mission_type = (EmployeeType)(_type);
         this.missionName = _name;
+
+        this.icon = icon;
         this.iconID = iconID;
         this.level = level;
 
@@ -57,10 +62,17 @@ public class Mission
     {
         return mission_type;
     }
+
     public Sprite GetIcon()
     {
-        return MissionController.instance.GetIcon(iconID);
+        return icon;
     }
+
+    public void SetIcon(Sprite icon)
+    {
+        this.icon = icon;
+    }
+
     public List<Todo_Mission> GetTodoMissions()
     {
         return todo_missions;
@@ -77,14 +89,15 @@ public class Mission
                 return false;
             }
         }
+
         return true;
     }
-    
+
     private void SetDoneDate(Date date)
     {
         doneDate = date;
     }
-    
+
     public void Set_TodoMission_IsDone(int index, bool isDone)
     {
         todo_missions[index].IsDone = isDone;
@@ -94,10 +107,11 @@ public class Mission
         {
             Date date = new Date();
             date.SetDate(DateTime.Now);
-            
+
             SetDoneDate(date);
         }
     }
+
     public string GetName()
     {
         return missionName;
@@ -114,7 +128,7 @@ public class Mission
     }
 
     //서버 보내기
-    public Dictionary<string, object> GetMission_ToJSON()
+    public Dictionary<string, object> MissionToJSON()
     {
         Dictionary<string, object> result = new Dictionary<string, object>
         {
@@ -128,10 +142,12 @@ public class Mission
         if (GetIsDone())
         {
             result.Add(
-                "doneDate" , DateToJSON()
+                "doneDate", DateToJSON()
             );
-        };
-            
+        }
+
+        ;
+
         return result;
     }
 
@@ -148,7 +164,7 @@ public class Mission
 
     /// <summary> 서버에서 가져오는 </summary>
     /// <param name="data"></param>
-    public void SetMissionFromJSON(Dictionary<string, object> data)
+    public void JSONToMission(Dictionary<string, object> data)
     {
         mission_type = (EmployeeType)(Convert.ToInt32(data["type"]));
         missionName = (string)data["name"];
@@ -158,18 +174,18 @@ public class Mission
         List<object> todo_missions = (List<object>)data["todo_missions"];
 
         //이거이거이거
-        for (int i = 0; i < todo_missions.Count; i++) 
+        for (int i = 0; i < todo_missions.Count; i++)
         {
             Todo_Mission todo_mission = new Todo_Mission();
             todo_mission.Set_Todo_Mission(todo_missions[i]);
             this.todo_missions.Add(todo_mission);
         }
-        
+
         //완료된 날짜
         if (GetIsDone())
         {
             Dictionary<string, object> doneDate = (Dictionary<string, object>)data["doneDate"];
-            
+
             this.doneDate.Year = Convert.ToInt32(doneDate["year"]);
             this.doneDate.Month = Convert.ToInt32(doneDate["month"]);
             this.doneDate.Day = Convert.ToInt32(doneDate["day"]);

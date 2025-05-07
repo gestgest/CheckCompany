@@ -8,8 +8,14 @@ using UnityEngine.UIElements;
 
 public class EditMissionPanel : Panel
 {
+    [Header("Controller")]
+    [SerializeField] private MissionControllerSO _missionControllerSO;
+
+    
     [SerializeField] private TMP_InputField title;
 
+
+    
     //라디오버튼 그룹 두개
     //ㄴ 나중에 SetMission때 활용
 
@@ -18,7 +24,8 @@ public class EditMissionPanel : Panel
     [SerializeField] private GameObject[] todo_mission_textObject; //edittext todoMission 오브젝트들
 
     [SerializeField] private MultiLayoutGroup multiLayoutGroup;
-    
+  
+
 
     //소미션
     private int todo_mission_size;
@@ -129,27 +136,21 @@ public class EditMissionPanel : Panel
             id: mission_id,
             employeeTypeGroup.GetIndex(),
             title.text,
+            _missionControllerSO.GetIcon(0),
             0, //iconID
             levelGroup.GetIndex(),
             Get_Todo_Missions()
         );
 
-        //서버 보내기
-        FireStoreManager.instance.SetFirestoreData(
-            "GamePlayUser",
-            GameManager.instance.Nickname,
-            "missions." + mission_id.ToString(),
-            mission.GetMission_ToJSON()
-        );
-
+        _missionControllerSO.SetServerMission(mission);
         //값을 미션 적용, 이후 모든 오브젝트 초기화
-        MissionController missionController = MissionController.instance;
+        
 
-        int index = missionController.Search_Mission_Index(mission_id);
-        missionController.SetMission(mission, index);
+        int index = _missionControllerSO.Search_Mission_Index(mission_id);
+        _missionControllerSO.SetMission(mission, index);
 
         //정해진 element를 설정하는 함수 => 리롤함수?
-        missionController.Reroll_MissionElement(index);
+        _missionControllerSO.Reroll_MissionElement(index);
 
         //back 네비 Panel
         PanelManager.instance.Back_Nav_Panel();
@@ -158,12 +159,7 @@ public class EditMissionPanel : Panel
     //최종적으로 서버에 있는 미션 삭제
     public void RemoveMission()
     {
-        MissionController.instance.RemoveMission(mission_id);
-        FireStoreManager.instance.DeleteFirestoreDataKey(
-            "GamePlayUser",
-            GameManager.instance.Nickname,
-            "missions." + mission_id
-        );
+        _missionControllerSO.RemoveMission(mission_id);
 
         PanelManager.instance.Back_Nav_Panel();
     }
