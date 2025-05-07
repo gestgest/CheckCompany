@@ -153,7 +153,6 @@ public class EmployeeStatusWindow : MonoBehaviour
     {
         UMUMUM mission = new UMUMUM(m);
         employee.AddMission(mission);
-        employee.AddMissionToServer(mission, GameManager.instance.Nickname, employee.ID);
         addMissionMiniWindow.SetActive(false);
         SetMissionUI();
 

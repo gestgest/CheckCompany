@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "MissionControllerSO", menuName = "ScriptableObject/Controller/MissionControllerSO")]
@@ -7,6 +8,10 @@ public class MissionControllerSO : ScriptableObject
 {
     //이미지 리스트?
     [SerializeField] private IconsSO iconsSO;
+
+    [Header("ServerEvent")]
+    [SerializeField] private DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
+    [SerializeField] private SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
 
     //init
     private MissionPanel missionPanel;
@@ -41,7 +46,7 @@ public class MissionControllerSO : ScriptableObject
         //null처리
         if (mission_count == 0)
         {
-            MissionCountToServer();
+            SetServerMissionCount();
         }
         if (data == null)
         {
@@ -52,6 +57,7 @@ public class MissionControllerSO : ScriptableObject
         JSONToMissions(data);
     }
 
+    #region PROPERTY
 
     public int GetMissionCount()
     {
@@ -98,11 +104,19 @@ public class MissionControllerSO : ScriptableObject
         return completeMissionPanel;
     }
 
+    #endregion
 
-    public void AddMission(Mission mission)
+
+    public void AddMission(Mission mission, bool toServer = true)
     {
         missions.Add(mission);
+        if(toServer)
+            SetServerMission(mission); //서버 보내기
     }
+    /// <summary>
+    /// 미션 제거 (서버 포함)
+    /// </summary>
+    /// <param name="id"></param>
     public void RemoveMission(int id)
     {
         int index = Search_Mission_Index(id);
@@ -111,7 +125,7 @@ public class MissionControllerSO : ScriptableObject
             missions.RemoveAt(index);
             missionPanel.RemoveMissionObject(index);
         }
-        PanelManager.instance.Back_Nav_Panel();
+        RemoveServerMission(id);
     }
 
     public void Reroll_MissionElement(int index)
@@ -140,7 +154,7 @@ public class MissionControllerSO : ScriptableObject
             mission.ID = Convert.ToInt32(todo_mission.Key);
             mission.JSONToMission(tmp);
             mission.SetIcon(GetIcon(Convert.ToInt32(tmp["icon"])));
-            AddMission(mission);
+            AddMission(mission, false);
 
 
             //여기서 Todo_Mission 생성하고 SetFromJSON 각각
@@ -149,16 +163,67 @@ public class MissionControllerSO : ScriptableObject
         }
     }
 
-    //미션 총합 아이디 서버에 저장
-    public void MissionCountToServer()
+    #region SERVER
+
+
+    //미션카운트
+    public void SetServerMissionCount()
     {
-        FireStoreManager.instance.SetFirestoreData(
+        _sendFirebaseEventChannelSO.RaiseEvent(
             "GamePlayUser",
             GameManager.instance.Nickname,
             "mission_count",
             mission_count
         );
     }
+
+    //Mission
+    public void SetServerMission(Mission mission)
+    {
+        //서버 보내기
+        _sendFirebaseEventChannelSO.RaiseEvent(
+            "GamePlayUser",
+            GameManager.instance.Nickname,
+            "missions." + mission.ID.ToString(),
+            mission.MissionToJSON()
+        );
+    }
+
+    private void RemoveServerMission(int mission_id)
+    {
+        _deleteFirebaseEventChannelSO.RaiseEvent
+        (
+            "GamePlayUser",
+            GameManager.instance.Nickname,
+            "missions." + mission_id
+        );
+    }
+
+    //todo
+    public void SetServerTodoMissions(Mission mission)
+    {
+        //json이 아니라 배열 수정이다.
+        _sendFirebaseEventChannelSO.RaiseEvent(
+            "GamePlayUser",
+            GameManager.instance.Nickname,
+            "missions." + mission.ID + ".todo_missions",
+            mission.GetTodoMissions()
+        );
+    }
+
+    //DoneDate
+    public void SetServerDoneDate(Mission mission)
+    {
+        //json이 아니라 배열 수정이다.
+        _sendFirebaseEventChannelSO.RaiseEvent(
+            "GamePlayUser",
+            GameManager.instance.Nickname,
+            "missions." + mission.ID + ".doneDate",
+            mission.DateToJSON()
+        );
+    }
+
+    #endregion
 
 
     #region BINARY_SEARCH

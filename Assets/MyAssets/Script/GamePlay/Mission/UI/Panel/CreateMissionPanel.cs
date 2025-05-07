@@ -1,18 +1,14 @@
 using System;
-using System.Collections;
 using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class CreateMissionPanel : Panel
 {
-    [FormerlySerializedAs("missionController")]
-    [FormerlySerializedAs("missionsSO")]
-    [Header("SO")]
-    [SerializeField] private MissionControllerSO missionControllerSo;
+    [Header("Controller")]
+    [SerializeField] private MissionControllerSO _missionControllerSO;
 
     [SerializeField] private MissionPanel missionPanel;
 
@@ -22,7 +18,7 @@ public class CreateMissionPanel : Panel
     [SerializeField] private MultiLayoutGroup multiLayoutGroup; //제일 아래 Layout => inputList
     [SerializeField] private Toggle[] toggles;
 
-    
+
     //이미지? => 정말 나중에 만들 예정 => 지금은 그냥 0으로 default
     private int employee_type; //이걸로 dev, QA인지 분류할 수 있지 않을까
     private int level;
@@ -30,6 +26,8 @@ public class CreateMissionPanel : Panel
     private bool isFirst = true;
 
     private static int TODO_MISSION_HEIGHT = 30;
+
+    
 
 
     protected void OnEnable()
@@ -48,6 +46,7 @@ public class CreateMissionPanel : Panel
     void Init()
     {
         multiLayoutGroup.Init();
+
         title_InputField.text = "";
 
         for(int i = 0; i < toggles.Length; i++)
@@ -133,40 +132,27 @@ public class CreateMissionPanel : Panel
         
         //대충 
 
-        Mission todo_mission = new Mission(
-            missionControllerSo.GetAndIncrementCount(),
+        Mission mission = new Mission(
+            _missionControllerSO.GetAndIncrementCount(),
             employee_type,
             title_InputField.text,
-            missionControllerSo.GetIcon(0),
+            _missionControllerSO.GetIcon(0),
             0, //iconID
             level,
             todo_Missions
         );
 
 
-        missionControllerSo.AddMission(todo_mission);
-        missionControllerSo.MissionCountToServer();
+        _missionControllerSO.AddMission(mission);
+        _missionControllerSO.SetServerMissionCount();
         
-        TodoMission_ToServer(todo_mission.MissionToJSON(), todo_mission.ID);
 
-        missionPanel.CreateMissionElementObject(todo_mission); //
+        missionPanel.CreateMissionElementObject(mission); //
         //missionPanel.OnPanel(); => 이거 자체가 서브 미션 Panel이라 전환이 안됨
 
         //초기화
         Init();
         GamePanelManager.instance.SwitchingPanelFromInt(1); //missionPanel로 전환
     }
-
-    //Server
-    private void TodoMission_ToServer(Dictionary<string, object> data, int id)
-    {
-        FireStoreManager.instance.SetFirestoreData(
-            "GamePlayUser",
-            GameManager.instance.Nickname,
-            "missions." + id.ToString(),
-            data
-        );
-    }
-
 
 }

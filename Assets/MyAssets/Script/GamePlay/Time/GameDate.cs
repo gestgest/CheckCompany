@@ -5,15 +5,17 @@ using UnityEngine.Events;
 
 public class GameDate : Date
 {
-    public UnityAction<int> OnStaminaChanged;
+    public UnityAction<int> _onStaminaChanged;
+    public SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
 
     /// <summary> 생성자 </summary>
     /// <param name="onStaminaChanged">EmployeeControllerSO의 함수</param>
-    public GameDate(UnityAction<int> onStaminaChanged)
+    public GameDate(UnityAction<int> onStaminaChanged, SendFirebaseEventChannelSO sendFirebaseEventChannelSO)
     {
-        this.OnStaminaChanged += onStaminaChanged;
+        this._onStaminaChanged += onStaminaChanged;
+        this._sendFirebaseEventChannelSO = sendFirebaseEventChannelSO;
     }
-    
+
     public override int Month
     {
         get
@@ -47,7 +49,7 @@ public class GameDate : Date
             base.Day = value;
 
             //임시 디버깅용 회복 함수
-            OnStaminaChanged.Invoke(70);
+            _onStaminaChanged.Invoke(70);
             //EmployeeControllerSO.instance.AddStamina(70);
             Debug.Log("체력 회복");
         }
@@ -66,24 +68,24 @@ public class GameDate : Date
         }
     }
 
-    
-    
+
     #region SERVER
 
     public override void GetDateFromJSON(Dictionary<string, object> data)
     {
         if (data == null)
         {
-            SetDate();
+            SetDateNow();
             SetDateToServer(DateToJSON());
             return;
         }
         base.GetDateFromJSON(data);
     }
-    
+
     public void SetDateToServer(Dictionary<string, object> data)
     {
-        FireStoreManager.instance.SetFirestoreData("GamePlayUser",
+        _sendFirebaseEventChannelSO.OnSendEventRaised(
+            "GamePlayUser",
             GameManager.instance.Nickname,
             "date",
             data

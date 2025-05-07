@@ -4,10 +4,10 @@ using UnityEngine;
 //Employee 만드는 빌더 클래스
 public class EmployeeBuilder
 {
-    public Employee BuildEmployee(EmployeeSO employeeSO, EmployeeControllerSO employeeControllerSO = null)
+    public Employee BuildEmployee(EmployeeSO employeeSO, EmployeeControllerSO employeeControllerSO, bool isEmployee)
     {
         Employee employee;
-        employee = new Employee(employeeControllerSO); 
+        employee = new Employee(employeeControllerSO, isEmployee); 
         /*
         switch (employeeSO.GetEmployeeType())
         {

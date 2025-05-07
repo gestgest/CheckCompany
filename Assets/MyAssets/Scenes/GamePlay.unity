@@ -1989,7 +1989,7 @@ MonoBehaviour:
   panelInfo: {fileID: 11400000, guid: b97579edfb26f854eb2efdb44e593021, type: 2}
   panels: []
   hasMini: 0
-  missionControllerSo: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
+  _missionControllerSO: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
   missionPanel: {fileID: 248255120}
   title_InputField: {fileID: 2006799269}
   todo_Mission_Objects:
@@ -15882,6 +15882,8 @@ MonoBehaviour:
   employeeParent: {fileID: 1490410352}
   employeeStatusWindow: {fileID: 122420082}
   employeePanel: {fileID: 122420083}
+  _deleteFirebaseEventChannelSO: {fileID: 11400000, guid: 7a1f9e67b78693248b645e9629191902, type: 2}
+  _sendFirebaseEventChannelSO: {fileID: 11400000, guid: bc6e20a0b24975943a58a86b83f606ea, type: 2}
 --- !u!1 &606009176
 GameObject:
   m_ObjectHideFlags: 0
@@ -31041,7 +31043,7 @@ GameObject:
   - component: {fileID: 1208356400}
   - component: {fileID: 1208356401}
   m_Layer: 5
-  m_Name: MissionEditPanel
+  m_Name: EditMissionPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31086,7 +31088,7 @@ MonoBehaviour:
   panelInfo: {fileID: 11400000, guid: 7bb1200649c2e8f46ba1ce397142c313, type: 2}
   panels: []
   hasMini: 0
-  missionControllerSo: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
+  _missionControllerSO: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
   title: {fileID: 1843250800}
   employeeTypeGroup: {fileID: 1963349253}
   levelGroup: {fileID: 48490508}

@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: MissionControllerSO
   m_EditorClassIdentifier: 
   iconsSO: {fileID: 11400000, guid: 414e6934076897143ab461098194ade5, type: 2}
+  _deleteFirebaseEventChannelSO: {fileID: 11400000, guid: 7a1f9e67b78693248b645e9629191902, type: 2}
+  _sendFirebaseEventChannelSO: {fileID: 11400000, guid: bc6e20a0b24975943a58a86b83f606ea, type: 2}

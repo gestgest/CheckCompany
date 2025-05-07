@@ -8,7 +8,7 @@ public class TodoMissionElement : MonoBehaviour
     [SerializeField] private TextMeshProUGUI title;
     [SerializeField] private Toggle my_toggle;
 
-    [FormerlySerializedAs("missionController")] [FormerlySerializedAs("missionsSO")] [SerializeField] private MissionControllerSO missionControllerSo;
+    [SerializeField] private MissionControllerSO _missionControllerSO;
     private int mission_id;
     private int todo_mission_index;
 
@@ -63,16 +63,16 @@ public class TodoMissionElement : MonoBehaviour
             //게이지가 다 채워졌으면 => Complete
             if (gauge.GetValue() >= gauge.GetMaxValue() && isGage)
             {
-                int mission_index = missionControllerSo.Search_Mission_Index(mission_id);
-                Mission mission = missionControllerSo.GetMission(mission_index);
+                int mission_index = _missionControllerSO.Search_Mission_Index(mission_id);
+                Mission mission = _missionControllerSO.GetMission(mission_index);
                 
                 mission.Set_TodoMission_IsDone(todo_mission_index, my_toggle.isOn);
                 
                 
                 
                 //현재 미션은 제거, 완료된 미션에 온 => 그냥 Enable할때마다 쿼리로 받아야 할듯
-                missionControllerSo.GetMissionPanel().RemoveMissionObject(mission_index);
-                missionControllerSo.GetCompleteMissionPanel().AddMissionElementObject(missionControllerSo.GetMission(mission_index));
+                _missionControllerSO.GetMissionPanel().RemoveMissionObject(mission_index);
+                _missionControllerSO.GetCompleteMissionPanel().AddMissionElementObject(_missionControllerSO.GetMission(mission_index));
 
                 Debug.Log("엄엄");
                 //미션 보상 받기 => 디버깅
@@ -87,14 +87,14 @@ public class TodoMissionElement : MonoBehaviour
             //완료된 것을 미 완성으로 수정
             if (gauge.GetValue() >= gauge.GetMaxValue())
             {
-                int mission_index = missionControllerSo.Search_Mission_Index(mission_id);
-                Mission mission = missionControllerSo.GetMission(mission_index);
+                int mission_index = _missionControllerSO.Search_Mission_Index(mission_id);
+                Mission mission = _missionControllerSO.GetMission(mission_index);
                 
                 mission.Set_TodoMission_IsDone(todo_mission_index, my_toggle.isOn);
 
                 //현재 미션은 제거, 완료된 미션에 온
-                missionControllerSo.GetCompleteMissionPanel().RemoveMissionObject(mission_index);
-                missionControllerSo.GetMissionPanel().AddMissionElementObject(missionControllerSo.GetMission(mission_index));
+                _missionControllerSO.GetCompleteMissionPanel().RemoveMissionObject(mission_index);
+                _missionControllerSO.GetMissionPanel().AddMissionElementObject(_missionControllerSO.GetMission(mission_index));
             }
             
             //gage 값 전달
@@ -105,27 +105,15 @@ public class TodoMissionElement : MonoBehaviour
 
     private void MissionToServer()
     {
-        Mission mission = missionControllerSo.GetMission(missionControllerSo.Search_Mission_Index(mission_id));
+        Mission mission = _missionControllerSO.GetMission(_missionControllerSO.Search_Mission_Index(mission_id));
         //mission.Set_TodoMission_IsDone(todo_mission_index, my_toggle.isOn);
 
-        //json이 아니라 배열 수정이다.
-        FireStoreManager.instance.SetFirestoreData(
-            "GamePlayUser",
-            GameManager.instance.Nickname,
-            "missions." + mission_id + ".todo_missions",
-            mission.GetTodoMissions()
-        );
+        _missionControllerSO.SetServerTodoMissions(mission);
 
         //완료됐다면 완료된 날짜
         if (mission.GetIsDone())
         {
-            //json이 아니라 배열 수정이다.
-            FireStoreManager.instance.SetFirestoreData(
-                "GamePlayUser",
-                GameManager.instance.Nickname,
-                "missions." + mission_id + ".doneDate",
-                mission.DateToJSON()
-            );
+            _missionControllerSO.SetServerDoneDate(mission);
         }
     }
 }

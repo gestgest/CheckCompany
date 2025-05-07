@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     private FirebaseAuth auth;
     private FirebaseUser user;
 
+
     //컨트롤러 리스트
     [Header("Controller")]
     [SerializeField] RecruitmentControllerSO recruitmentControllerSO;
@@ -35,6 +36,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject employeeParent;
     [SerializeField] private EmployeeStatusWindow employeeStatusWindow; //이거를 subPanel로 바꿀 수 없나
     [SerializeField] private Panel employeePanel;
+
+    [Header("ServerEvent")]
+    [SerializeField] private DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
+    [SerializeField] private SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
+
 
     private string nickname;
 
@@ -71,7 +77,7 @@ public class GameManager : MonoBehaviour
         missionControllerSO.Init(mission_panel, complete_mission_panel);
         employeeControllerSO.Init(employeeParent, employeeStatusWindow, employeePanel);
         
-        date = new GameDate(employeeControllerSO.AddStamina);
+        date = new GameDate(employeeControllerSO.AddStamina, _sendFirebaseEventChannelSO);
         //절대로 LoginScene에 넣지마 => 메인 스레드 충돌 오류
         fireStoreManager.Init();
         //SetDateUI();
@@ -121,7 +127,7 @@ public class GameManager : MonoBehaviour
         );
 
         Dictionary<string,object> recruitments = (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "recruitments");
-        recruitmentControllerSO.RecruitmentsFromJSON(recruitments);
+        recruitmentControllerSO.JSONToRecruitments(recruitments);
 
         Dictionary<string, object> employees = (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "employees");
         employeeControllerSO.EmployeesFromJSON(employees);
@@ -147,7 +153,7 @@ public class GameManager : MonoBehaviour
         money = value;
 
         if(toServer)
-            fireStoreManager.SetFirestoreData("GamePlayUser", nickname, "money", money);
+            _sendFirebaseEventChannelSO.RaiseEvent("GamePlayUser", nickname, "money", money);
 
         //서버 로딩
         ui_manager.SetMoneyText(value);
@@ -161,7 +167,7 @@ public class GameManager : MonoBehaviour
         set
         {
             employee_count = value;
-            fireStoreManager.SetFirestoreData(
+            _sendFirebaseEventChannelSO.RaiseEvent(
                 "GamePlayUser",
                 nickname ,
                 "employee_count", 

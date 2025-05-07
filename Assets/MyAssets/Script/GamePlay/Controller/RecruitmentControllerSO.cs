@@ -16,6 +16,14 @@ public class RecruitmentControllerSO : ScriptableObject
     [SerializeField] private GameObject recruitmentPrefab;
     [SerializeField] private EmployeeNameSO employeeNameSO;
 
+    [Header("Controller")]
+    [SerializeField] private EmployeeControllerSO _employeeControllerSO;
+
+
+    [Header("ServerEvent")]
+    [SerializeField] private DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
+    [SerializeField] private SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
+
     //init로 넣어야 할 정보
     private GameObject view; //parent
     private TextMeshProUGUI costText;
@@ -69,7 +77,7 @@ public class RecruitmentControllerSO : ScriptableObject
     public void AddRecruitment()
     {
         Recruitment recruitment = new Recruitment();
-        recruitment.Init();
+        recruitment.Init(RemoveServerApplicant);
 
         //버튼 정보 가져오기 디버깅
         recruitment.SetEmployeeSO(employeeSOs[employeeTypeIndex]);
@@ -165,6 +173,10 @@ public class RecruitmentControllerSO : ScriptableObject
         }
     }
 
+    /// <summary>
+    /// 서버 포함 제거
+    /// </summary>
+    /// <param name="id">recruitment_id</param>
     public void RemoveRecruitment(int id)
     {
         int index = Search_Recruitment_Index(id);
@@ -172,7 +184,7 @@ public class RecruitmentControllerSO : ScriptableObject
         recruitmentObjects.RemoveAt(index);
 
         //서버 연동
-        Remove_server_recruitment_index(id);
+        RemoveServerRecruitment(id);
     }
 
     public EmployeeSO GetEmployeeSO(int index)
@@ -185,7 +197,7 @@ public class RecruitmentControllerSO : ScriptableObject
         return recruitments[id];
     }
     
-    public void RecruitmentsFromJSON(Dictionary<string, object> serverRecruitments) //server 예정
+    public void JSONToRecruitments(Dictionary<string, object> serverRecruitments) //server 예정
     {
         if (this.recruitments == null)
             this.recruitments = new List<Recruitment>();
@@ -197,7 +209,7 @@ public class RecruitmentControllerSO : ScriptableObject
             foreach (KeyValuePair<string, object> serverRecruitment in serverRecruitments)
             {
                 Recruitment recruitment = new Recruitment();
-                recruitment.JSONToRecruitment(serverRecruitment, this);
+                recruitment.JSONToRecruitment(serverRecruitment, this, _employeeControllerSO);
                 this.recruitments.Add(recruitment);
             }
         }
@@ -217,33 +229,53 @@ public class RecruitmentControllerSO : ScriptableObject
 
     #endregion
 
+    #region SERVER
+
+    //recruitment
     public void AddServerRecruitmentIndex(int index) //recruit 인덱스만 서버 동기화 => Firestore 배열 Add 기능만 있음
     {
-        //Dictionary<string, object> data = new Dictionary<string, object>
-        //{
-        //    { index.ToString(), recruitments[index].RecruitmentToJSON() }
-        //};
-
-        FireStoreManager.instance.SetFirestoreData("GamePlayUser",
+        _sendFirebaseEventChannelSO.RaiseEvent(
+            "GamePlayUser",
             GameManager.instance.Nickname,
             "recruitments." + index.ToString(),
             recruitments[index].RecruitmentToJSON()
         );
-
         //recruitments.index => 
         //FieldValue.ArrayUnion(recruitments[index].RecruitmentToJSON()) //기존에 있는 배열에서 추가한 느낌
 
-        //user/
     }
 
-    public void Remove_server_recruitment_index(int id)
+    public void RemoveServerRecruitment(int id)
     {
-        FireStoreManager.instance.DeleteFirestoreDataKey(
+        _deleteFirebaseEventChannelSO.RaiseEvent(
             "GamePlayUser",
             GameManager.instance.Nickname,
             "recruitments." + id.ToString()
         );
     }
+
+    //applicant
+    public void RemoveServerApplicant(int recruitment_id, int applicant_id)
+    {
+        //recruitment의 id, applicant_id는 지원자의 id
+        string id = recruitment_id.ToString();
+        _deleteFirebaseEventChannelSO.RaiseEvent(
+            "GamePlayUser",
+            GameManager.instance.Nickname,
+            "recruitments." + id + ".applicants." + applicant_id.ToString()
+        );
+    }
+    public void SetServerApplicant(int recruitment_id, Employee applicant)
+    {
+        _sendFirebaseEventChannelSO.RaiseEvent("GamePlayUser",
+            GameManager.instance.Nickname,
+            "recruitments." + recruitment_id.ToString() + ".applicants." + applicant.ID,
+            applicant.EmployeeToJSON()
+        );
+    }
+
+
+    #endregion
 
     //Recruitment 이진탐색
     public int Search_Recruitment_Index(int id)

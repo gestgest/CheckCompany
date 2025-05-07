@@ -25,9 +25,8 @@ public class RecruitmentElement : MonoBehaviour
 
     //Controller
     [Header("Controller")]
-    [SerializeField] private RecruitmentControllerSO recruitmentControllerSo;
+    [SerializeField] private RecruitmentControllerSO _recruitmentControllerSO;
     [SerializeField] private EmployeeControllerSO _employeeControllerSO;
-
 
     //지원자 정보 리스트
     private Recruitment recruitment;
@@ -36,17 +35,11 @@ public class RecruitmentElement : MonoBehaviour
     private static int HEIGHT = 100;
     private void Start()
     {
-        recruitment.Init();
+        //아니 이게 왜 필요하지
+        //recruitment.Init();
 
         //Init();
 
-        // multiLayoutGroup.SetParentObjectPos(
-        //     RecruitmentController.instance
-        //         .GetLastRecruitmentObject()
-        //         .GetComponent<RectTransform>()
-        // );
-        //icon.sprite
-        //_multiLayoutGroup.RerollScreen();
     }
     
 
@@ -110,7 +103,7 @@ public class RecruitmentElement : MonoBehaviour
         //RerollPanel();
     }
 
-    public void SetRecruitment(Recruitment recruitment) //나중에 매개변수를 Recruitment으로 해라 ㅇㅇ
+    public void SetRecruitment(Recruitment recruitment)
     {
         this.recruitment = recruitment;
         SetIcon(recruitment.GetEmployeeSO().GetIcon());
@@ -133,26 +126,44 @@ public class RecruitmentElement : MonoBehaviour
 
     public void RemoveRecruitment()
     {
-        recruitmentControllerSo.RemoveRecruitment(recruitment.GetID());
+        _recruitmentControllerSO.RemoveRecruitment(recruitment.GetID());
         _multiLayoutGroup.AddOnHeight(-HEIGHT);
         _multiLayoutGroup.RerollScreen();
         Destroy(gameObject);
         //이 오브젝트 제거
     }
-    
-    private void SetServerApplicant(Employee applicant)
+
+
+    //지원자 넣는 함수 => 나중에 Employee 매개변수 받고 생성할 예정
+    public void AddApplicant(string name)
     {
-       
-        FireStoreManager.instance.SetFirestoreData("GamePlayUser",
-            GameManager.instance.Nickname,
-            "recruitments." + recruitment.GetID().ToString() + ".applicants." + applicant.ID,
-            applicant.SetEmployeeToJSON()
+        Employee employee = new Employee(_employeeControllerSO, false);
+        employee.ID = GameManager.instance.Employee_count;
+        GameManager.instance.Employee_count = employee.ID + 1;
+        employee.Name = name;
+        //employee.IsEmployee = false;
+        employee.Age = 19;
+        employee.Max_Stamina = 100; //이렇게 해야지 Max값으로 Stamina값 비교 가능
+        employee.SetStamina(100, false);
+        employee.Max_Mental = 100;
+        employee.Mental = 100;
+        employee.CareerPeriod = 12; //1 year
+        employee.Salary = 1000000; //월 100만원
+        employee._EmployeeSO = _recruitmentControllerSO.GetRecruitmentEmployeeSO(
+            _recruitmentControllerSO.Search_Recruitment_Index(recruitment.GetID())
         );
+        //(int)(recruitment.GetEmployeeSO().GetEmployeeType()
+
+        //서버에 들어가버려잇
+        _recruitmentControllerSO.SetServerApplicant(recruitment.GetID(), employee);
+
+        recruitment.AddApplicant(employee);
+        SetApplicant(employee);
     }
 
 
-    #region property
 
+    #region PROPERTY
     private void SetIcon(Sprite sprite)
     {
         icon.sprite = sprite;
@@ -166,32 +177,6 @@ public class RecruitmentElement : MonoBehaviour
         applicantNumber_Text.text = size.ToString() + "명";
     }
 
-    //지원자 넣는 함수 => 나중에 Employee 매개변수 받고 생성할 예정
-    public void AddApplicant(string name)
-    {
-        Employee employee = new Employee();
-        employee.ID = GameManager.instance.Employee_count;
-        GameManager.instance.Employee_count = employee.ID + 1;
-        employee.Name = name;
-        //employee.IsEmployee = false;
-        employee.Age = 19;
-        employee.Max_Stamina = 100; //이렇게 해야지 Max값으로 Stamina값 비교 가능
-        employee.SetStamina(100, false);
-        employee.Max_Mental = 100;
-        employee.Mental = 100;
-        employee.CareerPeriod = 12; //1 year
-        employee.Salary = 1000000; //월 100만원
-        employee._EmployeeSO = recruitmentControllerSo.GetRecruitmentEmployeeSO(
-            recruitmentControllerSo.Search_Recruitment_Index(recruitment.GetID())
-        );
-        //(int)(recruitment.GetEmployeeSO().GetEmployeeType()
-
-        //서버에 들어가버려잇
-        SetServerApplicant(employee);
-
-        recruitment.AddApplicant(employee);
-        SetApplicant(employee);
-    }
 
     public Employee GetApplicant(int id)
     {
@@ -222,10 +207,10 @@ public class RecruitmentElement : MonoBehaviour
     {
         int index = recruitment.Search_Employee_Index(applicant_id);
 
-        recruitment.RemoveServerApplicant(applicant_id);
+        //_recruitmentControllerSO.RemoveServerApplicant(recruitment.GetID(), applicant_id);
         Destroy(applicant_objects[index]); //Pool링?
         applicant_objects.RemoveAt(index);
-        recruitment.RemoveApplicant(index);
+        recruitment.RemoveApplicant(applicant_id, index);
         SetApplicantsNumber(recruitment.GetApplicantCount());
 
     }

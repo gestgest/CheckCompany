@@ -29,12 +29,19 @@ public class Employee
     private bool isEmployee = false;
     //private bool [] isClearSmallMission; acievement => Mission의 missions로 대체 
 
+    //Server Function
+    private UnityAction<string, int> _removeAllServerMissions;
+    private UnityAction<UMUMUM, string, int> _addServerMission;
+    private UnityAction<string, int, int> _setServerStamina;
+
     //Controller Function
     private UnityAction<int, int> setStaminaBarUI;
     private UnityAction banCheckTodoMission;
     
     public const int MAX_MISSION_SIZE = 5;
     public const int MAX_TODO_MISSION_SIZE = 7; //소미션
+
+
 
     #region PROPERTY
     public int ID { get { return id; } set { id = value; } }
@@ -73,7 +80,7 @@ public class Employee
 
         
         if(toServer)
-            SetStaminaToServer(GameManager.instance.Nickname, id);
+            _setServerStamina.Invoke(GameManager.instance.Nickname, id, stamina);
     }
 
 
@@ -93,10 +100,16 @@ public class Employee
     //미션 => 5개
     /// <summary>생성자 </summary>
     /// <param name="employeeControllerSO"> </param>
-    public Employee(EmployeeControllerSO employeeControllerSO = null)
+    public Employee(EmployeeControllerSO employeeControllerSO, bool isEmployee)
     {
         missions = new UMUMUM[MAX_MISSION_SIZE];
-        if (employeeControllerSO == null)
+
+        _removeAllServerMissions += employeeControllerSO.RemoveAllServerMissions;
+        _addServerMission += employeeControllerSO.AddServerMission;
+        _setServerStamina += employeeControllerSO.SetServerStamina;
+
+        //applicant라면
+        if (!isEmployee)
         {
             return;
         }
@@ -117,6 +130,8 @@ public class Employee
         mission_size++;
 
         //서버에 미션을 넣는다. => 이거 초반에 가져올때 가져오고 넣어짐
+        _addServerMission(m, GameManager.instance.Nickname, m.GetMissionID());
+
         //SetMissionToServer(m, GameManager.instance.Nickname, m.GetMissionID());
 
         //if (mission_size == 1)
@@ -125,68 +140,34 @@ public class Employee
     public void RemoveMission(int index)
     {
         string nickName = GameManager.instance.Nickname;
-        RemoveAllMissionsToServer(GameManager.instance.Nickname, ID);
+        _removeAllServerMissions.Invoke(GameManager.instance.Nickname, ID);
         for (int i = index; i < mission_size && i < Employee.MAX_MISSION_SIZE - 1; i++)
         {
             missions[i] = missions[i + 1];
             if (missions[i] != null)
-                AddMissionToServer(missions[i], nickName, ID);
+                _addServerMission.Invoke(missions[i], nickName, ID);
         }
         mission_size--;
-
-
     }
 
     //requirementEmployeeType
 
     #region SERVER
-
-    public void RemoveAllMissionsToServer(string nickname, int id)
-    {
-        FireStoreManager.instance.SetFirestoreData(
-            "GamePlayUser",
-            nickname,
-            "employees." + id.ToString() + ".missions",
-            FieldValue.Delete
-        );
-    }
-
     public void SetAllMissionToServer(string nickname, int id)
     {
-        RemoveAllMissionsToServer(nickname, id);
+        _removeAllServerMissions.Invoke(nickname, id); //다 제거하고
         for (int i = 0; i < missions.Length; i++)
         {
             if (missions[i] == null)
             {
                 break;
             }
-            AddMissionToServer(missions[i], nickname, id);
+            _addServerMission.Invoke(missions[i], nickname, id); //미션추가
         }
     }
 
-    public void AddMissionToServer(UMUMUM m, string nickname, int id)
-    {
-        FireStoreManager.instance.SetFirestoreData(
-            "GamePlayUser",
-            nickname,
-            "employees." + id.ToString() + ".missions",
-            FieldValue.ArrayUnion(m.SetMissionToJSON())
-        );
-    }
-    
-    public void SetStaminaToServer(string nickname, int id)
-    {
-        string em = "employees.";
-        FireStoreManager.instance.SetFirestoreData(
-            "GamePlayUser",
-            nickname,
-            em + id.ToString() + ".stamina",
-            stamina
-        );
-    }
-
     //JSON으로 만들기
-    public Dictionary<string, object> SetEmployeeToJSON()
+    public Dictionary<string, object> EmployeeToJSON()
     {
         Dictionary<string, float> _worktime = new Dictionary<string, float>
         {

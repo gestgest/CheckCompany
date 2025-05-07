@@ -16,7 +16,7 @@ public class Date
 
     public Date()
     {
-        SetDate();
+        SetDateNow();
     }
 
     #region PROPERTY
@@ -134,7 +134,7 @@ public class Date
         get { return minute; }
     }
     
-    public void SetDate()
+    virtual public void SetDateNow()
     {
         System.DateTime today = System.DateTime.Now;
         SetDate(today);

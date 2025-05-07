@@ -1,3 +1,4 @@
+using Firebase.Firestore;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,7 +14,12 @@ public class EmployeeControllerSO : ScriptableObject
     
     [Header("Controller")]
     [SerializeField] private RecruitmentControllerSO recruitmentControllerSo;
-    
+
+    [Header("ServerEvent")]
+    [SerializeField] private DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
+    [SerializeField] private SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
+
+
     //직원 목록
     List<Employee> employees;
     List<GameObject> employeeObjects;
@@ -74,7 +80,7 @@ public class EmployeeControllerSO : ScriptableObject
         if (index != -1)
         {
             employees.RemoveAt(index);
-            RemoveEmployeeToServer(id); //서버도 제거
+            RemoveServerEmployee(id); //서버도 제거
             Destroy(employeeObjects[index]);
             employeeObjects.RemoveAt(index);
         }
@@ -108,7 +114,7 @@ public class EmployeeControllerSO : ScriptableObject
 
     public void CreateEmployee(Employee e)
     {
-        SetEmployeeToServer(e);
+        SetServerEmployee(e);
         employees.Add(e);
         CreateEmployeeElementUI(e);
         SelectionEmployeeSort();
@@ -154,26 +160,6 @@ public class EmployeeControllerSO : ScriptableObject
     {
         employeeStatusWindow.BanCheckTodoMission();
     }
-    
-    #region SERVER
-    void SetEmployeeToServer(Employee e)
-    {
-        //서버에 
-        FireStoreManager.instance.SetFirestoreData("GamePlayUser",
-            GameManager.instance.Nickname,
-            "employees." + e.ID,
-            e.SetEmployeeToJSON()
-        );
-    }
-
-    void RemoveEmployeeToServer(int id)
-    {
-        FireStoreManager.instance.DeleteFirestoreDataKey(
-            "GamePlayUser",
-            GameManager.instance.Nickname, 
-            "employees." + id.ToString()
-        );
-    }
 
     //고용된 직원 서버 자료들을 인 게임으로 가져오는 함수
     public void EmployeesFromJSON(Dictionary<string, object> serverEmployees)
@@ -192,12 +178,66 @@ public class EmployeeControllerSO : ScriptableObject
             Dictionary<string, object> tmp = (Dictionary<string, object>)(serverEmployee.Value);
 
             EmployeeSO employeeSO = recruitmentControllerSo.GetEmployeeSO(Convert.ToInt32(tmp["employeeType"]));
-            Employee employee = new EmployeeBuilder().BuildEmployee(employeeSO, this);
+            Employee employee = new EmployeeBuilder().BuildEmployee(employeeSO, this, true);
 
             employee.JSONToEmployee(serverEmployee);
             this.employees.Add(employee);
         }
         InitEmployeeSet();
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////서버
+    #region SERVER
+
+    //employee
+    void SetServerEmployee(Employee e)
+    {
+        _sendFirebaseEventChannelSO.RaiseEvent(
+            "GamePlayUser",
+            GameManager.instance.Nickname, 
+            "employees." + e.ID,
+            e.EmployeeToJSON()
+        );
+    }
+
+    void RemoveServerEmployee(int id)
+    {
+        _deleteFirebaseEventChannelSO.RaiseEvent(
+            "GamePlayUser",
+            GameManager.instance.Nickname,
+            "employees." + id.ToString()
+        );
+    }
+
+    public void RemoveAllServerMissions(string nickname, int id)
+    {
+        _sendFirebaseEventChannelSO.RaiseEvent(
+            "GamePlayUser",
+            nickname,
+            "employees." + id.ToString() + ".missions",
+            FieldValue.Delete
+        );
+    }
+    public void AddServerMission(UMUMUM m, string nickname, int id)
+    {
+        _sendFirebaseEventChannelSO.RaiseEvent(
+            "GamePlayUser",
+            nickname,
+            "employees." + id.ToString() + ".missions",
+            FieldValue.ArrayUnion(m.SetMissionToJSON())
+        );
+    }
+
+    public void SetServerStamina(string nickname, int id, int stamina)
+    {
+        string em = "employees.";
+        _sendFirebaseEventChannelSO.RaiseEvent(
+            "GamePlayUser",
+            nickname,
+            em + id.ToString() + ".stamina",
+            stamina
+        );
     }
 
     #endregion

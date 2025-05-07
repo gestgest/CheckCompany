@@ -12,24 +12,19 @@ using UnityEngine.Serialization;
 public class FireStoreManager : MonoBehaviour
 {
     static FirebaseFirestore db;
-    public static FireStoreManager instance;
     [SerializeField] DeleteFirebaseEventChannelSO deleteFirebaseEventChannelSO;
     [SerializeField] SendFirebaseEventChannelSO sendFirebaseEventChannelSO;
 
-    private void Awake()
+    private void OnEnable()
     {
-        if (instance == null)
-        {
-            instance = this;
-            return;
-        }
-        Destroy(gameObject);
+        deleteFirebaseEventChannelSO.OnDeleteEventRaised += DeleteFirestoreDataKey;
+        sendFirebaseEventChannelSO.OnSendEventRaised += SetFirestoreData;
     }
 
-    private void Start()
+    private void OnDisable()
     {
-        deleteFirebaseEventChannelSO.OnDeleteEvent.AddListener(DeleteFirestoreDataKey);
-        sendFirebaseEventChannelSO.OnSendEvent.AddListener(SetFirestoreData);
+        deleteFirebaseEventChannelSO.OnDeleteEventRaised -= DeleteFirestoreDataKey;
+        sendFirebaseEventChannelSO.OnSendEventRaised -= SetFirestoreData;
     }
 
     //이미 app과 db는 싱글톤이다.

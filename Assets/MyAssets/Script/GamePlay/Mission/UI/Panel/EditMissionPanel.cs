@@ -8,11 +8,8 @@ using UnityEngine.UIElements;
 
 public class EditMissionPanel : Panel
 {
-    
-    [FormerlySerializedAs("missionController")]
-    [FormerlySerializedAs("missionsSO")]
-    [Header("SO")]
-    [SerializeField] private MissionControllerSO missionControllerSo;
+    [Header("Controller")]
+    [SerializeField] private MissionControllerSO _missionControllerSO;
 
     
     [SerializeField] private TMP_InputField title;
@@ -139,28 +136,21 @@ public class EditMissionPanel : Panel
             id: mission_id,
             employeeTypeGroup.GetIndex(),
             title.text,
-            missionControllerSo.GetIcon(0),
+            _missionControllerSO.GetIcon(0),
             0, //iconID
             levelGroup.GetIndex(),
             Get_Todo_Missions()
         );
 
-        //서버 보내기
-        FireStoreManager.instance.SetFirestoreData(
-            "GamePlayUser",
-            GameManager.instance.Nickname,
-            "missions." + mission_id.ToString(),
-            mission.MissionToJSON()
-        );
-
+        _missionControllerSO.SetServerMission(mission);
         //값을 미션 적용, 이후 모든 오브젝트 초기화
         
 
-        int index = missionControllerSo.Search_Mission_Index(mission_id);
-        missionControllerSo.SetMission(mission, index);
+        int index = _missionControllerSO.Search_Mission_Index(mission_id);
+        _missionControllerSO.SetMission(mission, index);
 
         //정해진 element를 설정하는 함수 => 리롤함수?
-        missionControllerSo.Reroll_MissionElement(index);
+        _missionControllerSO.Reroll_MissionElement(index);
 
         //back 네비 Panel
         PanelManager.instance.Back_Nav_Panel();
@@ -169,12 +159,7 @@ public class EditMissionPanel : Panel
     //최종적으로 서버에 있는 미션 삭제
     public void RemoveMission()
     {
-        missionControllerSo.RemoveMission(mission_id);
-        FireStoreManager.instance.DeleteFirestoreDataKey(
-            "GamePlayUser",
-            GameManager.instance.Nickname,
-            "missions." + mission_id
-        );
+        _missionControllerSO.RemoveMission(mission_id);
 
         PanelManager.instance.Back_Nav_Panel();
     }
