@@ -33,6 +33,7 @@ public class EmployeeControllerSO : ScriptableObject
         Panel employeePanel)
     {
         this.parent = parent;
+        employeeStatusWindow.Init();
         this.employeeStatusWindow = employeeStatusWindow;
         this.employeePanel = employeePanel;
         
@@ -219,13 +220,13 @@ public class EmployeeControllerSO : ScriptableObject
             FieldValue.Delete
         );
     }
-    public void AddServerMission(UMUMUM m, string nickname, int id)
+    public void AddServerMission(Mission m, string nickname, int id)
     {
         _sendFirebaseEventChannelSO.RaiseEvent(
             "GamePlayUser",
             nickname,
             "employees." + id.ToString() + ".missions",
-            FieldValue.ArrayUnion(m.SetMissionToJSON())
+            FieldValue.ArrayUnion(m.MissionToJSON())
         );
     }
 

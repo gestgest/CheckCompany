@@ -23,7 +23,7 @@ public class Employee
     private WorkTime workTime;
     private EmployeeRank rank;
 
-    private UMUMUM[] missions; //5개
+    private Mission[] missions; //5개
     private int mission_size = 0;
 
     private bool isEmployee = false;
@@ -31,7 +31,7 @@ public class Employee
 
     //Server Function
     private UnityAction<string, int> _removeAllServerMissions;
-    private UnityAction<UMUMUM, string, int> _addServerMission;
+    private UnityAction<Mission, string, int> _addServerMission;
     private UnityAction<string, int, int> _setServerStamina;
 
     //Controller Function
@@ -91,8 +91,8 @@ public class Employee
     public int Salary { get { return salary; } set { salary = value; } }
     public EmployeeRank _Rank { get { return rank; } set { rank = value; } }
     public WorkTime _WorkTime { get { return workTime; } set { workTime = value; } }
-    public UMUMUM GetMission(int index) { return missions[index]; }
-    public bool Get_SmallMission_Achievement(int index) { return missions[0].GetAchievement(index); }
+    public Mission GetMission(int index) { return missions[index]; }
+    public bool Get_TodoMission_IsDone(int index) { return missions[0].GetTodoMission(index).IsDone; }
     public bool IsEmployee { get { return isEmployee; } set { isEmployee = value; } }
     
     #endregion
@@ -102,7 +102,7 @@ public class Employee
     /// <param name="employeeControllerSO"> </param>
     public Employee(EmployeeControllerSO employeeControllerSO, bool isEmployee)
     {
-        missions = new UMUMUM[MAX_MISSION_SIZE];
+        missions = new Mission[MAX_MISSION_SIZE];
 
         _removeAllServerMissions += employeeControllerSO.RemoveAllServerMissions;
         _addServerMission += employeeControllerSO.AddServerMission;
@@ -120,7 +120,7 @@ public class Employee
 
     public int GetMissionSize() { return mission_size; }
 
-    public void AddMission(UMUMUM m)
+    public void AddMission(Mission m)
     {
         //꽉 차있다면 => 취소
         if (mission_size == Employee.MAX_MISSION_SIZE)
@@ -130,7 +130,7 @@ public class Employee
         mission_size++;
 
         //서버에 미션을 넣는다. => 이거 초반에 가져올때 가져오고 넣어짐
-        _addServerMission(m, GameManager.instance.Nickname, m.GetMissionID());
+        _addServerMission(m, GameManager.instance.Nickname, m.ID);
 
         //SetMissionToServer(m, GameManager.instance.Nickname, m.GetMissionID());
 
@@ -226,8 +226,8 @@ public class Employee
             for (int i = 0; i < missions_tmp.Count; i++)
             {
                 Dictionary<string, object> mission_map = (Dictionary<string, object>)missions_tmp[i];
-                UMUMUM mission = new UMUMUM();
-                mission.GetMissionFromJSON(mission_map);
+                Mission mission = new Mission();
+                mission.JSONToMission(mission_map);
                 AddMission(mission);
             }
         }

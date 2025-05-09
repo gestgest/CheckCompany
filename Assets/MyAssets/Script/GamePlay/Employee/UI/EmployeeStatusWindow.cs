@@ -20,8 +20,8 @@ public class EmployeeStatusWindow : MonoBehaviour
     [SerializeField] private TextMeshProUGUI careerPeriodText;
     [SerializeField] private TextMeshProUGUI timeText;
     
-    [FormerlySerializedAs("staminaBar")] [SerializeField] private Gauge staminaGauge;
-    [FormerlySerializedAs("mentalBar")] [SerializeField] private Gauge mentalGauge;
+    [SerializeField] private Gauge staminaGauge;
+    [SerializeField] private Gauge mentalGauge;
     
     
     //MissionPanel
@@ -42,13 +42,11 @@ public class EmployeeStatusWindow : MonoBehaviour
     [SerializeField] private GameObject addMissionElement_prefab;
 
     //MissionPanel의 Mission
-    [SerializeField] private GameObject[] smallMission_PoolObjects; //풀링용 오브젝트 (7개)
-    [SerializeField] private GameObject smallMission_prefab; //토글
+    [SerializeField] private GameObject[] todoMission_PoolObjects; //풀링용 오브젝트 (7개)
+    [SerializeField] private GameObject todoMission_prefab; //토글
 
-    [FormerlySerializedAs("missionController")]
-    [FormerlySerializedAs("missionsSO")]
     [Header("Model")]
-    [SerializeField] private MissionControllerSO missionControllerSo;
+    [SerializeField] private MissionControllerSO _missionControllerSO;
 
     
     private Employee employee;
@@ -57,13 +55,11 @@ public class EmployeeStatusWindow : MonoBehaviour
     
     RectTransform rf_dPanel;
     //아마 이거 달성률 임
-    private int small_mission_size; // 이거 제거 예정이었으나 그냥 호출 한번하고 계속 보관하는 용도
-    bool clearSmallMissionLock = false;
-
+    private int todo_mission_size; // 이거 제거 예정이었으나 그냥 호출 한번하고 계속 보관하는 용도
+    bool clearTodoMissionLock = false;
 
     private static int WIDTH = 250;
-
-    void Awake()
+    public void Init()
     {
         rf_dPanel = descriptionPanel.GetComponent<RectTransform>();
         missionUIs = new MissionIconElement[Employee.MAX_MISSION_SIZE];
@@ -74,11 +70,6 @@ public class EmployeeStatusWindow : MonoBehaviour
             missionUIs[i] = mObj.GetComponent<MissionIconElement>();
         }
     }
-
-    void Start()
-    {
-    }
-
 
 
     //EmployeeStatusWindow => 값 받기, panels 관련 애니메이션, panel이동 관련 함수
@@ -125,7 +116,7 @@ public class EmployeeStatusWindow : MonoBehaviour
         }
         
         //missions 개수만큼 addMissionElement_prefab 생성
-        for (int i = 0; i < missionControllerSo.GetMissionSize(); i++)
+        for (int i = 0; i < _missionControllerSO.GetMissionSize(); i++)
         {
             GameObject addMissionElement = Instantiate(addMissionElement_prefab);
 
@@ -134,7 +125,7 @@ public class EmployeeStatusWindow : MonoBehaviour
 
             //SetMission 함수 실행
             AddMissionElementUI element = addMissionElement.GetComponent<AddMissionElementUI>();
-            element.SetMission(missionControllerSo.GetMission(i));
+            element.SetMission(_missionControllerSO.GetMission(i));
             element.SetEmployeeStatusWindow(this.GetComponent<EmployeeStatusWindow>());
         }
     }
@@ -149,9 +140,8 @@ public class EmployeeStatusWindow : MonoBehaviour
         //     SetSmallMission();
     }
 
-    public void AddMission(Mission m)
+    public void AddMission(Mission mission)
     {
-        UMUMUM mission = new UMUMUM(m);
         employee.AddMission(mission);
         addMissionMiniWindow.SetActive(false);
         SetMissionUI();
@@ -170,95 +160,97 @@ public class EmployeeStatusWindow : MonoBehaviour
         
         for (int i = 0; i < missionSize; i++)
         {
-            UMUMUM mission = employee.GetMission(i);
-            missionUIs[i].SetValue(mission.GetTodo_Mission());
+            Mission mission = employee.GetMission(i);
+            missionUIs[i].SetValue(mission);
 
             //?  null 값이라면
             //if (mission.GetTodo_Mission().GetMissionType() != EmployeeType.NONE)
         }
 
+        
+        Debug.Log("dd : "+missionUIs.Length);
         for (int i = missionSize; i < Employee.MAX_MISSION_SIZE; i++)
         {
             missionUIs[i].SetValue();
         }
         
-        SetSmallMission();
+        SetTodoMission();
     }
 
     /////////////////////////////////////소미션
     //소 미션을 클리어 한 경우
-    public void ClearSmallMission(int index)
+    public void ClearTodoMission(int index)
     {
-        if(clearSmallMissionLock)
+        if(clearTodoMissionLock)
             return;
         //켰다면
-        if (smallMission_PoolObjects[index].GetComponent<Toggle>().isOn)
+        if (todoMission_PoolObjects[index].GetComponent<Toggle>().isOn)
         {
-            Check_smallmission_achievement(index, true);
+            Check_TodoMission(index, true);
 
         }
         else
         {
-            Check_smallmission_achievement(index, false);
+            Check_TodoMission(index, false);
         }
 
         //미션 클리어
-        if (employee.GetMission(0).GetAchievementClearCount() == small_mission_size)
+        if (employee.GetMission(0).GetIsDone())
         {
             //디버깅용 돈 주는 이벤트
             GameManager.instance.SetMoney(GameManager.instance.Money + 30000 
-                * employee.GetMission(0).GetTodo_Mission().GetTodoMissions().Count);
+                * employee.GetMission(0).GetTodoMissions().Count);
             RemoveMission(0);
         }
     }
 
     //소 미션 셋팅(init)
-    private void SetSmallMission()
+    private void SetTodoMission()
     {
         //Debug.Log("EmployeeStatusWindow 의 GetMissionSize : " + employee.GetMissionSize());
 
         if(employee.GetMissionSize() == 0)
         {
-            small_mission_size = 0;
-            Set_smallMission_achievement_UI();
+            todo_mission_size = 0;
+            Set_TodoMission_UI();
 
             //모두 소미션 오브젝트 비활성화
             for (int i = 0; i < Employee.MAX_TODO_MISSION_SIZE; i++)
-                smallMission_PoolObjects[i].SetActive(false);
+                todoMission_PoolObjects[i].SetActive(false);
             return;
         }
 
-        UMUMUM mission = employee.GetMission(0);
-        List<Todo_Mission> missions = mission.GetTodo_Mission().GetTodoMissions();
+        Mission mission = employee.GetMission(0);
+        List<Todo_Mission> missions = mission.GetTodoMissions();
         int j;
         
-        small_mission_size = missions.Count;
-        Set_smallMission_achievement_UI();
-        clearSmallMissionLock = true;
+        todo_mission_size = missions.Count;
+        Set_TodoMission_UI();
+        clearTodoMissionLock = true;
 
         //소 미션 오브젝트 풀링 => 7
-        for (j = 0; j < small_mission_size && j < Employee.MAX_TODO_MISSION_SIZE; j++)
+        for (j = 0; j < todo_mission_size && j < Employee.MAX_TODO_MISSION_SIZE; j++)
         {
-            smallMission_PoolObjects[j].SetActive(true);
+            todoMission_PoolObjects[j].SetActive(true);
 
-            smallMission_PoolObjects[j].GetComponent<Toggle>().isOn = employee.Get_SmallMission_Achievement(j);
-            Text _text = smallMission_PoolObjects[j].GetComponentInChildren<Text>();
+            todoMission_PoolObjects[j].GetComponent<Toggle>().isOn = employee.Get_TodoMission_IsDone(j);
+            Text _text = todoMission_PoolObjects[j].GetComponentInChildren<Text>();
             _text.text = missions[j].Title;
         }
 
-        clearSmallMissionLock = false;
+        clearTodoMissionLock = false;
 
         for (; j < Employee.MAX_TODO_MISSION_SIZE; j++)
         {
-            smallMission_PoolObjects[j].SetActive(false);
+            todoMission_PoolObjects[j].SetActive(false);
         }
         BanCheckTodoMission();
     }
 
     /// //////////////////프로퍼티 - small_mission_current_size
-    public void Check_smallmission_achievement(int index, bool check)
+    public void Check_TodoMission(int index, bool check)
     {
-        UMUMUM mission = employee.GetMission(0);
+        Mission mission = employee.GetMission(0);
         if (check)
         {
             if(employee.Stamina >= 10)
@@ -275,26 +267,26 @@ public class EmployeeStatusWindow : MonoBehaviour
         {
             employee.SetStamina(employee.Stamina + 10);
         }
-        mission.SetAchievement(index, check);
+        mission.Set_TodoMission_IsDone(index, check);
 
-        if (mission.GetAchievementClearCount() != small_mission_size)
+        if (!mission.GetIsDone())
             employee.SetAllMissionToServer(GameManager.instance.Nickname, employee.ID);
 
-        Set_smallMission_achievement_UI();
+        Set_TodoMission_UI();
     }
 
     
     //UI 설정
-    public void Set_smallMission_achievement_UI()
+    public void Set_TodoMission_UI()
     {
         if (employee.GetMissionSize() == 0)
         {
             processBar_text.text = "0%";
             return;
         }
-        int small_mission_achievement = employee.GetMission(0).GetAchievementClearCount();
+        int todo_mission_achievement = employee.GetMission(0).GetDoneCount();
         //Debug.Log("미션 완료 횟수 : " + small_mission_achievement);
-        processBar_text.text = ((float)small_mission_achievement * 100 / small_mission_size).ToString() + "%";
+        processBar_text.text = ((float)todo_mission_achievement * 100 / todo_mission_size).ToString() + "%";
     }
 
     //
@@ -314,9 +306,9 @@ public class EmployeeStatusWindow : MonoBehaviour
         {
             isBan = false;
         }
-        for (int j = 0; j < small_mission_size && j < Employee.MAX_TODO_MISSION_SIZE; j++)
+        for (int j = 0; j < todo_mission_size && j < Employee.MAX_TODO_MISSION_SIZE; j++)
         {
-            Toggle t = smallMission_PoolObjects[j].GetComponent<Toggle>();
+            Toggle t = todoMission_PoolObjects[j].GetComponent<Toggle>();
             if (isBan)
             {
                 //토글이 체크 안되어있다면 비활성화

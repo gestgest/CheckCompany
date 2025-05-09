@@ -77,6 +77,10 @@ public class Mission
     {
         return todo_missions;
     }
+    public Todo_Mission GetTodoMission(int index)
+    {
+        return todo_missions[index];
+    }
 
     /// <summary>todo 리스트들이 다 됐는지 </summary>
     /// <returns></returns>
@@ -93,6 +97,20 @@ public class Mission
         return true;
     }
 
+    public int GetDoneCount()
+    {
+        int count = 0;
+        for (int i = 0; i < todo_missions.Count; i++)
+        {
+            if (!todo_missions[i].IsDone)
+            {
+                count++;
+            }
+        }
+
+        return count;
+    }
+    
     private void SetDoneDate(Date date)
     {
         doneDate = date;
