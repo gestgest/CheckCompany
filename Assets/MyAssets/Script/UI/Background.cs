@@ -8,4 +8,6 @@ public class Background : MonoBehaviour
         gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width, Screen.height);
         gameObject.GetComponent<RectTransform>().position = new Vector2(Screen.width / 2, Screen.height / 2);
     }
+    
+    //off => 미니Panel.OffPanel()함수를 써야함
 }

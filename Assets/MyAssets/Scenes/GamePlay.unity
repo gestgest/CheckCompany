@@ -12803,7 +12803,7 @@ PrefabInstance:
     - target: {fileID: 8037801010729141495, guid: ef3f4c91cf9cae249b1c6ed3fbf29e87, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1106018435}
+      objectReference: {fileID: 122420083}
     - target: {fileID: 8037801010729141495, guid: ef3f4c91cf9cae249b1c6ed3fbf29e87, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -12814,7 +12814,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8037801010729141495, guid: ef3f4c91cf9cae249b1c6ed3fbf29e87, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Panel, Assembly-CSharp
+      value: MiniPanel, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 8037801010729141495, guid: ef3f4c91cf9cae249b1c6ed3fbf29e87, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -16016,7 +16016,7 @@ MonoBehaviour:
   complete_mission_panel: {fileID: 873169011}
   employeeParent: {fileID: 1490410352}
   employeeStatusWindow: {fileID: 122420082}
-  employeePanel: {fileID: 122420083}
+  employeePanel: {fileID: 1106018435}
   _deleteFirebaseEventChannelSO: {fileID: 11400000, guid: 7a1f9e67b78693248b645e9629191902, type: 2}
   _sendFirebaseEventChannelSO: {fileID: 11400000, guid: bc6e20a0b24975943a58a86b83f606ea, type: 2}
 --- !u!1 &606009176
@@ -38036,7 +38036,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1508242466
 RectTransform:
   m_ObjectHideFlags: 0
@@ -38049,10 +38049,10 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 278282405}
   - {fileID: 122420079}
   - {fileID: 2066266584}
   - {fileID: 221784517}
-  - {fileID: 278282405}
   m_Father: {fileID: 1106018430}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}

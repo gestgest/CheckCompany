@@ -94,6 +94,7 @@ public class EmployeeControllerSO : ScriptableObject
     //직원 창 보여주는 기능
     private void ShowEmployeeStatusWindow(int id)
     {
+        Debug.Log("엄엄");
         //EmployeeStatusWindow 호출
         employeePanel.SwitchingPanel(0);
         //PanelManager.instance.Click_Button_Panel(5, true);

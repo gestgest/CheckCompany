@@ -52,8 +52,6 @@ public class EmployeeElement : MonoBehaviour
         costUI.text = (cost / 10000).ToString() + "만원";
     }
 
-
-    //싱글톤으로 Employee를 제거하는 함수
     public void RemoveEmployee()
     {
         _employeeControllerSO.RemoveEmployee(ID);
