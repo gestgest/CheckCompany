@@ -12,18 +12,25 @@ public class BuildingSystem : MonoBehaviour
     private Grid grid;
     public Tilemap mainTilemap;
     public TileBase takenTile;
-
     [SerializeField] Transform internObjectList;
+
+    [Header("Event")]
+    [SerializeField] private GameObjectEventChannelSO _createEvent;
+    
+    
 
     public GameObject prefab1;
     [SerializeField] private PlaceableObject selectedObject;
+
 
     private void Awake()
     {
         instance = this;
         grid = gridLayout.gameObject.GetComponent<Grid>();
+        _createEvent._onEventRaised += CreateObject;
     }
 
+    //어차피 안드로이드인데 키보드를 넣을 이유가 있나.
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
