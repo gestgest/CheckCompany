@@ -20,8 +20,13 @@ public class BuildingSystem : MonoBehaviour
     
 
     public GameObject prefab1;
+    
+    
+    //selected
     [SerializeField] private PlaceableObject selectedObject;
-
+    private bool isFirst = true; 
+    private Vector3Int startpos;
+    private Vector3Int object_size;
 
     private void Awake()
     {
@@ -69,24 +74,21 @@ public class BuildingSystem : MonoBehaviour
     //건물 놓는 함수
     public void PutOnObject()
     {
-
-        //타일이 없으면  
+        //겹치는 타일이 없으면
         if (CheckTile(selectedObject))
         {
             //놓기 전에 물어보는 함수
-
             selectedObject.Place();
-            Vector3Int startpos = gridLayout.WorldToCell(selectedObject.GetStartPosition());
-            TakenArea(startpos, selectedObject.Size);
+
+            startpos = gridLayout.WorldToCell(selectedObject.GetStartPosition());
+            ClearArea();
+            //TakenArea(startpos, selectedObject.Size);
 
             //배치 하는 순간 조종 권한 제거  
             Destroy(selectedObject.gameObject.GetComponent<HandlingObject>());
             selectedObject = null;
         }
-        else
-        {
-            Destroy(selectedObject.gameObject);
-        }
+        //겹치면 그냥 진행
     }
 
     #region Building Placement  
@@ -134,7 +136,6 @@ public class BuildingSystem : MonoBehaviour
         Vector3Int position = gridLayout.WorldToCell(ob.GetStartPosition());
 
         //타일 베이스 [타일 가져오기]  
-
         for(int i = 0; i < ob.Size.z;i++)
         {
             for(int j = 0; j < ob.Size.x;j++)
@@ -150,16 +151,45 @@ public class BuildingSystem : MonoBehaviour
         return true;
     }
 
-    //타일 색칠 함수  
-    public void TakenArea(Vector3Int startpos, Vector3Int size)
+    /// <summary> 타일 채우는 함수</summary>
+    /// <param name="startpos"></param>
+    /// <param name="size"></param>
+    private void TakenArea(Vector3Int startpos, Vector3Int size)
     {
+        this.startpos = startpos;
+        this.object_size = size;
         for(int i = 0; i < size.z; i++)
         {
             for(int j = 0; j < size.x; j++)
             {
                 mainTilemap.SetTile(startpos + new Vector3Int(j, i, 0), takenTile);
             }
+        }
+    }
+    
+    /// <summary>
+    /// 놓는 함수, 근데 너무 비효율적이지 않을까
+    /// </summary>
+    public void TakenArea()
+    {
+        ClearArea();
+        Vector3Int startpos = gridLayout.WorldToCell(selectedObject.GetStartPosition());
+        TakenArea(startpos, selectedObject.Size);
+    }
 
+    private void ClearArea()
+    {
+        if (isFirst)
+        {
+            isFirst = false;
+            return;
+        }
+        for(int i = 0; i < object_size.z; i++)
+        {
+            for(int j = 0; j < object_size.x; j++)
+            {
+                mainTilemap.SetTile(startpos + new Vector3Int(j, i, 0), null);
+            }
         }
     }
     #endregion

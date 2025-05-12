@@ -15,6 +15,7 @@ public class PlaceableObject : MonoBehaviour
         CalculateTileSize();
     }
 
+    /// <summary> 손에 있는 selectedObject 제거 </summary>
     public virtual void Place()
     {
         HandlingObject drag = gameObject.GetComponent<HandlingObject>();

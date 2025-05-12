@@ -8,23 +8,24 @@ public class ShopPanel : Panel
     [SerializeField] private Transform parent;
 
     private List<CategoryElement> _categoryElements;
-    override protected void Start()
+    protected void Awake()
     {
-        base.Start();
         _categoryElements = new List<CategoryElement>();
         for(int i = 0; i < panels.Length; i++)
         {
             //for문 돌려서 Panel SO 정보값을 버튼으로 변환
-            CreateCategoryElement(panels[i].GetSprite());
+            CreateCategoryElement(panels[i]);
         }
     }
 
-    public void CreateCategoryElement(Sprite icon)
+    public void CreateCategoryElement(Panel panel)
     {
         GameObject obj = Instantiate(_categoryElementPrefab, parent);
         CategoryElement tmp = obj.GetComponent<CategoryElement>();
 
-        tmp.Init(icon);
+       CategoryPanel categoryPanel = panel as CategoryPanel;
+       categoryPanel.categoryElement = tmp;
+        tmp.Init(panel.GetSprite());
 
         _categoryElements.Add(tmp);
     }
