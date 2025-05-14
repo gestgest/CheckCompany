@@ -6,56 +6,52 @@ using UnityEngine.UIElements;
 
 public class BuildingSystem : MonoBehaviour
 {
-    public static BuildingSystem instance;
-
-    public GridLayout gridLayout;
+    [SerializeField] private GridLayout gridLayout;
     private Grid grid;
-    public Tilemap mainTilemap;
-    public TileBase takenTile;
+    [SerializeField] private Tilemap mainTilemap;
+    [SerializeField] private TileBase takenTile;
     [SerializeField] Transform internObjectList;
+
+    [Header("selected")]
+    //selected
+    [SerializeField] private PlaceableObject selectedObject;
+    [SerializeField] private Transform _tmp_parent;
+    [SerializeField] private GameObject _okButton;
+    [SerializeField] private GameObject _denyButton;
 
     [Header("Event")]
     [SerializeField] private GameObjectEventChannelSO _createEvent;
+    [SerializeField] private VoidEventChannelSO _takenAreaEvent;
     
-    
-
-    public GameObject prefab1;
-    
-    
-    //selected
-    [SerializeField] private PlaceableObject selectedObject;
     private bool isFirst = true; 
     private Vector3Int startpos;
     private Vector3Int object_size;
 
     private void Awake()
     {
-        instance = this;
         grid = gridLayout.gameObject.GetComponent<Grid>();
+
         _createEvent._onEventRaised += CreateObject;
+        _takenAreaEvent._onEventRaised += TakenArea;
     }
 
     //어차피 안드로이드인데 키보드를 넣을 이유가 있나.
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            CreateObject(prefab1);
-        }
-
         if (!selectedObject)
         {
             return;
         }
 
-        //놓는 함수
+        //놓는 함수v
         if (Input.GetKeyDown(KeyCode.Space))
         {
             PutOnObject();
         }
+        //해체하는 함수x
         else if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Destroy(selectedObject.gameObject);
+            TakeOffObject();
         }
     }
 
@@ -84,11 +80,28 @@ public class BuildingSystem : MonoBehaviour
             ClearArea();
             //TakenArea(startpos, selectedObject.Size);
 
+            TakeOffBuilding();
             //배치 하는 순간 조종 권한 제거  
             Destroy(selectedObject.gameObject.GetComponent<HandlingObject>());
             selectedObject = null;
         }
         //겹치면 그냥 진행
+    }
+
+    //안 놓는 함수
+    public void TakeOffObject()
+    {
+        ClearArea();
+        TakeOffBuilding();
+        Destroy(selectedObject.gameObject);
+        selectedObject = null;
+    }
+
+    private void TakeOffBuilding()
+    {
+        //버튼 안 보이게
+        _okButton.SetActive(false);
+        _denyButton.SetActive(false);
     }
 
     #region Building Placement  
@@ -102,7 +115,11 @@ public class BuildingSystem : MonoBehaviour
 
         obj.transform.parent = internObjectList;
         //생성된 오브젝트에 HandlingObject속성 추가  
-        obj.AddComponent<HandlingObject>();
+
+        _okButton.SetActive(true);
+        _denyButton.SetActive(true);
+        obj.AddComponent<HandlingObject>().Init(_okButton.transform, _denyButton.transform, _takenAreaEvent);
+        
         selectedObject = obj.GetComponent<PlaceableObject>();
     }
 
