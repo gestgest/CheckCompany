@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,7 @@ public class BuildingSystem : MonoBehaviour
     [Header("Event")]
     [SerializeField] private GameObjectEventChannelSO _createEvent;
     [SerializeField] private VoidEventChannelSO _takenAreaEvent;
+    [SerializeField] private Vector3TransformChannelSO _gridEvent;
     
     private bool isFirst = true; 
     private Vector3Int startpos;
@@ -31,8 +33,19 @@ public class BuildingSystem : MonoBehaviour
     {
         grid = gridLayout.gameObject.GetComponent<Grid>();
 
+    }
+
+    private void OnEnable()
+    {
         _createEvent._onEventRaised += CreateObject;
         _takenAreaEvent._onEventRaised += TakenArea;
+        _gridEvent._onEventRaised += SnapCoordinateToGrid;
+    }
+    private void OnDisable()
+    {
+        _createEvent._onEventRaised -= CreateObject;
+        _takenAreaEvent._onEventRaised -= TakenArea;
+        _gridEvent._onEventRaised -= SnapCoordinateToGrid;
     }
 
     //어차피 안드로이드인데 키보드를 넣을 이유가 있나.
@@ -118,7 +131,12 @@ public class BuildingSystem : MonoBehaviour
 
         _okButton.SetActive(true);
         _denyButton.SetActive(true);
-        obj.AddComponent<HandlingObject>().Init(_okButton.transform, _denyButton.transform, _takenAreaEvent);
+        obj.AddComponent<HandlingObject>().Init(
+            _okButton.transform,
+            _denyButton.transform, 
+            _takenAreaEvent,
+            _gridEvent
+        );
         
         selectedObject = obj.GetComponent<PlaceableObject>();
     }

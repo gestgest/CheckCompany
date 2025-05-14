@@ -1,13 +1,13 @@
+using System;
 using UnityEngine;
-using UnityEngine.Events;
 
-[CreateAssetMenu(fileName = "Vector3EventChannelSO", menuName = "ScriptableObject/Event/Vector3EventChannelSO")]
-public class Vector3EventChannelSO : ScriptableObject
+[CreateAssetMenu(fileName = "Vector3TransformChannelSO", menuName = "ScriptableObject/Event/Vector3TransformChannelSO")]
+public class Vector3TransformChannelSO : ScriptableObject
 {
-    public UnityAction<Vector3> _onEventRaised;
+    public Func<Vector3, Vector3> _onEventRaised;
 
-    public void RaiseEvent(Vector3 pos)
+    public Vector3 RaiseEvent(Vector3 pos)
     {
-        _onEventRaised.Invoke(pos);
+        return _onEventRaised.Invoke(pos);
     }
 }

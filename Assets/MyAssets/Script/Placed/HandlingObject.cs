@@ -9,7 +9,7 @@ public class HandlingObject : MonoBehaviour
     Transform _denyButtonTransform;
 
     private VoidEventChannelSO _takenAreaEvent;
-    private Vector3EventChannelSO _snapCoordinateToGrid;
+    private Vector3TransformChannelSO _snapCoordinateToGrid;
 
 
     private void OnMouseDown()
@@ -51,11 +51,16 @@ public class HandlingObject : MonoBehaviour
         return Vector3.zero;
     }
 
-    public void Init(Transform okButton, Transform denyButton, VoidEventChannelSO takenAreaEvent)
+    public void Init(
+        Transform okButton,
+        Transform denyButton,
+        VoidEventChannelSO takenAreaEvent,
+        Vector3TransformChannelSO snapCoordinateToGrid)
     {
         _okButtonTransform = okButton;
         _denyButtonTransform = denyButton;
 
         _takenAreaEvent = takenAreaEvent;
+        _snapCoordinateToGrid = snapCoordinateToGrid;
     }
 }

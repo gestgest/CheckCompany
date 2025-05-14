@@ -9077,7 +9077,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &356361189
 RectTransform:
   m_ObjectHideFlags: 0
@@ -27547,7 +27547,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1010578236
 RectTransform:
   m_ObjectHideFlags: 0
@@ -54266,6 +54266,7 @@ MonoBehaviour:
   _denyButton: {fileID: 356361188}
   _createEvent: {fileID: 11400000, guid: 17130f6f4e93a9547b6a6caadb594b7b, type: 2}
   _takenAreaEvent: {fileID: 11400000, guid: 767a94b576ed3cf4abacb6b5b867d660, type: 2}
+  _gridEvent: {fileID: 11400000, guid: ae3fd948f4be3da45a40c6cca018c9b3, type: 2}
 --- !u!1 &2062066121
 GameObject:
   m_ObjectHideFlags: 0
