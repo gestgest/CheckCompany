@@ -1,44 +1,92 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class HandlingObject : MonoBehaviour
 {
-    private Vector3 offset;
-    Transform _okButtonTransform;
-    Transform _denyButtonTransform;
+    GameObject _okButton;
+    GameObject _denyButton;
 
     private VoidEventChannelSO _takenAreaEvent;
     private Vector3TransformChannelSO _snapCoordinateToGrid;
+    [SerializeField] private Vector2 _screenEdge;
 
-
-    private void OnMouseDown()
+    private Transform _cameraTransform;
+    
+    //down
+    private void Update()
     {
-        offset = transform.position - MoveObject();
+        if (Input.GetMouseButtonDown(0))
+        {
+            // UI 위를 클릭했다면 아무 일도 하지 않는다
+            if (EventSystem.current.IsPointerOverGameObject())
+                return;
+            
+            Vector3 mousePos = Input.mousePosition;
+            MoveObject(mousePos);
+            OffButton();
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            OnButton();
+        }
     }
 
     //OnMouseDrag()
-    private void FixedUpdate()
+    private void OnMouseDrag()
     {
-        //마우스에 따라서 포지션값[화면] 수정
-        Vector3 pos = MoveObject() + offset;
+        Vector3 mousePos = Input.mousePosition;
+        MoveObject(mousePos);
+        MoveCamera(mousePos); //화면 움직이는 함수
+    }
+    
+    public void Init(
+        GameObject okButton,
+        GameObject denyButton,
+        Transform cameraTransform,
+        VoidEventChannelSO takenAreaEvent,
+        Vector3TransformChannelSO snapCoordinateToGrid)
+    {
+        this._okButton = okButton;
+        this._denyButton = denyButton;
+
+        this._cameraTransform = cameraTransform;
         
+        _takenAreaEvent = takenAreaEvent;
+        _snapCoordinateToGrid = snapCoordinateToGrid;
+    }
+    
+    
+    private void MoveObject(Vector3 mousePos)
+    {
         //화면 포지션 값을 타일맵 좌표로 변환 => 기다려라 
-        transform.position = _snapCoordinateToGrid.RaiseEvent(pos);
+        transform.position = _snapCoordinateToGrid.RaiseEvent(GetObjectPos(mousePos));
 
-        //UI도 그거에 따라 옮기는 함수
-        _okButtonTransform.position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(-1.0f, 0.0f, -3.0f));
-        _denyButtonTransform.position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(-3.0f, 0.0f, -1.0f));
         //x축 => 왼쪽 아래, z축 => 오른쪽 아래
-
-        _takenAreaEvent.RaiseEvent();   //BuildingSystem.instance.TakenArea();
+        _takenAreaEvent.RaiseEvent();   //색칠
     }
 
+    private void OnButton()
+    {
+        _okButton.SetActive(true);
+        _denyButton.SetActive(true);
+        
+        //UI도 그거에 따라 옮기는 함수
+        _okButton.transform.position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(-1.0f, 0.0f, -3.0f));
+        _denyButton.transform.position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(-3.0f, 0.0f, -1.0f));
+    }
+    private void OffButton()
+    {
+        _okButton.SetActive(false);
+        _denyButton.SetActive(false);
+    }
+    
     ///<summary>선택된 오브젝트의 포지션 값 출력</summary>
-    private Vector3 MoveObject()
+    private Vector3 GetObjectPos(Vector3 mousePos)
     {
         RaycastHit hit;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = Camera.main.ScreenPointToRay(mousePos);
 
         if (Physics.Raycast(ray, out hit))
         {
@@ -51,16 +99,36 @@ public class HandlingObject : MonoBehaviour
         return Vector3.zero;
     }
 
-    public void Init(
-        Transform okButton,
-        Transform denyButton,
-        VoidEventChannelSO takenAreaEvent,
-        Vector3TransformChannelSO snapCoordinateToGrid)
+    private void MoveCamera(Vector3 mousePos)
     {
-        _okButtonTransform = okButton;
-        _denyButtonTransform = denyButton;
+        Vector3 mouseDir = Vector3.zero;
+        
+        // <- ^
+        //왼쪽
+        if (mousePos.x >= Screen.width - _screenEdge.x)
+        {
+            mouseDir += Vector3.left;
+            mouseDir += Vector3.forward;
+        }
+        else if (mousePos.x <= _screenEdge.x)
+        {
+            mouseDir += Vector3.right;
+            mouseDir += Vector3.back;
+        }
+        if (mousePos.y >= Screen.height - _screenEdge.y)
+        {
+            mouseDir += Vector3.left;
+            mouseDir += Vector3.back;
+        }
+        else if (mousePos.y <= _screenEdge.y)
+        {
+            mouseDir += Vector3.right;
+            mouseDir += Vector3.forward;
+        }
 
-        _takenAreaEvent = takenAreaEvent;
-        _snapCoordinateToGrid = snapCoordinateToGrid;
+        Vector3 newpos = _cameraTransform.position + mouseDir.normalized * Time.deltaTime;
+
+        _cameraTransform.position = newpos;
     }
+    
 }

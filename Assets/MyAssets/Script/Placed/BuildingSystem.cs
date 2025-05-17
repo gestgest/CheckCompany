@@ -17,8 +17,10 @@ public class BuildingSystem : MonoBehaviour
     //selected
     [SerializeField] private PlaceableObject selectedObject;
     [SerializeField] private Transform _tmp_parent;
+    [SerializeField] private Transform _cameraTransform;
     [SerializeField] private GameObject _okButton;
     [SerializeField] private GameObject _denyButton;
+    
 
     [Header("Event")]
     [SerializeField] private GameObjectEventChannelSO _createEvent;
@@ -128,12 +130,10 @@ public class BuildingSystem : MonoBehaviour
 
         obj.transform.parent = internObjectList;
         //생성된 오브젝트에 HandlingObject속성 추가  
-
-        _okButton.SetActive(true);
-        _denyButton.SetActive(true);
         obj.AddComponent<HandlingObject>().Init(
-            _okButton.transform,
-            _denyButton.transform, 
+            _okButton,
+            _denyButton, 
+            _cameraTransform,
             _takenAreaEvent,
             _gridEvent
         );
