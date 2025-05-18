@@ -191,7 +191,6 @@ public class Mission
 
         List<object> todo_missions = (List<object>)data["todo_missions"];
 
-        //이거이거이거
         for (int i = 0; i < todo_missions.Count; i++)
         {
             Todo_Mission todo_mission = new Todo_Mission();

@@ -10614,8 +10614,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2059868569}
-        m_TargetAssemblyTypeName: BuildingSystem, Assembly-CSharp
+      - m_Target: {fileID: 11400000, guid: 3e3a0617d4ef1064d9e9d0b6c5a9cab3, type: 2}
+        m_TargetAssemblyTypeName: PlaceSystemSO, Assembly-CSharp
         m_MethodName: TakeOffObject
         m_Mode: 1
         m_Arguments:
@@ -18903,6 +18903,7 @@ MonoBehaviour:
   recruitmentControllerSO: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
   missionControllerSO: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
   employeeControllerSO: {fileID: 11400000, guid: 6a695d970d94e0a4bb81e3e309e1fadf, type: 2}
+  _placeSystemSO: {fileID: 11400000, guid: 3e3a0617d4ef1064d9e9d0b6c5a9cab3, type: 2}
   recruitmentView: {fileID: 329780243}
   recrutmentCostText: {fileID: 1475385537}
   mission_panel: {fileID: 248255120}
@@ -18910,6 +18911,15 @@ MonoBehaviour:
   employeeParent: {fileID: 1490410352}
   employeeStatusWindow: {fileID: 122420082}
   employeePanel: {fileID: 1106018435}
+  gridLayout: {fileID: 2059868568}
+  mainTilemap: {fileID: 177504718}
+  _takenTile: {fileID: 11400000, guid: 82c57fe054a809b4391ce3d87d003bd3, type: 2}
+  _redTile: {fileID: 11400000, guid: 4ebcc278a4352224bb0feae5ba27d006, type: 2}
+  _objectParent: {fileID: 966093527}
+  _tmp_parent: {fileID: 1547845555}
+  _cameraTransform: {fileID: 963194228}
+  _okButton: {fileID: 1010578235}
+  _denyButton: {fileID: 356361188}
   _deleteFirebaseEventChannelSO: {fileID: 11400000, guid: 7a1f9e67b78693248b645e9629191902, type: 2}
   _sendFirebaseEventChannelSO: {fileID: 11400000, guid: bc6e20a0b24975943a58a86b83f606ea, type: 2}
 --- !u!1 &604371935
@@ -30319,8 +30329,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2059868569}
-        m_TargetAssemblyTypeName: BuildingSystem, Assembly-CSharp
+      - m_Target: {fileID: 11400000, guid: 3e3a0617d4ef1064d9e9d0b6c5a9cab3, type: 2}
+        m_TargetAssemblyTypeName: PlaceSystemSO, Assembly-CSharp
         m_MethodName: PutOnObject
         m_Mode: 1
         m_Arguments:
@@ -59643,7 +59653,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2059868567}
   - component: {fileID: 2059868568}
-  - component: {fileID: 2059868569}
   m_Layer: 0
   m_Name: Grid_BuildingManager
   m_TagString: Untagged
@@ -59679,30 +59688,6 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 1
---- !u!114 &2059868569
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2059868566}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d14f03cd5776412479f7d25101166db8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gridLayout: {fileID: 2059868568}
-  mainTilemap: {fileID: 177504718}
-  takenTile: {fileID: 11400000, guid: 82c57fe054a809b4391ce3d87d003bd3, type: 2}
-  internObjectList: {fileID: 966093527}
-  selectedObject: {fileID: 0}
-  _tmp_parent: {fileID: 1547845555}
-  _cameraTransform: {fileID: 963194228}
-  _okButton: {fileID: 1010578235}
-  _denyButton: {fileID: 356361188}
-  _createEvent: {fileID: 11400000, guid: 17130f6f4e93a9547b6a6caadb594b7b, type: 2}
-  _takenAreaEvent: {fileID: 11400000, guid: 767a94b576ed3cf4abacb6b5b867d660, type: 2}
-  _gridEvent: {fileID: 11400000, guid: ae3fd948f4be3da45a40c6cca018c9b3, type: 2}
 --- !u!1 &2062066121
 GameObject:
   m_ObjectHideFlags: 0
