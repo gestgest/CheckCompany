@@ -21,7 +21,6 @@ public class PlaceableObject : MonoBehaviour
     }
     public void SetObjectID(int object_id)
     {
-        
         this.object_id = object_id;
     }
 

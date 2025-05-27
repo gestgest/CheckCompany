@@ -133,7 +133,7 @@ public class PlaceSystemSO : ScriptableObject
 
     private void ServerCreateObject(KeyValuePair<string, object> placeableObject)
     {
-        int id = (int.Parse(placeableObject.Key));
+        int id = Convert.ToInt32(placeableObject.Key);
         
         Dictionary<string, object> keyValues = (Dictionary<string, object>)placeableObject.Value;
         int index = Convert.ToInt32(keyValues["property_id"]);
@@ -146,11 +146,12 @@ public class PlaceSystemSO : ScriptableObject
         );
         
         BuildingObject(_shopPlaceableObjects[index].gameObject, pos, false); // 핸들링 안할거
+
         _placedObjects[_placedObjects.Count - 1].SetObjectID(id);
     }
     
     //건물 만드는 함수
-    public void CreateObject(GameObject obj)
+    private void CreateObject(GameObject obj)
     {
         //선택된 오브젝트가 있다면
         if (selectedObject != null)
@@ -230,6 +231,9 @@ public class PlaceSystemSO : ScriptableObject
 
         obj.transform.parent = _objectParent;
 
+        PlaceableObject tmp = obj.GetComponent<PlaceableObject>();
+        tmp.Init();
+        
         if (isHandling)
         {
             //생성된 오브젝트에 HandlingObject속성 추가  
@@ -240,14 +244,13 @@ public class PlaceSystemSO : ScriptableObject
                 _takenAreaEvent,
                 _gridEvent
             );
-            selectedObject = obj.GetComponent<PlaceableObject>();
-            selectedObject.Init();
+            selectedObject = tmp;
 
             SetAllArea(true); //건물 다 색칠
             isFirst = false;
         }
 
-        _placedObjects.Add(selectedObject);
+        _placedObjects.Add(tmp);
     }
 
     public Vector3 SnapCoordinateToGrid(Vector3 position)
