@@ -318,7 +318,7 @@ public class PlaceSystemSO : ScriptableObject
     {
         for (int i = 0; i < _placedObjects.Count; i++)
         {
-            PlaceableObject po= _placedObjects[i];
+            PlaceableObject po = _placedObjects[i]; //po는 null 아님, 아마 GetStartPosition 이거 자체가?
             Vector3Int startpos = gridLayout.WorldToCell(po.GetStartPosition());
             TakenArea(startpos, po.Size, isSelected);
         }

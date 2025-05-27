@@ -8,7 +8,8 @@ public class PlaceableObject : MonoBehaviour
 {
     public bool Placed { get; private set; }
     public Vector3Int Size { get; private set; }
-    [SerializeField] private Vector3[] vertices;
+    
+    private Vector3[] vertices;
 
     private int object_id;
     [SerializeField] private int property_id;

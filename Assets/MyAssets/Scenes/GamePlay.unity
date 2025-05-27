@@ -18903,7 +18903,7 @@ MonoBehaviour:
   recruitmentControllerSO: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
   missionControllerSO: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
   employeeControllerSO: {fileID: 11400000, guid: 6a695d970d94e0a4bb81e3e309e1fadf, type: 2}
-  _placeSystemSO: {fileID: 11400000, guid: 3e3a0617d4ef1064d9e9d0b6c5a9cab3, type: 2}
+  _placeSystemSO: {fileID: 11400000, guid: 78992eda014fc4149a161456aaedd847, type: 2}
   recruitmentView: {fileID: 329780243}
   recrutmentCostText: {fileID: 1475385537}
   mission_panel: {fileID: 248255120}
