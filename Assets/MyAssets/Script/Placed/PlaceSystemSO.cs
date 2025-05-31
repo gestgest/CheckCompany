@@ -66,6 +66,11 @@ public class PlaceSystemSO : ScriptableObject
         _placedObjects = new List<PlaceableObject>();
     }
 
+    /// <summary>
+    /// 모든 서버에서 가져온 데이터 설정
+    /// </summary>
+    /// <param name="data"></param>
+    /// <param name="object_id"></param>
     public void SetPlacedObjects(Dictionary<string, object> data, int object_id)
     {
         //map 구조의 data
@@ -150,7 +155,7 @@ public class PlaceSystemSO : ScriptableObject
         _placedObjects[_placedObjects.Count - 1].SetObjectID(id);
     }
     
-    //건물 만드는 함수
+    //오브젝트 버튼 누르면 오브젝트 나오는 함수
     private void CreateObject(GameObject obj)
     {
         //선택된 오브젝트가 있다면
@@ -160,6 +165,9 @@ public class PlaceSystemSO : ScriptableObject
             selectedObject = null;
         }
         BuildingObject(obj, Vector3.zero);
+        
+        //모든 오브젝트 색칠
+        SetAllArea(true);
     }
 
     //건물 놓는 함수
@@ -216,10 +224,11 @@ public class PlaceSystemSO : ScriptableObject
     #region Building Placement  
 
     /// <summary>
-    ///
+    /// 자체 오브젝트를 생성하는 함수. 초기에 서버에서 가져온 오브젝트와 핸들링한 오브젝트를 설치하는 함수
     /// </summary>
     /// <param name="building"></param>
     /// <param name="position">넣을 값 없으면 Vector3.zero</param>
+    /// <param name="isHandling">손에 들고 있는 오브젝트인지</param>
     private void BuildingObject(GameObject building, Vector3 position, bool isHandling = true)
     {
         isFirst = true;
@@ -246,7 +255,7 @@ public class PlaceSystemSO : ScriptableObject
             );
             selectedObject = tmp;
 
-            SetAllArea(true); //건물 다 색칠
+            //SetArea(); //지정된 건물만 색칠
             isFirst = false;
         }
 
@@ -261,21 +270,21 @@ public class PlaceSystemSO : ScriptableObject
     }
 
     //area는 범위, tilemap
-    private static TileBase[] GetTileBlock(BoundsInt area, Tilemap tilemap)
-    {
-        TileBase[] array = new TileBase[area.size.x * area.size.y];
-        int count = 0;
-
-        foreach (Vector3Int v in area.allPositionsWithin)
-        {
-            Debug.Log(v);
-            Vector3Int pos = new Vector3Int(v.x, v.y, 0);
-            array[count] = tilemap.GetTile(pos);
-            count++;
-        }
-
-        return array;
-    }
+    // private static TileBase[] GetTileBlock(BoundsInt area, Tilemap tilemap)
+    // {
+    //     TileBase[] array = new TileBase[area.size.x * area.size.y];
+    //     int count = 0;
+    //
+    //     foreach (Vector3Int v in area.allPositionsWithin)
+    //     {
+    //         Debug.Log(v);
+    //         Vector3Int pos = new Vector3Int(v.x, v.y, 0);
+    //         array[count] = tilemap.GetTile(pos);
+    //         count++;
+    //     }
+    //
+    //     return array;
+    // }
 
     //타일이 비어있는지  
     public bool CheckTile(PlaceableObject ob, Vector3Int position)
@@ -307,7 +316,8 @@ public class PlaceSystemSO : ScriptableObject
     }
     
     /// <summary>
-    /// 영역 설정하는 함수, 근데 너무 비효율적이지 않을까
+    /// 영역 설정하는 함수, 드래그 할때마다 이 함수가 발동됨
+    /// 비효율 적인데?
     /// </summary>
     public void SetArea()
     {
