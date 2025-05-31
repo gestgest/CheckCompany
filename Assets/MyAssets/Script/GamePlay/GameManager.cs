@@ -35,7 +35,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private CompleteMissionPanel complete_mission_panel;
 
     [Header("Employee")]
-    [SerializeField] private GameObject employeeParent;
+    [SerializeField] private GameObject employeeElementParent;
+    [SerializeField] private GameObject employeeObjectParent;
     [SerializeField] private EmployeeStatusWindow employeeStatusWindow; //이거를 subPanel로 바꿀 수 없나
     [SerializeField] private Panel employeePanel;
 
@@ -90,7 +91,7 @@ public class GameManager : MonoBehaviour
     {
         recruitmentControllerSO.Init(recruitmentView, recrutmentCostText);
         missionControllerSO.Init(mission_panel, complete_mission_panel);
-        employeeControllerSO.Init(employeeParent, employeeStatusWindow, employeePanel);
+        employeeControllerSO.Init(employeeElementParent, employeeObjectParent, employeeStatusWindow, employeePanel);
         
         _placeSystemSO.Init(
             gridLayout,
@@ -156,7 +157,7 @@ public class GameManager : MonoBehaviour
         recruitmentControllerSO.JSONToRecruitments(recruitments);
 
         Dictionary<string, object> employees = (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "employees");
-        employeeControllerSO.EmployeesFromJSON(employees);
+        employeeControllerSO.JSONToEmployees(employees);
         
         date.GetDateFromJSON(
             (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "date")

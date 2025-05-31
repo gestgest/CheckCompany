@@ -10,7 +10,8 @@ using UnityEngine.UI;
 [CreateAssetMenu(fileName = "EmployeeControllerSO", menuName = "ScriptableObject/Controller/EmployeeControllerSO")]
 public class EmployeeControllerSO : ScriptableObject
 {
-    [SerializeField] private GameObject employeePrefab;
+    [SerializeField] private GameObject employeeElementPrefab;
+    [SerializeField] private GameObject employeeObjectPrefab;
     
     [Header("Controller")]
     [SerializeField] private RecruitmentControllerSO recruitmentControllerSo;
@@ -19,25 +20,30 @@ public class EmployeeControllerSO : ScriptableObject
     [SerializeField] private DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
     [SerializeField] private SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
 
-
+    
     //직원 목록
     List<Employee> employees;
+    List<GameObject> employeeElementObjects;
     List<GameObject> employeeObjects;
 
-    GameObject parent;
+    GameObject element_parent;
+    GameObject object_parent;
     EmployeeStatusWindow employeeStatusWindow; //이거를 subPanel로 바꿀 수 없나
     Panel employeePanel;
     
-    public void Init(GameObject parent,
+    public void Init(GameObject element_parent,
+        GameObject object_parent,
         EmployeeStatusWindow employeeStatusWindow,
         Panel employeePanel)
     {
-        this.parent = parent;
+        this.element_parent = element_parent;
+        this.object_parent = object_parent;
         employeeStatusWindow.Init();
         this.employeeStatusWindow = employeeStatusWindow;
         this.employeePanel = employeePanel;
         
         employees = new List<Employee>();
+        employeeElementObjects = new List<GameObject>();
         employeeObjects = new List<GameObject>();
 
         InitEmployeeSet();
@@ -49,6 +55,8 @@ public class EmployeeControllerSO : ScriptableObject
         for (int i = 0; i < employees.Count; i++)
         {
             Employee e = employees[i];
+            //오브젝트 생성
+            CreateEmployeeObject();
             CreateEmployeeElementUI(e);
         }
     }
@@ -59,13 +67,13 @@ public class EmployeeControllerSO : ScriptableObject
     //show함수, index를 employees기준으로 하면 안된다. => 나중에 전체 ID로 바꿀 예정
     private void CreateEmployeeElementUI(Employee e)
     {
-        GameObject employeeObject = Instantiate(employeePrefab, Vector3.zero, Quaternion.identity);
+        GameObject employeeObject = Instantiate(employeeElementPrefab, Vector3.zero, Quaternion.identity);
         EmployeeElement employeeContent = employeeObject.GetComponent<EmployeeElement>();
         Button button = employeeObject.GetComponent<Button>();
 
         employeeContent.SetEmployee(e._EmployeeSO.GetIcon(), e.Name, e.CareerPeriod, 1, e.Salary, e.ID);
-        employeeObjects.Add(employeeObject);
-        employeeObject.transform.SetParent(parent.transform);
+        employeeElementObjects.Add(employeeObject);
+        employeeObject.transform.SetParent(element_parent.transform);
 
         //버튼 추가
         button.onClick.AddListener(() => { ShowEmployeeStatusWindow(e.ID); });
@@ -82,8 +90,8 @@ public class EmployeeControllerSO : ScriptableObject
         {
             employees.RemoveAt(index);
             RemoveServerEmployee(id); //서버도 제거
-            Destroy(employeeObjects[index]);
-            employeeObjects.RemoveAt(index);
+            Destroy(employeeElementObjects[index]);
+            employeeElementObjects.RemoveAt(index);
         }
         else
         {
@@ -164,7 +172,7 @@ public class EmployeeControllerSO : ScriptableObject
     }
 
     //고용된 직원 서버 자료들을 인 게임으로 가져오는 함수
-    public void EmployeesFromJSON(Dictionary<string, object> serverEmployees)
+    public void JSONToEmployees(Dictionary<string, object> serverEmployees)
     {
         if (this.employees == null)
             this.employees = new List<Employee>();
@@ -288,9 +296,9 @@ public class EmployeeControllerSO : ScriptableObject
                     employees[i] = employees[j];
                     employees[j] = tmp;
 
-                    Transform a = employeeObjects[i].transform;
+                    Transform a = employeeElementObjects[i].transform;
                     int a_index = a.GetSiblingIndex();
-                    Transform b = employeeObjects[j].transform;
+                    Transform b = employeeElementObjects[j].transform;
                     int b_index = b.GetSiblingIndex();
 
                     //Debug.Log("a : " +a_index);
@@ -298,14 +306,26 @@ public class EmployeeControllerSO : ScriptableObject
                     b.SetSiblingIndex(a_index);
                     a.SetSiblingIndex(b_index);
 
-                    GameObject tmp_object = employeeObjects[i];
-                    employeeObjects[i] = employeeObjects[j];
-                    employeeObjects[j] = tmp_object;
+                    GameObject tmp_object = employeeElementObjects[i];
+                    employeeElementObjects[i] = employeeElementObjects[j];
+                    employeeElementObjects[j] = tmp_object;
 
                 }
             }
         }
     }
+
+    #endregion
+
+    #region OBJECT
+
+    /// <summary> 직원 오브젝트 생성 </summary>
+    private void CreateEmployeeObject()
+    {
+        GameObject tmp =Instantiate(employeeObjectPrefab, object_parent.transform);
+        employeeObjects.Add(tmp);
+    }
+    
 
     #endregion
 }
