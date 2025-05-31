@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d14f03cd5776412479f7d25101166db8, type: 3}
+  m_Name: PlaceSystemSO
+  m_EditorClassIdentifier: 
+  _shopPlaceableObjects:
+  - {fileID: 132292087961979328, guid: ec71814fb4ff65441989d0088126ae12, type: 3}
+  _createEvent: {fileID: 11400000, guid: 17130f6f4e93a9547b6a6caadb594b7b, type: 2}
+  _takenAreaEvent: {fileID: 11400000, guid: 767a94b576ed3cf4abacb6b5b867d660, type: 2}
+  _gridEvent: {fileID: 11400000, guid: ae3fd948f4be3da45a40c6cca018c9b3, type: 2}
+  _sendFirebaseEventChannelSO: {fileID: 11400000, guid: bc6e20a0b24975943a58a86b83f606ea, type: 2}

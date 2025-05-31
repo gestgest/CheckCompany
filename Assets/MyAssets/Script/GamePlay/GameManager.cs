@@ -6,6 +6,7 @@ using Firebase.Auth;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.Tilemaps;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] RecruitmentControllerSO recruitmentControllerSO;
     [SerializeField] MissionControllerSO missionControllerSO;
     [SerializeField] EmployeeControllerSO employeeControllerSO;
+    [SerializeField] PlaceSystemSO _placeSystemSO;
 
     //init 리스트
     [Header("Recruitment")]
@@ -37,6 +39,19 @@ public class GameManager : MonoBehaviour
     [SerializeField] private EmployeeStatusWindow employeeStatusWindow; //이거를 subPanel로 바꿀 수 없나
     [SerializeField] private Panel employeePanel;
 
+    [Header("PlacedObject")]
+    [SerializeField] private GridLayout gridLayout;
+    [SerializeField] private Tilemap mainTilemap;
+    [SerializeField] private TileBase _takenTile;
+    [SerializeField] private TileBase _redTile;
+    [SerializeField] Transform _objectParent;
+
+    [Header("PlacedObject_selected")]
+    [SerializeField] private Transform _tmp_parent;
+    [SerializeField] private Transform _cameraTransform;
+    [SerializeField] private GameObject _okButton;
+    [SerializeField] private GameObject _denyButton;
+    
     [Header("ServerEvent")]
     [SerializeField] private DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
     [SerializeField] private SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
@@ -76,6 +91,17 @@ public class GameManager : MonoBehaviour
         recruitmentControllerSO.Init(recruitmentView, recrutmentCostText);
         missionControllerSO.Init(mission_panel, complete_mission_panel);
         employeeControllerSO.Init(employeeParent, employeeStatusWindow, employeePanel);
+        
+        _placeSystemSO.Init(
+            gridLayout,
+            mainTilemap,
+            _takenTile,
+            _redTile,
+            _objectParent,
+            _cameraTransform,
+            _okButton,
+            _denyButton
+        );
         
         date = new GameDate(employeeControllerSO.AddStamina, _sendFirebaseEventChannelSO);
         //절대로 LoginScene에 넣지마 => 메인 스레드 충돌 오류
@@ -136,6 +162,17 @@ public class GameManager : MonoBehaviour
             (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "date")
         );
         SetDateUI();
+        
+        //object_count 가져오고
+        
+        int object_count =
+            Convert.ToInt32(await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "placeableObject_id"));
+        
+        //각각 object 정보 가져오고
+        _placeSystemSO.SetPlacedObjects(
+            (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "placeableObjects"),
+            object_count
+        );
     }
 
     #region property

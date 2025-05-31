@@ -847,8 +847,6 @@ MonoBehaviour:
   _multiLayoutGroup: {fileID: 3669712219086700055}
   _recruitmentControllerSO: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
   _employeeControllerSO: {fileID: 11400000, guid: 6a695d970d94e0a4bb81e3e309e1fadf, type: 2}
-  _deleteFirebaseEventChannelSO: {fileID: 11400000, guid: 7a1f9e67b78693248b645e9629191902, type: 2}
-  _sendFirebaseEventChannelSO: {fileID: 11400000, guid: bc6e20a0b24975943a58a86b83f606ea, type: 2}
 --- !u!114 &7520629813391628149
 MonoBehaviour:
   m_ObjectHideFlags: 0

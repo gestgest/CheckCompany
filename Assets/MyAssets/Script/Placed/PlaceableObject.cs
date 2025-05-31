@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,14 +8,23 @@ public class PlaceableObject : MonoBehaviour
 {
     public bool Placed { get; private set; }
     public Vector3Int Size { get; private set; }
-    [SerializeField] private Vector3[] vertices;
+    
+    private Vector3[] vertices;
 
-    private void Awake()
+    private int object_id;
+    [SerializeField] private int property_id;
+
+    public void Init()
     {
         VertexLocalPosition();
         CalculateTileSize();
     }
+    public void SetObjectID(int object_id)
+    {
+        this.object_id = object_id;
+    }
 
+    /// <summary> 손에 있는 selectedObject 제거 </summary>
     public virtual void Place()
     {
         HandlingObject drag = gameObject.GetComponent<HandlingObject>();
@@ -68,6 +78,30 @@ public class PlaceableObject : MonoBehaviour
 
     public Vector3 GetStartPosition()
     {
+        // if (vertices == null)
+        //     Init();
         return transform.TransformPoint(vertices[0]); //왜 이게 문제일까
+    }
+
+    public Dictionary<string, object> ObjectToJSON()
+    {
+        Dictionary<string, object> pos = new Dictionary<string, object>()
+        {
+            { "x", GetStartPosition().x },
+            { "y", GetStartPosition().y },
+            { "z", GetStartPosition().z },
+            
+        };
+
+        Dictionary<string, object> result = new Dictionary<string, object>
+        {
+            {"startPosition", pos},
+            {"property_id", property_id},
+        };
+        return result;
+    }
+    public int GetObjectID()
+    {
+        return object_id;
     }
 }
