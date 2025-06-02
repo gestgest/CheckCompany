@@ -12,19 +12,30 @@ using UnityEngine.Serialization;
 public class FireStoreManager : MonoBehaviour
 {
     static FirebaseFirestore db;
-    [SerializeField] DeleteFirebaseEventChannelSO deleteFirebaseEventChannelSO;
-    [SerializeField] SendFirebaseEventChannelSO sendFirebaseEventChannelSO;
+    
+    [Header("Listening to channels")]
+    [SerializeField] private VoidEventChannelSO _initFirebaseChannelEvent;
+
+    [SerializeField] DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
+    [SerializeField] SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
+    [SerializeField] SendFirebaseEventChannelSO _newSendFirebaseEventChannelSO;
 
     private void OnEnable()
     {
-        deleteFirebaseEventChannelSO.OnDeleteEventRaised += DeleteFirestoreDataKey;
-        sendFirebaseEventChannelSO.OnSendEventRaised += SetFirestoreData;
+        _initFirebaseChannelEvent._onEventRaised += Init;
+        
+        _deleteFirebaseEventChannelSO.OnDeleteEventRaised += DeleteFirestoreDataKey;
+        _sendFirebaseEventChannelSO.OnSendEventRaised += SetFirestoreData;
+        _newSendFirebaseEventChannelSO.OnSendEventRaised += SetNewFirestoreData;
     }
 
     private void OnDisable()
     {
-        deleteFirebaseEventChannelSO.OnDeleteEventRaised -= DeleteFirestoreDataKey;
-        sendFirebaseEventChannelSO.OnSendEventRaised -= SetFirestoreData;
+        _initFirebaseChannelEvent._onEventRaised -= Init;
+        
+        _deleteFirebaseEventChannelSO.OnDeleteEventRaised -= DeleteFirestoreDataKey;
+        _sendFirebaseEventChannelSO.OnSendEventRaised -= SetFirestoreData;
+        _newSendFirebaseEventChannelSO.OnSendEventRaised -= SetNewFirestoreData;
     }
 
     //이미 app과 db는 싱글톤이다.

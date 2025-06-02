@@ -971,8 +971,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1361042015}
-        m_TargetAssemblyTypeName: Window, Assembly-CSharp
-        m_MethodName: SwitchingPanel
+        m_TargetAssemblyTypeName: PanelManager, Assembly-CSharp
+        m_MethodName: SwitchingPanelFromInt
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1948,8 +1948,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: FirebaseAuthManager, Assembly-CSharp
+      - m_Target: {fileID: 1361042016}
+        m_TargetAssemblyTypeName: UILoginMenu, Assembly-CSharp
         m_MethodName: Login
         m_Mode: 1
         m_Arguments:
@@ -2740,8 +2740,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: FirebaseAuthManager, Assembly-CSharp
+      - m_Target: {fileID: 1361042016}
+        m_TargetAssemblyTypeName: UILoginMenu, Assembly-CSharp
         m_MethodName: Register
         m_Mode: 1
         m_Arguments:
@@ -3218,6 +3218,7 @@ GameObject:
   - component: {fileID: 1361042014}
   - component: {fileID: 1361042013}
   - component: {fileID: 1361042015}
+  - component: {fileID: 1361042016}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -3298,6 +3299,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panel_parent: {fileID: 1361042012}
+--- !u!114 &1361042016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361042011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a02a2a16f07cf4d4791a09f202a4d6e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _loginEmailTextField: {fileID: 1942930105}
+  _loginPasswordTextField: {fileID: 1345912309}
+  _registerNameTextField: {fileID: 1548617201}
+  _registerEmailTextField: {fileID: 1853969288}
+  _registerPasswordTextField: {fileID: 1136172256}
+  _registerConfirmPasswordTextField: {fileID: 1414258959}
+  _loginEvent: {fileID: 11400000, guid: d95bd9c545684ba43925193f008f6d41, type: 2}
+  _registerEvent: {fileID: 11400000, guid: f0d1361b51d787043a9149a076410a67, type: 2}
 --- !u!1 &1414258957
 GameObject:
   m_ObjectHideFlags: 0
@@ -5457,8 +5478,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1361042015}
-        m_TargetAssemblyTypeName: Window, Assembly-CSharp
-        m_MethodName: SwitchingPanel
+        m_TargetAssemblyTypeName: PanelManager, Assembly-CSharp
+        m_MethodName: SwitchingPanelFromInt
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

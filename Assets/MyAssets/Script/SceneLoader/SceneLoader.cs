@@ -12,6 +12,8 @@ public class SceneLoader : MonoBehaviour
 
 	public void SceneLoad()
 	{
+		//Login 제거, 씬 출격
+		
 		_managersScene.LoadSceneAsync(LoadSceneMode.Single, true);
 		//비동기 씬 로드, true : 로딩되면 바로 실행
 		//이후 기존에 있는 메모리는 제거되는 듯?
