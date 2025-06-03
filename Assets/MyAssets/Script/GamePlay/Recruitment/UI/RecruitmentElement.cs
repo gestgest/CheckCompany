@@ -25,8 +25,8 @@ public class RecruitmentElement : MonoBehaviour
 
     //Controller
     [Header("Controller")]
-    [SerializeField] private RecruitmentControllerSO _recruitmentControllerSO;
-    [SerializeField] private EmployeeControllerSO _employeeControllerSO;
+    [SerializeField] private RecruitmentManagerSO _recruitmentControllerSO;
+    [SerializeField] private EmployeeManagerSO _employeeControllerSO;
 
     //지원자 정보 리스트
     private Recruitment recruitment;

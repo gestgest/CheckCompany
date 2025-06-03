@@ -100,7 +100,7 @@ public class Employee
     //미션 => 5개
     /// <summary>생성자 </summary>
     /// <param name="employeeControllerSO"> </param>
-    public Employee(EmployeeControllerSO employeeControllerSO, bool isEmployee)
+    public Employee(EmployeeManagerSO employeeControllerSO, bool isEmployee)
     {
         missions = new Mission[MAX_MISSION_SIZE];
 

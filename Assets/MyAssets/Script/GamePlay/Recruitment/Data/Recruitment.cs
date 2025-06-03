@@ -159,7 +159,7 @@ public struct Recruitment
 
 
     //Recruitment 값 입력
-    public void JSONToRecruitment(KeyValuePair<string, object> data, RecruitmentControllerSO rsSO, EmployeeControllerSO ecSO)
+    public void JSONToRecruitment(KeyValuePair<string, object> data, RecruitmentManagerSO rsSO, EmployeeManagerSO ecSO)
     {
         this.SetID(int.Parse(data.Key));
 

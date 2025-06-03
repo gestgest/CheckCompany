@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//를 상속받는 
+//UIManager를 맨 앞에.
+//그거를 상속받는 UIMenuManager, UIGameManager
 public class PanelManager : MonoBehaviour
 {
     public static PanelManager instance;
@@ -23,8 +24,9 @@ public class PanelManager : MonoBehaviour
             //DontDestroyOnLoad(gameObject);
             return;
         }
-        Destroy(gameObject);
-        
+        //임시방편
+        Destroy(instance);
+        instance = this;
         //return instance;
     }
 

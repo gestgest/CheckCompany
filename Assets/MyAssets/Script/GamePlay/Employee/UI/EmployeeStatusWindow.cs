@@ -46,7 +46,7 @@ public class EmployeeStatusWindow : MonoBehaviour
     [SerializeField] private GameObject todoMission_prefab; //토글
 
     [Header("Model")]
-    [SerializeField] private MissionControllerSO _missionControllerSO;
+    [SerializeField] private MissionManagerSO _missionControllerSO;
 
     
     private Employee employee;

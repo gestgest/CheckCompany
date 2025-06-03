@@ -84,7 +84,7 @@ public class GameDate : Date
 
     public void SetDateToServer(Dictionary<string, object> data)
     {
-        _sendFirebaseEventChannelSO.OnSendEventRaised(
+        _sendFirebaseEventChannelSO._onSendEventRaised(
             "GamePlayUser",
             GameManager.instance.Nickname,
             "date",

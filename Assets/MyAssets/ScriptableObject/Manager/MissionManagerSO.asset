@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4ef4257eb17e7ca4cbc09e51abbc3f6e, type: 3}
-  m_Name: MissionControllerSO
+  m_Name: MissionManagerSO
   m_EditorClassIdentifier: 
   iconsSO: {fileID: 11400000, guid: 414e6934076897143ab461098194ade5, type: 2}
   _deleteFirebaseEventChannelSO: {fileID: 11400000, guid: 7a1f9e67b78693248b645e9629191902, type: 2}

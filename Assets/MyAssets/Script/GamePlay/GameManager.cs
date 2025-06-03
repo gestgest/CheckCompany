@@ -13,19 +13,19 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     [SerializeField] UIManager ui_manager;
-    [SerializeField] FireStoreManager fireStoreManager;
+    //[SerializeField] FireStoreManager fireStoreManager;
     private FirebaseAuth auth;
     private FirebaseUser user;
 
 
     //컨트롤러 리스트
     [Header("Controller")]
-    [SerializeField] RecruitmentControllerSO recruitmentControllerSO;
-    [SerializeField] MissionControllerSO missionControllerSO;
-    [SerializeField] EmployeeControllerSO employeeControllerSO;
+    [SerializeField] RecruitmentManagerSO recruitmentControllerSO;
+    [SerializeField] MissionManagerSO missionControllerSO;
+    [SerializeField] EmployeeManagerSO employeeControllerSO;
     [SerializeField] PlaceSystemSO _placeSystemSO;
 
-    //init 리스트
+    //init 리스트 => 제거할 목록 
     [Header("Recruitment")]
     [SerializeField] GameObject recruitmentView;
     [SerializeField] TextMeshProUGUI recrutmentCostText;
@@ -56,6 +56,7 @@ public class GameManager : MonoBehaviour
     [Header("ServerEvent")]
     [SerializeField] private DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
     [SerializeField] private SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
+    [SerializeField] private GetJSONFirebaseEventChannelSO _getJSONEventChannelSO;
 
 
     private string nickname;
@@ -89,6 +90,7 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
+        //컨트롤러 넣고
         recruitmentControllerSO.Init(recruitmentView, recrutmentCostText);
         missionControllerSO.Init(mission_panel, complete_mission_panel);
         employeeControllerSO.Init(employeeElementParent, employeeObjectParent, employeeStatusWindow, employeePanel);
@@ -105,8 +107,10 @@ public class GameManager : MonoBehaviour
         );
         
         date = new GameDate(employeeControllerSO.AddStamina, _sendFirebaseEventChannelSO);
+
+        GameServerStart();
         //절대로 LoginScene에 넣지마 => 메인 스레드 충돌 오류
-        fireStoreManager.Init();
+        //fireStoreManager.Init();
         //SetDateUI();
     }
     
@@ -129,14 +133,14 @@ public class GameManager : MonoBehaviour
         //convert로 하면 null이 0으로 바뀌어진다
 
         //user.Email으로 쿼리 만들고 => null 처리 안함 => 그냥 
-        nickname = (string)await fireStoreManager.GetFirestoreData("User", user.Email, "nickname");
+        nickname = (string)await _getJSONEventChannelSO.RaiseEvent("User", user.Email, "nickname");
 
         long money;
-        money = (long)(await fireStoreManager.GetFirestoreData("User", user.Email, "money") ?? (long)0);
+        money = (long)(await _getJSONEventChannelSO.RaiseEvent("User", user.Email, "money") ?? (long)0);
         SetMoney(money, false);
 
         object tmp_employee_count =
-            Convert.ToInt32(await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "employee_count"));
+            Convert.ToInt32(await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "employee_count"));
 
         if (tmp_employee_count == null)
         {
@@ -149,31 +153,31 @@ public class GameManager : MonoBehaviour
         
         //MissionController.instance.Init();
         missionControllerSO.SetMissionData(
-            (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "missions"),
-            Convert.ToInt32(await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "mission_count"))
+            (Dictionary<string, object>)await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "missions"),
+            Convert.ToInt32(await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "mission_count"))
         );
 
-        Dictionary<string,object> recruitments = (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "recruitments");
+        Dictionary<string,object> recruitments = (Dictionary<string, object>)await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "recruitments");
         recruitmentControllerSO.JSONToRecruitments(recruitments);
 
-        Dictionary<string, object> employees = (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "employees");
+        Dictionary<string, object> employees = (Dictionary<string, object>)await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "employees");
         employeeControllerSO.JSONToEmployees(employees);
         
         date.GetDateFromJSON(
-            (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "date")
+            (Dictionary<string, object>)await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "date")
         );
         SetDateUI();
         
         //object_count 가져오고
         
         int object_count =
-            Convert.ToInt32(await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "placeableObject_id"));
+            Convert.ToInt32(await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "placeableObject_id"));
         
         //각각 object 정보 가져오고
-        _placeSystemSO.SetPlacedObjects(
-            (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "placeableObjects"),
-            object_count
-        );
+        //_placeSystemSO.SetPlacedObjects(
+        //    (Dictionary<string, object>)await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "placeableObjects"),
+        //    object_count
+        //);
     }
 
     #region property
@@ -194,7 +198,7 @@ public class GameManager : MonoBehaviour
             _sendFirebaseEventChannelSO.RaiseEvent("GamePlayUser", nickname, "money", money);
 
         //서버 로딩
-        ui_manager.SetMoneyText(value);
+        ui_manager.SetMoneyText(money);
     }
 
 

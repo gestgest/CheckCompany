@@ -163,12 +163,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68cdee09f47f72140a5181c13638e075, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _managersScene:
+  _gameplayScene:
     m_AssetGUID: 9fc0d4010bbf28b4594072e72b8655ab
     m_SubObjectName: 
     m_SubObjectGUID: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
+  _loadLocation: {fileID: 11400000, guid: 8d9d3da6891fefa4b879dcb5f91b7f2a, type: 2}
+  _loadMenu: {fileID: 11400000, guid: 753df1d70f221d04b931ffa04b0f7dd9, type: 2}
 --- !u!1 &1130438848
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,7 +236,13 @@ MonoBehaviour:
   _initFirebaseChannelEvent: {fileID: 11400000, guid: c7eba184838da6b45968a02ac7452a40, type: 2}
   _setNewFireStoreEvent: {fileID: 11400000, guid: 2d9625a92dc72da448cf0da5ea7931f1, type: 2}
   _setFireStoreEvent: {fileID: 11400000, guid: bc6e20a0b24975943a58a86b83f606ea, type: 2}
-  sceneLoader: {fileID: 322734083}
+  _loadLocation: {fileID: 11400000, guid: 8d9d3da6891fefa4b879dcb5f91b7f2a, type: 2}
+  _myCompanyScene:
+    m_AssetGUID: e75245830b5746648965797656c89fc6
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
 --- !u!4 &1751107973
 Transform:
   m_ObjectHideFlags: 0
@@ -298,6 +306,7 @@ MonoBehaviour:
   _deleteFirebaseEventChannelSO: {fileID: 11400000, guid: 7a1f9e67b78693248b645e9629191902, type: 2}
   _sendFirebaseEventChannelSO: {fileID: 11400000, guid: bc6e20a0b24975943a58a86b83f606ea, type: 2}
   _newSendFirebaseEventChannelSO: {fileID: 11400000, guid: 2d9625a92dc72da448cf0da5ea7931f1, type: 2}
+  _getJSONFirebaseEventChannelSO: {fileID: 11400000, guid: 273b81728c703114aa820167d4b00c02, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

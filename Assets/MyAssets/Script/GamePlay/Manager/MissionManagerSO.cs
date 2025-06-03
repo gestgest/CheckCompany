@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "MissionControllerSO", menuName = "ScriptableObject/Controller/MissionControllerSO")]
-public class MissionControllerSO : ScriptableObject
+[CreateAssetMenu(fileName = "MissionManagerSO", menuName = "ScriptableObject/Controller/MissionManagerSO")]
+public class MissionManagerSO : ScriptableObject
 {
     //이미지 리스트?
     [SerializeField] private IconsSO iconsSO;

@@ -15,8 +15,28 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: f6517331720d4a74d97828981c8dfa8f
   m_SerializeEntries:
+  - m_GUID: 0cebbb4dac6693340a5dc0afb0219d03
+    m_Address: Assets/MyAssets/Scenes/Manager/PersistentManager.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 59a72cfb8b8768244aac88d905b6e86e
+    m_Address: Assets/MyAssets/Scenes/Login.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 753df1d70f221d04b931ffa04b0f7dd9
+    m_Address: Assets/MyAssets/ScriptableObject/Event/Server/LoadMenuEventChannelSO.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9fc0d4010bbf28b4594072e72b8655ab
-    m_Address: Assets/Scenes/GamePlay.unity
+    m_Address: Assets/MyAssets/Scenes/Manager/GamePlay.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e75245830b5746648965797656c89fc6
+    m_Address: Assets/MyAssets/Scenes/GameScenes/MyCompany.unity
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

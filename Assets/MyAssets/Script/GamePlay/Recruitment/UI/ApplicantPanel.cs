@@ -8,8 +8,8 @@ public class ApplicantPanel : MiniPanel
     //private Button yButton;
 
     //controller
-    [SerializeField] RecruitmentControllerSO recruitmentControllerSO;
-    [SerializeField] EmployeeControllerSO employeeControllerSO;
+    [SerializeField] RecruitmentManagerSO recruitmentControllerSO;
+    [SerializeField] EmployeeManagerSO employeeControllerSO;
 
     private int applicant_id; //직원 index
     private int recruitment_id; //채용공고 index

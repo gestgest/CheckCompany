@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using Unity.VisualScripting;
 using UnityEngine.Serialization;
+using UnityEngine.AddressableAssets;
 
 
 public class FirebaseAuthManager : MonoBehaviour
@@ -36,9 +37,10 @@ public class FirebaseAuthManager : MonoBehaviour
     [SerializeField] private VoidEventChannelSO _initFirebaseChannelEvent;
     [SerializeField] private SendFirebaseEventChannelSO _setNewFireStoreEvent;
     [SerializeField] private SendFirebaseEventChannelSO _setFireStoreEvent;
-    
-    //함수로
-    [SerializeField] private SceneLoader sceneLoader;
+
+    //함수로 => _loadLocation
+    [SerializeField] private LoadEventChannelSO _loadLocation;
+    [SerializeField] private AssetReference _myCompanyScene;
     
     void Awake()
     {
@@ -158,7 +160,7 @@ public class FirebaseAuthManager : MonoBehaviour
         {
             user = loginTask.Result.User;
             Debug.Log("성공" + user);
-            sceneLoader.SceneLoad();
+            _loadLocation.RaiseEvent(_myCompanyScene);
         }
     }
 

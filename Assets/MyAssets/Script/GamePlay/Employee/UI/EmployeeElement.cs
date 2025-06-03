@@ -16,7 +16,7 @@ public class EmployeeElement : MonoBehaviour
 
     //Controller
     [Header("Controller")]
-    [SerializeField] private EmployeeControllerSO _employeeControllerSO;
+    [SerializeField] private EmployeeManagerSO _employeeControllerSO;
     
     
     public int ID { get; set; } //직원 아이디

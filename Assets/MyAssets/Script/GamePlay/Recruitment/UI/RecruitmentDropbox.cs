@@ -8,7 +8,7 @@ using UnityEngine.Serialization;
 //나중에 dropbox 인터페이스 만들 예정 [소공] => 채용 공고 드롭박스 클래스
 public class RecruitmentDropbox : MonoBehaviour
 {
-    [SerializeField] private RecruitmentControllerSO recruitmentControllerSo;
+    [SerializeField] private RecruitmentManagerSO recruitmentControllerSo;
 
     TMP_Dropdown dropdown;
     void Start()

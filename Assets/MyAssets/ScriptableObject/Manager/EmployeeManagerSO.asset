@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dfa91f27f0350c045b42f74817cae502, type: 3}
-  m_Name: EmployeeControllerSO
+  m_Name: EmployeeManagerSO
   m_EditorClassIdentifier: 
   employeeElementPrefab: {fileID: 7451260809270566376, guid: 147f27304293a2e48a04f84d1cd21c44, type: 3}
   employeeObjectPrefab: {fileID: 1782702501690864755, guid: 60770bdb4dc667c45bea53db0339dc05, type: 3}

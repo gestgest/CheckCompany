@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 public class EditMissionPanel : Panel
 {
     [Header("Controller")]
-    [SerializeField] private MissionControllerSO _missionControllerSO;
+    [SerializeField] private MissionManagerSO _missionControllerSO;
 
     
     [SerializeField] private TMP_InputField title;

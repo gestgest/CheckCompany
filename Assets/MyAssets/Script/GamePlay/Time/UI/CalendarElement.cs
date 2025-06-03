@@ -8,7 +8,7 @@ public class CalendarElement : MonoBehaviour
 {
     Date date;
     [SerializeField] private TextMeshProUGUI dayText;
-    [FormerlySerializedAs("missionController")] [FormerlySerializedAs("missionsSO")] [SerializeField] private MissionControllerSO missionControllerSo;
+    [FormerlySerializedAs("missionController")] [FormerlySerializedAs("missionsSO")] [SerializeField] private MissionManagerSO missionControllerSo;
 
     private void Awake()
     {

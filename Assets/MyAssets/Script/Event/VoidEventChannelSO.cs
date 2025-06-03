@@ -8,6 +8,13 @@ public class VoidEventChannelSO : ScriptableObject
 
     public void RaiseEvent()
     {
-        _onEventRaised.Invoke();
+        if (_onEventRaised != null)
+        {
+            _onEventRaised.Invoke();
+        }
+        else
+        {
+            Debug.LogError("대충 오류라는 내용");
+        }
     }
 }

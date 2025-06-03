@@ -8,7 +8,7 @@ public class TodoMissionElement : MonoBehaviour
     [SerializeField] private TextMeshProUGUI title;
     [SerializeField] private Toggle my_toggle;
 
-    [SerializeField] private MissionControllerSO _missionControllerSO;
+    [SerializeField] private MissionManagerSO _missionControllerSO;
     private int mission_id;
     private int todo_mission_index;
 

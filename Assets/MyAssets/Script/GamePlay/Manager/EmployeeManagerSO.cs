@@ -7,14 +7,14 @@ using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 //직원 고용 관련 
-[CreateAssetMenu(fileName = "EmployeeControllerSO", menuName = "ScriptableObject/Controller/EmployeeControllerSO")]
-public class EmployeeControllerSO : ScriptableObject
+[CreateAssetMenu(fileName = "EmployeeManagerSO", menuName = "ScriptableObject/Controller/EmployeeManagerSO")]
+public class EmployeeManagerSO : ScriptableObject
 {
     [SerializeField] private GameObject employeeElementPrefab;
     [SerializeField] private GameObject employeeObjectPrefab;
     
     [Header("Controller")]
-    [SerializeField] private RecruitmentControllerSO recruitmentControllerSo;
+    [SerializeField] private RecruitmentManagerSO recruitmentControllerSo;
 
     [Header("ServerEvent")]
     [SerializeField] private DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
@@ -322,8 +322,8 @@ public class EmployeeControllerSO : ScriptableObject
     /// <summary> 직원 오브젝트 생성 </summary>
     private void CreateEmployeeObject()
     {
-        GameObject tmp =Instantiate(employeeObjectPrefab, object_parent.transform);
-        employeeObjects.Add(tmp);
+        //GameObject tmp =Instantiate(employeeObjectPrefab, object_parent.transform);
+        //employeeObjects.Add(tmp);
     }
     
 

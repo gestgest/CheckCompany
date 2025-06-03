@@ -4,8 +4,8 @@ using TMPro;
 using Random = UnityEngine.Random;
 
 
-[CreateAssetMenu(fileName = "RecruitmentControllerSO", menuName = "ScriptableObject/Controller/RecruitmentControllerSO")]
-public class RecruitmentControllerSO : ScriptableObject
+[CreateAssetMenu(fileName = "RecruitmentManagerSO", menuName = "ScriptableObject/Controller/RecruitmentManagerSO")]
+public class RecruitmentManagerSO : ScriptableObject
 {
     //채용 리스트
     List<Recruitment> recruitments;
@@ -16,8 +16,8 @@ public class RecruitmentControllerSO : ScriptableObject
     [SerializeField] private GameObject recruitmentPrefab;
     [SerializeField] private EmployeeNameSO employeeNameSO;
 
-    [Header("Controller")]
-    [SerializeField] private EmployeeControllerSO _employeeControllerSO;
+    [Header("Manager")]
+    [SerializeField] private EmployeeManagerSO _employeeManagerSO;
 
 
     [Header("ServerEvent")]
@@ -209,7 +209,7 @@ public class RecruitmentControllerSO : ScriptableObject
             foreach (KeyValuePair<string, object> serverRecruitment in serverRecruitments)
             {
                 Recruitment recruitment = new Recruitment();
-                recruitment.JSONToRecruitment(serverRecruitment, this, _employeeControllerSO);
+                recruitment.JSONToRecruitment(serverRecruitment, this, _employeeManagerSO);
                 this.recruitments.Add(recruitment);
             }
         }

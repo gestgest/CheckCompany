@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class CreateMissionPanel : Panel
 {
     [Header("Controller")]
-    [SerializeField] private MissionControllerSO _missionControllerSO;
+    [SerializeField] private MissionManagerSO _missionControllerSO;
 
     [SerializeField] private MissionPanel missionPanel;
 
