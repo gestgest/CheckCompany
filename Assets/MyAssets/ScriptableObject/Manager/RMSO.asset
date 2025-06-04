@@ -20,5 +20,6 @@ MonoBehaviour:
   recruitmentPrefab: {fileID: 8974342152770559031, guid: 32efdf2fedeb42c45ac036900fd03e16, type: 3}
   employeeNameSO: {fileID: 11400000, guid: b1872c501f9b97343a92b3e8f02cb4c0, type: 2}
   _employeeManagerSO: {fileID: 11400000, guid: 6a695d970d94e0a4bb81e3e309e1fadf, type: 2}
+  _addRecruitmentObject: {fileID: 11400000, guid: 5b4310d3e696f0d419181d15722ed04a, type: 2}
   _deleteFirebaseEventChannelSO: {fileID: 11400000, guid: 7a1f9e67b78693248b645e9629191902, type: 2}
   _sendFirebaseEventChannelSO: {fileID: 11400000, guid: bc6e20a0b24975943a58a86b83f606ea, type: 2}

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
 using Random = UnityEngine.Random;
 
 
@@ -19,11 +20,16 @@ public class RecruitmentManagerSO : ScriptableObject
     [Header("Manager")]
     [SerializeField] private EmployeeManagerSO _employeeManagerSO;
 
+    [Space]
+    [Header("Listening to Events")]
+    [SerializeField] private GameObjectEventChannelSO _addRecruitmentObject;
 
-    [Header("ServerEvent")]
+    [Header("Broadcasting on FirebaseEvents")]
     [SerializeField] private DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
     [SerializeField] private SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
 
+    
+    
     //init로 넣어야 할 정보
     private GameObject view; //parent
     private TextMeshProUGUI costText;
@@ -36,6 +42,16 @@ public class RecruitmentManagerSO : ScriptableObject
     private int cost; //코스트 => 게임 오브젝트도 가져와서 설정해야 할 거 같은데
 
 
+    void OnEnable()
+    {
+        _addRecruitmentObject._onEventRaised += AddRecruitmentObject;
+    }
+
+    void OnDisable()
+    {
+        _addRecruitmentObject._onEventRaised -= AddRecruitmentObject;
+    }
+    
     public void Init(GameObject view, TextMeshProUGUI costText)
     {
         recruitments = new List<Recruitment>();
@@ -67,10 +83,13 @@ public class RecruitmentManagerSO : ScriptableObject
         recruitmentContent.Init(); //여기에 multiLayoutGroup height값을 추가
         recruitmentContent.SetRecruitment(r);
 
-        recruitmentObjects.Add(recruitmentObject);
-        //recruitmentObject.transform.SetParent(view.transform);
 
         recruitmentContent.SetApplicant(); //그리기
+    }
+
+    private void AddRecruitmentObject(GameObject recruitmentObject)
+    {
+        recruitmentObjects.Add(recruitmentObject);
     }
 
     //추가하는 함수

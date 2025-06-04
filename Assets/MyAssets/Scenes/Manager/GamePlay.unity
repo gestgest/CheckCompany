@@ -31219,6 +31219,7 @@ GameObject:
   - component: {fileID: 1110578334}
   - component: {fileID: 1110578337}
   - component: {fileID: 1110578339}
+  - component: {fileID: 1110578340}
   m_Layer: 5
   m_Name: RecruitPanel
   m_TagString: Untagged
@@ -31272,6 +31273,27 @@ MonoBehaviour:
   - {fileID: 741635678}
   - {fileID: 1081635829}
   hasMini: 1
+--- !u!114 &1110578340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1110578333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85a2a0b7c67bd2f45b7aefa921c0650f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelInfo: {fileID: 11400000, guid: 352892ce7d28ddf449db745f5cdddd28, type: 2}
+  panels:
+  - {fileID: 741635678}
+  - {fileID: 1081635829}
+  hasMini: 1
+  recruitmentPrefab: {fileID: 8974342152770559031, guid: 32efdf2fedeb42c45ac036900fd03e16, type: 3}
+  view: {fileID: 329780243}
+  _getRecruitment: {fileID: 0}
+  _addRecruitmentObject: {fileID: 11400000, guid: 5b4310d3e696f0d419181d15722ed04a, type: 2}
 --- !u!1001 &1111795697
 PrefabInstance:
   m_ObjectHideFlags: 0
