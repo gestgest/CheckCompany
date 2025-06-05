@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
-using Unity.VisualScripting;
 using Random = UnityEngine.Random;
 
 
@@ -10,30 +8,23 @@ public class RecruitmentManagerSO : ScriptableObject
 {
     //채용 리스트
     List<Recruitment> recruitments;
-    List<GameObject> recruitmentObjects; //RecruitmentElement
-    int id = 0; //생성하려는 recruitment id
+    int id = 0; //recruitment id
 
-    [SerializeField] List<EmployeeSO> employeeSOs; //employee 특징
+    [SerializeField] List<EmployeeSO> employeeSOs; //employee types
     [SerializeField] private GameObject recruitmentPrefab;
     [SerializeField] private EmployeeNameSO employeeNameSO;
 
     [Header("Manager")]
     [SerializeField] private EmployeeManagerSO _employeeManagerSO;
 
-    [Space]
     [Header("Listening to Events")]
-    [SerializeField] private GameObjectEventChannelSO _addRecruitmentObject;
+    [SerializeField] private BoolEventChannelSO _isChangedEvent;
+    
+    [Space]
 
     [Header("Broadcasting on FirebaseEvents")]
     [SerializeField] private DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
     [SerializeField] private SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
-
-    
-    
-    //init로 넣어야 할 정보
-    private GameObject view; //parent
-    private TextMeshProUGUI costText;
-
 
     //채용 정보 [버튼을 누르면 함수를 호출해서 tmp처럼 대신 넣는 느낌]
     private int employeeTypeIndex = 0; //0,1,2,3
@@ -44,75 +35,19 @@ public class RecruitmentManagerSO : ScriptableObject
 
     void OnEnable()
     {
-        _addRecruitmentObject._onEventRaised += AddRecruitmentObject;
     }
 
     void OnDisable()
     {
-        _addRecruitmentObject._onEventRaised -= AddRecruitmentObject;
     }
     
-    public void Init(GameObject view, TextMeshProUGUI costText)
+    public void Init()
     {
         recruitments = new List<Recruitment>();
-        recruitmentObjects = new List<GameObject>();
         
-        this.view = view;
-        this.costText = costText;
     }
-
-    //초기 채용공고 리스트 보여주는 함수
-    public void ShowRecruitments()
-    {
-        SetID();
-
-        for (int i = 0; i < recruitments.Count; i++)
-        {
-            Recruitment r = recruitments[i];
-            CreateRecruitmentObject(r);
-        }
-    }
-
-    //Panel안에 채용 목록 띄워주는 함수
-    private void CreateRecruitmentObject(Recruitment r)
-    {
-        GameObject recruitmentObject = GameObject.Instantiate(recruitmentPrefab, view.transform);
-        RecruitmentElement recruitmentContent = recruitmentObject.GetComponent<RecruitmentElement>();
-
-        //recruitmentContent.SetRecruitment(employeeTypeIcons[(int)r.GetEmployeeType()], r.GetDay(), r.GetSize(), i)
-        recruitmentContent.Init(); //여기에 multiLayoutGroup height값을 추가
-        recruitmentContent.SetRecruitment(r);
-
-
-        recruitmentContent.SetApplicant(); //그리기
-    }
-
-    private void AddRecruitmentObject(GameObject recruitmentObject)
-    {
-        recruitmentObjects.Add(recruitmentObject);
-    }
-
-    //추가하는 함수
-    public void AddRecruitment()
-    {
-        Recruitment recruitment = new Recruitment();
-        recruitment.Init(RemoveServerApplicant);
-
-        //버튼 정보 가져오기 디버깅
-        recruitment.SetEmployeeSO(employeeSOs[employeeTypeIndex]);
-        recruitment.SetLevel(level);
-        recruitment.SetDay(period);
-        recruitment.SetID(id++);
-        //SetCost()
-
-        Debug.Log(recruitment.GetID());
-        recruitments.Add(recruitment);
-        AddServerRecruitmentIndex(Search_Recruitment_Index(recruitment.GetID()));
-
-        CreateRecruitmentObject(recruitment);
-    }
-
-    #region Property
+    
+    #region PROPERTY
 
     public void SetID()
     {
@@ -122,6 +57,7 @@ public class RecruitmentManagerSO : ScriptableObject
             id = recruitments[recruitments.Count - 1].GetID() + 1;
         }
     }
+    
     public void SetEmployeeType(int index)
     {
         employeeTypeIndex = index;
@@ -164,21 +100,33 @@ public class RecruitmentManagerSO : ScriptableObject
         }
     }
 
-    private void SetCost(int cost)
+    public void AddRecruitment()
     {
-        this.cost = cost;
-        costText.text = cost.ToString();
-    }
+        Recruitment recruitment = new Recruitment();
+        recruitment.Init(RemoveServerApplicant);
 
-    //index는 recruitment의 index임
-    public EmployeeSO GetRecruitmentEmployeeSO(int index)
-    {
-        return recruitments[index].GetEmployeeSO();
+        //버튼 정보 가져오기 디버깅
+        recruitment.SetEmployeeSO(employeeSOs[employeeTypeIndex]);
+        recruitment.SetLevel(level);
+        recruitment.SetDay(period);
+        recruitment.SetID(id++);
+        //SetCost()
+
+        recruitments.Add(recruitment);
+        AddServerRecruitmentIndex(Search_Recruitment_Index(recruitment.GetID()));
+
+        //bool true
+        if (_isChangedEvent == null)
+        {
+            Debug.LogError("This message should never appear");
+            return;
+        }
+        _isChangedEvent.RaiseEvent(true);
     }
 
     //randomMax 값 만큼 랜덤 돌리기
     // ReSharper disable Unity.PerformanceAnalysis
-    public void AddApplicants(int randomWeight)
+    public void AddRandomApplicants(int randomWeight)
     {
         for (int i = 0; i < recruitments.Count; i++)
         {
@@ -186,10 +134,41 @@ public class RecruitmentManagerSO : ScriptableObject
             if (value == 0)
             {
                 string name = employeeNameSO.GetRandomName();
-
-                recruitmentObjects[i].GetComponent<RecruitmentElement>().AddApplicant(name);
+                
+                recruitments[i].AddApplicant(
+                    CreateApplicant(
+                        name,
+                        recruitments[i].GetID(),
+                        recruitments[i].GetEmployeeSO()
+                    )
+                );
             }
         }
+        _isChangedEvent.RaiseEvent(true);
+    }
+    
+    //지원자 넣는 함수 => 나중에 Employee 매개변수 받고 생성할 예정
+    public Employee CreateApplicant(string name, int id, EmployeeSO employeeSO)
+    {
+        Employee employee = new Employee(_employeeManagerSO, false);
+        employee.ID = GameManager.instance.Employee_count;
+        GameManager.instance.Employee_count = employee.ID + 1;
+        employee.Name = name;
+        //employee.IsEmployee = false;
+        employee.Age = 19;
+        employee.Max_Stamina = 100; //이렇게 해야지 Max값으로 Stamina값 비교 가능
+        employee.SetStamina(100, false);
+        employee.Max_Mental = 100;
+        employee.Mental = 100;
+        employee.CareerPeriod = 12; //1 year
+        employee.Salary = 1000000; //월 100만원
+        employee._EmployeeSO = employeeSO;
+        //(int)(recruitment.GetEmployeeSO().GetEmployeeType()
+
+        //서버에 들어가버려잇
+        SetServerApplicant(id, employee);
+
+        return employee;
     }
 
     /// <summary>
@@ -200,56 +179,42 @@ public class RecruitmentManagerSO : ScriptableObject
     {
         int index = Search_Recruitment_Index(id);
         recruitments.RemoveAt(index);
-        recruitmentObjects.RemoveAt(index);
-
-        //서버 연동
-        RemoveServerRecruitment(id);
+        RemoveServerRecruitment(id);        //서버 연동
+        _isChangedEvent.RaiseEvent(true);
     }
 
+    //server + isChanged
+    public void RemoveApplicant(int recruitment_id, int applicant_id)
+    {
+        recruitments[recruitment_id].RemoveApplicant(applicant_id);
+        
+        RemoveServerApplicant(recruitment_id, applicant_id);
+        _isChangedEvent.RaiseEvent(true);
+        
+    }
+    
     public EmployeeSO GetEmployeeSO(int index)
     {
         return employeeSOs[index];
     }
+    
+    //recruitments
 
-    public Recruitment GetRecruitment(int id) // property
+    public List<Recruitment> GetRecruitments()
+    {
+        return recruitments;
+    }
+    
+    public Recruitment GetRecruitment(int id)
     {
         return recruitments[id];
     }
     
-    public void JSONToRecruitments(Dictionary<string, object> serverRecruitments) //server 예정
-    {
-        if (this.recruitments == null)
-            this.recruitments = new List<Recruitment>();
-
-        // null 처리
-        if (serverRecruitments != null)
-        {
-            //map형태의 recruitments를 list로 변환
-            foreach (KeyValuePair<string, object> serverRecruitment in serverRecruitments)
-            {
-                Recruitment recruitment = new Recruitment();
-                recruitment.JSONToRecruitment(serverRecruitment, this, _employeeManagerSO);
-                this.recruitments.Add(recruitment);
-            }
-        }
-
-        ShowRecruitments();
-    }
-
-
-    public GameObject GetRecruitmentObject(int index)
-    {
-        return recruitmentObjects[index];
-    }
-    public GameObject GetLastRecruitmentObject()
-    {
-        return recruitmentObjects[recruitmentObjects.Count - 1];
-    }
 
     #endregion
 
     #region SERVER
-
+    
     //recruitment
     public void AddServerRecruitmentIndex(int index) //recruit 인덱스만 서버 동기화 => Firestore 배열 Add 기능만 있음
     {
@@ -293,8 +258,29 @@ public class RecruitmentManagerSO : ScriptableObject
         );
     }
 
+    //init
+    public void JSONToRecruitments(Dictionary<string, object> serverRecruitments) //server 예정
+    {
+        if (this.recruitments == null)
+            this.recruitments = new List<Recruitment>();
+
+        // null 처리
+        if (serverRecruitments != null)
+        {
+            //map형태의 recruitments를 list로 변환
+            foreach (KeyValuePair<string, object> serverRecruitment in serverRecruitments)
+            {
+                Recruitment recruitment = new Recruitment();
+                recruitment.JSONToRecruitment(serverRecruitment, this, _employeeManagerSO);
+                this.recruitments.Add(recruitment);
+            }
+        }
+        SetID();
+    }
 
     #endregion
+
+    #region BINARY_SEARCH
 
     //Recruitment 이진탐색
     public int Search_Recruitment_Index(int id)
@@ -323,5 +309,8 @@ public class RecruitmentManagerSO : ScriptableObject
             return Binary_Search_Recruitment_Index(start, mid - 1, id);
         }
     }
+
+    #endregion
+    
 
 }

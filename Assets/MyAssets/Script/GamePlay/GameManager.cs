@@ -25,11 +25,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] EmployeeManagerSO employeeControllerSO;
     [SerializeField] PlaceSystemSO _placeSystemSO;
 
-    //init 리스트 => 제거할 목록 
-    [Header("Recruitment")]
-    [SerializeField] GameObject recruitmentView;
-    [SerializeField] TextMeshProUGUI recrutmentCostText;
-
     [Header("Mission")]
     [SerializeField] private MissionPanel mission_panel;
     [SerializeField] private CompleteMissionPanel complete_mission_panel;
@@ -91,7 +86,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         //컨트롤러 넣고
-        recruitmentControllerSO.Init(recruitmentView, recrutmentCostText);
+        recruitmentControllerSO.Init();
         missionControllerSO.Init(mission_panel, complete_mission_panel);
         employeeControllerSO.Init(employeeElementParent, employeeObjectParent, employeeStatusWindow, employeePanel);
         
@@ -235,7 +230,7 @@ public class GameManager : MonoBehaviour
     public void AddDateMinute(int value)
     {
         date.Minute += value;
-        recruitmentControllerSO.AddApplicants(60 / value);
+        recruitmentControllerSO.AddRandomApplicants(60 / value);
         SetDateUI();
     }
 

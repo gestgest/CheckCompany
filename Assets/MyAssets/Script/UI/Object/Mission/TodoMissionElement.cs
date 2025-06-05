@@ -68,8 +68,6 @@ public class TodoMissionElement : MonoBehaviour
                 
                 mission.Set_TodoMission_IsDone(todo_mission_index, my_toggle.isOn);
                 
-                
-                
                 //현재 미션은 제거, 완료된 미션에 온 => 그냥 Enable할때마다 쿼리로 받아야 할듯
                 _missionControllerSO.GetMissionPanel().RemoveMissionObject(mission_index);
                 _missionControllerSO.GetCompleteMissionPanel().AddMissionElementObject(_missionControllerSO.GetMission(mission_index));

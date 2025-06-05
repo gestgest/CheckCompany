@@ -7,7 +7,7 @@ public class ApplicantPanel : MiniPanel
     //private Button xButton;
     //private Button yButton;
 
-    //controller
+    //Manager
     [SerializeField] RecruitmentManagerSO recruitmentControllerSO;
     [SerializeField] EmployeeManagerSO employeeControllerSO;
 
@@ -26,9 +26,9 @@ public class ApplicantPanel : MiniPanel
      //지원자 제거 함수
     public void DeleteApplicant()
     {
-        RecruitmentElement recruitmentElement = GetRecruitmentElement();
-
-        recruitmentElement.RemoveApplicant(applicant_id);
+        Recruitment recruitment = GetRecruitment();
+    
+        recruitmentControllerSO.RemoveApplicant(recruitment.GetID(), applicant_id);
 
         PanelManager.instance.Back_Nav_Panel();
 
@@ -38,14 +38,14 @@ public class ApplicantPanel : MiniPanel
     //지원자 고용하고 기존 거 제거 함수
     public void EmployApplicant()
     {
-        RecruitmentElement recruitmentElement = GetRecruitmentElement();
+        Recruitment recruitment = GetRecruitment();
         //생성되는 함수
-        Employee employee = recruitmentElement.GetApplicant(applicant_id);
+        Employee employee = recruitment.GetApplicant(applicant_id);
         employee.IsEmployee = true;
         if(employee != null)
         {
             employeeControllerSO.CreateEmployee(employee);
-            recruitmentElement.RemoveApplicant(applicant_id);
+            recruitmentControllerSO.RemoveApplicant(recruitment.GetID(), applicant_id);
         }
         PanelManager.instance.Back_Nav_Panel();
     }
@@ -54,11 +54,11 @@ public class ApplicantPanel : MiniPanel
     //V는 직원 합류 후 지원자 삭제
     //X는 지원자 삭제
 
-    private RecruitmentElement GetRecruitmentElement()
+    private Recruitment GetRecruitment()
     {
         int index = recruitmentControllerSO.Search_Recruitment_Index(recruitment_id);
-        RecruitmentElement recruitmentElement = (recruitmentControllerSO.GetRecruitmentObject(index)).GetComponent<RecruitmentElement>();
+        Recruitment r = recruitmentControllerSO.GetRecruitment(index);
 
-        return recruitmentElement;
+        return r;
     }
 }

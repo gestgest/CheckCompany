@@ -13,7 +13,7 @@ public struct Recruitment
     private EmployeeSO employeeSO;
 
     public UnityAction<int, int> _onDeleteServerApplicant; //서버 지원자 제거 함수
-    
+
     public void Init(UnityAction<int, int> onDeleteServerApplicant)
     {
         if(applicants == null)
@@ -66,13 +66,13 @@ public struct Recruitment
     }
 
 
-    /// <summary> 서버 포함 지원자 제거 함수 </summary>
+    /// <summary> 무조건 제거할땐 ManagerSO로만 호출해야한다 </summary>
     /// <param name="applicant_id"></param>
     /// <param name="applicant_index"></param>
-    public void RemoveApplicant(int applicant_id, int applicant_index)
+    public void RemoveApplicant(int applicant_id)
     {
-        _onDeleteServerApplicant.Invoke(GetID(), applicant_id);
-        applicants.RemoveAt(applicant_index);
+        int index = Search_Employee_Index(applicant_id);
+        applicants.RemoveAt(index);
     }
 
     public int GetApplicantCount()
@@ -85,7 +85,7 @@ public struct Recruitment
     }
 
     #endregion
-    #region UI
+    #region BINARY_SEARCH
     public void SwitchApplicant(int i, int j)
     {
         Employee tmp = applicants[i];
