@@ -76,14 +76,14 @@ public class EmployeeStatusPanel : MiniPanel
     override protected void Start()
     {
         base.Start();
-        rf_dPanel = descriptionPanel.GetComponent<RectTransform>();
-        missionUIs = new MissionIconElement[Employee.MAX_MISSION_SIZE];
+        //rf_dPanel = descriptionPanel.GetComponent<RectTransform>();
+        //missionUIs = new MissionIconElement[Employee.MAX_MISSION_SIZE];
 
-        for (int i = 0; i < missionObjectParent.transform.childCount; i++)
-        {
-            Transform mObj = missionObjectParent.transform.GetChild(i);
-            missionUIs[i] = mObj.GetComponent<MissionIconElement>();
-        }
+        //for (int i = 0; i < missionObjectParent.transform.childCount; i++)
+        //{
+        //    Transform mObj = missionObjectParent.transform.GetChild(i);
+        //    missionUIs[i] = mObj.GetComponent<MissionIconElement>();
+        //}
     }
 
     protected void OnEnable()
@@ -117,8 +117,9 @@ public class EmployeeStatusPanel : MiniPanel
         staminaGauge.Init(employee.Stamina, employee.Max_Stamina, WIDTH);
         mentalGauge.Init(employee.Mental, employee.Max_Mental, WIDTH);
         
-        SetMissionUI(); //
-        AddMissionToMiniWindow();
+        //이거는 미션으로 가라
+        //SetMissionUI();
+        //AddMissionToMiniWindow();
     }
 
     public float GetDescriptionPanelHeight()

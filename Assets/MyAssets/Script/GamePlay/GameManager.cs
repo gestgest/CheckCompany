@@ -23,13 +23,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] RecruitmentManagerSO recruitmentControllerSO;
     [SerializeField] MissionManagerSO missionControllerSO;
     [SerializeField] EmployeeManagerSO employeeControllerSO;
-    [SerializeField] PlaceSystemSO _placeSystemSO;
-
-    [Header("Employee")]
-    [SerializeField] private GameObject employeeElementParent;
-    [SerializeField] private GameObject employeeObjectParent;
-    [SerializeField] private EmployeeStatusPanel employeeStatusWindow; //이거를 subPanel로 바꿀 수 없나
-    [SerializeField] private Panel employeePanel;
+    [SerializeField] PlacedObjectManager _placeSystemSO;
 
     [Header("PlacedObject")]
     [SerializeField] private GridLayout gridLayout;
@@ -84,7 +78,7 @@ public class GameManager : MonoBehaviour
         //컨트롤러 넣고
         recruitmentControllerSO.Init();
         missionControllerSO.Init();
-        employeeControllerSO.Init(employeeElementParent);
+        employeeControllerSO.Init();
         
         _placeSystemSO.Init(
             gridLayout,

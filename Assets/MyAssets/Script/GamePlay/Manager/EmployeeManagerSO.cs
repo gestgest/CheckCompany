@@ -10,9 +10,6 @@ using UnityEngine.UI;
 [CreateAssetMenu(fileName = "EmployeeManagerSO", menuName = "ScriptableObject/Manager/EmployeeManagerSO")]
 public class EmployeeManagerSO : ScriptableObject
 {
-    [SerializeField] private GameObject employeeElementPrefab;
-    [SerializeField] private GameObject employeeObjectPrefab;
-    
     [Header("Manager")]
     [SerializeField] private RecruitmentManagerSO _recruitmentManager;
 
@@ -23,56 +20,18 @@ public class EmployeeManagerSO : ScriptableObject
     [SerializeField] private SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
 
     [SerializeField] private VoidEventChannelSO _rerollEmployeeStatusEventChannelSO;
+    [SerializeField] private BoolEventChannelSO _isChangedEmployeePanelEventChannelSO;
 
     //직원 목록
     List<Employee> employees;
-    List<GameObject> employeeElementObjects;
-    List<GameObject> employeeObjects;
 
     private Employee _selectedEmployee;
 
-    private GameObject element_parent;
 
 
-    public void Init(GameObject element_parent)
+    public void Init()
     {
         employees = new List<Employee>();
-        employeeElementObjects = new List<GameObject>();
-        employeeObjects = new List<GameObject>();
-
-        this.element_parent = element_parent;
-
-        InitEmployeeSet();
-    }
-    
-    //init함수
-    private void InitEmployeeSet()
-    {
-        for (int i = 0; i < employees.Count; i++)
-        {
-            Employee e = employees[i];
-            //오브젝트 생성
-            CreateEmployeeObject();
-            CreateEmployeeElementUI(e);
-        }
-    }
-
-    
-
-
-    //show함수, index를 employees기준으로 하면 안된다. => 나중에 전체 ID로 바꿀 예정
-    private void CreateEmployeeElementUI(Employee e)
-    {
-        GameObject employeeObject = Instantiate(employeeElementPrefab, Vector3.zero, Quaternion.identity);
-        EmployeeElement employeeContent = employeeObject.GetComponent<EmployeeElement>();
-        Button button = employeeObject.GetComponent<Button>();
-
-        employeeContent.SetEmployee(e._EmployeeSO.GetIcon(), e.Name, e.CareerPeriod, 1, e.Salary, e.ID);
-        employeeElementObjects.Add(employeeObject);
-        employeeObject.transform.SetParent(element_parent.transform);
-
-        //버튼 추가
-        button.onClick.AddListener(() => { ShowEmployeeStatusWindow(e.ID); });
     }
 
 
@@ -86,8 +45,7 @@ public class EmployeeManagerSO : ScriptableObject
         {
             employees.RemoveAt(index);
             RemoveServerEmployee(id); //서버도 제거
-            Destroy(employeeElementObjects[index]);
-            employeeElementObjects.RemoveAt(index);
+            _isChangedEmployeePanelEventChannelSO.RaiseEvent(true);
         }
         else
         {
@@ -96,7 +54,7 @@ public class EmployeeManagerSO : ScriptableObject
     }
 
     //직원 창 보여주는 기능
-    private void ShowEmployeeStatusWindow(int id)
+    public void ShowEmployeeStatusWindow(int id)
     {
         int index = Search_Employee_Index(id);
         _selectedEmployee = employees[index];
@@ -108,6 +66,8 @@ public class EmployeeManagerSO : ScriptableObject
         dir.Add(0);
         dir.Add(0);
 
+        Debug.Log("엄준식");
+
         PanelManager.instance.SwitchingPanel(dir);
     }
 
@@ -115,8 +75,8 @@ public class EmployeeManagerSO : ScriptableObject
     {
         SetServerEmployee(e);
         employees.Add(e);
-        CreateEmployeeElementUI(e);
         SelectionEmployeeSort();
+        _isChangedEmployeePanelEventChannelSO.RaiseEvent(true);
     }
 
     //결제 시도하고 안되면 false
@@ -143,6 +103,12 @@ public class EmployeeManagerSO : ScriptableObject
     {
         return _selectedEmployee;
     }
+
+    public List<Employee> GetEmployees()
+    {
+        return employees;
+    }
+
     #endregion
     public void AddStamina(int add_value)
     {
@@ -155,33 +121,14 @@ public class EmployeeManagerSO : ScriptableObject
 
     public void ChangedEmployeeStatus()
     {
-        _rerollEmployeeStatusEventChannelSO.RaiseEvent();
-    }
-
-    //고용된 직원 서버 자료들을 인 게임으로 가져오는 함수
-    public void JSONToEmployees(Dictionary<string, object> serverEmployees)
-    {
-        if (this.employees == null)
-            this.employees = new List<Employee>();
-
-        if (serverEmployees == null)
+        //employeestatus is not active
+        if(_rerollEmployeeStatusEventChannelSO._onEventRaised == null)
         {
             return;
         }
-
-        //map형태의 employees를 list로 변환
-        foreach (KeyValuePair<string, object> serverEmployee in serverEmployees)
-        {
-            Dictionary<string, object> tmp = (Dictionary<string, object>)(serverEmployee.Value);
-
-            EmployeeSO employeeSO = _recruitmentManager.GetEmployeeSO(Convert.ToInt32(tmp["employeeType"]));
-            Employee employee = new EmployeeBuilder().BuildEmployee(employeeSO, this, true);
-
-            employee.JSONToEmployee(serverEmployee);
-            this.employees.Add(employee);
-        }
-        InitEmployeeSet();
+        _rerollEmployeeStatusEventChannelSO.RaiseEvent();
     }
+
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////서버
@@ -237,6 +184,32 @@ public class EmployeeManagerSO : ScriptableObject
         );
     }
 
+
+    //고용된 직원 서버 자료들을 인 게임으로 가져오는 함수
+    public void JSONToEmployees(Dictionary<string, object> serverEmployees)
+    {
+        if (this.employees == null)
+            this.employees = new List<Employee>();
+
+        if (serverEmployees == null)
+        {
+            return;
+        }
+
+        //map형태의 employees를 list로 변환
+        foreach (KeyValuePair<string, object> serverEmployee in serverEmployees)
+        {
+            Dictionary<string, object> tmp = (Dictionary<string, object>)(serverEmployee.Value);
+
+            EmployeeSO employeeSO = _recruitmentManager.GetEmployeeSO(Convert.ToInt32(tmp["employeeType"]));
+            Employee employee = new EmployeeBuilder().BuildEmployee(employeeSO, this, true);
+
+            employee.JSONToEmployee(serverEmployee);
+            this.employees.Add(employee);
+        }
+        _isChangedEmployeePanelEventChannelSO.RaiseEvent(true);
+    }
+
     #endregion
 
     #region BINARY_SEARCH
@@ -282,37 +255,10 @@ public class EmployeeManagerSO : ScriptableObject
                     Employee tmp = employees[i];
                     employees[i] = employees[j];
                     employees[j] = tmp;
-
-                    Transform a = employeeElementObjects[i].transform;
-                    int a_index = a.GetSiblingIndex();
-                    Transform b = employeeElementObjects[j].transform;
-                    int b_index = b.GetSiblingIndex();
-
-                    //Debug.Log("a : " +a_index);
-                    //Debug.Log("b : " +b_index);
-                    b.SetSiblingIndex(a_index);
-                    a.SetSiblingIndex(b_index);
-
-                    GameObject tmp_object = employeeElementObjects[i];
-                    employeeElementObjects[i] = employeeElementObjects[j];
-                    employeeElementObjects[j] = tmp_object;
-
                 }
             }
         }
     }
-
-    #endregion
-
-    #region OBJECT
-
-    /// <summary> 직원 오브젝트 생성 </summary>
-    private void CreateEmployeeObject()
-    {
-        //GameObject tmp =Instantiate(employeeObjectPrefab, object_parent.transform);
-        //employeeObjects.Add(tmp);
-    }
-    
 
     #endregion
 }

@@ -8,6 +8,7 @@ public class PlaceableObject : MonoBehaviour
 {
     public bool Placed { get; private set; }
     public Vector3Int Size { get; private set; }
+    public Vector3 ObjectPosition { get; set; } //vertices[0] 시작점 기준
     
     private Vector3[] vertices;
 

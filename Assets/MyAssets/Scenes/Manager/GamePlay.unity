@@ -762,7 +762,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &19920659
 RectTransform:
   m_ObjectHideFlags: 0
@@ -806,7 +806,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   panelInfo: {fileID: 11400000, guid: d0bf2e75e8787e547b0c6a6ec73c5f14, type: 2}
   panels:
-  - {fileID: 1106018435}
+  - {fileID: 1106018436}
   - {fileID: 1747650256}
   - {fileID: 1110578340}
   hasMini: 0
@@ -3187,7 +3187,9 @@ MonoBehaviour:
   addMissionElement_prefab: {fileID: 0}
   todoMission_PoolObjects: []
   todoMission_prefab: {fileID: 0}
-  _missionControllerSO: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
+  _missionManager: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
+  _employeeManager: {fileID: 11400000, guid: 6a695d970d94e0a4bb81e3e309e1fadf, type: 2}
+  _rerollEventChannelSO: {fileID: 11400000, guid: 8725ea3adc1d7bf4e8044adb93a14f6b, type: 2}
 --- !u!1 &125328097
 GameObject:
   m_ObjectHideFlags: 0
@@ -13510,7 +13512,7 @@ PrefabInstance:
     - target: {fileID: 8037801010729141495, guid: ef3f4c91cf9cae249b1c6ed3fbf29e87, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 122420082}
     - target: {fileID: 8037801010729141495, guid: ef3f4c91cf9cae249b1c6ed3fbf29e87, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -16922,10 +16924,6 @@ MonoBehaviour:
   missionControllerSO: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
   employeeControllerSO: {fileID: 11400000, guid: 6a695d970d94e0a4bb81e3e309e1fadf, type: 2}
   _placeSystemSO: {fileID: 11400000, guid: 78992eda014fc4149a161456aaedd847, type: 2}
-  employeeElementParent: {fileID: 1490410352}
-  employeeObjectParent: {fileID: 0}
-  employeeStatusWindow: {fileID: 122420082}
-  employeePanel: {fileID: 1106018435}
   gridLayout: {fileID: 2059868568}
   mainTilemap: {fileID: 177504718}
   _takenTile: {fileID: 11400000, guid: 82c57fe054a809b4391ce3d87d003bd3, type: 2}
@@ -22206,9 +22204,9 @@ RectTransform:
   - {fileID: 372837050}
   m_Father: {fileID: 1850164825}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 110, y: -50}
   m_SizeDelta: {x: 180, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &816041212
@@ -29516,7 +29514,7 @@ GameObject:
   - component: {fileID: 1106018433}
   - component: {fileID: 1106018432}
   - component: {fileID: 1106018431}
-  - component: {fileID: 1106018435}
+  - component: {fileID: 1106018436}
   m_Layer: 5
   m_Name: EmployeeSubPanel
   m_TagString: Untagged
@@ -29614,7 +29612,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1106018429}
   m_CullTransparentMesh: 1
---- !u!114 &1106018435
+--- !u!114 &1106018436
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -29623,15 +29621,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1106018429}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ec1fbf39c8835142b35fda844d698e0, type: 3}
+  m_Script: {fileID: 11500000, guid: 34e79a3afdf5383429209c1ac8b2fa40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   panelInfo: {fileID: 11400000, guid: d0bf2e75e8787e547b0c6a6ec73c5f14, type: 2}
   panels:
-  - {fileID: 0}
+  - {fileID: 122420082}
   - {fileID: 2066266588}
   - {fileID: 221784518}
   hasMini: 1
+  employeeElementPrefab: {fileID: 7451260809270566376, guid: 147f27304293a2e48a04f84d1cd21c44, type: 3}
+  element_parent: {fileID: 1490410352}
+  _employeeManager: {fileID: 11400000, guid: 6a695d970d94e0a4bb81e3e309e1fadf, type: 2}
+  _isChangedEmployeePanelEventChannelSO: {fileID: 11400000, guid: 90c535dc7bf60c74aa646d37d2a0d9ac, type: 2}
 --- !u!1 &1109429359
 GameObject:
   m_ObjectHideFlags: 0
@@ -33296,9 +33298,9 @@ RectTransform:
   - {fileID: 814028558}
   m_Father: {fileID: 1850164825}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 330, y: -50}
   m_SizeDelta: {x: 180, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1287668089
@@ -39455,7 +39457,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1508242466
 RectTransform:
   m_ObjectHideFlags: 0
@@ -39513,9 +39515,9 @@ RectTransform:
   - {fileID: 753846696}
   m_Father: {fileID: 1850164825}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 550, y: -50}
   m_SizeDelta: {x: 180, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1518307438
@@ -40411,7 +40413,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1547845555}
   m_Layer: 5
-  m_Name: Tmp
+  m_Name: UIPlaceObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45628,7 +45630,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1747650251
 RectTransform:
   m_ObjectHideFlags: 0
@@ -53794,8 +53796,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2059868567}
   - component: {fileID: 2059868568}
+  - component: {fileID: 2059868569}
   m_Layer: 0
-  m_Name: Grid_BuildingManager
+  m_Name: Grid_PlaceSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -53829,6 +53832,18 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 1
+--- !u!114 &2059868569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2059868566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d21c0fef6178b245a7f6beca894806b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2062066121
 GameObject:
   m_ObjectHideFlags: 0
