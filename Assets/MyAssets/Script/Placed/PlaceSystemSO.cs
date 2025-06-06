@@ -29,7 +29,7 @@ public class PlaceSystemSO : ScriptableObject
     
     
     [Header("Event")]
-    [SerializeField] private GameObjectEventChannelSO _createEvent;
+    //[SerializeField] private GameObjectEventChannelSO _createEvent;
     [SerializeField] private VoidEventChannelSO _takenAreaEvent;
     [SerializeField] private Vector3TransformChannelSO _gridEvent;
     [SerializeField] private SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
@@ -90,13 +90,13 @@ public class PlaceSystemSO : ScriptableObject
 
     private void OnEnable()
     {
-        _createEvent._onEventRaised += CreateObject;
+        //_createEvent._onEventRaised += CreateObject;
         _takenAreaEvent._onEventRaised += SetArea;
         _gridEvent._onEventRaised += SnapCoordinateToGrid;
     }
     private void OnDisable()
     {
-        _createEvent._onEventRaised -= CreateObject;
+        //_createEvent._onEventRaised -= CreateObject;
         _takenAreaEvent._onEventRaised -= SetArea;
         _gridEvent._onEventRaised -= SnapCoordinateToGrid;
     }

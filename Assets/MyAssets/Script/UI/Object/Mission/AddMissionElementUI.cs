@@ -7,7 +7,7 @@ using UnityEngine.UI;
 //누르면 미션 추가
 public class AddMissionElementUI : MonoBehaviour
 {
-    private EmployeeStatusWindow employeeStatusWindow;
+    private EmployeeStatusPanel employeeStatusWindow;
 
     [SerializeField] private Mission todo_mission;
     [SerializeField] private Image icon;
@@ -24,7 +24,7 @@ public class AddMissionElementUI : MonoBehaviour
         this.todo_mission = todo_mission;
         icon.sprite = todo_mission.GetIcon();
     }
-    public void SetEmployeeStatusWindow(EmployeeStatusWindow employeeStatusWindow)
+    public void SetEmployeeStatusWindow(EmployeeStatusPanel employeeStatusWindow)
     {
         this.employeeStatusWindow = employeeStatusWindow;
     }

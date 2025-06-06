@@ -63,16 +63,8 @@ public class TodoMissionElement : MonoBehaviour
             //게이지가 다 채워졌으면 => Complete
             if (gauge.GetValue() >= gauge.GetMaxValue() && isGage)
             {
-                int mission_index = _missionControllerSO.Search_Mission_Index(mission_id);
-                Mission mission = _missionControllerSO.GetMission(mission_index);
-                
-                mission.Set_TodoMission_IsDone(todo_mission_index, my_toggle.isOn);
-                
-                //현재 미션은 제거, 완료된 미션에 온 => 그냥 Enable할때마다 쿼리로 받아야 할듯
-                _missionControllerSO.GetMissionPanel().RemoveMissionObject(mission_index);
-                _missionControllerSO.GetCompleteMissionPanel().AddMissionElementObject(_missionControllerSO.GetMission(mission_index));
+                changedTodoMission();
 
-                Debug.Log("엄엄");
                 //미션 보상 받기 => 디버깅
                 GameManager.instance.SetMoney(GameManager.instance.Money + 10000);
             }
@@ -85,20 +77,21 @@ public class TodoMissionElement : MonoBehaviour
             //완료된 것을 미 완성으로 수정
             if (gauge.GetValue() >= gauge.GetMaxValue())
             {
-                int mission_index = _missionControllerSO.Search_Mission_Index(mission_id);
-                Mission mission = _missionControllerSO.GetMission(mission_index);
-                
-                mission.Set_TodoMission_IsDone(todo_mission_index, my_toggle.isOn);
-
-                //현재 미션은 제거, 완료된 미션에 온
-                _missionControllerSO.GetCompleteMissionPanel().RemoveMissionObject(mission_index);
-                _missionControllerSO.GetMissionPanel().AddMissionElementObject(_missionControllerSO.GetMission(mission_index));
+                changedTodoMission();
             }
-            
+
             //gage 값 전달
             gauge.AddValue(-1);
         }
         //취소선은 <s> 이걸로 하라는데
+    }
+
+    private void changedTodoMission()
+    {
+        int mission_index = _missionControllerSO.Search_Mission_Index(mission_id);
+        Mission mission = _missionControllerSO.GetMission(mission_index);
+
+        mission.Set_TodoMission_IsDone(todo_mission_index, my_toggle.isOn);
     }
 
     private void MissionToServer()

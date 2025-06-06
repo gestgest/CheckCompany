@@ -149,8 +149,7 @@ public class EditMissionPanel : Panel
         int index = _missionControllerSO.Search_Mission_Index(mission_id);
         _missionControllerSO.SetMission(mission, index);
 
-        //정해진 element를 설정하는 함수 => 리롤함수?
-        _missionControllerSO.Reroll_MissionElement(index);
+        //굳이 리롤이 필요할까
 
         //back 네비 Panel
         PanelManager.instance.Back_Nav_Panel();

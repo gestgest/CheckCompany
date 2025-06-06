@@ -3,7 +3,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 
-[CreateAssetMenu(fileName = "RecruitmentManagerSO", menuName = "ScriptableObject/Controller/RecruitmentManagerSO")]
+[CreateAssetMenu(fileName = "RecruitmentManagerSO", menuName = "ScriptableObject/Manager/RecruitmentManagerSO")]
 public class RecruitmentManagerSO : ScriptableObject
 {
     //채용 리스트

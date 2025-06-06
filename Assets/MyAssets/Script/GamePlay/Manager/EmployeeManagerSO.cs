@@ -7,44 +7,40 @@ using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 //직원 고용 관련 
-[CreateAssetMenu(fileName = "EmployeeManagerSO", menuName = "ScriptableObject/Controller/EmployeeManagerSO")]
+[CreateAssetMenu(fileName = "EmployeeManagerSO", menuName = "ScriptableObject/Manager/EmployeeManagerSO")]
 public class EmployeeManagerSO : ScriptableObject
 {
     [SerializeField] private GameObject employeeElementPrefab;
     [SerializeField] private GameObject employeeObjectPrefab;
     
-    [Header("Controller")]
-    [SerializeField] private RecruitmentManagerSO recruitmentControllerSo;
+    [Header("Manager")]
+    [SerializeField] private RecruitmentManagerSO _recruitmentManager;
 
-    [Header("ServerEvent")]
+    [Space]
+
+    [Header("Broadingcast on Events")]
     [SerializeField] private DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
     [SerializeField] private SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
 
-    
+    [SerializeField] private VoidEventChannelSO _rerollEmployeeStatusEventChannelSO;
+
     //직원 목록
     List<Employee> employees;
     List<GameObject> employeeElementObjects;
     List<GameObject> employeeObjects;
 
-    GameObject element_parent;
-    GameObject object_parent;
-    EmployeeStatusWindow employeeStatusWindow; //이거를 subPanel로 바꿀 수 없나
-    Panel employeePanel;
-    
-    public void Init(GameObject element_parent,
-        GameObject object_parent,
-        EmployeeStatusWindow employeeStatusWindow,
-        Panel employeePanel)
+    private Employee _selectedEmployee;
+
+    private GameObject element_parent;
+
+
+    public void Init(GameObject element_parent)
     {
-        this.element_parent = element_parent;
-        this.object_parent = object_parent;
-        employeeStatusWindow.Init();
-        this.employeeStatusWindow = employeeStatusWindow;
-        this.employeePanel = employeePanel;
-        
         employees = new List<Employee>();
         employeeElementObjects = new List<GameObject>();
         employeeObjects = new List<GameObject>();
+
+        this.element_parent = element_parent;
 
         InitEmployeeSet();
     }
@@ -102,24 +98,17 @@ public class EmployeeManagerSO : ScriptableObject
     //직원 창 보여주는 기능
     private void ShowEmployeeStatusWindow(int id)
     {
-        Debug.Log("엄엄");
-        //EmployeeStatusWindow 호출
-        employeePanel.SwitchingPanel(0);
-        //PanelManager.instance.Click_Button_Panel(5, true);
-
-        //Debug.Log("직원 아이디" + id);
-
         int index = Search_Employee_Index(id);
+        _selectedEmployee = employees[index];
 
-        //Panel 이동 함수, index가 -1이면 오류
-        if(index != -1)
-        {
-            employeeStatusWindow.SetValue(employees[index]);
-        }
-        else
-        {
-            Debug.LogError(id + ", 선택한 직원이 없는데요?");
-        }
+        //EmployeeStatusWindow 호출
+        //employeePanel.SwitchingPanel(0);
+        List<int> dir = new List<int>();
+        dir.Add(0);
+        dir.Add(0);
+        dir.Add(0);
+
+        PanelManager.instance.SwitchingPanel(dir);
     }
 
     public void CreateEmployee(Employee e)
@@ -148,6 +137,13 @@ public class EmployeeManagerSO : ScriptableObject
         return false;
     }
 
+    #region PROPERTY
+
+    public Employee GetSelectedEmployee()
+    {
+        return _selectedEmployee;
+    }
+    #endregion
     public void AddStamina(int add_value)
     {
         for(int i = 0; i < employees.Count; i++)
@@ -157,18 +153,9 @@ public class EmployeeManagerSO : ScriptableObject
         }
     }
 
-    public void SetStaminaBarUI(int employee_id, int value)
+    public void ChangedEmployeeStatus()
     {
-        employeeStatusWindow.SetStaminaBarUI(employee_id, value);
-    }
-    public void SetMentalBarUI(int employee_id, int value)
-    {
-        employeeStatusWindow.SetMentalBarUI(employee_id, value);
-    }
-
-    public void BanCheckTodoMission()
-    {
-        employeeStatusWindow.BanCheckTodoMission();
+        _rerollEmployeeStatusEventChannelSO.RaiseEvent();
     }
 
     //고용된 직원 서버 자료들을 인 게임으로 가져오는 함수
@@ -187,7 +174,7 @@ public class EmployeeManagerSO : ScriptableObject
         {
             Dictionary<string, object> tmp = (Dictionary<string, object>)(serverEmployee.Value);
 
-            EmployeeSO employeeSO = recruitmentControllerSo.GetEmployeeSO(Convert.ToInt32(tmp["employeeType"]));
+            EmployeeSO employeeSO = _recruitmentManager.GetEmployeeSO(Convert.ToInt32(tmp["employeeType"]));
             Employee employee = new EmployeeBuilder().BuildEmployee(employeeSO, this, true);
 
             employee.JSONToEmployee(serverEmployee);

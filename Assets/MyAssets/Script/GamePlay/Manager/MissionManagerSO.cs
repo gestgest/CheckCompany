@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "MissionManagerSO", menuName = "ScriptableObject/Controller/MissionManagerSO")]
+[CreateAssetMenu(fileName = "MissionManagerSO", menuName = "ScriptableObject/Manager/MissionManagerSO")]
 public class MissionManagerSO : ScriptableObject
 {
     //이미지 리스트?
@@ -13,9 +13,8 @@ public class MissionManagerSO : ScriptableObject
     [SerializeField] private DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
     [SerializeField] private SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
 
-    //init
-    private MissionPanel missionPanel;
-    private CompleteMissionPanel completeMissionPanel;
+    private Date _completeDate;
+    private bool _isQuery = false;
 
 
     private List<Mission> missions;
@@ -23,13 +22,12 @@ public class MissionManagerSO : ScriptableObject
 
 
     //나중에 없앨 함수
-    public void Init(MissionPanel missionPanel, CompleteMissionPanel completeMissionPanel)
+    public void Init()
     {
         if (missions == null)
             missions = new List<Mission>();
 
-        this.missionPanel = missionPanel;
-        this.completeMissionPanel = completeMissionPanel;
+        _completeDate = new Date();
 
     }
 
@@ -72,7 +70,28 @@ public class MissionManagerSO : ScriptableObject
         missions[index] = mission;
     }
 
+    public bool GetIsQuery()
+    {
+        return _isQuery;
+    }
+    public void SetIsQuery(bool isQuery)
+    {
+        _isQuery = isQuery;
+    }
 
+    public Date GetCompleteDate()
+    {
+        return _completeDate;
+    }
+
+    public void SetCompleteDate(Date date)
+    {
+        _completeDate.Year = date.Year;
+        _completeDate.Month = date.Month;
+        _completeDate.Day = date.Day;
+
+        _isQuery = true;
+    }
 
     public Sprite GetIcon(int index)
     {
@@ -94,16 +113,6 @@ public class MissionManagerSO : ScriptableObject
         return missions.Count;
     }
 
-    public MissionPanel GetMissionPanel()
-    {
-        return missionPanel;
-    }
-
-    public CompleteMissionPanel GetCompleteMissionPanel()
-    {
-        return completeMissionPanel;
-    }
-
     #endregion
 
 
@@ -123,16 +132,9 @@ public class MissionManagerSO : ScriptableObject
         if (index != -1)
         {
             missions.RemoveAt(index);
-            missionPanel.RemoveMissionObject(index);
         }
         RemoveServerMission(id);
     }
-
-    public void Reroll_MissionElement(int index)
-    {
-        missionPanel.SetMissionObject(missions[index], index);
-    }
-
 
     /// <summary>미션 서버(json)에서 가져오는 함수</summary>
     /// <param name="data"></param>

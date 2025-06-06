@@ -5,17 +5,11 @@ using UnityEngine;
 
 public class CompleteMissionPanel : MissionPanel
 {
-    private Date queryDate;
-    private bool isQuery = false;
-
-    private void Awake()
-    {
-        queryDate = new Date();
-    }
-
     //start => 
     protected override void OnEnable()
     {
+        bool isQuery = _missionManager.GetIsQuery();
+
         SetMissionCount(0);
         for (int i = 0; i < MISSION_MAX_SIZE; i++)
         {
@@ -25,7 +19,7 @@ public class CompleteMissionPanel : MissionPanel
         //base.Start();
         foreach (Mission mission in _missionManager.GetMissions())
         {
-            //만약 완료된 미션이 있는 경우(쿼리)
+            //만약 완료된 미션이 있는 경우(쿼리) => 나중에 여기 if부분만 함수로 나눌 예정
             if (mission.GetIsDone())
             {
                 if(Query(mission.GetDoneDate(), isQuery))
@@ -44,28 +38,9 @@ public class CompleteMissionPanel : MissionPanel
     }
 
 
-    public void SetQueryDate(Date date)
-    {
-        queryDate.Year = date.Year;
-        queryDate.Month = date.Month;
-        queryDate.Day = date.Day;
-
-        SetIsQuery(true);
-    }
-
-    //버튼용
-    public void OffIsQuery()
-    {
-        this.isQuery = false;
-    }
-
-    private void SetIsQuery(bool isQuery)
-    {
-        this.isQuery = isQuery;
-    }
-
     private bool Query(Date mission_date, bool isQuery)
     {
+        Date queryDate = _missionManager.GetCompleteDate();
         //false면
         if(!isQuery)
         {
@@ -85,12 +60,5 @@ public class CompleteMissionPanel : MissionPanel
         }
         return true;
     }
-
-
-    void DeleteMission()
-    {
-        
-    }
-    
     
 }

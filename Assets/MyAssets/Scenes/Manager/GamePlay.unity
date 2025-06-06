@@ -808,7 +808,7 @@ MonoBehaviour:
   panels:
   - {fileID: 1106018435}
   - {fileID: 1747650256}
-  - {fileID: 1110578339}
+  - {fileID: 1110578340}
   hasMini: 0
 --- !u!1 &26017177
 GameObject:
@@ -3085,7 +3085,6 @@ GameObject:
   - component: {fileID: 122420081}
   - component: {fileID: 122420080}
   - component: {fileID: 122420082}
-  - component: {fileID: 122420083}
   m_Layer: 5
   m_Name: EmployeeStatusPanel
   m_TagString: Untagged
@@ -3163,13 +3162,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 122420078}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3267c69b70104e343b8554a30f2757a2, type: 3}
+  m_Script: {fileID: 11500000, guid: c0aae954fcfc82f4894845dec61e3d91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  panelInfo: {fileID: 11400000, guid: 2422b8b1e26db9d43a1504abd3f2f96f, type: 2}
+  panels: []
+  hasMini: 0
+  background: {fileID: 278282404}
   nameTexts:
-  - {fileID: 576199158}
   - {fileID: 1065091066}
-  - {fileID: 561588739}
   image: {fileID: 500320031}
   ageText: {fileID: 481965495}
   salaryText: {fileID: 356356487}
@@ -3177,39 +3178,16 @@ MonoBehaviour:
   timeText: {fileID: 1373346877}
   staminaGauge: {fileID: 753942242}
   mentalGauge: {fileID: 356618032}
-  missionObjectParent: {fileID: 1806534797}
-  descriptionPanel: {fileID: 634420864}
-  addMissionMiniWindow: {fileID: 936718803}
-  processBar: {fileID: 215840418}
-  processBar_text: {fileID: 1427675750}
-  addMissionElement_parent: {fileID: 421526660}
-  addMissionElement_prefab: {fileID: 9022450608184969405, guid: e0b79ce9c5a4b93498de71c48c3fe453, type: 3}
-  todoMission_PoolObjects:
-  - {fileID: 1548881095}
-  - {fileID: 189907091}
-  - {fileID: 645957323}
-  - {fileID: 1439740386}
-  - {fileID: 517550521}
-  - {fileID: 1628016312}
-  - {fileID: 1754490399}
-  todoMission_prefab: {fileID: 1359309258578336218, guid: 074f8cbdcbd61574aafb7a4828beb8db, type: 3}
+  missionObjectParent: {fileID: 0}
+  descriptionPanel: {fileID: 0}
+  addMissionMiniWindow: {fileID: 0}
+  processBar: {fileID: 0}
+  processBar_text: {fileID: 0}
+  addMissionElement_parent: {fileID: 0}
+  addMissionElement_prefab: {fileID: 0}
+  todoMission_PoolObjects: []
+  todoMission_prefab: {fileID: 0}
   _missionControllerSO: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
---- !u!114 &122420083
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 122420078}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a28d3eb3c9e652d4d84a7db01a2b69b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  panelInfo: {fileID: 11400000, guid: 2422b8b1e26db9d43a1504abd3f2f96f, type: 2}
-  panels: []
-  hasMini: 0
-  background: {fileID: 278282404}
 --- !u!1 &125328097
 GameObject:
   m_ObjectHideFlags: 0
@@ -5164,11 +5142,6 @@ PrefabInstance:
 --- !u!224 &189907090 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1359309258578336219, guid: 074f8cbdcbd61574aafb7a4828beb8db, type: 3}
-  m_PrefabInstance: {fileID: 189907089}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &189907091 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1359309258578336218, guid: 074f8cbdcbd61574aafb7a4828beb8db, type: 3}
   m_PrefabInstance: {fileID: 189907089}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &192697977
@@ -13537,7 +13510,7 @@ PrefabInstance:
     - target: {fileID: 8037801010729141495, guid: ef3f4c91cf9cae249b1c6ed3fbf29e87, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 122420083}
+      objectReference: {fileID: 0}
     - target: {fileID: 8037801010729141495, guid: ef3f4c91cf9cae249b1c6ed3fbf29e87, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -14551,11 +14524,6 @@ PrefabInstance:
 --- !u!224 &517550520 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1359309258578336219, guid: 074f8cbdcbd61574aafb7a4828beb8db, type: 3}
-  m_PrefabInstance: {fileID: 517550519}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &517550521 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1359309258578336218, guid: 074f8cbdcbd61574aafb7a4828beb8db, type: 3}
   m_PrefabInstance: {fileID: 517550519}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &520586943
@@ -16954,8 +16922,6 @@ MonoBehaviour:
   missionControllerSO: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
   employeeControllerSO: {fileID: 11400000, guid: 6a695d970d94e0a4bb81e3e309e1fadf, type: 2}
   _placeSystemSO: {fileID: 11400000, guid: 78992eda014fc4149a161456aaedd847, type: 2}
-  mission_panel: {fileID: 248255120}
-  complete_mission_panel: {fileID: 873169011}
   employeeElementParent: {fileID: 1490410352}
   employeeObjectParent: {fileID: 0}
   employeeStatusWindow: {fileID: 122420082}
@@ -18014,11 +17980,6 @@ PrefabInstance:
 --- !u!224 &645957322 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1359309258578336219, guid: 074f8cbdcbd61574aafb7a4828beb8db, type: 3}
-  m_PrefabInstance: {fileID: 645957321}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &645957323 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1359309258578336218, guid: 074f8cbdcbd61574aafb7a4828beb8db, type: 3}
   m_PrefabInstance: {fileID: 645957321}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &646665614
@@ -29667,7 +29628,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   panelInfo: {fileID: 11400000, guid: d0bf2e75e8787e547b0c6a6ec73c5f14, type: 2}
   panels:
-  - {fileID: 122420083}
+  - {fileID: 0}
   - {fileID: 2066266588}
   - {fileID: 221784518}
   hasMini: 1
@@ -29733,7 +29694,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1110578334}
   - component: {fileID: 1110578337}
-  - component: {fileID: 1110578339}
   - component: {fileID: 1110578340}
   m_Layer: 5
   m_Name: RecruitPanel
@@ -29771,23 +29731,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1110578333}
   m_CullTransparentMesh: 1
---- !u!114 &1110578339
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1110578333}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ec1fbf39c8835142b35fda844d698e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  panelInfo: {fileID: 11400000, guid: 352892ce7d28ddf449db745f5cdddd28, type: 2}
-  panels:
-  - {fileID: 741635678}
-  - {fileID: 1081635829}
-  hasMini: 1
 --- !u!114 &1110578340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38201,11 +38144,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1359309258578336219, guid: 074f8cbdcbd61574aafb7a4828beb8db, type: 3}
   m_PrefabInstance: {fileID: 1439740384}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1439740386 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1359309258578336218, guid: 074f8cbdcbd61574aafb7a4828beb8db, type: 3}
-  m_PrefabInstance: {fileID: 1439740384}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1446717955
 GameObject:
   m_ObjectHideFlags: 0
@@ -40630,11 +40568,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1359309258578336219, guid: 074f8cbdcbd61574aafb7a4828beb8db, type: 3}
   m_PrefabInstance: {fileID: 1548881093}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1548881095 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1359309258578336218, guid: 074f8cbdcbd61574aafb7a4828beb8db, type: 3}
-  m_PrefabInstance: {fileID: 1548881093}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1550463124
 GameObject:
   m_ObjectHideFlags: 0
@@ -42662,11 +42595,6 @@ PrefabInstance:
 --- !u!224 &1628016311 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1359309258578336219, guid: 074f8cbdcbd61574aafb7a4828beb8db, type: 3}
-  m_PrefabInstance: {fileID: 1628016310}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1628016312 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1359309258578336218, guid: 074f8cbdcbd61574aafb7a4828beb8db, type: 3}
   m_PrefabInstance: {fileID: 1628016310}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1628110482
@@ -45443,10 +45371,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 873169011}
-        m_TargetAssemblyTypeName: CompleteMissionPanel, Assembly-CSharp
-        m_MethodName: OffIsQuery
-        m_Mode: 1
+      - m_Target: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
+        m_TargetAssemblyTypeName: MissionManagerSO, Assembly-CSharp
+        m_MethodName: SetIsQuery
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -46020,11 +45948,6 @@ PrefabInstance:
 --- !u!224 &1754490398 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1359309258578336219, guid: 074f8cbdcbd61574aafb7a4828beb8db, type: 3}
-  m_PrefabInstance: {fileID: 1754490397}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1754490399 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1359309258578336218, guid: 074f8cbdcbd61574aafb7a4828beb8db, type: 3}
   m_PrefabInstance: {fileID: 1754490397}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1755273241

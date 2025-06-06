@@ -35,8 +35,8 @@ public class Employee
     private UnityAction<string, int, int> _setServerStamina;
 
     //Controller Function
-    private UnityAction<int, int> setStaminaBarUI;
-    private UnityAction banCheckTodoMission;
+    private UnityAction _changedEmployeeStatus;
+    //private UnityAction banCheckTodoMission;
     
     public const int MAX_MISSION_SIZE = 5;
     public const int MAX_TODO_MISSION_SIZE = 7; //소미션
@@ -72,10 +72,10 @@ public class Employee
         if (stamina > max_stamina)
             stamina = max_stamina;
 
-        if (setStaminaBarUI != null)
+        if (_changedEmployeeStatus != null)
         {
-            setStaminaBarUI.Invoke(ID, stamina);
-            banCheckTodoMission.Invoke();            
+            _changedEmployeeStatus.Invoke();
+            //banCheckTodoMission.Invoke(); 미션 체력 딸리는지 체크
         }
 
         
@@ -99,23 +99,23 @@ public class Employee
     
     //미션 => 5개
     /// <summary>생성자 </summary>
-    /// <param name="employeeControllerSO"> </param>
-    public Employee(EmployeeManagerSO employeeControllerSO, bool isEmployee)
+    /// <param name="employeeManager"> </param>
+    public Employee(EmployeeManagerSO employeeManager, bool isEmployee)
     {
         missions = new Mission[MAX_MISSION_SIZE];
 
-        _removeAllServerMissions += employeeControllerSO.RemoveAllServerMissions;
-        _addServerMission += employeeControllerSO.AddServerMission;
-        _setServerStamina += employeeControllerSO.SetServerStamina;
+        _removeAllServerMissions += employeeManager.RemoveAllServerMissions;
+        _addServerMission += employeeManager.AddServerMission;
+        _setServerStamina += employeeManager.SetServerStamina;
 
         //applicant라면
         if (!isEmployee)
         {
             return;
         }
-        
-        setStaminaBarUI += employeeControllerSO.SetStaminaBarUI;
-        banCheckTodoMission += employeeControllerSO.BanCheckTodoMission;
+
+        _changedEmployeeStatus = employeeManager.ChangedEmployeeStatus;
+        //banCheckTodoMission += employeeManager.BanCheckTodoMission;
     }
 
     public int GetMissionSize() { return mission_size; }

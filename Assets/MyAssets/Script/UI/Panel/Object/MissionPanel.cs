@@ -24,18 +24,10 @@ public class MissionPanel : Panel
     private const int MISSION_SPACE_HEIGHT = 50;
     
     
-    //그냥 활성화할때마다 쿼리해야할듯
+    //그냥 활성화할때마다 쿼리해야할듯 => Mission은 다른 Panel에서도 너무 바뀜
     protected virtual void OnEnable()
     {
-        //Layout값 초기화
-        if(mission_count != 0)
-            multiLayoutGroup.AddHeight(-multiLayoutGroup.GetHeight());
-
-        mission_count = 0;
-        for (int i = 0; i < MISSION_MAX_SIZE; i++)
-        {
-            missionElementPoolObjects[i].gameObject.SetActive(false);
-        }
+        RerollPanel();
         //base.Start();
         // List<Mission> missions = missionsSO.GetMissions();
         // for (i = 0; i < missions.Count; i++)
@@ -47,19 +39,8 @@ public class MissionPanel : Panel
         // {
         //     missionElementPoolObjects[i].gameObject.SetActive(false);
         // }
-        
 
-        foreach (Mission mission in _missionManager.GetMissions())
-        {
-            if (!mission.GetIsDone())
-                CreateMissionElementObject(mission);
-        }
-        
-        for (int i = mission_count; i < MISSION_MAX_SIZE; i++)
-        {
-            missionElementPoolObjects[i].gameObject.SetActive(false);
-        }
-        CreateEditPanelIndex();
+
     }
 
     /// <summary> EditPanel index 리스트 추가하는 함수 </summary>
@@ -170,6 +151,34 @@ public class MissionPanel : Panel
     }
     #endregion
     
+
+    private void RerollPanel()
+    {
+        //Initialize Layout 
+        if (mission_count != 0)
+            multiLayoutGroup.AddHeight(-multiLayoutGroup.GetHeight());
+
+        mission_count = 0;
+        for (int i = 0; i < MISSION_MAX_SIZE; i++)
+        {
+            missionElementPoolObjects[i].gameObject.SetActive(false);
+        }
+
+
+        foreach (Mission mission in _missionManager.GetMissions())
+        {
+            //여기서 if문만 따로 함수를 만들면 됨 => 상속버전
+            if (!mission.GetIsDone())
+                CreateMissionElementObject(mission);
+        }
+
+        //for (int i = mission_count; i < MISSION_MAX_SIZE; i++)
+        //{
+        //    missionElementPoolObjects[i].gameObject.SetActive(false);
+        //}
+        CreateEditPanelIndex();
+    }
+
     //미션 오브젝트 정렬하는 함수
     
     private void SelectionMissionObjectSort()

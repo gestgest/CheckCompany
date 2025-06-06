@@ -8,11 +8,11 @@ using UnityEngine.Serialization;
 
 
 //MonoBehaviour 대신 Panel해야하나?
-public class EmployeeStatusWindow : MonoBehaviour
+public class EmployeeStatusPanel : MiniPanel
 {
     //const Employee.MAX_MISSION_SIZE = 5;
 
-    //Description Panel UI 부분
+    [Header("Description Panel UI")]
     [SerializeField] private TextMeshProUGUI [] nameTexts;
     [SerializeField] private Image image;
     [SerializeField] private TextMeshProUGUI ageText;
@@ -22,33 +22,44 @@ public class EmployeeStatusWindow : MonoBehaviour
     
     [SerializeField] private Gauge staminaGauge;
     [SerializeField] private Gauge mentalGauge;
-    
-    
-    //MissionPanel
+
+    [Space]
+
+    [Header("EmployeeMissionPanel")]
     [SerializeField] private GameObject missionObjectParent; //5개
     private MissionIconElement[] missionUIs; //5개 
     //나중에 MissionElementUI에서 클릭 하면 바로바로 여기서 미션을 가져와야 함
     // ㄴ 원래 이거였지만 어쩌다 보니 바뀜
 
-    //Mission UI 부분
+    [Space]
+    [Header("Mission UI")]
     [SerializeField] private GameObject descriptionPanel;
     [SerializeField] private GameObject addMissionMiniWindow;
     [SerializeField] private GameObject processBar;
     [SerializeField] private TextMeshProUGUI processBar_text;
-    
-    //ㄴ MissionPanel의 AddMissionMiniWindow
+
+    [Space]
+    [Header("MissionPanel's AddMissionMiniWindow")]
     //private Mission[] missions;  //추가할 미션  => 아직  안쓴다. 대신 미션 필터링할때 여기에 담을 수 있다.
     [SerializeField] private Transform addMissionElement_parent;
     [SerializeField] private GameObject addMissionElement_prefab;
 
-    //MissionPanel의 Mission
+    [Space]
+    [Header("MissionPanel의 Mission")]
     [SerializeField] private GameObject[] todoMission_PoolObjects; //풀링용 오브젝트 (7개)
     [SerializeField] private GameObject todoMission_prefab; //토글
 
-    [Header("Model")]
-    [SerializeField] private MissionManagerSO _missionControllerSO;
+    [Space]
+    [Header("Manager")]
+    [SerializeField] private MissionManagerSO _missionManager;
+    [SerializeField] private EmployeeManagerSO _employeeManager;
 
-    
+    [Space]
+    [Header("Listening to Events")]
+    [SerializeField] private VoidEventChannelSO _rerollEventChannelSO;
+
+
+
     private Employee employee;
     // ㄴ Mission : 미션 목록들은 여기에 있다 ****************
     //    ㄴ 이미 그 전
@@ -59,8 +70,12 @@ public class EmployeeStatusWindow : MonoBehaviour
     bool clearTodoMissionLock = false;
 
     private static int WIDTH = 250;
-    public void Init()
+
+
+    //일단 EmployeeMissionPanel과 EmployeeRecruitmentPanel로 나눠라
+    override protected void Start()
     {
+        base.Start();
         rf_dPanel = descriptionPanel.GetComponent<RectTransform>();
         missionUIs = new MissionIconElement[Employee.MAX_MISSION_SIZE];
 
@@ -71,12 +86,23 @@ public class EmployeeStatusWindow : MonoBehaviour
         }
     }
 
+    protected void OnEnable()
+    {
+        SetUI();
+        _rerollEventChannelSO._onEventRaised += SetUI;
+    }
+
+    private void OnDisable()
+    {
+        _rerollEventChannelSO._onEventRaised -= SetUI;
+    }
+
 
     //EmployeeStatusWindow => 값 받기, panels 관련 애니메이션, panel이동 관련 함수
     //값 받고, UI에게 전달 하기
-    public void SetValue(Employee employee)
+    public void SetUI()
     {
-        this.employee = employee;
+        this.employee = _employeeManager.GetSelectedEmployee();
 
         for(int i = 0; i < nameTexts.Length; i++)
         {
@@ -116,7 +142,7 @@ public class EmployeeStatusWindow : MonoBehaviour
         }
         
         //missions 개수만큼 addMissionElement_prefab 생성
-        for (int i = 0; i < _missionControllerSO.GetMissionSize(); i++)
+        for (int i = 0; i < _missionManager.GetMissionSize(); i++)
         {
             GameObject addMissionElement = Instantiate(addMissionElement_prefab);
 
@@ -125,8 +151,8 @@ public class EmployeeStatusWindow : MonoBehaviour
 
             //SetMission 함수 실행
             AddMissionElementUI element = addMissionElement.GetComponent<AddMissionElementUI>();
-            element.SetMission(_missionControllerSO.GetMission(i));
-            element.SetEmployeeStatusWindow(this.GetComponent<EmployeeStatusWindow>());
+            element.SetMission(_missionManager.GetMission(i));
+            element.SetEmployeeStatusWindow(this.GetComponent<EmployeeStatusPanel>());
         }
     }
 

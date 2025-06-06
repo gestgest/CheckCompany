@@ -11,7 +11,7 @@ using Unity.VisualScripting;
 public class MissionIconElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private int id;
-    [SerializeField] EmployeeStatusWindow employeeStatusWindow;
+    [SerializeField] EmployeeStatusPanel employeeStatusWindow;
     [SerializeField] GameObject addMissionMiniWindow; //미션 추가하는 윈도우
     [SerializeField] GameObject missionDescriptionPanel;
 
