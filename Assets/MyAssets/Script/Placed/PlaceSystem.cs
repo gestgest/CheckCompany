@@ -1,29 +1,33 @@
 
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 
 public class PlaceSystem : MonoBehaviour
 {
+    private List<PlaceableObject> _placedObjects = new List<PlaceableObject>();
+    
     private GridLayout gridLayout;
+    private Grid grid;
 
     //selected
     private PlaceableObject selectedObject;
-    private Grid grid;
 
     [SerializeField] private Tilemap mainTilemap;
-    private TileBase _takenTile;
-    private TileBase _redTile;
-    Transform _objectParent;
+    [SerializeField] private TileBase _takenTile;
+    [SerializeField] private TileBase _redTile;
+    [SerializeField] private Transform _objectParent;
 
-    private Transform _cameraTransform;
+    //
+    private bool isFirst = true;
+    private Vector3Int object_size;
+    private Vector3Int startPos;
+
     private GameObject _okButton;
     private GameObject _denyButton;
-
-    private bool isFirst = true;
-    private Vector3Int startpos;
-    private Vector3Int object_size;
-
+    private GameObject _camera;
+    
     [Space]
     [Header("ShopObjects")]
     [SerializeField] private PlaceableObject[] _shopPlaceableObjects;
@@ -35,13 +39,19 @@ public class PlaceSystem : MonoBehaviour
 
     [Space]
     [Header("Listening to Event")]
-
     [SerializeField] private VoidEventChannelSO _takenAreaEvent;
     [SerializeField] private Vector3TransformChannelSO _gridEvent;
+    [SerializeField] private GameObjectEventChannelSO _setOkButtonEvent;
+    [SerializeField] private GameObjectEventChannelSO _setDenyButtonEvent;
+    [SerializeField] private GameObjectEventChannelSO _setCameraEvent;
 
+    
     private void Start()
     {
-        gridLayout = GetComponent<Grid>();
+        grid = GetComponent<Grid>();
+        gridLayout = GetComponent<GridLayout>();
+
+        AllCreatePlacedObjects();
     }
 
     private void OnEnable()
@@ -49,15 +59,21 @@ public class PlaceSystem : MonoBehaviour
         //_createEvent._onEventRaised += CreateObject;
         _takenAreaEvent._onEventRaised += SetArea;
         _gridEvent._onEventRaised += SnapCoordinateToGrid;
+        
+        _setOkButtonEvent._onEventRaised += SetOkButton;
+        _setDenyButtonEvent._onEventRaised += SetDenyButton;
+        _setCameraEvent._onEventRaised += SetCamera;
     }
     private void OnDisable()
     {
         //_createEvent._onEventRaised -= CreateObject;
         _takenAreaEvent._onEventRaised -= SetArea;
         _gridEvent._onEventRaised -= SnapCoordinateToGrid;
+        
+        _setOkButtonEvent._onEventRaised -= SetOkButton;
+        _setDenyButtonEvent._onEventRaised -= SetDenyButton;
+        _setCameraEvent._onEventRaised -= SetCamera;
     }
-
-
 
     //어차피 안드로이드인데 키보드를 넣을 이유가 있나.
     private void Update()
@@ -79,65 +95,125 @@ public class PlaceSystem : MonoBehaviour
         }
     }
 
+    
+    private void AllCreatePlacedObjects()
+    {
+        foreach(PlacedObjectData obj in _placedObjectManager.GetPlacedObjects())
+        {
+            PlaceObject(obj);
+        }
+    }
+    
+    private void PlaceObject(PlacedObjectData data)
+    {
+        Vector3Int startPos = gridLayout.WorldToCell(data.GetPosition());
+        int id = data.GetID();
+        int pid = data.GetPropertyID();
+        //생성
+        PlaceableObject obj = Instantiate(_shopPlaceableObjects[pid], _objectParent);
+        obj.SetPlacedObjectData(data);
+        obj.Place();
+
+        _placedObjects.Add(obj);
+    }
 
 
+    
     //오브젝트 버튼 누르면 오브젝트 나오는 함수
     private void StartPlaceMode(GameObject obj)
     {
-        //선택된 오브젝트가 있다면
+        //before selected object => current selected object
         if (selectedObject != null)
         {
             Destroy(selectedObject.gameObject);
             selectedObject = null;
         }
-        BuildingObject(obj, Vector3.zero);
-
-        //모든 오브젝트 색칠
         SetAllArea(true);
+        CreateHandlingObject(obj);
     }
-
-    //건물 놓는 함수
-    public void PutOnObject()
+    
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="building"></param>
+    /// <param name="position">넣을 값 없으면 Vector3.zero</param>
+    /// <param name="isHandling">손에 들고 있는 오브젝트인지</param>
+    private void CreateHandlingObject(GameObject building)
     {
-        Vector3Int position = gridLayout.WorldToCell(selectedObject.GetStartPosition());
+        //isFirst = true;
+
+        //맨 처음 생성할때 0,0,0에 생성  => 마우스 위치에 생성으로 
+        Vector3 position = SnapCoordinateToGrid(Vector3.zero);
+
+        GameObject obj = Instantiate(building, position, Quaternion.identity);
+        obj.transform.SetParent(_objectParent);
+
+        PlaceableObject tmp = obj.GetComponent<PlaceableObject>();
+
+        PlacedObjectData pod = new PlacedObjectData(
+            _placedObjectManager.GetObjectID(),
+            tmp.GetPropertyID(),
+            position
+        );
+
+        tmp.SetPlacedObjectData(pod);
+
+        //생성된 오브젝트에 HandlingObject속성 추가  
+        obj.AddComponent<HandlingObject>().Init(
+            _okButton,
+            _denyButton,
+            _camera,
+            _takenAreaEvent,
+            _gridEvent
+        );
+        selectedObject = tmp;
+
+        //SetArea(); //지정된 건물만 색칠
+        isFirst = false;
+
+        
+    }
+    
+
+    //핸들링한 건물 놓는 함수
+    public void PlaceHandlingObject()
+    {
+        Vector3Int pos = gridLayout.WorldToCell(selectedObject.GetStartPosition());
 
         //겹치는 타일이 없으면
-        if (CheckTile(selectedObject, position))
+        if (CheckTile(selectedObject, pos))
         {
-            //놓기 전에 물어보는 함수
             selectedObject.Place();
-            selectedObject.SetObjectID(object_id);
 
-            startpos = position;
+            selectedObject.SetPosition(pos);
+
+            startPos = pos;
             ClearArea();
-            //TakenArea(startpos, selectedObject.Size);
 
-            TakeOffBuilding();
-
-            //오브젝트 ID, startpos를 전송하는 서버 함수
-            _sendFirebaseEventChannelSO.RaiseEvent(
-                "GamePlayUser",
-                GameManager.instance.Nickname,
-                "placeableObjects." + selectedObject.GetObjectID(),
-                selectedObject.ObjectToJSON()
-            );
-
-            SetObjectID(++object_id);
+            _placedObjectManager.SendPlaceableObject(selectedObject);
+            _placedObjectManager.SetObjectID(selectedObject.GetObjectID() + 1);
+            
             //배치 하는 순간 조종 권한 제거  
             Destroy(selectedObject.gameObject.GetComponent<HandlingObject>());
             selectedObject = null;
+            
+            _placedObjects.Add(selectedObject);
+            TakeOffPlaceMode();
         }
+        
+        //아무일도 없다
+
     }
 
-    //안 놓는 함수
     public void TakeOffObject()
     {
-        TakeOffBuilding();
+        TakeOffPlaceMode();
         Destroy(selectedObject.gameObject);
         selectedObject = null;
     }
 
-    private void TakeOffBuilding()
+    private void TakeOffPlaceMode()
     {
         //타일 지우기
         SetAllArea(false);
@@ -148,47 +224,19 @@ public class PlaceSystem : MonoBehaviour
     }
 
 
-
-    #region Building Placement  
-
-    /// <summary>
-    /// 자체 오브젝트를 생성하는 함수. 초기에 서버에서 가져온 오브젝트와 핸들링한 오브젝트를 설치하는 함수
-    /// </summary>
-    /// <param name="building"></param>
-    /// <param name="position">넣을 값 없으면 Vector3.zero</param>
-    /// <param name="isHandling">손에 들고 있는 오브젝트인지</param>
-    private void BuildingObject(GameObject building, Vector3 position, bool isHandling = true)
+    #region TILE
+    
+    /// <summary> 모든 건물 타일 색칠 => false면 색칠no </summary>
+    private void SetAllArea(bool isSelected) //
     {
-        isFirst = true;
-
-        //맨 처음 생성할때 0,0,0에 생성  => 마우스 위치에 생성으로 
-        position = SnapCoordinateToGrid(position);
-
-        GameObject obj = Instantiate(building, position, Quaternion.identity);
-
-        obj.transform.parent = _objectParent;
-
-        PlaceableObject tmp = obj.GetComponent<PlaceableObject>();
-        tmp.Init();
-
-        if (isHandling)
+        for (int i = 0; i < _placedObjects.Count; i++)
         {
-            //생성된 오브젝트에 HandlingObject속성 추가  
-            obj.AddComponent<HandlingObject>().Init(
-                _okButton,
-                _denyButton,
-                _cameraTransform,
-                _takenAreaEvent,
-                _gridEvent
-            );
-            selectedObject = tmp;
-
-            //SetArea(); //지정된 건물만 색칠
-            isFirst = false;
+            PlaceableObject po = _placedObjects[i]; //po는 null 아님, 아마 GetStartPosition 이거 자체가?
+            Vector3Int startpos = gridLayout.WorldToCell(po.GetStartPosition());
+            TakenArea(startpos, po.Size, isSelected);
         }
-
-        _placedObjects.Add(tmp);
     }
+
 
     public Vector3 SnapCoordinateToGrid(Vector3 position)
     {
@@ -238,7 +286,7 @@ public class PlaceSystem : MonoBehaviour
     /// <param name="size"></param>
     private void TakenArea(Vector3Int startpos, Vector3Int size, bool isSelected)
     {
-        this.startpos = startpos;
+        this.startPos = startpos;
         this.object_size = size;
         TakenArea(isSelected);
     }
@@ -281,21 +329,36 @@ public class PlaceSystem : MonoBehaviour
             for (int j = 0; j < object_size.x; j++)
             {
                 //초록색인데 이미 초록색, 빨간색인 경우 => 빨간색 
-                if (isSelected && mainTilemap.GetTile(startpos + new Vector3Int(j, i, 0)) != null)
+                if (isSelected && mainTilemap.GetTile(startPos + new Vector3Int(j, i, 0)) != null)
                 {
-                    mainTilemap.SetTile(startpos + new Vector3Int(j, i, 0), _redTile);
+                    mainTilemap.SetTile(startPos + new Vector3Int(j, i, 0), _redTile);
                 }
                 //비어있는데 이미 빨간색인 경우 
-                else if (!isSelected && mainTilemap.GetTile(startpos + new Vector3Int(j, i, 0)) == _redTile)
+                else if (!isSelected && mainTilemap.GetTile(startPos + new Vector3Int(j, i, 0)) == _redTile)
                 {
-                    mainTilemap.SetTile(startpos + new Vector3Int(j, i, 0), _takenTile);
+                    mainTilemap.SetTile(startPos + new Vector3Int(j, i, 0), _takenTile);
                 }
                 else
                 {
-                    mainTilemap.SetTile(startpos + new Vector3Int(j, i, 0), tile);
+                    mainTilemap.SetTile(startPos + new Vector3Int(j, i, 0), tile);
                 }
             }
         }
     }
     #endregion
+
+    private void SetOkButton(GameObject okButton)
+    {
+        this._okButton = okButton;
+    }
+
+    private void SetDenyButton(GameObject denyButton)
+    {
+        this._denyButton = denyButton;
+    }
+
+    private void SetCamera(GameObject camera)
+    {
+        this._camera = camera;
+    }
 }

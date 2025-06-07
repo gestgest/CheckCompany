@@ -24,19 +24,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] MissionManagerSO missionControllerSO;
     [SerializeField] EmployeeManagerSO employeeControllerSO;
     [SerializeField] PlacedObjectManager _placeSystemSO;
-
-    [Header("PlacedObject")]
-    [SerializeField] private GridLayout gridLayout;
-    [SerializeField] private Tilemap mainTilemap;
-    [SerializeField] private TileBase _takenTile;
-    [SerializeField] private TileBase _redTile;
-    [SerializeField] Transform _objectParent;
-
-    [Header("PlacedObject_selected")]
-    [SerializeField] private Transform _tmp_parent;
-    [SerializeField] private Transform _cameraTransform;
-    [SerializeField] private GameObject _okButton;
-    [SerializeField] private GameObject _denyButton;
     
     [Header("ServerEvent")]
     [SerializeField] private DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
@@ -80,16 +67,7 @@ public class GameManager : MonoBehaviour
         missionControllerSO.Init();
         employeeControllerSO.Init();
         
-        _placeSystemSO.Init(
-            gridLayout,
-            mainTilemap,
-            _takenTile,
-            _redTile,
-            _objectParent,
-            _cameraTransform,
-            _okButton,
-            _denyButton
-        );
+        _placeSystemSO.Init();
         
         date = new GameDate(employeeControllerSO.AddStamina, _sendFirebaseEventChannelSO);
 

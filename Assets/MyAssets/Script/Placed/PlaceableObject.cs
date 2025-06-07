@@ -8,23 +8,26 @@ public class PlaceableObject : MonoBehaviour
 {
     public bool Placed { get; private set; }
     public Vector3Int Size { get; private set; }
-    public Vector3 ObjectPosition { get; set; } //vertices[0] 시작점 기준
     
     private Vector3[] vertices;
 
-    private int object_id;
-    [SerializeField] private int property_id;
+    private PlacedObjectData _placedObjectData;
+    // private int object_id;
+    // [SerializeField] private int property_id;
 
-    public void Init()
+    public void SetPlacedObjectData(PlacedObjectData placedObjectData)
+    {
+        _placedObjectData = placedObjectData;
+
+        transform.position = placedObjectData.GetPosition();
+        Init();
+    }
+
+    private void Init()
     {
         VertexLocalPosition();
         CalculateTileSize();
     }
-    public void SetObjectID(int object_id)
-    {
-        this.object_id = object_id;
-    }
-
     /// <summary> 손에 있는 selectedObject 제거 </summary>
     public virtual void Place()
     {
@@ -97,12 +100,20 @@ public class PlaceableObject : MonoBehaviour
         Dictionary<string, object> result = new Dictionary<string, object>
         {
             {"startPosition", pos},
-            {"property_id", property_id},
+            {"property_id", _placedObjectData.GetPropertyID()},
         };
         return result;
     }
     public int GetObjectID()
     {
-        return object_id;
+        return _placedObjectData.GetID();
+    }
+    public int GetPropertyID()
+    {
+        return _placedObjectData.GetPropertyID();
+    }
+    public void SetPosition(Vector3 position)
+    {
+        _placedObjectData.SetPosition(position);
     }
 }

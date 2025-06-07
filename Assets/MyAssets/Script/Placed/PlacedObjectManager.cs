@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PlacedObjectManager", menuName = "ScriptableObject/Manager/PlacedObjectManager")]
 public class PlacedObjectManager : ScriptableObject
 {
-s    private List<PlaceableObject> _placedObjects;
+    private List<PlacedObjectData> _placedObjects;
 
     [Header("Broadcasting on Event")]
     //[SerializeField] private GameObjectEventChannelSO _createEvent;
@@ -16,7 +16,7 @@ s    private List<PlaceableObject> _placedObjects;
 
     public void Init()
     {
-        _placedObjects = new List<PlaceableObject>();
+        _placedObjects = new List<PlacedObjectData>();
     }
 
 
@@ -37,13 +37,12 @@ s    private List<PlaceableObject> _placedObjects;
         //map형태의 recruitments를 list로 변환
         foreach (KeyValuePair<string, object> serverPlaceableObject in data)
         {
-            JSONtoPlacedObject(serverPlaceableObject);
+            JSONtoPlacedObjectData(serverPlaceableObject);
         }
 
     }
 
-    //object_id
-
+    //  ServerToObjectId
     public void SetObjectID(int object_id, bool isServer = true)
     {
         this.object_id = object_id;
@@ -59,13 +58,12 @@ s    private List<PlaceableObject> _placedObjects;
         );
     }
 
-    //
-    private void JSONtoPlacedObject(KeyValuePair<string, object> placeableObject)
+    private void JSONtoPlacedObjectData(KeyValuePair<string, object> placeableObject)
     {
         int id = Convert.ToInt32(placeableObject.Key);
 
         Dictionary<string, object> keyValues = (Dictionary<string, object>)placeableObject.Value;
-        int index = Convert.ToInt32(keyValues["property_id"]);
+        int property_id = Convert.ToInt32(keyValues["property_id"]);
         Dictionary<string, object> server_pos = (Dictionary<string, object>)keyValues["startPosition"];
 
         Vector3 pos = new Vector3(
@@ -73,23 +71,28 @@ s    private List<PlaceableObject> _placedObjects;
             Convert.ToSingle(server_pos["y"]),
             Convert.ToSingle(server_pos["z"])
         );
-        _placedObjects[_placedObjects.Count - 1].ObjectPosition = pos;
-
-        //BuildingObject(_shopPlaceableObjects[index].gameObject, pos); // 핸들링 안할거
-
-        _placedObjects[_placedObjects.Count - 1].SetObjectID(id);
+        PlacedObjectData pod = new PlacedObjectData(id, property_id, pos);
     }
 
-
-    /// <summary> 모든 건물 타일 색칠 => false면 색칠no </summary>
-    private void SetAllArea(bool isSelected) //
+    public void SendPlaceableObject(PlaceableObject selectedObject)
     {
-        for (int i = 0; i < _placedObjects.Count; i++)
-        {
-            PlaceableObject po = _placedObjects[i]; //po는 null 아님, 아마 GetStartPosition 이거 자체가?
-            Vector3Int startpos = gridLayout.WorldToCell(po.GetStartPosition());
-            TakenArea(startpos, po.Size, isSelected);
-        }
+        //오브젝트 ID, startpos를 전송하는 서버 함수
+        _sendFirebaseEventChannelSO.RaiseEvent(
+            "GamePlayUser",
+            GameManager.instance.Nickname,
+            "placeableObjects." + selectedObject.GetObjectID(),
+            selectedObject.ObjectToJSON()
+        );
+    }
+
+    public List<PlacedObjectData> GetPlacedObjects()
+    {
+        return _placedObjects;
+    }
+
+    public int GetObjectID()
+    {
+        return object_id;
     }
 
 
