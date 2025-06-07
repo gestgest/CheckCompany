@@ -1,25 +1,16 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.Tilemaps;
-using UnityEngine.UIElements;
-using Object = UnityEngine.Object;
 
-[CreateAssetMenu(fileName = "PlaceSystemSO", menuName = "ScriptableObject/Manager/PlaceSystemSO")]
+[CreateAssetMenu(fileName = "PlacedObjectManager", menuName = "ScriptableObject/Manager/PlacedObjectManager")]
 public class PlacedObjectManager : ScriptableObject
 {
+s    private List<PlaceableObject> _placedObjects;
 
-    [Header("PlacedObjects")]
-    
-    
-    
     [Header("Broadcasting on Event")]
     //[SerializeField] private GameObjectEventChannelSO _createEvent;
     [SerializeField] private SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
     
-    private List<PlaceableObject> _placedObjects;
 
     private int object_id;
 
