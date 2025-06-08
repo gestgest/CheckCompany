@@ -5,14 +5,16 @@ using UnityEngine.EventSystems;
 
 public class HandlingObject : MonoBehaviour
 {
-    GameObject _okButton;
-    GameObject _denyButton;
+    private GameObject _okButton;
+    private GameObject _denyButton;
+    private Transform _cameraTransform;
 
+    
     private VoidEventChannelSO _takenAreaEvent;
     private Vector3TransformChannelSO _snapCoordinateToGrid;
+    
+    
     [SerializeField] private Vector2 _screenEdge;
-
-    private Transform _cameraTransform;
     
     //down
     private void Update()
@@ -44,14 +46,15 @@ public class HandlingObject : MonoBehaviour
     public void Init(
         GameObject okButton,
         GameObject denyButton,
-        Transform cameraTransform,
+        GameObject camera,
         VoidEventChannelSO takenAreaEvent,
         Vector3TransformChannelSO snapCoordinateToGrid)
     {
         this._okButton = okButton;
         this._denyButton = denyButton;
 
-        this._cameraTransform = cameraTransform;
+        //camera null
+        this._cameraTransform = camera.GetComponent<Transform>();
         
         _takenAreaEvent = takenAreaEvent;
         _snapCoordinateToGrid = snapCoordinateToGrid;

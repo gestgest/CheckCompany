@@ -13,48 +13,22 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     [SerializeField] UIManager ui_manager;
-    [SerializeField] FireStoreManager fireStoreManager;
+    //[SerializeField] FireStoreManager fireStoreManager;
     private FirebaseAuth auth;
     private FirebaseUser user;
 
 
     //컨트롤러 리스트
-    [Header("Controller")]
-    [SerializeField] RecruitmentControllerSO recruitmentControllerSO;
-    [SerializeField] MissionControllerSO missionControllerSO;
-    [SerializeField] EmployeeControllerSO employeeControllerSO;
-    [SerializeField] PlaceSystemSO _placeSystemSO;
-
-    //init 리스트
-    [Header("Recruitment")]
-    [SerializeField] GameObject recruitmentView;
-    [SerializeField] TextMeshProUGUI recrutmentCostText;
-
-    [Header("Mission")]
-    [SerializeField] private MissionPanel mission_panel;
-    [SerializeField] private CompleteMissionPanel complete_mission_panel;
-
-    [Header("Employee")]
-    [SerializeField] private GameObject employeeParent;
-    [SerializeField] private EmployeeStatusWindow employeeStatusWindow; //이거를 subPanel로 바꿀 수 없나
-    [SerializeField] private Panel employeePanel;
-
-    [Header("PlacedObject")]
-    [SerializeField] private GridLayout gridLayout;
-    [SerializeField] private Tilemap mainTilemap;
-    [SerializeField] private TileBase _takenTile;
-    [SerializeField] private TileBase _redTile;
-    [SerializeField] Transform _objectParent;
-
-    [Header("PlacedObject_selected")]
-    [SerializeField] private Transform _tmp_parent;
-    [SerializeField] private Transform _cameraTransform;
-    [SerializeField] private GameObject _okButton;
-    [SerializeField] private GameObject _denyButton;
+    [Header("Manager")]
+    [SerializeField] RecruitmentManagerSO recruitmentControllerSO;
+    [SerializeField] MissionManagerSO missionControllerSO;
+    [SerializeField] EmployeeManagerSO employeeControllerSO;
+    [FormerlySerializedAs("_placeSystemSO")] [SerializeField] PlacedObjectManager _placeManager;
     
     [Header("ServerEvent")]
     [SerializeField] private DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
     [SerializeField] private SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
+    [SerializeField] private GetJSONFirebaseEventChannelSO _getJSONEventChannelSO;
 
 
     private string nickname;
@@ -88,24 +62,18 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        recruitmentControllerSO.Init(recruitmentView, recrutmentCostText);
-        missionControllerSO.Init(mission_panel, complete_mission_panel);
-        employeeControllerSO.Init(employeeParent, employeeStatusWindow, employeePanel);
+        //컨트롤러 넣고
+        recruitmentControllerSO.Init();
+        missionControllerSO.Init();
+        employeeControllerSO.Init();
         
-        _placeSystemSO.Init(
-            gridLayout,
-            mainTilemap,
-            _takenTile,
-            _redTile,
-            _objectParent,
-            _cameraTransform,
-            _okButton,
-            _denyButton
-        );
+        _placeManager.Init();
         
         date = new GameDate(employeeControllerSO.AddStamina, _sendFirebaseEventChannelSO);
+
+        GameServerStart();
         //절대로 LoginScene에 넣지마 => 메인 스레드 충돌 오류
-        fireStoreManager.Init();
+        //fireStoreManager.Init();
         //SetDateUI();
     }
     
@@ -128,14 +96,14 @@ public class GameManager : MonoBehaviour
         //convert로 하면 null이 0으로 바뀌어진다
 
         //user.Email으로 쿼리 만들고 => null 처리 안함 => 그냥 
-        nickname = (string)await fireStoreManager.GetFirestoreData("User", user.Email, "nickname");
+        nickname = (string)await _getJSONEventChannelSO.RaiseEvent("User", user.Email, "nickname");
 
         long money;
-        money = (long)(await fireStoreManager.GetFirestoreData("User", user.Email, "money") ?? (long)0);
+        money = (long)(await _getJSONEventChannelSO.RaiseEvent("User", user.Email, "money") ?? (long)0);
         SetMoney(money, false);
 
         object tmp_employee_count =
-            Convert.ToInt32(await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "employee_count"));
+            Convert.ToInt32(await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "employee_count"));
 
         if (tmp_employee_count == null)
         {
@@ -148,29 +116,29 @@ public class GameManager : MonoBehaviour
         
         //MissionController.instance.Init();
         missionControllerSO.SetMissionData(
-            (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "missions"),
-            Convert.ToInt32(await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "mission_count"))
+            (Dictionary<string, object>)await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "missions"),
+            Convert.ToInt32(await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "mission_count"))
         );
 
-        Dictionary<string,object> recruitments = (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "recruitments");
+        Dictionary<string,object> recruitments = (Dictionary<string, object>)await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "recruitments");
         recruitmentControllerSO.JSONToRecruitments(recruitments);
 
-        Dictionary<string, object> employees = (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "employees");
-        employeeControllerSO.EmployeesFromJSON(employees);
+        Dictionary<string, object> employees = (Dictionary<string, object>)await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "employees");
+        employeeControllerSO.JSONToEmployees(employees);
         
         date.GetDateFromJSON(
-            (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "date")
+            (Dictionary<string, object>)await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "date")
         );
         SetDateUI();
         
         //object_count 가져오고
         
         int object_count =
-            Convert.ToInt32(await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "placeableObject_id"));
+            Convert.ToInt32(await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "placeableObject_id"));
         
         //각각 object 정보 가져오고
-        _placeSystemSO.SetPlacedObjects(
-            (Dictionary<string, object>)await fireStoreManager.GetFirestoreData("GamePlayUser", nickname, "placeableObjects"),
+        _placeManager.SetPlacedObjects(
+            (Dictionary<string, object>)await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "placeableObjects"),
             object_count
         );
     }
@@ -193,7 +161,7 @@ public class GameManager : MonoBehaviour
             _sendFirebaseEventChannelSO.RaiseEvent("GamePlayUser", nickname, "money", money);
 
         //서버 로딩
-        ui_manager.SetMoneyText(value);
+        ui_manager.SetMoneyText(money);
     }
 
 
@@ -230,7 +198,7 @@ public class GameManager : MonoBehaviour
     public void AddDateMinute(int value)
     {
         date.Minute += value;
-        recruitmentControllerSO.AddApplicants(60 / value);
+        recruitmentControllerSO.AddRandomApplicants(60 / value);
         SetDateUI();
     }
 

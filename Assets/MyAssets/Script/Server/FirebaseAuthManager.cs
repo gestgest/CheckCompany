@@ -5,9 +5,10 @@ using UnityEngine;
 using Firebase;
 using Firebase.Auth;
 using System.Threading.Tasks;
-using UnityEngine.UI;
 using System.ComponentModel;
-using TMPro;
+using Unity.VisualScripting;
+using UnityEngine.Serialization;
+using UnityEngine.AddressableAssets;
 
 
 public class FirebaseAuthManager : MonoBehaviour
@@ -16,20 +17,31 @@ public class FirebaseAuthManager : MonoBehaviour
     private DependencyStatus dependencyStatus;
     [SerializeField] private FirebaseAuth auth;
     [SerializeField] private FirebaseUser user;
-    [SerializeField] private FireStoreManager fireStoreManager;
 
+    [Header("Listening to eventChannels")]
+    [SerializeField] private String2EventChannelSO _loginEvent;
+    [SerializeField] private String4EventChannelSO _registerEvent;
+    
+    
+    // [SerializeField] private GetStringEventChannelSO _getLoginEmailEvent;
+    // [SerializeField] private GetStringEventChannelSO _getLoginPasswordEvent;
+    //
+    // [SerializeField] private GetStringEventChannelSO _getRegisterNameEvent;
+    // [SerializeField] private GetStringEventChannelSO _getRegisterEmailEvent;
+    // [SerializeField] private GetStringEventChannelSO _getRegisterPasswordEvent;
+    // [SerializeField] private GetStringEventChannelSO _getRegisterConfirmPasswordEvent;
 
     [Space]
-    [Header("Login")]
-    [SerializeField] private TMP_InputField emailLoginTextField;
-    [SerializeField] private TMP_InputField passwordLoginTextField;
+    //서버 send 함수
+    [Header("Broadcasting on firebaseChannels")]
+    [SerializeField] private VoidEventChannelSO _initFirebaseChannelEvent;
+    [SerializeField] private SendFirebaseEventChannelSO _setNewFireStoreEvent;
+    [SerializeField] private SendFirebaseEventChannelSO _setFireStoreEvent;
 
-    [SerializeField] private TMP_InputField nameRegisterTextField;
-    [SerializeField] private TMP_InputField emailRegisterTextField;
-    [SerializeField] private TMP_InputField passwordRegisterTextField;
-    [SerializeField] private TMP_InputField confirmPasswordRegisterTextField;
-    [SerializeField] private SceneLoader sceneLoader;
-
+    //함수로 => _loadLocation
+    [SerializeField] private LoadEventChannelSO _loadLocation;
+    [SerializeField] private AssetReference _myCompanyScene;
+    
     void Awake()
     {
         //파이어베이스 서버 체크 => 전역 무언가를 생성
@@ -40,7 +52,7 @@ public class FirebaseAuthManager : MonoBehaviour
             if (dependencyStatus == DependencyStatus.Available)
             {
                 InitFirebase();
-                fireStoreManager.Init();
+                _initFirebaseChannelEvent.RaiseEvent();
             }
             else
             {
@@ -53,6 +65,18 @@ public class FirebaseAuthManager : MonoBehaviour
         //예를 들어 Auth와 FireStore가 동시에 실행되는 Start()면 맛이 감
     }
 
+    private void OnEnable()
+    {
+        _loginEvent._onEventRaised += Login;
+        _registerEvent._onEventRaised += Register;
+    }
+
+    private void OnDisable()
+    {
+        _loginEvent._onEventRaised -= Login;
+        _registerEvent._onEventRaised -= Register;
+    }
+
     void InitFirebase()
     {
         auth = FirebaseAuth.DefaultInstance; //싱글톤으로 디폴트 FirebaseAuth 생성
@@ -61,9 +85,6 @@ public class FirebaseAuthManager : MonoBehaviour
         AuthStatusChanged(this, null);
     }
 
-    private void Update()
-    {
-    }
 
     void AuthStatusChanged(object sender, System.EventArgs eventArgs)
     {
@@ -87,9 +108,12 @@ public class FirebaseAuthManager : MonoBehaviour
         }
     }
 
-    public void Login()
+    public void Login(string email, string password)
     {
-        StartCoroutine(LoginAynsc(emailLoginTextField.text, passwordLoginTextField.text));
+        StartCoroutine(LoginAynsc(
+            email,
+            password
+        ));
     }
 
     private IEnumerator LoginAynsc(string email, string password)
@@ -136,21 +160,16 @@ public class FirebaseAuthManager : MonoBehaviour
         {
             user = loginTask.Result.User;
             Debug.Log("성공" + user);
-            SceneLoad();
+            _loadLocation.RaiseEvent(_myCompanyScene);
         }
     }
 
-    public void Register()
+    public void Register(string name, string email, string password, string confirmPassword)
     {
-        StartCoroutine(
-            RegisterAynsc(
-                nameRegisterTextField.text,
-                emailRegisterTextField.text,
-                passwordRegisterTextField.text,
-                confirmPasswordRegisterTextField.text
-        ));
+        StartCoroutine(RegisterAynsc(name,email,password,confirmPassword));
     }
 
+    //비동기
     private IEnumerator RegisterAynsc(string name, string email, string password, string confirmPassword)
     {
         if (name == "")
@@ -228,7 +247,7 @@ public class FirebaseAuthManager : MonoBehaviour
                     Debug.Log("회원가입 성공");
 
                     //user 닉네임 Document
-                    fireStoreManager.SetNewFirestoreData("User", user.Email, "nickname", name);
+                    _setNewFireStoreEvent.RaiseEvent("User", user.Email, "nickname", name);
                     GamePlayerInit(name);
                     PanelManager.instance.SwitchingPanelFromInt(1); //로그인 화면으로
                 }
@@ -238,20 +257,14 @@ public class FirebaseAuthManager : MonoBehaviour
         }
     }
 
-    //씬 로드
-    public void SceneLoad()
-    {
-        sceneLoader.SceneLoad();
-    }
-    
     //초기값 설정
     private void GamePlayerInit(string name)
     {
-        fireStoreManager.SetNewFirestoreData("GamePlayUser", name, "money", 0);
-        fireStoreManager.SetFirestoreData("GamePlayUser", name, "employee_count", 0);
+        _setNewFireStoreEvent.RaiseEvent("GamePlayUser", name, "money", 0);
+        _setFireStoreEvent.RaiseEvent("GamePlayUser", name, "employee_count", 0);
         Date date = new Date();
-        fireStoreManager.SetFirestoreData("GamePlayUser", name, "date", date.DateToJSON());
-        fireStoreManager.SetFirestoreData("GamePlayUser", name, "recruitments", new Dictionary<string, object>());
-        fireStoreManager.SetFirestoreData("GamePlayUser", name, "employees",  new Dictionary<string, object>());
+        _setFireStoreEvent.RaiseEvent("GamePlayUser", name, "date", date.DateToJSON());
+        _setFireStoreEvent.RaiseEvent("GamePlayUser", name, "recruitments", new Dictionary<string, object>());
+        _setFireStoreEvent.RaiseEvent("GamePlayUser", name, "employees",  new Dictionary<string, object>());
     }
 }

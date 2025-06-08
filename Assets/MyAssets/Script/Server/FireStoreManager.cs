@@ -12,19 +12,33 @@ using UnityEngine.Serialization;
 public class FireStoreManager : MonoBehaviour
 {
     static FirebaseFirestore db;
-    [SerializeField] DeleteFirebaseEventChannelSO deleteFirebaseEventChannelSO;
-    [SerializeField] SendFirebaseEventChannelSO sendFirebaseEventChannelSO;
+    
+    [Header("Listening to channels")]
+    [SerializeField] private VoidEventChannelSO _initFirebaseChannelEvent;
+
+    [SerializeField] DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
+    [SerializeField] SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
+    [SerializeField] SendFirebaseEventChannelSO _newSendFirebaseEventChannelSO;
+    [SerializeField] GetJSONFirebaseEventChannelSO _getJSONFirebaseEventChannelSO;
 
     private void OnEnable()
     {
-        deleteFirebaseEventChannelSO.OnDeleteEventRaised += DeleteFirestoreDataKey;
-        sendFirebaseEventChannelSO.OnSendEventRaised += SetFirestoreData;
+        _initFirebaseChannelEvent._onEventRaised += Init;
+        
+        _deleteFirebaseEventChannelSO._onDeleteEventRaised += DeleteFirestoreDataKey;
+        _sendFirebaseEventChannelSO._onSendEventRaised += SetFirestoreData;
+        _newSendFirebaseEventChannelSO._onSendEventRaised += SetNewFirestoreData;
+        _getJSONFirebaseEventChannelSO._onEventRaised += GetFirestoreData;
     }
 
     private void OnDisable()
     {
-        deleteFirebaseEventChannelSO.OnDeleteEventRaised -= DeleteFirestoreDataKey;
-        sendFirebaseEventChannelSO.OnSendEventRaised -= SetFirestoreData;
+        _initFirebaseChannelEvent._onEventRaised -= Init;
+        
+        _deleteFirebaseEventChannelSO._onDeleteEventRaised -= DeleteFirestoreDataKey;
+        _sendFirebaseEventChannelSO._onSendEventRaised -= SetFirestoreData;
+        _newSendFirebaseEventChannelSO._onSendEventRaised -= SetNewFirestoreData;
+        _getJSONFirebaseEventChannelSO._onEventRaised -= GetFirestoreData;
     }
 
     //이미 app과 db는 싱글톤이다.
@@ -36,10 +50,6 @@ public class FireStoreManager : MonoBehaviour
             FirebaseApp app = FirebaseApp.DefaultInstance;
             db = FirebaseFirestore.DefaultInstance;
             Debug.Log("Firestore 작동");
-
-            //이거 스타트가 아닌 로그인 이후 작동해야 한다. 
-            if(GameManager.instance != null)
-                GameManager.instance.GameServerStart(); //=> 대충 서버에서 데이터 들어오는 함수
         });
     }
 
