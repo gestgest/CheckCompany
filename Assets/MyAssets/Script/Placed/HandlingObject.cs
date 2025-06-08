@@ -46,14 +46,14 @@ public class HandlingObject : MonoBehaviour
     public void Init(
         GameObject okButton,
         GameObject denyButton,
-        GameObject cameraTransform,
+        GameObject camera,
         VoidEventChannelSO takenAreaEvent,
         Vector3TransformChannelSO snapCoordinateToGrid)
     {
         this._okButton = okButton;
         this._denyButton = denyButton;
 
-        this._cameraTransform = GetComponent<Camera>().transform;
+        this._cameraTransform = camera.GetComponent<Transform>();
         
         _takenAreaEvent = takenAreaEvent;
         _snapCoordinateToGrid = snapCoordinateToGrid;

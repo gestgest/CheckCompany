@@ -19,7 +19,7 @@ public class PlaceSystem : MonoBehaviour
     [SerializeField] private TileBase _redTile;
     [SerializeField] private Transform _objectParent;
 
-    //
+    
     private bool isFirst = true;
     private Vector3Int object_size;
     private Vector3Int startPos;
@@ -41,6 +41,11 @@ public class PlaceSystem : MonoBehaviour
     [Header("Listening to Event")]
     [SerializeField] private VoidEventChannelSO _takenAreaEvent;
     [SerializeField] private Vector3TransformChannelSO _gridEvent;
+    [SerializeField] private GameObjectEventChannelSO _createPlaceableObjectEvent;
+    
+    [SerializeField] private VoidEventChannelSO _okEvent;
+    [SerializeField] private VoidEventChannelSO _denyEvent;
+    
     [SerializeField] private GameObjectEventChannelSO _setOkButtonEvent;
     [SerializeField] private GameObjectEventChannelSO _setDenyButtonEvent;
     [SerializeField] private GameObjectEventChannelSO _setCameraEvent;
@@ -59,6 +64,11 @@ public class PlaceSystem : MonoBehaviour
         //_createEvent._onEventRaised += CreateObject;
         _takenAreaEvent._onEventRaised += SetArea;
         _gridEvent._onEventRaised += SnapCoordinateToGrid;
+
+        _createPlaceableObjectEvent._onEventRaised += StartPlaceMode;
+
+        _okEvent._onEventRaised += PlaceHandlingObject;
+        _denyEvent._onEventRaised += TakeOffObject;
         
         _setOkButtonEvent._onEventRaised += SetOkButton;
         _setDenyButtonEvent._onEventRaised += SetDenyButton;
@@ -69,6 +79,11 @@ public class PlaceSystem : MonoBehaviour
         //_createEvent._onEventRaised -= CreateObject;
         _takenAreaEvent._onEventRaised -= SetArea;
         _gridEvent._onEventRaised -= SnapCoordinateToGrid;
+
+        _createPlaceableObjectEvent._onEventRaised -= StartPlaceMode;
+        
+        _okEvent._onEventRaised -= PlaceHandlingObject;
+        _denyEvent._onEventRaised -= TakeOffObject;
         
         _setOkButtonEvent._onEventRaised -= SetOkButton;
         _setDenyButtonEvent._onEventRaised -= SetDenyButton;
@@ -176,7 +191,7 @@ public class PlaceSystem : MonoBehaviour
     }
     
 
-    //핸들링한 건물 놓는 함수
+    //핸들링한 건물 놓는 함수 ok
     public void PlaceHandlingObject()
     {
         Vector3Int pos = gridLayout.WorldToCell(selectedObject.GetStartPosition());
@@ -203,9 +218,9 @@ public class PlaceSystem : MonoBehaviour
         }
         
         //아무일도 없다
-
     }
 
+    // deny
     public void TakeOffObject()
     {
         TakeOffPlaceMode();

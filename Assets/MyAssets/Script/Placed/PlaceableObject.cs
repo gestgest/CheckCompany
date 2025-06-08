@@ -11,7 +11,8 @@ public class PlaceableObject : MonoBehaviour
     
     private Vector3[] vertices;
 
-    private PlacedObjectData _placedObjectData;
+    
+    [SerializeField] private PlacedObjectData _placedObjectData;
     // private int object_id;
     // [SerializeField] private int property_id;
 

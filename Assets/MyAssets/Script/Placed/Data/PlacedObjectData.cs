@@ -1,10 +1,12 @@
+using System;
 using UnityEngine;
 
+[Serializable]
 public class PlacedObjectData
 {
-    private int id;
-    private int property_id;
-    private Vector3 position;
+    [SerializeField] private int id;
+    [SerializeField] private int property_id;
+    [SerializeField] private Vector3 position;
 
     public PlacedObjectData(int id, int property_id, Vector3 position)
     {

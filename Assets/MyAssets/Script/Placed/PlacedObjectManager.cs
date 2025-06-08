@@ -7,11 +7,27 @@ public class PlacedObjectManager : ScriptableObject
 {
     private List<PlacedObjectData> _placedObjects;
 
+    private GameObject _myCamera;
+    private GameObject _okButton;
+    private GameObject _denyButton;
+    
+
+    //UIPlaceableObject
     [Header("Broadcasting on Event")]
-    //[SerializeField] private GameObjectEventChannelSO _createEvent;
+    [SerializeField] private GameObjectEventChannelSO _createPlaceableObjectEvent;
+    [SerializeField] private VoidEventChannelSO _okEvent;
+    [SerializeField] private VoidEventChannelSO _denyEvent;
+
+    //PlaceSystem
+    [SerializeField] private GameObjectEventChannelSO _SetOkButtonEvent;
+    [SerializeField] private GameObjectEventChannelSO _SetDenyButtonEvent;
+    [SerializeField] private GameObjectEventChannelSO _SetCameraEvent;
+    
     [SerializeField] private SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
     
 
+    
+    
     private int object_id;
 
     public void Init()
@@ -95,5 +111,40 @@ public class PlacedObjectManager : ScriptableObject
         return object_id;
     }
 
+    public void CreatePlaceableObject(GameObject obj)
+    {
+        _createPlaceableObjectEvent.RaiseEvent(obj);
+    }
+
+    public void OkEvent()
+    {
+        _okEvent.RaiseEvent();
+    }
+
+    public void DenyEvent()
+    {
+        _denyEvent.RaiseEvent();
+    }
+
+    public void SetHandlingObjectProperties(GameObject camera, GameObject okButton, GameObject denyButton)
+    {
+        this._myCamera = camera;
+        this._okButton = okButton;
+        this._denyButton = denyButton;
+    }
+    
+    public void SetOkButton(GameObject button)
+    {
+        _SetOkButtonEvent.RaiseEvent(button);
+    }
+    public void SetDenyButton(GameObject button)
+    {
+        _SetDenyButtonEvent.RaiseEvent(button);
+    }
+    
+    public void SetCamera(GameObject camera)
+    {
+        _SetCameraEvent.RaiseEvent(camera);
+    }
 
 }

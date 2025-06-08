@@ -122,9 +122,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11400000, guid: 17130f6f4e93a9547b6a6caadb594b7b, type: 2}
-        m_TargetAssemblyTypeName: GameObjectEventChannelSO, Assembly-CSharp
-        m_MethodName: RaiseEvent
+      - m_Target: {fileID: 11400000, guid: 78992eda014fc4149a161456aaedd847, type: 2}
+        m_TargetAssemblyTypeName: PlacedObjectManager, Assembly-CSharp
+        m_MethodName: CreatePlaceableObject
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 1289936835854364, guid: ec71814fb4ff65441989d0088126ae12, type: 3}

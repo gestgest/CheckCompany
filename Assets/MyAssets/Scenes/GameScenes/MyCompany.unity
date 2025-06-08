@@ -884,6 +884,9 @@ MonoBehaviour:
   _placedObjectManager: {fileID: 11400000, guid: 78992eda014fc4149a161456aaedd847, type: 2}
   _takenAreaEvent: {fileID: 11400000, guid: 767a94b576ed3cf4abacb6b5b867d660, type: 2}
   _gridEvent: {fileID: 11400000, guid: ae3fd948f4be3da45a40c6cca018c9b3, type: 2}
+  _createPlaceableObjectEvent: {fileID: 11400000, guid: 81fcc363f02503546814d9b98feb975d, type: 2}
+  _okEvent: {fileID: 11400000, guid: eb94e3168489db24dbd3e64a60e0f1cb, type: 2}
+  _denyEvent: {fileID: 11400000, guid: eecae7648030d354fad1b4f7689f1fa0, type: 2}
   _setOkButtonEvent: {fileID: 11400000, guid: f13b87d96f33a9842a4923bd4e362a17, type: 2}
   _setDenyButtonEvent: {fileID: 11400000, guid: 639f4fb0034740242be5c04c7469ce54, type: 2}
   _setCameraEvent: {fileID: 11400000, guid: a3f4216cf7136214c97050e454359b67, type: 2}

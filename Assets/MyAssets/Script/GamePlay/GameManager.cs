@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] RecruitmentManagerSO recruitmentControllerSO;
     [SerializeField] MissionManagerSO missionControllerSO;
     [SerializeField] EmployeeManagerSO employeeControllerSO;
-    [SerializeField] PlacedObjectManager _placeSystemSO;
+    [FormerlySerializedAs("_placeSystemSO")] [SerializeField] PlacedObjectManager _placeManager;
     
     [Header("ServerEvent")]
     [SerializeField] private DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
         missionControllerSO.Init();
         employeeControllerSO.Init();
         
-        _placeSystemSO.Init();
+        _placeManager.Init();
         
         date = new GameDate(employeeControllerSO.AddStamina, _sendFirebaseEventChannelSO);
 
@@ -137,10 +137,10 @@ public class GameManager : MonoBehaviour
             Convert.ToInt32(await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "placeableObject_id"));
         
         //각각 object 정보 가져오고
-        //_placeSystemSO.SetPlacedObjects(
-        //    (Dictionary<string, object>)await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "placeableObjects"),
-        //    object_count
-        //);
+        _placeManager.SetPlacedObjects(
+            (Dictionary<string, object>)await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "placeableObjects"),
+            object_count
+        );
     }
 
     #region property
