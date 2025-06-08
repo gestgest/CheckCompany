@@ -15,7 +15,5 @@ MonoBehaviour:
   _createPlaceableObjectEvent: {fileID: 11400000, guid: 81fcc363f02503546814d9b98feb975d, type: 2}
   _okEvent: {fileID: 11400000, guid: eb94e3168489db24dbd3e64a60e0f1cb, type: 2}
   _denyEvent: {fileID: 11400000, guid: eecae7648030d354fad1b4f7689f1fa0, type: 2}
-  _SetOkButtonEvent: {fileID: 11400000, guid: f13b87d96f33a9842a4923bd4e362a17, type: 2}
-  _SetDenyButtonEvent: {fileID: 11400000, guid: 639f4fb0034740242be5c04c7469ce54, type: 2}
-  _SetCameraEvent: {fileID: 11400000, guid: a3f4216cf7136214c97050e454359b67, type: 2}
+  _onChangedEvent: {fileID: 11400000, guid: 08a1a7add6255fb478e97537dc3adfde, type: 2}
   _sendFirebaseEventChannelSO: {fileID: 11400000, guid: bc6e20a0b24975943a58a86b83f606ea, type: 2}
