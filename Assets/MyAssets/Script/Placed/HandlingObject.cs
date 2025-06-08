@@ -53,6 +53,7 @@ public class HandlingObject : MonoBehaviour
         this._okButton = okButton;
         this._denyButton = denyButton;
 
+        //camera null
         this._cameraTransform = camera.GetComponent<Transform>();
         
         _takenAreaEvent = takenAreaEvent;

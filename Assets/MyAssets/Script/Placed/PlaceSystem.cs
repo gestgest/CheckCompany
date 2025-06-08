@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
 
 
 public class PlaceSystem : MonoBehaviour
@@ -42,13 +43,11 @@ public class PlaceSystem : MonoBehaviour
     [SerializeField] private VoidEventChannelSO _takenAreaEvent;
     [SerializeField] private Vector3TransformChannelSO _gridEvent;
     [SerializeField] private GameObjectEventChannelSO _createPlaceableObjectEvent;
-    
+
+    [SerializeField] private VoidEventChannelSO _onChangedEvent;
     [SerializeField] private VoidEventChannelSO _okEvent;
     [SerializeField] private VoidEventChannelSO _denyEvent;
     
-    [SerializeField] private GameObjectEventChannelSO _setOkButtonEvent;
-    [SerializeField] private GameObjectEventChannelSO _setDenyButtonEvent;
-    [SerializeField] private GameObjectEventChannelSO _setCameraEvent;
 
     
     private void Start()
@@ -57,6 +56,8 @@ public class PlaceSystem : MonoBehaviour
         gridLayout = GetComponent<GridLayout>();
 
         AllCreatePlacedObjects();
+
+        SetHandlingPropertys();
     }
 
     private void OnEnable()
@@ -67,12 +68,11 @@ public class PlaceSystem : MonoBehaviour
 
         _createPlaceableObjectEvent._onEventRaised += StartPlaceMode;
 
+        _onChangedEvent._onEventRaised += AllCreatePlacedObjects;
+
         _okEvent._onEventRaised += PlaceHandlingObject;
         _denyEvent._onEventRaised += TakeOffObject;
         
-        _setOkButtonEvent._onEventRaised += SetOkButton;
-        _setDenyButtonEvent._onEventRaised += SetDenyButton;
-        _setCameraEvent._onEventRaised += SetCamera;
     }
     private void OnDisable()
     {
@@ -81,13 +81,13 @@ public class PlaceSystem : MonoBehaviour
         _gridEvent._onEventRaised -= SnapCoordinateToGrid;
 
         _createPlaceableObjectEvent._onEventRaised -= StartPlaceMode;
-        
+
+        _onChangedEvent._onEventRaised -= AllCreatePlacedObjects;
+
+
         _okEvent._onEventRaised -= PlaceHandlingObject;
         _denyEvent._onEventRaised -= TakeOffObject;
         
-        _setOkButtonEvent._onEventRaised -= SetOkButton;
-        _setDenyButtonEvent._onEventRaised -= SetDenyButton;
-        _setCameraEvent._onEventRaised -= SetCamera;
     }
 
     //어차피 안드로이드인데 키보드를 넣을 이유가 있나.
@@ -362,18 +362,11 @@ public class PlaceSystem : MonoBehaviour
     }
     #endregion
 
-    private void SetOkButton(GameObject okButton)
+    private void SetHandlingPropertys()
     {
-        this._okButton = okButton;
+        this._okButton = _placedObjectManager.GetOkButton();
+        this._denyButton = _placedObjectManager.GetDenyButton();
+        this._camera = _placedObjectManager.GetCamera();
     }
 
-    private void SetDenyButton(GameObject denyButton)
-    {
-        this._denyButton = denyButton;
-    }
-
-    private void SetCamera(GameObject camera)
-    {
-        this._camera = camera;
-    }
 }

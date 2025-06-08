@@ -17,11 +17,7 @@ public class PlacedObjectManager : ScriptableObject
     [SerializeField] private GameObjectEventChannelSO _createPlaceableObjectEvent;
     [SerializeField] private VoidEventChannelSO _okEvent;
     [SerializeField] private VoidEventChannelSO _denyEvent;
-
-    //PlaceSystem
-    [SerializeField] private GameObjectEventChannelSO _SetOkButtonEvent;
-    [SerializeField] private GameObjectEventChannelSO _SetDenyButtonEvent;
-    [SerializeField] private GameObjectEventChannelSO _SetCameraEvent;
+    [SerializeField] private VoidEventChannelSO _onChangedEvent;
     
     [SerializeField] private SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
     
@@ -55,7 +51,7 @@ public class PlacedObjectManager : ScriptableObject
         {
             JSONtoPlacedObjectData(serverPlaceableObject);
         }
-
+        _onChangedEvent.RaiseEvent();
     }
 
     //  ServerToObjectId
@@ -88,6 +84,8 @@ public class PlacedObjectManager : ScriptableObject
             Convert.ToSingle(server_pos["z"])
         );
         PlacedObjectData pod = new PlacedObjectData(id, property_id, pos);
+
+        _placedObjects.Add(pod);
     }
 
     public void SendPlaceableObject(PlaceableObject selectedObject)
@@ -103,6 +101,7 @@ public class PlacedObjectManager : ScriptableObject
 
     public List<PlacedObjectData> GetPlacedObjects()
     {
+        Debug.Log("사이즈 크기는? " + _placedObjects.Count);
         return _placedObjects;
     }
 
@@ -133,18 +132,18 @@ public class PlacedObjectManager : ScriptableObject
         this._denyButton = denyButton;
     }
     
-    public void SetOkButton(GameObject button)
+    public GameObject GetOkButton()
     {
-        _SetOkButtonEvent.RaiseEvent(button);
+        return this._okButton;
     }
-    public void SetDenyButton(GameObject button)
+    public GameObject GetDenyButton()
     {
-        _SetDenyButtonEvent.RaiseEvent(button);
+        return this._denyButton;
     }
-    
-    public void SetCamera(GameObject camera)
+
+    public GameObject GetCamera()
     {
-        _SetCameraEvent.RaiseEvent(camera);
+        return this._myCamera;
     }
 
 }
