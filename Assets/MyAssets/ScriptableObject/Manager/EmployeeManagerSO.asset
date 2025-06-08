@@ -17,3 +17,6 @@ MonoBehaviour:
   _sendFirebaseEventChannelSO: {fileID: 11400000, guid: bc6e20a0b24975943a58a86b83f606ea, type: 2}
   _rerollEmployeeStatusEventChannelSO: {fileID: 11400000, guid: 8725ea3adc1d7bf4e8044adb93a14f6b, type: 2}
   _isChangedEmployeePanelEventChannelSO: {fileID: 11400000, guid: 90c535dc7bf60c74aa646d37d2a0d9ac, type: 2}
+  _onChangedCreateEvent: {fileID: 11400000, guid: 37a62bbd438ac8a4b90fad938ed1538d, type: 2}
+  _onChangedRemoveEvent: {fileID: 11400000, guid: e74f063d74b8fb54f886d93afe10d76e, type: 2}
+  _onChangeEvent: {fileID: 11400000, guid: fced9544da4ea7f458b50f765eebdc6d, type: 2}

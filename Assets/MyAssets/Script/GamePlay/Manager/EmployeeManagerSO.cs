@@ -2,6 +2,7 @@ using Firebase.Firestore;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -21,6 +22,11 @@ public class EmployeeManagerSO : ScriptableObject
 
     [SerializeField] private VoidEventChannelSO _rerollEmployeeStatusEventChannelSO;
     [SerializeField] private BoolEventChannelSO _isChangedEmployeePanelEventChannelSO;
+
+    //EmployeeObjectSystem
+    [SerializeField] private IntEventChannelSO _onChangedCreateEvent;
+    [SerializeField] private IntEventChannelSO _onChangedRemoveEvent;
+    [SerializeField] private Int2EventChannelSO _onChangeEvent;
 
     //직원 목록
     List<Employee> employees;
@@ -46,6 +52,7 @@ public class EmployeeManagerSO : ScriptableObject
             employees.RemoveAt(index);
             RemoveServerEmployee(id); //서버도 제거
             _isChangedEmployeePanelEventChannelSO.RaiseEvent(true);
+            _onChangedRemoveEvent.RaiseEvent(index);
         }
         else
         {
@@ -66,8 +73,6 @@ public class EmployeeManagerSO : ScriptableObject
         dir.Add(0);
         dir.Add(0);
 
-        Debug.Log("엄준식");
-
         PanelManager.instance.SwitchingPanel(dir);
     }
 
@@ -77,6 +82,7 @@ public class EmployeeManagerSO : ScriptableObject
         employees.Add(e);
         SelectionEmployeeSort();
         _isChangedEmployeePanelEventChannelSO.RaiseEvent(true);
+        _onChangedCreateEvent.RaiseEvent(employees.Count - 1);
     }
 
     //결제 시도하고 안되면 false
@@ -129,7 +135,10 @@ public class EmployeeManagerSO : ScriptableObject
         _rerollEmployeeStatusEventChannelSO.RaiseEvent();
     }
 
-
+    public Employee GetEmployee(int index)
+    {
+        return employees[index];
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////서버
     #region SERVER
@@ -208,6 +217,7 @@ public class EmployeeManagerSO : ScriptableObject
             this.employees.Add(employee);
         }
         _isChangedEmployeePanelEventChannelSO.RaiseEvent(true);
+        _onChangedCreateEvent.RaiseEvent(employees.Count - 1);
     }
 
     #endregion
@@ -255,6 +265,8 @@ public class EmployeeManagerSO : ScriptableObject
                     Employee tmp = employees[i];
                     employees[i] = employees[j];
                     employees[j] = tmp;
+
+                    _onChangeEvent.RaiseEvent(i, j);
                 }
             }
         }

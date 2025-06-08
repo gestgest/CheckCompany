@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Events;
 
-[CreateAssetMenu(fileName = "GetStringEventChannelSO", menuName = "ScriptableObject/Event/GetStringEventChannelSO")]
+[CreateAssetMenu(fileName = "GetStringEventChannelSO", menuName = "ScriptableObject/Event/Get/GetStringEventChannelSO")]
 public class GetStringEventChannelSO : ScriptableObject
 {
     public Func<string> _onEventRaised;
