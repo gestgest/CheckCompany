@@ -33,7 +33,7 @@ public class EmployeeObjectSystem : MonoBehaviour
     private void Start()
     {
         int n = _employeeManagerSO.GetEmployees().Count;
-        Debug.Log("수는 : "+  n);
+        //Debug.Log("수는 : "+  n);
         for (int i = 0; i < _employeeManagerSO.GetEmployees().Count; i++)
         {
             CreateEmployeeObject(i);

@@ -16735,6 +16735,7 @@ GameObject:
   m_Component:
   - component: {fileID: 602332988}
   - component: {fileID: 602332989}
+  - component: {fileID: 602332990}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -16779,6 +16780,19 @@ MonoBehaviour:
   _deleteFirebaseEventChannelSO: {fileID: 11400000, guid: 7a1f9e67b78693248b645e9629191902, type: 2}
   _sendFirebaseEventChannelSO: {fileID: 11400000, guid: bc6e20a0b24975943a58a86b83f606ea, type: 2}
   _getJSONEventChannelSO: {fileID: 11400000, guid: 273b81728c703114aa820167d4b00c02, type: 2}
+--- !u!114 &602332990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 602332987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8d13c1015d451044bae666db46e5d28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _camera: {fileID: 963194227}
 --- !u!1 &606009176
 GameObject:
   m_ObjectHideFlags: 0
@@ -46397,7 +46411,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00010264559}
+  m_AnchoredPosition: {x: 0, y: 0.0000125058905}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1770271717
@@ -54059,7 +54073,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 867920746}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.9968087
+  m_Size: 0.9999984
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
