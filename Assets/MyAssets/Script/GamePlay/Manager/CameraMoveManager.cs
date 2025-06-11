@@ -18,7 +18,7 @@ public class CameraMoveManager : MonoBehaviour
         Vector3 delta1 = Vector3.zero;
         Vector3 delta2 = Vector3.zero;
 
-        
+
         //나중에 핸들링오브젝트에 있는 카메라 이동 함수 넣을듯
         if (Input.touchCount >= 1)
         {
@@ -39,8 +39,30 @@ public class CameraMoveManager : MonoBehaviour
             {
                 _camera.transform.Translate(delta1, Space.World);
             }
-
         }
+        //
+        else if (Input.touchCount >= 2)
+        {
+            Vector3 pos1 = PlanePosition(Input.GetTouch(0).position);
+            Vector3 pos2 = PlanePosition(Input.GetTouch(1).position);
+
+            Vector3 before_pos1 = PlanePosition(Input.GetTouch(0).position - Input.GetTouch(0).deltaPosition);
+            Vector3 before_pos2 = PlanePosition(Input.GetTouch(1).position - Input.GetTouch(1).deltaPosition);
+
+            //calc
+            float zoom = Vector3.Distance(pos1, pos2) / Vector3.Distance(before_pos1, before_pos2);
+
+            //edge case
+            if(zoom == 0f || zoom > 10)
+            {
+                return;
+            }
+
+            _camera.transform.position = Vector3.LerpUnclamped(pos1, _camera.transform.position, 1 / zoom);
+
+            //rotate?
+        }
+
         //손에서 떈 경우
         else
         {
@@ -57,11 +79,19 @@ public class CameraMoveManager : MonoBehaviour
             Debug.Log(delta1);
             _camera.transform.Translate(delta1, Space.World);
         }
-
         if (Input.GetMouseButtonUp(0))
         {
             isUI = false;
         }
+
+        Vector2 mouseScroll = Input.mouseScrollDelta;
+        if (mouseScroll.y != 0)
+        {
+            Debug.Log(mouseScroll.y);
+            //up
+            _camera.transform.Translate(0, 0, mouseScroll.y * 2);
+        }
+
 #endif
 
     }
@@ -97,6 +127,8 @@ public class CameraMoveManager : MonoBehaviour
     }
 #endif
 
+
+    //터치한 포지션 카메라 기준으로 delta
     private Vector3 PlanePositionDelta(Touch touch)
     {
         //터치 움직이지 않았냐 => 안 움직였으니 delta값은 0
@@ -118,6 +150,7 @@ public class CameraMoveManager : MonoBehaviour
         return Vector3.zero;
     }
 
+    //터치한 좌표 
     private Vector3 PlanePosition(Vector2 screenPos)
     {
 
