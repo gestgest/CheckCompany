@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 4346157372599031627}
   - component: {fileID: 2548109123698556238}
   - component: {fileID: 7470040203482129869}
+  - component: {fileID: 4307885365877752005}
   m_Layer: 5
-  m_Name: EmployeeIconElement
+  m_Name: AssignEmployeeElement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66,8 +67,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: e184ab22d20b9f34f90f9b21569b7c8a, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -120,3 +121,15 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4307885365877752005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1864999889546425758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88fb0f6bb48777540850f1b3083e0940, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

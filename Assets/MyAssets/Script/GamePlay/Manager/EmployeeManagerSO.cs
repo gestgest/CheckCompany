@@ -22,6 +22,7 @@ public class EmployeeManagerSO : ScriptableObject
 
     [SerializeField] private VoidEventChannelSO _rerollEmployeeStatusEventChannelSO;
     [SerializeField] private BoolEventChannelSO _isChangedEmployeePanelEventChannelSO;
+    [SerializeField] private BoolEventChannelSO _isChangedAssignEmployeePanelEventChannelSO;
 
     //EmployeeObjectSystem
     [SerializeField] private IntEventChannelSO _onChangedCreateEvent;
