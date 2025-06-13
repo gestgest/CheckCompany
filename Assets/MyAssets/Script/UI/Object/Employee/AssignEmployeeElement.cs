@@ -2,42 +2,34 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
+//assign - 1) assigned, 2) employee 
 public class AssignEmployeeElement : MonoBehaviour
 {
-    private Employee employee;
+    protected Employee employee;
     private Image icon;
-    private bool isSelected = false;
-    private SelctedType _selctedType;
+    protected bool isSelected = false;
 
-    void SetEmployee(Employee employee, SelctedType selctedType)
+    public virtual void SetEmployee(Employee employee, bool isSelected)
     {
         this.employee = employee;
         
         //add icon
-        this._selctedType = selctedType;
+        IsSelected = isSelected;
     }
 
     //button Fucntion
-    public void SwitchingIsSelcted()
+    public virtual void SwitchingIsSelcted()
     {
         IsSelected = !IsSelected;
     }
-    public bool IsSelected
+    public virtual bool IsSelected
     {
         get { return isSelected; }
         set
         {
             isSelected = value;
-            //true : 회색, false : 그대로
-            //뒤집히는 animation?
+            //override
         }
-    }
-
-    public enum SelctedType
-    {
-        NULL = 0,
-        DEFAULT = 1,
-        SELECTED = 2,
     }
 
 }
