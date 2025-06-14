@@ -38,13 +38,11 @@ public class AssignMissionPanel : MiniPanel
     public void Init()
     {
         //this.mission = mission;
-
         _assignedEmployees.Clear();
         //assignedEmployeeSize = mission.assignedEmployeeSize
         //default => 1
         assignedEmployeeSize = 1;
         
-
         DeleteAllAssignedEmployeeElements();
         CreateAssignedEmployeeElements();
     }
@@ -66,6 +64,7 @@ public class AssignMissionPanel : MiniPanel
         //assignedEmployees => debug one ~ two employee, but later 1 instead of mission
         for (int i = 0; i < _assignedEmployeeElements.Count; i++)
         {
+            _assignedEmployeeElements[i].IsSelected = false;
             _assignedEmployeeElements[i].gameObject.SetActive(false);
         }
     }
@@ -78,9 +77,10 @@ public class AssignMissionPanel : MiniPanel
             _assignedEmployeeElements[i].gameObject.SetActive(true);
         }
 
-        for(int i = 0; i < _assignedEmployees.Count; i++)
+        for(int i = 0; i < assignedEmployeeSize; i++)
         {
-            _assignedEmployeeElements[i].SetEmployee(_assignedEmployees[i]);
+            //icon setting
+            //_assignedEmployeeElements[i].SetEmployee(_assignedEmployees[i]);
             _assignedEmployeeElements[i].IsSelected = true;
         }
     }

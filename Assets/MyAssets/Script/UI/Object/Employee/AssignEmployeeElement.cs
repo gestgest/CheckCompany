@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class AssignEmployeeElement : MonoBehaviour
 {
     protected Employee employee;
-    protected bool isSelected = false;
+    protected bool isSelected;
 
     protected Image _icon;
 
@@ -15,7 +15,7 @@ public class AssignEmployeeElement : MonoBehaviour
     //     base.SetEmployee(employee, isSelected);
     // }
 
-    private void Start()
+    private void Awake()
     {
         _icon = GetComponent<Image>();
     }

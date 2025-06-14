@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class AssignedEmployeeElement : AssignEmployeeElement
 {
     [SerializeField] private Sprite _nullIcon;
-    //isSeleceted
+    //isSeleceted, _icon
     //false : null, true : employee
     
 
