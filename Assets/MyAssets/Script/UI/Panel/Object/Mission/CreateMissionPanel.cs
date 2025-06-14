@@ -7,8 +7,8 @@ using UnityEngine.UI;
 
 public class CreateMissionPanel : Panel
 {
-    [Header("Controller")]
-    [SerializeField] private MissionManagerSO _missionControllerSO;
+    [Header("Manager")]
+    [SerializeField] private MissionManagerSO _missionManager;
 
     [SerializeField] private MissionPanel missionPanel;
 
@@ -59,7 +59,7 @@ public class CreateMissionPanel : Panel
         multiLayoutGroup.AddHeight(TODO_MISSION_HEIGHT * todo_mission_size - multiLayoutGroup.GetHeight());
         for (int i = 1; i < todo_Mission_Objects.Length; i++)
         {
-            DeleteSmallMission();
+            DeleteTodoMission();
         }
 
         todo_Mission_Objects[0].transform.GetChild(0)
@@ -92,7 +92,7 @@ public class CreateMissionPanel : Panel
         //layoutGroup.RerollScreen();
         //layoutGroup.SwitchingScreen(true);
     }
-    public void DeleteSmallMission()
+    public void DeleteTodoMission()
     {
         if (todo_mission_size <= 1)
             return;
@@ -133,18 +133,18 @@ public class CreateMissionPanel : Panel
         //대충 
 
         Mission mission = new Mission(
-            _missionControllerSO.GetAndIncrementCount(),
+            _missionManager.GetAndIncrementCount(),
             employee_type,
             title_InputField.text,
-            _missionControllerSO.GetIcon(0),
+            _missionManager.GetIcon(0),
             0, //iconID
             level,
             todo_Missions
         );
 
 
-        _missionControllerSO.AddMission(mission);
-        _missionControllerSO.SetServerMissionCount();
+        _missionManager.AddMission(mission);
+        _missionManager.SetServerMissionCount();
         
 
         missionPanel.CreateMissionElementObject(mission); //
@@ -153,6 +153,14 @@ public class CreateMissionPanel : Panel
         //초기화
         Init();
         GamePanelManager.instance.SwitchingPanelFromInt(1); //missionPanel로 전환
+    }
+
+    public void SwitchingAssignEmployeePanel()
+    {
+        AssignMissionPanel p = panels[0].GetComponent<AssignMissionPanel>();
+
+        panels[0].OnPanel();
+        p.Init();
     }
 
 }

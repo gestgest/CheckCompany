@@ -10,18 +10,6 @@ public class AssignedEmployeeElement : AssignEmployeeElement
     //isSeleceted
     //false : null, true : employee
     
-    private Image _icon;
-
-    
-    // public override void SetEmployee(Employee employee, bool isSelected)
-    // {
-    //     base.SetEmployee(employee, isSelected);
-    // }
-    
-    private void Start()
-    {
-        _icon = GetComponent<Image>();
-    }
 
     public override void SwitchingIsSelcted()
     {
@@ -30,7 +18,6 @@ public class AssignedEmployeeElement : AssignEmployeeElement
             IsSelected = false;
         }
         //if isSelected is false, nothing happen
-        
     }
 
     public override bool IsSelected

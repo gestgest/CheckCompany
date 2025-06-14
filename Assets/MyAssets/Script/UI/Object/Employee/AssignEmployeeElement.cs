@@ -6,8 +6,24 @@ using UnityEngine.UI;
 public class AssignEmployeeElement : MonoBehaviour
 {
     protected Employee employee;
-    private Image icon;
     protected bool isSelected = false;
+
+    protected Image _icon;
+
+    // public override void SetEmployee(Employee employee, bool isSelected)
+    // {
+    //     base.SetEmployee(employee, isSelected);
+    // }
+
+    private void Start()
+    {
+        _icon = GetComponent<Image>();
+    }
+
+    public void SetEmployee(Employee employee)
+    {
+        this.employee = employee;
+    }
 
     public virtual void SetEmployee(Employee employee, bool isSelected)
     {

@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class AssignMissionPanel : MiniPanel
 {
-    private TextMeshProUGUI title;
-    [SerializeField] private GameObject _assignEmployeeElementPrefab;
-    [SerializeField] private Transform _selectedEmployeeParent;
+    [SerializeField] private GameObject _assignableEmployeeElementPrefab; //employeess
     [SerializeField] private Transform _defaultEmployeeParent;
     
     [SerializeField] private EmployeeManagerSO _employeeManagerSO;
@@ -14,8 +12,14 @@ public class AssignMissionPanel : MiniPanel
     [Header("Listening to Events")]
     [SerializeField] private BoolEventChannelSO _isChangedAssignEmployeePanelEventChannelSO;
 
-    private List<AssignEmployeeElement> _assignEmployeeElements = new List<AssignEmployeeElement>();
-    private Mission mission;
+    //pooling employee max count = 4
+    [SerializeField] private List<AssignEmployeeElement> _assignedEmployeeElements;
+    [SerializeField] private List<Employee> _assignedEmployees = new List<Employee>();
+    private List<AssignEmployeeElement> _assignableEmployeeElements = new List<AssignEmployeeElement>();
+
+    private int assignedEmployeeSize;
+
+    //private Mission mission;
     private bool _isChanged = true;
 
 
@@ -29,35 +33,78 @@ public class AssignMissionPanel : MiniPanel
     {
         _isChangedAssignEmployeePanelEventChannelSO._onEventRaised -= SetIsChanged;
     }
+
     
+    public void Init()
+    {
+        //this.mission = mission;
+
+        _assignedEmployees.Clear();
+        //assignedEmployeeSize = mission.assignedEmployeeSize
+        //default => 1
+        assignedEmployeeSize = 1;
+        
+
+        DeleteAllAssignedEmployeeElements();
+        CreateAssignedEmployeeElements();
+    }
+
+
     void OnEnable()
     {
+
+        //employees => if employees changed
         if (_isChanged)
         {
-            DeleteAllAssignEmployeeElements();
-            CreateAssignEmployeeElements();
+            DeleteAllAssignableEmployeeElements();
+            CreateAssignableEmployeeElements();
         }
     }
-    //자작 직원 icons
 
-    void DeleteAllAssignEmployeeElements()
+    void DeleteAllAssignedEmployeeElements()
     {
-        //default : not select employee
-        foreach (AssignEmployeeElement element in _assignEmployeeElements)
+        //assignedEmployees => debug one ~ two employee, but later 1 instead of mission
+        for (int i = 0; i < _assignedEmployeeElements.Count; i++)
+        {
+            _assignedEmployeeElements[i].gameObject.SetActive(false);
+        }
+    }
+
+    void CreateAssignedEmployeeElements()
+    {
+        //assignedEmployees => debug one ~ two employee, but later 1 instead of mission
+        for (int i = 0; i < assignedEmployeeSize; i++)
+        {
+            _assignedEmployeeElements[i].gameObject.SetActive(true);
+        }
+
+        for(int i = 0; i < _assignedEmployees.Count; i++)
+        {
+            _assignedEmployeeElements[i].SetEmployee(_assignedEmployees[i]);
+            _assignedEmployeeElements[i].IsSelected = true;
+        }
+    }
+
+
+    void DeleteAllAssignableEmployeeElements()
+    {
+        foreach (AssignEmployeeElement element in _assignableEmployeeElements)
         {
             Destroy(element.gameObject);
         }
         
-        _assignEmployeeElements.Clear();
+        _assignableEmployeeElements.Clear();
     }
-    void CreateAssignEmployeeElements()
+
+    
+    void CreateAssignableEmployeeElements()
     {
         //default : not select employee
         foreach (Employee e in _employeeManagerSO.GetEmployees())
         {
-            GameObject obj = Instantiate(_assignEmployeeElementPrefab, _defaultEmployeeParent);
+            GameObject obj = Instantiate(_assignableEmployeeElementPrefab, _defaultEmployeeParent);
             
-            _assignEmployeeElements.Add(obj.GetComponent<AssignEmployeeElement>());
+            _assignableEmployeeElements.Add(obj.GetComponent<AssignEmployeeElement>());
         }
     }
 

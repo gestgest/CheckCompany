@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 4346157372599031627}
   - component: {fileID: 2548109123698556238}
   - component: {fileID: 7470040203482129869}
-  - component: {fileID: 4307885365877752005}
+  - component: {fileID: 9167234941921590778}
   m_Layer: 5
-  m_Name: AssignEmployeeElement
+  m_Name: AssignedEmployeeElement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -121,8 +121,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4307885365877752005}
-        m_TargetAssemblyTypeName: AssignEmployeeElement, Assembly-CSharp
+      - m_Target: {fileID: 9167234941921590778}
+        m_TargetAssemblyTypeName: AssignedEmployeeElement, Assembly-CSharp
         m_MethodName: SwitchingIsSelcted
         m_Mode: 1
         m_Arguments:
@@ -133,7 +133,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &4307885365877752005
+--- !u!114 &9167234941921590778
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -142,6 +142,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1864999889546425758}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88fb0f6bb48777540850f1b3083e0940, type: 3}
+  m_Script: {fileID: 11500000, guid: ef034c5baec5605448347403a8710863, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _nullIcon: {fileID: 21300000, guid: 5cb832165cebecd46a73c7107316b85d, type: 3}
