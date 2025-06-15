@@ -14,6 +14,9 @@ public class Employee
     private string employee_name;
     private int age;
 
+    //asset
+    private int assetID;
+
     private int stamina = 100; //체력 => 평균이 100
     private int max_stamina = 100; //최대 체력 => 평균이 100
     private int mental = 100; //멘탈
@@ -37,22 +40,47 @@ public class Employee
     //Controller Function
     private UnityAction _changedEmployeeStatus;
     //private UnityAction banCheckTodoMission;
-    
+
     public const int MAX_MISSION_SIZE = 5;
     public const int MAX_TODO_MISSION_SIZE = 7; //소미션
 
 
-
     #region PROPERTY
-    public int ID { get { return id; } set { id = value; } }
-    public EmployeeSO _EmployeeSO { get { return employeeSO; } set { employeeSO = value; } }
-    public string Name { get { return employee_name; } set { employee_name = value; } }
-    public int Age { get { return age; } set { age = value; } }
-    
-    /*
-    public int Stamina 
+
+    public int ID
     {
-        get { 
+        get { return id; }
+        set { id = value; }
+    }
+
+    public EmployeeSO _EmployeeSO
+    {
+        get { return employeeSO; }
+        set { employeeSO = value; }
+    }
+
+    public string Name
+    {
+        get { return employee_name; }
+        set { employee_name = value; }
+    }
+
+    public int Age
+    {
+        get { return age; }
+        set { age = value; }
+    }
+
+    public int AssetID
+    {
+        get { return assetID; }
+        set { assetID = value; }
+    }
+
+    /*
+    public int Stamina
+    {
+        get {
             return stamina;
         }
         set
@@ -64,6 +92,7 @@ public class Employee
         }
     }
     */
+
     public int Stamina => stamina;
 
     public void SetStamina(int value, bool toServer = true)
@@ -78,25 +107,76 @@ public class Employee
             //banCheckTodoMission.Invoke(); 미션 체력 딸리는지 체크
         }
 
-        
-        if(toServer)
+
+        if (toServer)
             _setServerStamina.Invoke(GameManager.instance.Nickname, id, stamina);
     }
 
 
-    public int Max_Stamina { get { return max_stamina; } set { max_stamina = value; } }
-    public int Mental { get { return mental; } set { mental = value; if (mental > max_mental) mental = max_mental; } }
-    public int Max_Mental { get { return max_mental; } set { max_mental = value; } }
-    public int CareerPeriod { get { return careerPeriod; } set { careerPeriod = value; } }
-    public int Salary { get { return salary; } set { salary = value; } }
-    public EmployeeRank _Rank { get { return rank; } set { rank = value; } }
-    public WorkTime _WorkTime { get { return workTime; } set { workTime = value; } }
-    public Mission GetMission(int index) { return missions[index]; }
-    public bool Get_TodoMission_IsDone(int index) { return missions[0].GetTodoMission(index).IsDone; }
-    public bool IsEmployee { get { return isEmployee; } set { isEmployee = value; } }
-    
+    public int Max_Stamina
+    {
+        get { return max_stamina; }
+        set { max_stamina = value; }
+    }
+
+    public int Mental
+    {
+        get { return mental; }
+        set
+        {
+            mental = value;
+            if (mental > max_mental) mental = max_mental;
+        }
+    }
+
+    public int Max_Mental
+    {
+        get { return max_mental; }
+        set { max_mental = value; }
+    }
+
+    public int CareerPeriod
+    {
+        get { return careerPeriod; }
+        set { careerPeriod = value; }
+    }
+
+    public int Salary
+    {
+        get { return salary; }
+        set { salary = value; }
+    }
+
+    public EmployeeRank _Rank
+    {
+        get { return rank; }
+        set { rank = value; }
+    }
+
+    public WorkTime _WorkTime
+    {
+        get { return workTime; }
+        set { workTime = value; }
+    }
+
+    public Mission GetMission(int index)
+    {
+        return missions[index];
+    }
+
+    public bool Get_TodoMission_IsDone(int index)
+    {
+        return missions[0].GetTodoMission(index).IsDone;
+    }
+
+    public bool IsEmployee
+    {
+        get { return isEmployee; }
+        set { isEmployee = value; }
+    }
+
     #endregion
-    
+
     //미션 => 5개
     /// <summary>생성자 </summary>
     /// <param name="employeeManager"> </param>
@@ -118,7 +198,10 @@ public class Employee
         //banCheckTodoMission += employeeManager.BanCheckTodoMission;
     }
 
-    public int GetMissionSize() { return mission_size; }
+    public int GetMissionSize()
+    {
+        return mission_size;
+    }
 
     public void AddMission(Mission m)
     {
@@ -137,6 +220,7 @@ public class Employee
         //if (mission_size == 1)
         //missions[0].SetAchievementAllFalse();
     }
+
     public void RemoveMission(int index)
     {
         string nickName = GameManager.instance.Nickname;
@@ -147,12 +231,15 @@ public class Employee
             if (missions[i] != null)
                 _addServerMission.Invoke(missions[i], nickName, ID);
         }
+
         mission_size--;
     }
 
     //requirementEmployeeType
 
     #region SERVER
+
+    //
     public void SetAllMissionToServer(string nickname, int id)
     {
         _removeAllServerMissions.Invoke(nickname, id); //다 제거하고
@@ -162,11 +249,12 @@ public class Employee
             {
                 break;
             }
+
             _addServerMission.Invoke(missions[i], nickname, id); //미션추가
         }
     }
 
-    //JSON으로 만들기
+    //JSON
     public Dictionary<string, object> EmployeeToJSON()
     {
         Dictionary<string, float> _worktime = new Dictionary<string, float>
@@ -180,10 +268,11 @@ public class Employee
             //{ "id", ID },
             { "name", Name },
             { "age", Age },
-            {"stamina", Stamina },
-            {"max_stamina", Max_Stamina },
-            {"mental", Mental },
-            {"max_mental", Max_Mental },
+            { "assetID", AssetID },
+            { "stamina", Stamina },
+            { "max_stamina", Max_Stamina },
+            { "mental", Mental },
+            { "max_mental", Max_Mental },
             { "careerPeriod", CareerPeriod },
             { "rank", _Rank },
             { "salary", Salary },
@@ -206,6 +295,9 @@ public class Employee
 
         Dictionary<string, object> keyValues = (Dictionary<string, object>)employee.Value;
         Age = Convert.ToInt32(keyValues["age"]);
+
+        AssetID = Convert.ToInt32(keyValues["assetID"]);
+
         SetStamina(Convert.ToInt32(keyValues["stamina"]), false);
         Max_Stamina = Convert.ToInt32(keyValues["max_stamina"]);
         Mental = Convert.ToInt32(keyValues["mental"]);
@@ -235,7 +327,6 @@ public class Employee
     }
 
     #endregion
-
 }
 
 public enum EmployeeType
@@ -256,6 +347,7 @@ public struct WorkTime
 {
     public float start;
     public float end;
+
     public WorkTime(float start, float end)
     {
         this.start = start;

@@ -13,6 +13,7 @@ public class EmployeeManagerSO : ScriptableObject
 {
     [Header("Manager")]
     [SerializeField] private RecruitmentManagerSO _recruitmentManager;
+    [SerializeField] private EmployeeAssetsSO _employeeAssetsSO;
 
     [Space]
 

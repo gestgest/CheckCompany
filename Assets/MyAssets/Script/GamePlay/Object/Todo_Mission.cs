@@ -5,7 +5,6 @@ using UnityEngine;
 [FirestoreData]
 public class Todo_Mission
 {
-    [FirestoreProperty]
     public string Title { get; set; }
     [FirestoreProperty]
     public bool IsDone { get; set; }

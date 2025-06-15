@@ -16,6 +16,8 @@ public class Mission
     private int level; //easy, medium, hard, very hard
     private List<Todo_Mission> todo_missions;
 
+    private List<int> refEmployees;
+
     //private bool isDone = false; //전체 다 완료했는지 => 그냥 GetIsDone
     private Date doneDate;
 
@@ -23,6 +25,7 @@ public class Mission
     {
         doneDate = new Date();
         this.todo_missions = new List<Todo_Mission>();
+        refEmployees = new List<int>();
     }
 
     /// <summary> 서버에서 가져오는 ?</summary>
@@ -33,7 +36,7 @@ public class Mission
     /// <param name="level"></param>
     /// <param name="todo_missions"></param>
     public Mission(int id, int _type, string _name, Sprite icon, int iconID, int level,
-        List<Todo_Mission> todo_missions)
+        List<Todo_Mission> todo_missions, List<int> refEmployees)
     {
         //this.todo_missions = new List<Todo_Mission>();
 
@@ -46,6 +49,7 @@ public class Mission
         this.level = level;
 
         this.todo_missions = todo_missions;
+        this.refEmployees = refEmployees;
         //for (int i = 0; i < todo_missions.Count; i++)
         //{
         //    this.todo_missions.Add(todo_missions[i]);
@@ -145,6 +149,8 @@ public class Mission
         return doneDate;
     }
 
+    public List<int> RefEmployees { get; set; }
+
     //서버 보내기
     public Dictionary<string, object> MissionToJSON()
     {
@@ -155,6 +161,7 @@ public class Mission
             { "icon", iconID },
             { "level", level },
             { "todo_missions", todo_missions }, //배열임
+            {"refEmployees", refEmployees}
         };
 
         if (GetIsDone())
@@ -163,9 +170,6 @@ public class Mission
                 "doneDate", DateToJSON()
             );
         }
-
-        ;
-
         return result;
     }
 
@@ -207,6 +211,8 @@ public class Mission
             this.doneDate.Month = Convert.ToInt32(doneDate["month"]);
             this.doneDate.Day = Convert.ToInt32(doneDate["day"]);
         }
+
+        refEmployees = data["refEmployee"] as List<int>;
     }
 }
 

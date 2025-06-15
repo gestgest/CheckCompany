@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 //assign - 1) assigned, 2) employee 
@@ -9,6 +10,8 @@ public class AssignEmployeeElement : MonoBehaviour
     protected bool isSelected;
 
     protected Image _icon;
+
+    [SerializeField] protected IntEventChannelSO _RemoveRefEmployeeID; 
 
     // public override void SetEmployee(Employee employee, bool isSelected)
     // {
@@ -20,9 +23,10 @@ public class AssignEmployeeElement : MonoBehaviour
         _icon = GetComponent<Image>();
     }
 
-    public void SetEmployee(Employee employee)
+    public void SetEmployee(Employee employee, Sprite icon)
     {
         this.employee = employee;
+        _icon.sprite = icon;
     }
 
     public virtual void SetEmployee(Employee employee, bool isSelected)

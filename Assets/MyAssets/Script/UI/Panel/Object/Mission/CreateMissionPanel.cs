@@ -10,6 +10,7 @@ public class CreateMissionPanel : Panel
     [Header("Manager")]
     [SerializeField] private MissionManagerSO _missionManager;
 
+    [Space]
     [SerializeField] private MissionPanel missionPanel;
 
     [SerializeField] private TMP_InputField title_InputField;
@@ -18,7 +19,11 @@ public class CreateMissionPanel : Panel
     [SerializeField] private MultiLayoutGroup multiLayoutGroup; //제일 아래 Layout => inputList
     [SerializeField] private Toggle[] toggles;
 
-
+    [Space]
+    [Header("Listening to Events")]
+    [SerializeField] private IntEventChannelSO _AddRefEmployeeID;  
+    [SerializeField] private IntEventChannelSO _RemoveRefEmployeeID;  
+    
     //이미지? => 정말 나중에 만들 예정 => 지금은 그냥 0으로 default
     private int employee_type; //이걸로 dev, QA인지 분류할 수 있지 않을까
     private int level;
@@ -27,13 +32,22 @@ public class CreateMissionPanel : Panel
 
     private static int TODO_MISSION_HEIGHT = 30;
 
-    
+    private List<int> refEmployees;
 
 
     protected void OnEnable()
     {
         if(!isFirst)
             Init();
+        
+        _AddRefEmployeeID._onEventRaised += AddRefEmployeeID;
+        _RemoveRefEmployeeID._onEventRaised += RemoveRefEmployeeID;
+    }
+
+    protected void OnDisable()
+    {
+        _AddRefEmployeeID._onEventRaised -= AddRefEmployeeID;
+        _RemoveRefEmployeeID._onEventRaised -= RemoveRefEmployeeID;
     }
 
     protected override void Start()
@@ -46,6 +60,7 @@ public class CreateMissionPanel : Panel
     void Init()
     {
         multiLayoutGroup.Init();
+        refEmployees = new List<int>();
 
         title_InputField.text = "";
 
@@ -139,13 +154,12 @@ public class CreateMissionPanel : Panel
             _missionManager.GetIcon(0),
             0, //iconID
             level,
-            todo_Missions
+            todo_Missions,
+            refEmployees
         );
-
 
         _missionManager.AddMission(mission);
         _missionManager.SetServerMissionCount();
-        
 
         missionPanel.CreateMissionElementObject(mission); //
         //missionPanel.OnPanel(); => 이거 자체가 서브 미션 Panel이라 전환이 안됨
@@ -161,6 +175,20 @@ public class CreateMissionPanel : Panel
 
         panels[0].OnPanel();
         p.Init();
+    }
+
+    private void AddRefEmployeeID(int id)
+    {
+        refEmployees.Add(id);
+    }
+
+    private void RemoveRefEmployeeID(int id)
+    {
+        for (int i = 0; i < refEmployees.Count; i++)
+        {
+            if(id == refEmployees[i])
+                refEmployees.RemoveAt(i);   
+        }
     }
 
 }

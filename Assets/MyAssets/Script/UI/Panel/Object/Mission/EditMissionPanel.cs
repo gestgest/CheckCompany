@@ -14,7 +14,6 @@ public class EditMissionPanel : Panel
     
     [SerializeField] private TMP_InputField title;
 
-
     
     //라디오버튼 그룹 두개
     //ㄴ 나중에 SetMission때 활용
@@ -33,6 +32,9 @@ public class EditMissionPanel : Panel
 
     private int mission_id;
     private static int TODO_MISSION_HEIGHT = 30;
+    
+    private List<int> refEmployees;
+
 
     //나중에 직원도 넣을 예정
 
@@ -80,6 +82,9 @@ public class EditMissionPanel : Panel
             todo_mission_textObject[i].transform.GetChild(0).GetComponent<TMP_InputField>().text =
                 _todo_missions[i].Title;
         }
+        
+        //refEmployees
+        refEmployees = mission.RefEmployees;
     }
 
     List<Todo_Mission> Get_Todo_Missions()
@@ -139,7 +144,8 @@ public class EditMissionPanel : Panel
             _missionControllerSO.GetIcon(0),
             0, //iconID
             levelGroup.GetIndex(),
-            Get_Todo_Missions()
+            Get_Todo_Missions(),
+            refEmployees
         );
 
         _missionControllerSO.SetServerMission(mission);

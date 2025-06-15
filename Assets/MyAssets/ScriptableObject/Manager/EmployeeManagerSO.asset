@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: EmployeeManagerSO
   m_EditorClassIdentifier: 
   _recruitmentManager: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
+  _employeeAssetsSO: {fileID: 11400000, guid: f04a1cb7eb31a8747915a762042df88c, type: 2}
   _deleteFirebaseEventChannelSO: {fileID: 11400000, guid: 7a1f9e67b78693248b645e9629191902, type: 2}
   _sendFirebaseEventChannelSO: {fileID: 11400000, guid: bc6e20a0b24975943a58a86b83f606ea, type: 2}
   _rerollEmployeeStatusEventChannelSO: {fileID: 11400000, guid: 8725ea3adc1d7bf4e8044adb93a14f6b, type: 2}
