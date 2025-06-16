@@ -2185,6 +2185,7 @@ MonoBehaviour:
   - {fileID: 1645881918}
   hasMini: 1
   _missionManager: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
+  _createMissionManager: {fileID: 11400000, guid: 25cba49b90bb7aa4e9302301c8961b1c, type: 2}
   missionPanel: {fileID: 248255120}
   title_InputField: {fileID: 2006799269}
   todo_Mission_Objects:
@@ -2199,8 +2200,6 @@ MonoBehaviour:
   toggles:
   - {fileID: 540816421}
   - {fileID: 258212149}
-  _AddRefEmployeeID: {fileID: 11400000, guid: a8293ea419198474e984d7683370aee6, type: 2}
-  _RemoveRefEmployeeID: {fileID: 11400000, guid: 1ef82531c8a496b49923c1828b34d255, type: 2}
 --- !u!1 &68360739
 GameObject:
   m_ObjectHideFlags: 0
@@ -6518,9 +6517,9 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 67827085}
+      - m_Target: {fileID: 11500000, guid: 51c8f18b573e3a6428872ea20fcfbbfa, type: 3}
         m_TargetAssemblyTypeName: CreateMissionPanel, Assembly-CSharp
-        m_MethodName: SetLevel
+        m_MethodName: 
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6616,9 +6615,9 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 67827085}
+      - m_Target: {fileID: 11500000, guid: 51c8f18b573e3a6428872ea20fcfbbfa, type: 3}
         m_TargetAssemblyTypeName: CreateMissionPanel, Assembly-CSharp
-        m_MethodName: SetLevel
+        m_MethodName: 
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9509,9 +9508,9 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 67827085}
+      - m_Target: {fileID: 11500000, guid: 51c8f18b573e3a6428872ea20fcfbbfa, type: 3}
         m_TargetAssemblyTypeName: CreateMissionPanel, Assembly-CSharp
-        m_MethodName: SetLevel
+        m_MethodName: 
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -15160,7 +15159,19 @@ MonoBehaviour:
   m_Group: {fileID: 1804115472}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11500000, guid: 51c8f18b573e3a6428872ea20fcfbbfa, type: 3}
+        m_TargetAssemblyTypeName: UnityEditor.MonoScript, UnityEditor.CoreModule
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
 --- !u!1001 &541979387
 PrefabInstance:
@@ -15519,7 +15530,19 @@ MonoBehaviour:
   m_Group: {fileID: 1804115472}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11500000, guid: 51c8f18b573e3a6428872ea20fcfbbfa, type: 3}
+        m_TargetAssemblyTypeName: UnityEditor.MonoScript, UnityEditor.CoreModule
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1 &561588737
 GameObject:
@@ -34010,7 +34033,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5243127675918490630, guid: ef3f4c91cf9cae249b1c6ed3fbf29e87, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8037801010729141495, guid: ef3f4c91cf9cae249b1c6ed3fbf29e87, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -40749,9 +40772,9 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 67827085}
+      - m_Target: {fileID: 11500000, guid: 51c8f18b573e3a6428872ea20fcfbbfa, type: 3}
         m_TargetAssemblyTypeName: CreateMissionPanel, Assembly-CSharp
-        m_MethodName: SetLevel
+        m_MethodName: 
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -43975,7 +43998,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1645881914
 RectTransform:
   m_ObjectHideFlags: 0
@@ -44054,8 +44077,10 @@ MonoBehaviour:
   background: {fileID: 1273500455}
   _assignableEmployeeElementPrefab: {fileID: 1864999889546425758, guid: 91feac0353b1145419a8fc048cb0269e, type: 3}
   _defaultEmployeeParent: {fileID: 1799665681}
-  _employeeManagerSO: {fileID: 11400000, guid: 6a695d970d94e0a4bb81e3e309e1fadf, type: 2}
-  _isChangedAssignEmployeePanelEventChannelSO: {fileID: 11400000, guid: 14d3b307eb2516f4eb69c72c25576ec6, type: 2}
+  _employeeManager: {fileID: 11400000, guid: 6a695d970d94e0a4bb81e3e309e1fadf, type: 2}
+  _createMissionManager: {fileID: 11400000, guid: 25cba49b90bb7aa4e9302301c8961b1c, type: 2}
+  _isChangedEmployeeEventChannelSO: {fileID: 11400000, guid: 90c535dc7bf60c74aa646d37d2a0d9ac, type: 2}
+  _changedAssignedEmployeeEventChannel: {fileID: 11400000, guid: bbcb714acc99da748ac825e9d5476609, type: 2}
   _assignedEmployeeElements:
   - {fileID: 2106466679}
   - {fileID: 1697030340}
@@ -45172,7 +45197,19 @@ MonoBehaviour:
   m_Group: {fileID: 1804115472}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11500000, guid: 51c8f18b573e3a6428872ea20fcfbbfa, type: 3}
+        m_TargetAssemblyTypeName: UnityEditor.MonoScript, UnityEditor.CoreModule
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1 &1685123449
 GameObject:
@@ -54575,7 +54612,19 @@ MonoBehaviour:
   m_Group: {fileID: 1804115472}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11500000, guid: 51c8f18b573e3a6428872ea20fcfbbfa, type: 3}
+        m_TargetAssemblyTypeName: UnityEditor.MonoScript, UnityEditor.CoreModule
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1 &2038719168
 GameObject:

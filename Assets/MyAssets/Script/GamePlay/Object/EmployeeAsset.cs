@@ -7,5 +7,9 @@ public class EmployeeAsset
     [SerializeField] private GameObject _prefab;
     [SerializeField] private Sprite _icon;
     
+    public Sprite GetIcon()
+    {
+        return _icon;
+    }
     
 }

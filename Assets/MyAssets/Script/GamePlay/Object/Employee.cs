@@ -293,37 +293,45 @@ public class Employee
         ID = int.Parse(employee.Key);
         //_EmployeeSO는 그 전에 Recruitment의 JSONToRecruitment함수 에서 함
 
-        Dictionary<string, object> keyValues = (Dictionary<string, object>)employee.Value;
-        Age = Convert.ToInt32(keyValues["age"]);
+        Dictionary<string, object> keyValues = employee.Value as Dictionary<string, object>;
 
-        AssetID = Convert.ToInt32(keyValues["assetID"]);
+        Age = ConvertJSON.SafeGet<int>(keyValues, "age", 20);
+        AssetID = ConvertJSON.SafeGet<int>(keyValues, "assetID", 0);
+        SetStamina(ConvertJSON.SafeGet<int>(keyValues, "stamina", 100), false);
+        Max_Stamina = ConvertJSON.SafeGet<int>(keyValues, "max_stamina", 100);
+        Mental = ConvertJSON.SafeGet<int>(keyValues, "mental", 100);
+        Max_Mental = ConvertJSON.SafeGet<int>(keyValues, "max_mental", 100);
+        CareerPeriod = ConvertJSON.SafeGet<int>(keyValues, "careerPeriod", 0);
+        Name = ConvertJSON.SafeGet<string>(keyValues, "name", "지철");
+        _Rank = ConvertJSON.SafeGet<EmployeeRank>(keyValues, "rank", EmployeeRank.INTERN);
+        Salary = ConvertJSON.SafeGet<int>(keyValues, "salary", 0);
+        IsEmployee = ConvertJSON.SafeGet<bool>(keyValues, "isEmployee", true);
 
-        SetStamina(Convert.ToInt32(keyValues["stamina"]), false);
-        Max_Stamina = Convert.ToInt32(keyValues["max_stamina"]);
-        Mental = Convert.ToInt32(keyValues["mental"]);
-        Max_Mental = Convert.ToInt32(keyValues["max_mental"]);
-        CareerPeriod = Convert.ToInt32(keyValues["careerPeriod"]);
-        Name = keyValues["name"].ToString();
-        _Rank = (EmployeeRank)Convert.ToInt32(keyValues["rank"]);
-        Salary = Convert.ToInt32(keyValues["salary"]);
-        //IsEmployee = (bool)keyValues["isEmployee"];
-
-        Dictionary<string, object> worktime = (Dictionary<string, object>)keyValues["worktime"];
-        _WorkTime = new WorkTime(Convert.ToSingle(worktime["start"]), Convert.ToSingle(worktime["end"]));
+        Dictionary<string, object> worktime = ConvertJSON.SafeGet<Dictionary<string, object>>(keyValues, "worktime", null);
+        if (worktime != null)
+        {
+            float start = ConvertJSON.SafeGet<float>(worktime, "start", 9.0f);
+            float end = ConvertJSON.SafeGet<float>(worktime, "end", 18.0f);
+            _WorkTime = new WorkTime(start, end);
+        }
 
         if (keyValues.TryGetValue("missions", out object output))
         {
             List<object> missions_tmp = output as List<object>;
-
-            for (int i = 0; i < missions_tmp.Count; i++)
+            if (missions_tmp != null)
             {
-                Dictionary<string, object> mission_map = (Dictionary<string, object>)missions_tmp[i];
-                Mission mission = new Mission();
-                mission.JSONToMission(mission_map);
-                AddMission(mission);
+                for (int i = 0; i < missions_tmp.Count; i++)
+                {
+                    Dictionary<string, object> mission_map = missions_tmp[i] as Dictionary<string, object>;
+                    if (mission_map != null)
+                    {
+                        Mission mission = new Mission();
+                        mission.JSONToMission(mission_map);
+                        AddMission(mission);
+                    }
+                }
             }
         }
-        //세팅?
     }
 
     #endregion

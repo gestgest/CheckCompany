@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
@@ -9,6 +8,7 @@ public class CreateMissionPanel : Panel
 {
     [Header("Manager")]
     [SerializeField] private MissionManagerSO _missionManager;
+    [SerializeField] private CreateMissionManagerSO _createMissionManager;
 
     [Space]
     [SerializeField] private MissionPanel missionPanel;
@@ -19,35 +19,18 @@ public class CreateMissionPanel : Panel
     [SerializeField] private MultiLayoutGroup multiLayoutGroup; //제일 아래 Layout => inputList
     [SerializeField] private Toggle[] toggles;
 
-    [Space]
-    [Header("Listening to Events")]
-    [SerializeField] private IntEventChannelSO _AddRefEmployeeID;  
-    [SerializeField] private IntEventChannelSO _RemoveRefEmployeeID;  
-    
-    //이미지? => 정말 나중에 만들 예정 => 지금은 그냥 0으로 default
-    private int employee_type; //이걸로 dev, QA인지 분류할 수 있지 않을까
-    private int level;
     private int todo_mission_size;
     private bool isFirst = true;
 
     private static int TODO_MISSION_HEIGHT = 30;
 
-    private List<int> refEmployees;
 
 
     protected void OnEnable()
     {
-        if(!isFirst)
+        if (!isFirst)
             Init();
-        
-        _AddRefEmployeeID._onEventRaised += AddRefEmployeeID;
-        _RemoveRefEmployeeID._onEventRaised += RemoveRefEmployeeID;
-    }
-
-    protected void OnDisable()
-    {
-        _AddRefEmployeeID._onEventRaised -= AddRefEmployeeID;
-        _RemoveRefEmployeeID._onEventRaised -= RemoveRefEmployeeID;
+        _createMissionManager.Init();
     }
 
     protected override void Start()
@@ -60,7 +43,6 @@ public class CreateMissionPanel : Panel
     void Init()
     {
         multiLayoutGroup.Init();
-        refEmployees = new List<int>();
 
         title_InputField.text = "";
 
@@ -84,16 +66,6 @@ public class CreateMissionPanel : Panel
         //layoutGroup.SwitchingScreen(true);
     }
 
-
-    public void SetLevel(int level)
-    {
-        this.level = level;
-    }
-
-    public void SetEmployeeType(int employee_type)
-    {
-        this.employee_type = employee_type;
-    }
     
     //소미션 추가하는 버튼 함수 (최대 7번)
     public void AddSmallMission()
@@ -144,19 +116,10 @@ public class CreateMissionPanel : Panel
             }
             todo_Missions.Add(new Todo_Mission(text));
         }
-        
+
         //대충 
 
-        Mission mission = new Mission(
-            _missionManager.GetAndIncrementCount(),
-            employee_type,
-            title_InputField.text,
-            _missionManager.GetIcon(0),
-            0, //iconID
-            level,
-            todo_Missions,
-            refEmployees
-        );
+        Mission mission = _createMissionManager.CreateMission(title_InputField.text, todo_Missions);
 
         _missionManager.AddMission(mission);
         _missionManager.SetServerMissionCount();
@@ -175,20 +138,6 @@ public class CreateMissionPanel : Panel
 
         panels[0].OnPanel();
         p.Init();
-    }
-
-    private void AddRefEmployeeID(int id)
-    {
-        refEmployees.Add(id);
-    }
-
-    private void RemoveRefEmployeeID(int id)
-    {
-        for (int i = 0; i < refEmployees.Count; i++)
-        {
-            if(id == refEmployees[i])
-                refEmployees.RemoveAt(i);   
-        }
     }
 
 }

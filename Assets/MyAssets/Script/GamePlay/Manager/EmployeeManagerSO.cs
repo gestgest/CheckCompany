@@ -117,6 +117,11 @@ public class EmployeeManagerSO : ScriptableObject
         return employees;
     }
 
+    public Sprite GetIcon(int asset_id)
+    {
+        return _employeeAssetsSO.GetAsset(asset_id).GetIcon();
+    }
+
     #endregion
     public void AddStamina(int add_value)
     {

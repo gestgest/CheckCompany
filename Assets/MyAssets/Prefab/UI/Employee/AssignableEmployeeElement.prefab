@@ -145,5 +145,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3512ce445967a242bb575b31854ea98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _RemoveRefEmployeeID: {fileID: 11400000, guid: 1ef82531c8a496b49923c1828b34d255, type: 2}
-  _AddRefEmployeeID: {fileID: 11400000, guid: a8293ea419198474e984d7683370aee6, type: 2}
+  _createMissionManager: {fileID: 11400000, guid: 25cba49b90bb7aa4e9302301c8961b1c, type: 2}

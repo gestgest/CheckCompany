@@ -11,12 +11,13 @@ public class AssignEmployeeElement : MonoBehaviour
 
     protected Image _icon;
 
-    [SerializeField] protected IntEventChannelSO _RemoveRefEmployeeID; 
+    [SerializeField] protected CreateMissionManagerSO _createMissionManager;
 
-    // public override void SetEmployee(Employee employee, bool isSelected)
-    // {
-    //     base.SetEmployee(employee, isSelected);
-    // }
+
+    public void SetEmployee(Employee employee)
+    {
+        this.employee = employee;
+    }
 
     private void Awake()
     {
@@ -25,7 +26,7 @@ public class AssignEmployeeElement : MonoBehaviour
 
     public void SetEmployee(Employee employee, Sprite icon)
     {
-        this.employee = employee;
+        SetEmployee(employee);
         _icon.sprite = icon;
     }
 
@@ -40,7 +41,7 @@ public class AssignEmployeeElement : MonoBehaviour
     //button Fucntion
     public virtual void SwitchingIsSelcted()
     {
-        IsSelected = !IsSelected;
+        //IsSelected = !IsSelected;
     }
     public virtual bool IsSelected
     {

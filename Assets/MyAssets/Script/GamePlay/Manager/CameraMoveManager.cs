@@ -87,8 +87,7 @@ public class CameraMoveManager : MonoBehaviour
         Vector2 mouseScroll = Input.mouseScrollDelta;
         if (mouseScroll.y != 0)
         {
-            Debug.Log(mouseScroll.y);
-            //up
+            //아니 아무데서나 scroll 됨
             _camera.transform.Translate(0, 0, mouseScroll.y * 2);
         }
 

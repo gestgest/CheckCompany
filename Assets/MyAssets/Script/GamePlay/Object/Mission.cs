@@ -188,12 +188,12 @@ public class Mission
     /// <param name="data"></param>
     public void JSONToMission(Dictionary<string, object> data)
     {
-        mission_type = (EmployeeType)(Convert.ToInt32(data["type"]));
-        missionName = (string)data["name"];
-        iconID = Convert.ToInt32(data["icon"]);
-        level = Convert.ToInt32(data["level"]);
+        //mission_type = (EmployeeType)(Convert.ToInt32(data["type"]));
+        mission_type = ConvertJSON.SafeGet<EmployeeType>(data, "type", EmployeeType.DEVELOPER); missionName = ConvertJSON.SafeGet<string>(data, "name", "Unknown");
+        iconID = ConvertJSON.SafeGet<int>(data, "icon", 0);
+        level = ConvertJSON.SafeGet<int>(data, "level", 0);
 
-        List<object> todo_missions = (List<object>)data["todo_missions"];
+        List<object> todo_missions = ConvertJSON.SafeGet<List<object>>(data, "todo_missions", new List<object>());
 
         for (int i = 0; i < todo_missions.Count; i++)
         {
@@ -202,17 +202,19 @@ public class Mission
             this.todo_missions.Add(todo_mission);
         }
 
-        //완료된 날짜
+        // 완료된 날짜
         if (GetIsDone())
         {
-            Dictionary<string, object> doneDate = (Dictionary<string, object>)data["doneDate"];
-
-            this.doneDate.Year = Convert.ToInt32(doneDate["year"]);
-            this.doneDate.Month = Convert.ToInt32(doneDate["month"]);
-            this.doneDate.Day = Convert.ToInt32(doneDate["day"]);
+            Dictionary<string, object> doneDate = ConvertJSON.SafeGet<Dictionary<string, object>>(data, "doneDate", null);
+            if (doneDate != null)
+            {
+                this.doneDate.Year = ConvertJSON.SafeGet<int>(doneDate, "year", 0);
+                this.doneDate.Month = ConvertJSON.SafeGet<int>(doneDate, "month", 0);
+                this.doneDate.Day = ConvertJSON.SafeGet<int>(doneDate, "day", 0);
+            }
         }
 
-        refEmployees = data["refEmployee"] as List<int>;
+        refEmployees = ConvertJSON.SafeGet<List<int>>(data, "refEmployee", new List<int>());
     }
 }
 

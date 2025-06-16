@@ -4,27 +4,39 @@ public class AssignableEmployeeElement : AssignEmployeeElement
 {
     private int selectedIndex;
 
-    //_RemoveRefEmployeeIndex
-    [SerializeField] private IntEventChannelSO _AddRefEmployeeID;
-    
+    public override void SwitchingIsSelcted()
+    {
+        if (!isSelected)
+        {
+            //if assigned employee max, return
+            if (_createMissionManager.GetAssignableEmployeeSize() == _createMissionManager.GetRefEmployeesID().Count)
+            {
+                return;
+            }
+
+            _createMissionManager.AddRefEmployeeID(employee.ID);
+        }
+        else
+        {
+            _createMissionManager.RemoveRefEmployeeID(employee.ID);
+            //Assigned에 빼기
+        }
+    }
+
+    //only UI
     public override bool IsSelected
     {
         get { return isSelected; }
         set
         {
             base.IsSelected = value;
-
-            if (isSelected)
+            if(isSelected)
             {
-                _icon.color = Color.white;
-                _AddRefEmployeeID.RaiseEvent(employee.ID);
-                //Assigned에 넣기
+                _icon.color = Color.HSVToRGB(0.25f, 0.25f, 0.25f);
             }
             else
             {
-                _icon.color = Color.gray;
-                _RemoveRefEmployeeID.RaiseEvent(employee.ID);
-                //Assigned에 빼기
+                _icon.color = Color.white;
             }
         }
     }

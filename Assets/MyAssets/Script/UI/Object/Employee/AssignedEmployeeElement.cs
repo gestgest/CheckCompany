@@ -13,13 +13,17 @@ public class AssignedEmployeeElement : AssignEmployeeElement
 
     public override void SwitchingIsSelcted()
     {
+        //employee is not null
         if (isSelected)
         {
-            IsSelected = false;
+            _createMissionManager.RemoveRefEmployeeID(employee.ID);
+            //IsSelected = false;
+            //is => null
         }
         //if isSelected is false, nothing happen
     }
 
+    //only UI
     public override bool IsSelected
     {
         get { return isSelected; }
