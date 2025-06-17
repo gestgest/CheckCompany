@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Events;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
@@ -13,30 +14,41 @@ public class InitializationLoader : MonoBehaviour
 
     //맨 처음 게임 메뉴 Scene
     [SerializeField] private AssetReference  _loginMenuScene = default;
+    [SerializeField] private AssetReference  _GameScene = default;
 
+    [Header("Listening on Event")] 
+    [SerializeField] private BoolEventChannelSO _isLoginEvent;
+    
     [Header("Broadcasting on")]
     [SerializeField] private AssetReference _menuToLoadEvent = default; //SceneLoader의 LoadMenu 함수
-
+    
+    bool _isLogin = false;
+    
 
 
     private void Start()
     {
+        _isLoginEvent._onEventRaised = IsLoginEvent;
         _managersScene.LoadSceneAsync(LoadSceneMode.Additive, true).Completed += LoadEventChannel;
     }
 
     // obj는 _managerScene.LoadSceneAsync() 결과 값
     private void LoadEventChannel(AsyncOperationHandle<SceneInstance> obj)
     {
-
-        _menuToLoadEvent.LoadAssetAsync<LoadEventChannelSO>().Completed += LoadMainMenu;
     }
 
     //이후 init씬 제거
-    private void LoadMainMenu(AsyncOperationHandle<LoadEventChannelSO> obj)
+    private void LoadScene(AsyncOperationHandle<LoadEventChannelSO> obj)
     {
-        //SceneLoader의 LoadMenu 함수 실행
-        obj.Result.RaiseEvent(_loginMenuScene);
-
+        obj.Result.RaiseEvent(_isLogin ? _GameScene : _loginMenuScene);
         SceneManager.UnloadSceneAsync(0); //init 씬 제거
+    }
+
+    private void IsLoginEvent(bool isLogin)
+    {
+        this._isLogin = isLogin;
+        
+        _menuToLoadEvent.LoadAssetAsync<LoadEventChannelSO>().Completed
+            += LoadScene;
     }
 }

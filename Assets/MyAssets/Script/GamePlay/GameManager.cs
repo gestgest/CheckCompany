@@ -94,12 +94,12 @@ public class GameManager : MonoBehaviour
         //타입이 64비트가 나온다. => 8바이트 => long
         //int는 4바이트
         //convert로 하면 null이 0으로 바뀌어진다
-
+        
         //user.Email으로 쿼리 만들고 => null 처리 안함 => 그냥 
         nickname = (string)await _getJSONEventChannelSO.RaiseEvent("User", user.Email, "nickname");
 
         long money;
-        money = (long)(await _getJSONEventChannelSO.RaiseEvent("User", user.Email, "money") ?? (long)0);
+        money = (long)(await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "money") ?? (long)0);
         SetMoney(money, false);
 
         object tmp_employee_count =

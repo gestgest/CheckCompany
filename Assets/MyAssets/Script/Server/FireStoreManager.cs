@@ -14,7 +14,7 @@ public class FireStoreManager : MonoBehaviour
     static FirebaseFirestore db;
     
     [Header("Listening to channels")]
-    [SerializeField] private VoidEventChannelSO _initFirebaseChannelEvent;
+    [SerializeField] private VoidEventChannelSO _initFirebaseChannelEvent; //Auth
 
     [SerializeField] DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
     [SerializeField] SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
@@ -47,9 +47,9 @@ public class FireStoreManager : MonoBehaviour
         // Firebase Firestore 초기화 => 게임 시작할땐 GamaManager필요없다.
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
         {
+            Debug.Log("Firestore 작동");
             FirebaseApp app = FirebaseApp.DefaultInstance;
             db = FirebaseFirestore.DefaultInstance;
-            Debug.Log("Firestore 작동");
         });
     }
 
@@ -121,7 +121,11 @@ public class FireStoreManager : MonoBehaviour
     public async Task<object> GetFirestoreData(string collection_name, string id, string key)
     {
         Dictionary<string, object> result = null;
-        // 특정 문서 가져오기 => 임시 
+
+        if (db == null)
+        {
+            Debug.LogError("why");
+        }
         DocumentReference docRef = db.Collection(collection_name).Document(id);
 
         await docRef.GetSnapshotAsync().ContinueWithOnMainThread(task =>

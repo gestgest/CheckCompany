@@ -27,7 +27,6 @@ public class SceneLoader : MonoBehaviour
     //private float _fadeDuration = .5f;
     private bool _isLoading = false; //To prevent a new loading request while already loading a new scene
 
-
     private void OnEnable()
     {
         _loadLocation.OnLoadingRequested += LoadLocation;
@@ -40,7 +39,7 @@ public class SceneLoader : MonoBehaviour
         _loadMenu.OnLoadingRequested -= LoadMenu;
     }
 
-
+    
     /// <summary>
     /// This function loads the location scenes passed as array parameter
     /// </summary>

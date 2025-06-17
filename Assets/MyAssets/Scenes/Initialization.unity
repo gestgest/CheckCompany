@@ -175,6 +175,13 @@ MonoBehaviour:
     m_SubObjectGUID: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
+  _GameScene:
+    m_AssetGUID: 9fc0d4010bbf28b4594072e72b8655ab
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  _isLoginEvent: {fileID: 11400000, guid: 1e230bf51924575488035506b8b32078, type: 2}
   _menuToLoadEvent:
     m_AssetGUID: 753df1d70f221d04b931ffa04b0f7dd9
     m_SubObjectName: 
