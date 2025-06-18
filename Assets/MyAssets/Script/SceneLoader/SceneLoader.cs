@@ -45,19 +45,22 @@ public class SceneLoader : MonoBehaviour
     /// </summary>
     private void LoadLocation(AssetReference locationToLoad)
     {
+        Debug.Log("예아" + locationToLoad.ToString());
         if (_isLoading)
             return;
 
         _sceneToLoad = locationToLoad;
         //_showLoadingScreen = showLoadingScreen;
         _isLoading = true;
+        
+        
 
         //처음 시작하면 실행
         if (_gameplayManagerSceneInstance.Scene == null || !_gameplayManagerSceneInstance.Scene.isLoaded)
         {
             //게임매니저 씬 따로 저장
             //AsyncOperationHandle<SceneInstance> _gameplayManagerLoadingOpHandle  
-
+            
             _gameplayManagerLoadingOpHandle = _gameplayScene.LoadSceneAsync(LoadSceneMode.Additive, true);
             _gameplayManagerLoadingOpHandle.Completed += OnGameplayManagersLoaded;
         }

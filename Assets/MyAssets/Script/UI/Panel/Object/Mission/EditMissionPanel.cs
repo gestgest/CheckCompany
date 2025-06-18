@@ -8,9 +8,8 @@ using UnityEngine.UIElements;
 
 public class EditMissionPanel : Panel
 {
-    [Header("Controller")]
+    [Header("Managers")]
     [SerializeField] private MissionManagerSO _missionControllerSO;
-
     
     [SerializeField] private TMP_InputField title;
 

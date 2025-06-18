@@ -63,15 +63,17 @@ public class CreateMissionManagerSO : ScriptableObject
 
 
     #region PERPROTY
+    
+    public void SetEmployeeType(int employee_type)
+    {
+        this.employee_type = employee_type;
+    }
+    
     public void SetLevel(int level)
     {
         this.level = level;
     }
 
-    public void SetEmployeeType(int employee_type)
-    {
-        this.employee_type = employee_type;
-    }
     public void SetAssignableEmployeeSize(int size)
     {
         assignableEmployeeSize = size;
