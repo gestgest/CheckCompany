@@ -17,7 +17,7 @@ public class AddMissionElementUI : MonoBehaviour
     //버튼 누르면 추가되는 방식
     public void AddMission()
     {
-        employeeStatusWindow.AddMission(todo_mission);
+        //employeeStatusWindow.AddMission(todo_mission);
     }
     public void SetMission(Mission todo_mission)
     {

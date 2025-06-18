@@ -45,10 +45,10 @@ public class CreateMissionManagerSO : ScriptableObject
         _ChangeAssignedEmployeeEventChannel.RaiseEvent();
     }
 
-    public Mission CreateMission(string title, List<Todo_Mission> todo_Missions)
+    public Mission CreateMission(int id, string title, List<Todo_Mission> todo_Missions)
     {
         Mission mission = new Mission(
-            _missionManager.GetAndIncrementCount(),
+            id,
             employee_type,
             title,
             _missionManager.GetIcon(0),
@@ -72,6 +72,11 @@ public class CreateMissionManagerSO : ScriptableObject
     public void SetLevel(int level)
     {
         this.level = level;
+    }
+
+    public void SetRefEmployeesID(List<int> refEmployeesID)
+    {
+        _refEmployeesID = refEmployeesID;
     }
 
     public void SetAssignableEmployeeSize(int size)

@@ -57,7 +57,7 @@ public class MissionIconElement : MonoBehaviour, IPointerEnterHandler, IPointerE
     {
         if(isMissionON){
             //옮기는 함수
-            employeeStatusWindow.RemoveMission(id);
+            //employeeStatusWindow.RemoveMission(id);
         }
         else{
             //addMissionMiniWindow 위치조정 안해도 될거 같기도...?

@@ -23,9 +23,6 @@ public class CustomRadioButtonGroup : MonoBehaviour
         //protected
         return toggles;
     }
-    
-    
-    
 
     //toggle event
     public virtual void SetToggle(int index)
