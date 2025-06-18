@@ -62,26 +62,25 @@ public class CameraMoveManager : MonoBehaviour
 
             //rotate?
         }
-
+        #if UNITY_ANDROID_
         //손에서 떈 경우
         else
         {
             isUI = false;
-
         }
+        #endif
         
 #if UNITY_EDITOR || UNITY_STANDALONE
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            isUI = true;
+        }
         if (Input.GetMouseButton(0) && !isUI)
         {
             _plane = new Plane(transform.up, transform.position);
             
             delta1 = PlanePositionDeltaMouse();
-            Debug.Log(delta1);
             _camera.transform.Translate(delta1, Space.World);
-        }
-        if (Input.GetMouseButtonUp(0))
-        {
-            isUI = false;
         }
 
         Vector2 mouseScroll = Input.mouseScrollDelta;
@@ -91,6 +90,10 @@ public class CameraMoveManager : MonoBehaviour
             _camera.transform.Translate(0, 0, mouseScroll.y * 2);
         }
 
+        if (Input.GetMouseButtonUp(0))
+        {
+            isUI = false;
+        }
 #endif
 
     }
