@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] RecruitmentManagerSO recruitmentControllerSO;
     [SerializeField] MissionManagerSO missionControllerSO;
     [SerializeField] EmployeeManagerSO employeeControllerSO;
-    [FormerlySerializedAs("_placeSystemSO")] [SerializeField] PlacedObjectManager _placeManager;
+    [SerializeField] PlacedObjectManager _placeManager;
     
     [Header("ServerEvent")]
     [SerializeField] private DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
@@ -36,7 +36,8 @@ public class GameManager : MonoBehaviour
     //int executive = 1; //임원, 임원 생성할때 이거 참조해야한다
     int employee_count = 0;
     long money;
-    private GameDate date;
+    private GameDate _gameDate;
+    private Date _currentDate;
     
     //Reputation reputation = Reputation.single; //레벨 [명예]
     //int exp = 0;
@@ -69,7 +70,7 @@ public class GameManager : MonoBehaviour
         
         _placeManager.Init();
         
-        date = new GameDate(employeeControllerSO.AddStamina, _sendFirebaseEventChannelSO);
+        _gameDate = new GameDate(employeeControllerSO.AddStamina, _sendFirebaseEventChannelSO);
 
         GameServerStart();
         //절대로 LoginScene에 넣지마 => 메인 스레드 충돌 오류
@@ -125,10 +126,16 @@ public class GameManager : MonoBehaviour
 
         Dictionary<string, object> employees = (Dictionary<string, object>)await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "employees");
         employeeControllerSO.JSONToEmployees(employees);
-        
-        date.GetDateFromJSON(
-            (Dictionary<string, object>)await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "date")
+
+        Dictionary<string, object> dateData =
+            (Dictionary<string, object>)await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "date");
+        _currentDate.GetDateFromJSON(
+            (Dictionary<string, object>)dateData["currentDate"]
         );
+        _currentDate.GetDateFromJSON(
+            (Dictionary<string, object>)dateData["gameDate"]
+        );
+        
         SetDateUI();
         
         //object_count 가져오고
@@ -186,10 +193,10 @@ public class GameManager : MonoBehaviour
     public GameDate _Date
     {
         //애초에 서버에 데이터를 넣는 게 낫지 않나
-        get { return date; }
+        get { return _gameDate; }
         set
         {
-            date = value;
+            _gameDate = value;
             //서버 로딩
             SetDateUI();
         }
@@ -197,14 +204,14 @@ public class GameManager : MonoBehaviour
 
     public void AddDateMinute(int value)
     {
-        date.Minute += value;
+        _gameDate.Minute += value;
         recruitmentControllerSO.AddRandomApplicants(60 / value);
         SetDateUI();
     }
 
     public void SetDateUI()
     {
-        ui_manager.SetDateText(date);
+        ui_manager.SetDateText(_gameDate);
     }
 
     #endregion
