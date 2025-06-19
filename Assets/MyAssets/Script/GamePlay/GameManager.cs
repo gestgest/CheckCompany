@@ -103,17 +103,9 @@ public class GameManager : MonoBehaviour
         money = (long)(await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "money") ?? (long)0);
         SetMoney(money, false);
 
-        object tmp_employee_count =
+        int employee_count =
             Convert.ToInt32(await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "employee_count"));
 
-        if (tmp_employee_count == null)
-        {
-            Employee_count = 0;
-        }
-        else
-        {
-            employee_count = Convert.ToInt32(tmp_employee_count);
-        }
         
         //MissionController.instance.Init();
         missionControllerSO.SetMissionData(
@@ -129,17 +121,30 @@ public class GameManager : MonoBehaviour
 
         Dictionary<string, object> dateData =
             (Dictionary<string, object>)await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "date");
+
+        if (dateData == null)
+        {
+            dateData = new Dictionary<string, object>();
+        }
+
+        _currentDate = new Date();
         _currentDate.GetDateFromJSON(
-            (Dictionary<string, object>)dateData["currentDate"]
+            ConvertJSON.SafeGet<Dictionary<string, object>>(dateData,"currentDate", new Date().DateToJSON())
+        );  
+        _gameDate.GetDateFromJSON(
+            ConvertJSON.SafeGet<Dictionary<string, object>>(dateData,"gameDate", new Dictionary<string, object>())
         );
-        _currentDate.GetDateFromJSON(
-            (Dictionary<string, object>)dateData["gameDate"]
+        
+        _sendFirebaseEventChannelSO._onSendEventRaised(
+            "GamePlayUser",
+            GameManager.instance.Nickname,
+            "date.currentDate",
+            _currentDate.DateToJSON()
         );
         
         SetDateUI();
         
         //object_count 가져오고
-        
         int object_count =
             Convert.ToInt32(await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "placeableObject_id"));
         

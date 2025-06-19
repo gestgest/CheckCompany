@@ -9,7 +9,8 @@ public class BoolEventChannelSO : ScriptableObject
 
     public void RaiseEvent(bool tmp)
     {
-        _onEventRaised.Invoke(tmp);
+        if (_onEventRaised != null)
+            _onEventRaised.Invoke(tmp);
     }
     
 }

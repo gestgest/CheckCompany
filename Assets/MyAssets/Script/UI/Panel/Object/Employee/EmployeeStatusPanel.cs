@@ -101,6 +101,10 @@ public class EmployeeStatusPanel : MiniPanel
     public void SetUI()
     {
         this.employee = _employeeManager.GetSelectedEmployee();
+        if (employee == null)
+        {
+            return;
+        }
 
         for(int i = 0; i < nameTexts.Length; i++)
         {

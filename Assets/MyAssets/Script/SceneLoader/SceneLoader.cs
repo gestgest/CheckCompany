@@ -45,7 +45,6 @@ public class SceneLoader : MonoBehaviour
     /// </summary>
     private void LoadLocation(AssetReference locationToLoad)
     {
-        Debug.Log("예아" + locationToLoad.ToString());
         if (_isLoading)
             return;
 

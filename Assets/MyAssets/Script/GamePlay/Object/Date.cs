@@ -316,12 +316,12 @@ public class Date
 
     public virtual void GetDateFromJSON(Dictionary<string, object> data)
     {
-        Year = Convert.ToInt32(data["year"]);
-        Month = Convert.ToInt32(data["month"]);
-        Day = Convert.ToInt32(data["day"]);
-        _Week = (Week)Convert.ToInt32(data["week"]);
-        Hour = Convert.ToInt32(data["hour"]);
-        Minute = Convert.ToInt32(data["minute"]);
+        Year = ConvertJSON.SafeGet<int>(data, "year", 2020);
+        Month = ConvertJSON.SafeGet<int>(data, "month", 1);
+        Day = ConvertJSON.SafeGet<int>(data, "day", 1);
+        _Week = ConvertJSON.SafeGet<Week>(data, "week", Week.WED);
+        Hour = ConvertJSON.SafeGet<int>(data,"hour", 0);
+        Minute = ConvertJSON.SafeGet<int>(data,"minute", 0);
     }
     #endregion
     

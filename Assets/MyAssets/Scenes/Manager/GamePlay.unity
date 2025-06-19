@@ -2186,11 +2186,18 @@ MonoBehaviour:
   hasMini: 1
   _missionManager: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
   _createMissionManager: {fileID: 11400000, guid: 25cba49b90bb7aa4e9302301c8961b1c, type: 2}
-  title: {fileID: 0}
-  employeeTypeGroup: {fileID: 0}
-  levelGroup: {fileID: 0}
-  _multiLayoutGroup: {fileID: 0}
-  _todoMissionObjects: []
+  title: {fileID: 2006799269}
+  employeeTypeGroup: {fileID: 1804115472}
+  levelGroup: {fileID: 428797631}
+  _multiLayoutGroup: {fileID: 450677222}
+  _todoMissionObjects:
+  - {fileID: 171032298}
+  - {fileID: 538473034}
+  - {fileID: 344223071}
+  - {fileID: 568343165}
+  - {fileID: 1427249236}
+  - {fileID: 1203399159}
+  - {fileID: 1995947359}
   missionPanel: {fileID: 248255120}
   toggles:
   - {fileID: 540816421}
@@ -5014,8 +5021,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 67827085}
-        m_TargetAssemblyTypeName: CreateMissionPanel, Assembly-CSharp
-        m_MethodName: DeleteSmallMission
+        m_TargetAssemblyTypeName: ManagerMissionPanel, Assembly-CSharp
+        m_MethodName: DeleteTodoMission
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6598,9 +6605,9 @@ RectTransform:
   - {fileID: 1925999926}
   m_Father: {fileID: 854737369}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 500, y: -50}
   m_SizeDelta: {x: 180, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &255157377
@@ -21607,8 +21614,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 67827085}
-        m_TargetAssemblyTypeName: CreateMissionPanel, Assembly-CSharp
-        m_MethodName: DeleteSmallMission
+        m_TargetAssemblyTypeName: ManagerMissionPanel, Assembly-CSharp
+        m_MethodName: DeleteTodoMission
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -27513,8 +27520,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 67827085}
-        m_TargetAssemblyTypeName: CreateMissionPanel, Assembly-CSharp
-        m_MethodName: DeleteSmallMission
+        m_TargetAssemblyTypeName: ManagerMissionPanel, Assembly-CSharp
+        m_MethodName: DeleteTodoMission
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -29393,8 +29400,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 67827085}
-        m_TargetAssemblyTypeName: CreateMissionPanel, Assembly-CSharp
-        m_MethodName: DeleteSmallMission
+        m_TargetAssemblyTypeName: ManagerMissionPanel, Assembly-CSharp
+        m_MethodName: DeleteTodoMission
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -31224,7 +31231,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1128792564
 RectTransform:
   m_ObjectHideFlags: 0
@@ -31609,9 +31616,9 @@ RectTransform:
   - {fileID: 882908629}
   m_Father: {fileID: 854737369}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 100, y: -50}
   m_SizeDelta: {x: 180, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1132302910
@@ -33852,8 +33859,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 67827085}
-        m_TargetAssemblyTypeName: CreateMissionPanel, Assembly-CSharp
-        m_MethodName: DeleteSmallMission
+        m_TargetAssemblyTypeName: ManagerMissionPanel, Assembly-CSharp
+        m_MethodName: DeleteTodoMission
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -43948,8 +43955,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 67827085}
-        m_TargetAssemblyTypeName: CreateMissionPanel, Assembly-CSharp
-        m_MethodName: DeleteSmallMission
+        m_TargetAssemblyTypeName: ManagerMissionPanel, Assembly-CSharp
+        m_MethodName: DeleteTodoMission
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -45462,8 +45469,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 67827085}
-        m_TargetAssemblyTypeName: CreateMissionPanel, Assembly-CSharp
-        m_MethodName: DeleteSmallMission
+        m_TargetAssemblyTypeName: ManagerMissionPanel, Assembly-CSharp
+        m_MethodName: DeleteTodoMission
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -47572,9 +47579,9 @@ RectTransform:
   - {fileID: 182848821}
   m_Father: {fileID: 854737369}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 300, y: -50}
   m_SizeDelta: {x: 180, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1744298988
