@@ -47,8 +47,9 @@ public class PlaceSystem : MonoBehaviour
     [SerializeField] private VoidEventChannelSO _onChangedEvent;
     [SerializeField] private VoidEventChannelSO _okEvent;
     [SerializeField] private VoidEventChannelSO _denyEvent;
-    
 
+    [Header("Broadcasting on Events")]
+    [SerializeField] private BoolEventChannelSO _isHandlingEvent;
     
     private void Start()
     {
@@ -137,13 +138,13 @@ public class PlaceSystem : MonoBehaviour
     //오브젝트 버튼 누르면 오브젝트 나오는 함수
     private void StartPlaceMode(GameObject obj)
     {
+        _isHandlingEvent.RaiseEvent(true);
         //before selected object => current selected object
         if (selectedObject != null)
         {
             Destroy(selectedObject.gameObject);
             selectedObject = null;
         }
-        SetAllArea(true);
         CreateHandlingObject(obj);
     }
     
@@ -184,10 +185,8 @@ public class PlaceSystem : MonoBehaviour
         );
         selectedObject = tmp;
 
-        //SetArea(); //지정된 건물만 색칠
+        SetArea();
         isFirst = false;
-
-        
     }
     
 
@@ -204,17 +203,18 @@ public class PlaceSystem : MonoBehaviour
             selectedObject.SetPosition(pos);
 
             startPos = pos;
-            ClearArea();
+            BeforeClearArea();
 
             _placedObjectManager.SendPlaceableObject(selectedObject);
             _placedObjectManager.SetObjectID(selectedObject.GetObjectID() + 1);
             
+            TakeOffPlaceMode();
+
             //배치 하는 순간 조종 권한 제거  
             Destroy(selectedObject.gameObject.GetComponent<HandlingObject>());
             selectedObject = null;
             
             _placedObjects.Add(selectedObject);
-            TakeOffPlaceMode();
         }
         
         //아무일도 없다
@@ -230,16 +230,30 @@ public class PlaceSystem : MonoBehaviour
 
     private void TakeOffPlaceMode()
     {
-        //타일 지우기
-        SetAllArea(false);
+        TakenArea(false); //delete handling object tile
+        SetAllArea(false); //기존에 있는 타일 지우기
 
         //버튼 안 보이게
         _okButton.SetActive(false);
         _denyButton.SetActive(false);
+        _isHandlingEvent.RaiseEvent(false);
     }
 
 
     #region TILE
+    /// <summary>
+    /// 영역 설정하는 함수, 드래그 할때마다 이 함수가 발동됨
+    /// 비효율 적인데?
+    /// </summary>
+    public void SetArea() //handling object drag
+    {
+        BeforeClearArea();
+        SetAllArea(false);
+        SetAllArea(true);
+        
+        Vector3Int startpos = gridLayout.WorldToCell(selectedObject.GetStartPosition());
+        TakenArea(startpos, selectedObject.Size, true);
+    }
     
     /// <summary> 모든 건물 타일 색칠 => false면 색칠no </summary>
     private void SetAllArea(bool isSelected) //
@@ -306,28 +320,18 @@ public class PlaceSystem : MonoBehaviour
         TakenArea(isSelected);
     }
 
-    /// <summary>
-    /// 영역 설정하는 함수, 드래그 할때마다 이 함수가 발동됨
-    /// 비효율 적인데?
-    /// </summary>
-    public void SetArea()
-    {
-        ClearArea();
-        Vector3Int startpos = gridLayout.WorldToCell(selectedObject.GetStartPosition());
-        TakenArea(startpos, selectedObject.Size, true);
-    }
 
 
-    private void ClearArea()
+    private void BeforeClearArea()
     {
         if (isFirst)
         {
-            isFirst = false;
             return;
         }
         TakenArea(false);
     }
 
+    //single
     private void TakenArea(bool isSelected)
     {
         TileBase tile;

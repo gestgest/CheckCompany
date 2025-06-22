@@ -5,6 +5,7 @@ using UnityEngine;
 [FirestoreData]
 public class Todo_Mission
 {
+    [FirestoreProperty]
     public string Title { get; set; }
     [FirestoreProperty]
     public bool IsDone { get; set; }
@@ -29,7 +30,10 @@ public class Todo_Mission
     public void Set_Todo_Mission(object data)
     {
         Dictionary<string, object> tmp = data as Dictionary<string, object> ;
-        Set_Todo_Mission((string)tmp["Title"], (bool)tmp["IsDone"]);
+        string title = ConvertJSON.SafeGet<string>(tmp, "Title", "");
+        bool isDone = ConvertJSON.SafeGet<bool>(tmp, "IsDone", false);
+        
+        Set_Todo_Mission(title, isDone);
     }
 
 }

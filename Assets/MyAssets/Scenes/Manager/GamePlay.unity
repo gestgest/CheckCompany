@@ -17406,6 +17406,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _camera: {fileID: 963194227}
+  _isHandlingEventChannel: {fileID: 11400000, guid: 841d2e50e36a44343a21420305260597, type: 2}
 --- !u!1 &606009176
 GameObject:
   m_ObjectHideFlags: 0
@@ -28573,7 +28574,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 924872976}
         m_TargetAssemblyTypeName: PanelManager, Assembly-CSharp
         m_MethodName: Back_Nav_Panel
         m_Mode: 1

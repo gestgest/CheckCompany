@@ -61,14 +61,14 @@ public class RecruitmentElement : MonoBehaviour
 
     public void Init(Recruitment recruitment)
     {
-        layout_parent = transform.parent.GetComponent<RectTransform>(); //부모 가져오기
+        layout_parent = transform.parent.GetComponent<RectTransform>(); //부모 Layout 가져오기
         _multiLayoutGroup.Init();
         //_multiLayoutGroup.AddHeight(HEIGHT);
         
         //부모 디폴트 높이 추가
-        Vector2 v = layout_parent.sizeDelta;
-        v.y += HEIGHT;
-        layout_parent.sizeDelta = v;
+        // Vector2 v = layout_parent.sizeDelta;
+        // v.y += HEIGHT;
+        // layout_parent.sizeDelta = v;
         
         //_multiLayoutGroup.AddOnHeight(-HEIGHT);
         //레이아웃 처음 만들때 자기 자신은 제외.
@@ -128,21 +128,14 @@ public class RecruitmentElement : MonoBehaviour
         //RerollScreen();
     }
 
-    private void SetUI()
-    {
-        SetIcon(recruitment.GetEmployeeSO().GetIcon());
-        SetDDay(recruitment.GetDay());
-        SetApplicantsNumber(recruitment.GetApplicantCount());
-    }
 
     private void CreateEmployeeObject(Employee employee)
     {
-        GameObject tmp = Instantiate(applicant_Prefab);
+        GameObject tmp = Instantiate(applicant_Prefab, applicantsPanel.transform);
 
         ApplicantElement applicantElement = tmp.GetComponent<ApplicantElement>();
         applicantElement.SetValue(employee, recruitment.GetID());
 
-        tmp.transform.SetParent(applicantsPanel.transform);
         applicant_objects.Add(tmp);
         
         _multiLayoutGroup.AddOnHeight(HEIGHT);
@@ -168,7 +161,12 @@ public class RecruitmentElement : MonoBehaviour
         applicant_objects.Clear();
     }
 
-
+    private void SetUI()
+    {
+        SetIcon(recruitment.GetEmployeeSO().GetIcon());
+        SetDDay(recruitment.GetDay());
+        SetApplicantsNumber(recruitment.GetApplicantCount());
+    }
 
     public void SwitchPanel()
     {

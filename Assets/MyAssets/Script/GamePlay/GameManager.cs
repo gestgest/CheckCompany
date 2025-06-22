@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     private FirebaseUser user;
 
 
-    //컨트롤러 리스트
+    //managers
     [Header("Manager")]
     [SerializeField] RecruitmentManagerSO recruitmentControllerSO;
     [SerializeField] MissionManagerSO missionControllerSO;
@@ -33,14 +33,11 @@ public class GameManager : MonoBehaviour
 
     private string nickname;
 
-    //int executive = 1; //임원, 임원 생성할때 이거 참조해야한다
     int employee_count = 0;
     long money;
     private GameDate _gameDate;
     private Date _currentDate;
     
-    //Reputation reputation = Reputation.single; //레벨 [명예]
-    //int exp = 0;
 
     void Awake()
     {
@@ -63,7 +60,6 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        //컨트롤러 넣고
         recruitmentControllerSO.Init();
         missionControllerSO.Init();
         employeeControllerSO.Init();
@@ -73,21 +69,20 @@ public class GameManager : MonoBehaviour
         _gameDate = new GameDate(employeeControllerSO.AddStamina, _sendFirebaseEventChannelSO);
 
         GameServerStart();
-        //절대로 LoginScene에 넣지마 => 메인 스레드 충돌 오류
+        //Don't put the LoginScene => main thread error
         //fireStoreManager.Init();
         //SetDateUI();
     }
     
     public async void GameServerStart()
     {
-        //Auth로 가져오고
         auth = FirebaseAuth.DefaultInstance;
         user = auth.CurrentUser;
 
-        //만약 로그인 안했을 경우 무조건 디폴트 계정을 넣어야 한다.★★★
+        //if you are not logged in, you must enter the default account
         if (user == null)
         {
-            //디폴트 계정
+            //default account
         }
         Debug.Log(user.Email);
 
@@ -96,7 +91,6 @@ public class GameManager : MonoBehaviour
         //int는 4바이트
         //convert로 하면 null이 0으로 바뀌어진다
         
-        //user.Email으로 쿼리 만들고 => null 처리 안함 => 그냥 
         nickname = (string)await _getJSONEventChannelSO.RaiseEvent("User", user.Email, "nickname");
 
         long money;

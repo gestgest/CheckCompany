@@ -16,8 +16,7 @@ public class MissionPanel : Panel
     [SerializeField] protected MissionManagerSO _missionManager;
 
 
-    private int mission_count = 0; //현재 미션 카운트
-    protected List<int> editPanelIndex; 
+    private int mission_count = 0; //현재 미션 카운터
 
     protected const int MISSION_MAX_SIZE = 20;
     private const int MISSION_HEIGHT = 100;
@@ -44,11 +43,13 @@ public class MissionPanel : Panel
     }
 
     /// <summary> EditPanel index 리스트 추가하는 함수 </summary>
-    protected void CreateEditPanelIndex()
+    protected List<int> CreateEditPanelIndex()
     {
-        editPanelIndex = new List<int>();
+        List<int> editPanelIndex = new List<int>();
         editPanelIndex.Add(1);
         editPanelIndex.Add(1);
+
+        return editPanelIndex;
     }
     
     public void CreateMissionElementObject(Mission mission)
@@ -65,7 +66,7 @@ public class MissionPanel : Panel
 
         //Debug.Log(todoMission.ID);
         //editPanel 들어가는 함수를 missionElementUI에 투입
-        missionElementUI.AddEventListener(() => { EditPanelOn(mission.ID); });
+        missionElementUI.SetEventListener(() => { EditPanelOn(mission.ID); });
         mission_count++;
     }
 
@@ -101,7 +102,7 @@ public class MissionPanel : Panel
     {
         int index = _missionManager.Search_Mission_Index(id);
 
-        GamePanelManager.instance.SwitchingSubPanel(true, editPanelIndex);
+        GamePanelManager.instance.SwitchingSubPanel(true, CreateEditPanelIndex());
 
         //editPanel에게 값 전달
         missionEditPanel.SetMission(_missionManager.GetMission(index));
@@ -171,12 +172,6 @@ public class MissionPanel : Panel
             if (!mission.GetIsDone())
                 CreateMissionElementObject(mission);
         }
-
-        //for (int i = mission_count; i < MISSION_MAX_SIZE; i++)
-        //{
-        //    missionElementPoolObjects[i].gameObject.SetActive(false);
-        //}
-        CreateEditPanelIndex();
     }
 
     //미션 오브젝트 정렬하는 함수

@@ -80,9 +80,10 @@ public class MissionElement : MonoBehaviour
     }
 
 
-    public void AddEventListener(UnityAction listener)
+    public void SetEventListener(UnityAction listener)
     {
         Button button = this.GetComponentInChildren<Button>();
+        button.onClick.RemoveAllListeners();
         button.onClick.AddListener(listener);
     }
 

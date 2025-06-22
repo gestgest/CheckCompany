@@ -68,7 +68,7 @@ public class PanelManager : MonoBehaviour
     {
         //대충 panels에 들어가고
         OffPanel(this.indexList);
-        SetIndexList(indexList);
+        this.indexList = indexList;
         OnPanel(indexList);
     }
 
@@ -117,6 +117,7 @@ public class PanelManager : MonoBehaviour
     //뒤로가기 제외 => Panel 이동, subPanel끼리 이동할 경우에만
     public void SwitchingSubPanel(bool isNav, List<int> indexList)
     {
+        Debug.Log("엄준식");
         if(isNav){
             Push_NavPanelStack(this.indexList); //이전 panel 값 nav 저장
         }
@@ -128,6 +129,7 @@ public class PanelManager : MonoBehaviour
     public void Back_Nav_Panel()
     {
         OffPanel(indexList);
+        
         //원래 없어도 되지만
         if (nav_panel_index_stack.Count == 0)
         {
@@ -135,29 +137,15 @@ public class PanelManager : MonoBehaviour
             return;
         }
         List<int> output = Pop_NavPanelStack();
-        //Debug.Log("pop의 index : " + num);
-        
-        SetIndexList(output);
+        Debug.Log("뒤로가기 남은 nav 갯수 : " + nav_panel_index_stack.Count);
+
+        //set beforeIndex
+        indexList = output;
         SwitchingPanel(indexList);
     }
 
 
     #region PROPERTY
-
-    void SetIndexList(List<int> indexList)
-    {
-        //메모리 참조 방지를 위해 얉은 복사
-        if (indexList == this.indexList)
-            return;
-
-        (this.indexList).Clear();
-
-        for (int i = 0; i < indexList.Count; i++)
-        {
-            this.indexList.Add(indexList[i]);
-        }
-    }
-
     public List<int> GetIndexList()
     {
         return indexList;
@@ -189,14 +177,7 @@ public class PanelManager : MonoBehaviour
 
     protected virtual void Push_NavPanelStack(List<int> indexList)
     {
-        //어쩔 수 없이 가비지컬렉션으로 제거해야 함
-
-        List<int> tmp = new List<int>();
-        for(int i = 0; i < indexList.Count; i++)
-            tmp.Add(indexList[i]);
-
-        //Debug.Log("push의 index : " + index);
-        nav_panel_index_stack.Push(tmp);
+        nav_panel_index_stack.Push(indexList);
         //NavButtonSwitching();
     }
 

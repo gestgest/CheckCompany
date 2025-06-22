@@ -66,12 +66,6 @@ public class FirebaseAuthManager : MonoBehaviour
         _registerEvent._onEventRaised -= Register;
     }
 
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.K))
-            Debug.Log(auth.CurrentUser.Email);
-    }
-
     void InitFirebase()
     {
         auth = FirebaseAuth.DefaultInstance; //싱글톤으로 디폴트 FirebaseAuth 생성
