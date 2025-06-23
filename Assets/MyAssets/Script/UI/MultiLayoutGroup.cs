@@ -56,6 +56,7 @@ public class MultiLayoutGroup : MonoBehaviour
         // }
     }
 
+    
     public void SwitchingScreen(bool isOn, bool isValueChange = true)
     {
         if (isOn)

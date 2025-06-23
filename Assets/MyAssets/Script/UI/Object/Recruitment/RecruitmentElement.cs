@@ -21,7 +21,7 @@ public class RecruitmentElement : MonoBehaviour
     [SerializeField] private GameObject applicant_Prefab;
     private RectTransform layout_parent;
     
-    [SerializeField]private MultiLayoutGroup _multiLayoutGroup; //applicantsPanel
+    [SerializeField] private MultiLayoutGroup _multiLayoutGroup; //applicantsPanel
 
     //Controller
     [Header("Manager")]
@@ -38,14 +38,13 @@ public class RecruitmentElement : MonoBehaviour
     
     private void OnEnable()
     {
-        //draw UI
         if (!_isChangedApplicants)
         {
             return;
         }
+
         SetUI();
-        RemoveAllApplicantObjects();
-        AllCreateApplicantObjects();
+        _isChangedApplicants = false;
     }
     
 
@@ -77,8 +76,7 @@ public class RecruitmentElement : MonoBehaviour
             applicant_objects = new List<GameObject>();
 
         SetRecruitment(recruitment);
-        
-        _isChangedApplicants = true;
+        SetUI();
     }
 
     #region PROPERTY
@@ -151,7 +149,9 @@ public class RecruitmentElement : MonoBehaviour
     private void RemoveAllApplicantObjects()
     {
         //만약 지원자 리스트들이 보이게 하고 나간다면 => 부모 오브젝트는 크기만 커지고 onHeight는 그대로
-        //_multiLayoutGroup.AddHeight(-_multiLayoutGroup.GetOnHeight()); 
+        if(applicantsPanel.activeSelf)
+            _multiLayoutGroup.SwitchingScreen(false); //비활성화 => _multiLayoutGroup.AddHeight(-_multiLayoutGroup.GetOnHeight());
+         
         _multiLayoutGroup.AddOnHeight(-_multiLayoutGroup.GetOnHeight()); //부모 오브젝트까지 초기화
         
         for (int i = 0; i < applicant_objects.Count; i++)
@@ -166,6 +166,9 @@ public class RecruitmentElement : MonoBehaviour
         SetIcon(recruitment.GetEmployeeSO().GetIcon());
         SetDDay(recruitment.GetDay());
         SetApplicantsNumber(recruitment.GetApplicantCount());
+        
+        RemoveAllApplicantObjects();
+        AllCreateApplicantObjects();
     }
 
     public void SwitchPanel()

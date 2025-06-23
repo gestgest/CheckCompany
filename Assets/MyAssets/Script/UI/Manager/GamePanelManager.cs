@@ -86,7 +86,7 @@ public class GamePanelManager : PanelManager
     #region STACK
 
 
-    protected override void ClearNavStack()
+    public override void ClearNavStack()
     {
         base.ClearNavStack();
         //nav_panel_index_stack.Clear();

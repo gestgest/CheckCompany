@@ -58,8 +58,6 @@ public class RecruitPanel : Panel
         recruitmentContent.Init(r); //여기에 multiLayoutGroup height값을 추가
             
         recruitmentObjects.Add(recruitmentObject);
-        
-        recruitmentContent.AllCreateApplicantObjects(); //draw
     }
 
     private void Init()

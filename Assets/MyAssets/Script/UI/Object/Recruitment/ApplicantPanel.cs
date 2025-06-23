@@ -31,7 +31,7 @@ public class ApplicantPanel : MiniPanel
         recruitmentControllerSO.RemoveApplicant(recruitment.GetID(), applicant_id);
 
         PanelManager.instance.Back_Nav_Panel();
-
+        PanelManager.instance.ClearNavStack();
     }
 
     //Y
@@ -48,9 +48,8 @@ public class ApplicantPanel : MiniPanel
             recruitmentControllerSO.RemoveApplicant(recruitment.GetID(), applicant_id);
         }
         PanelManager.instance.Back_Nav_Panel();
+        PanelManager.instance.ClearNavStack();
     }
-
-
     //V는 직원 합류 후 지원자 삭제
     //X는 지원자 삭제
 

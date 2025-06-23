@@ -167,7 +167,7 @@ public class PanelManager : MonoBehaviour
 
 
     #region STACK
-    protected virtual void ClearNavStack()
+    public virtual void ClearNavStack()
     {
         nav_panel_index_stack.Clear();
         //NavButtonSwitching();
