@@ -33,7 +33,6 @@ public class MissionElement : MonoBehaviour
     {
         multiLayoutGroup = GetComponent<MultiLayoutGroup>();
         multiLayoutGroup.Init();
-        
     }
     
     //<summary> 미션 지정 : init, 미션 edit</summary>

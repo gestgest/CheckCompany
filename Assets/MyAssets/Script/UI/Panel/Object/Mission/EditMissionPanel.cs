@@ -83,7 +83,6 @@ public class EditMissionPanel : ManagerMissionPanel
 
         int index = _missionManager.Search_Mission_Index(mission_id);
         _missionManager.SetMission(mission, index);
-
         //굳이 리롤이 필요할까
 
         //back 네비 Panel

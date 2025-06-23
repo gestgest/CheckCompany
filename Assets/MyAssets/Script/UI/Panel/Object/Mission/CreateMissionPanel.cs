@@ -64,7 +64,12 @@ public class CreateMissionPanel : ManagerMissionPanel
 
         //초기화
         Init();
-        GamePanelManager.instance.SwitchingPanelFromInt(1); //missionPanel로 전환
+        List<int> ids = new List<int>();
+        ids.Add(1);
+        ids.Add(0);
+        
+        //nav 되려나
+        GamePanelManager.instance.SwitchingPanel(ids); //missionPanel로 전환
     }
 
 

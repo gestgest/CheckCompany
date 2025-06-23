@@ -95,7 +95,6 @@ public class GamePanelManager : PanelManager
 
     protected override void Push_NavPanelStack(List<int> indexList)
     {
-        Debug.Log("파카");
         base.Push_NavPanelStack(indexList);
         for (int i = 0; i < indexList.Count; i++)
         {

@@ -16,21 +16,17 @@ public class ApplicantElement : MonoBehaviour
     //int recruitment_id;
 
     private long applicant_id;
-    private List<int> indexList;
 
     private void Start()
     {
-        indexList = new List<int>(); 
-        indexList.Add(0);
-        indexList.Add(2);
-        indexList.Add(0);
         //이거를 바꿔야 함
-        applicantPanel = GamePanelManager.instance.GetPanel(indexList) as ApplicantPanel;
+        applicantPanel = GamePanelManager.instance.GetPanel(GetIndexList()) as ApplicantPanel;
     }
 
     // Init 급
     public void SetValue(Employee employee, int recruitment_id)
     {
+        
         //icon
         name_text.text = employee.Name;
         age_text.text = employee.Age.ToString() + "살";
@@ -39,11 +35,24 @@ public class ApplicantElement : MonoBehaviour
 
         Button button = GetComponent<Button>();
 
+        button.onClick.RemoveAllListeners();
         //버튼 누르면 이동
         button.onClick.AddListener(() =>
         {
-            PanelManager.instance.SwitchingSubPanel(true, indexList);
+            PanelManager.instance.SwitchingSubPanel(true, GetIndexList());
             applicantPanel.SetID(employee.ID, recruitment_id);
         });
+    }
+
+    private List<int> GetIndexList()
+    {
+        List<int> indexList;
+        
+        indexList = new List<int>(); 
+        indexList.Add(0);
+        indexList.Add(2);
+        indexList.Add(0);
+        
+        return indexList;
     }
 }

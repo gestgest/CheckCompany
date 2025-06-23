@@ -36,7 +36,6 @@ public class RecruitmentElement : MonoBehaviour
     private static int HEIGHT = 100;
     
     
-    
     private void OnEnable()
     {
         //draw UI
@@ -54,7 +53,7 @@ public class RecruitmentElement : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.T))
         {
-            Debug.Log("RecruitmentElement : T 버튼 누름");
+            Debug.Log(_multiLayoutGroup.GetOnHeight());
             _multiLayoutGroup.RerollScreen();
         }
     }
@@ -124,7 +123,6 @@ public class RecruitmentElement : MonoBehaviour
             CreateEmployeeObject(recruitment.GetApplicant(i));
         }
         SelectionApplicantSort();
-
         //RerollScreen();
     }
 
@@ -152,8 +150,10 @@ public class RecruitmentElement : MonoBehaviour
 
     private void RemoveAllApplicantObjects()
     {
-        //이거 무조건 문제될 거 같은데
-        _multiLayoutGroup.Init();
+        //만약 지원자 리스트들이 보이게 하고 나간다면 => 부모 오브젝트는 크기만 커지고 onHeight는 그대로
+        //_multiLayoutGroup.AddHeight(-_multiLayoutGroup.GetOnHeight()); 
+        _multiLayoutGroup.AddOnHeight(-_multiLayoutGroup.GetOnHeight()); //부모 오브젝트까지 초기화
+        
         for (int i = 0; i < applicant_objects.Count; i++)
         {
             Destroy(applicant_objects[i]);
