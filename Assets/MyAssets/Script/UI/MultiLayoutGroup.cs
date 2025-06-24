@@ -65,6 +65,7 @@ public class MultiLayoutGroup : MonoBehaviour
         }
         else if(isValueChange)
         {
+            Debug.Log(onHeight);
             AddHeight(-onHeight);
         }
         //RerollScreen();

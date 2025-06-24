@@ -31,20 +31,13 @@ public class RecruitmentElement : MonoBehaviour
     //지원자 정보 리스트
     private Recruitment recruitment;
     private List<GameObject> applicant_objects;
-    private bool _isChangedApplicants = false;
 
     private static int HEIGHT = 100;
-    
+    //change event => RecruitPanel's persistent
     
     private void OnEnable()
     {
-        if (!_isChangedApplicants)
-        {
-            return;
-        }
-
-        SetUI();
-        _isChangedApplicants = false;
+        //SetUI();
     }
     
 
@@ -57,10 +50,12 @@ public class RecruitmentElement : MonoBehaviour
         }
     }
 
-    public void Init(Recruitment recruitment)
+    //init
+    public void SetEmployee(Recruitment recruitment)
     {
         layout_parent = transform.parent.GetComponent<RectTransform>(); //부모 Layout 가져오기
         _multiLayoutGroup.Init();
+        
         //_multiLayoutGroup.AddHeight(HEIGHT);
         
         //부모 디폴트 높이 추가
@@ -74,16 +69,23 @@ public class RecruitmentElement : MonoBehaviour
         
         if(applicant_objects == null)
             applicant_objects = new List<GameObject>();
+        
+        this.recruitment = recruitment;
 
-        SetRecruitment(recruitment);
         SetUI();
     }
 
-    #region PROPERTY
-    private void SetRecruitment(Recruitment recruitment)
+    private void SetUI()
     {
-        this.recruitment = recruitment;
+        SetIcon(recruitment.GetEmployeeSO().GetIcon());
+        SetDDay(recruitment.GetDay());
+        SetApplicantsNumber(recruitment.GetApplicantCount());
+        
+        //RemoveAllApplicantObjects(); => 정말 상관없음, 어차피 RecruitPanel에서 다 새로로 만들어서
+        AllCreateApplicantObjects();
     }
+    
+    #region PROPERTY
     private void SetIcon(Sprite sprite)
     {
         icon.sprite = sprite;
@@ -146,30 +148,21 @@ public class RecruitmentElement : MonoBehaviour
         //이 오브젝트 제거
     }
 
-    private void RemoveAllApplicantObjects()
-    {
-        //만약 지원자 리스트들이 보이게 하고 나간다면 => 부모 오브젝트는 크기만 커지고 onHeight는 그대로
-        if(applicantsPanel.activeSelf)
-            _multiLayoutGroup.SwitchingScreen(false); //비활성화 => _multiLayoutGroup.AddHeight(-_multiLayoutGroup.GetOnHeight());
-         
-        _multiLayoutGroup.AddOnHeight(-_multiLayoutGroup.GetOnHeight()); //부모 오브젝트까지 초기화
-        
-        for (int i = 0; i < applicant_objects.Count; i++)
-        {
-            Destroy(applicant_objects[i]);
-        }
-        applicant_objects.Clear();
-    }
+    // private void RemoveAllApplicantObjects()
+    // {
+    //     //만약 지원자 리스트들이 보이게 하고 나간다면 => 부모 오브젝트는 크기만 커지고 onHeight는 그대로
+    //     if(applicantsPanel.activeSelf)
+    //         _multiLayoutGroup.SwitchingScreen(false); //비활성화 => _multiLayoutGroup.AddHeight(-_multiLayoutGroup.GetOnHeight());
+    //      
+    //     _multiLayoutGroup.AddOnHeight(-_multiLayoutGroup.GetOnHeight()); //부모 오브젝트까지 초기화
+    //     
+    //     for (int i = 0; i < applicant_objects.Count; i++)
+    //     {
+    //         Destroy(applicant_objects[i]);
+    //     }
+    //     applicant_objects.Clear();
+    // }
 
-    private void SetUI()
-    {
-        SetIcon(recruitment.GetEmployeeSO().GetIcon());
-        SetDDay(recruitment.GetDay());
-        SetApplicantsNumber(recruitment.GetApplicantCount());
-        
-        RemoveAllApplicantObjects();
-        AllCreateApplicantObjects();
-    }
 
     public void SwitchPanel()
     {
@@ -182,6 +175,11 @@ public class RecruitmentElement : MonoBehaviour
         _multiLayoutGroup.SwitchingScreen(isShow);
     }
 
+    public void InitMultiLayoutGroup()
+    {
+        _multiLayoutGroup.SwitchingScreen(false);
+        _multiLayoutGroup.AddOnHeight(-_multiLayoutGroup.GetOnHeight()); //부모 오브젝트까지 초기화
+    }
 
     #region binary_search
     //이진탐색

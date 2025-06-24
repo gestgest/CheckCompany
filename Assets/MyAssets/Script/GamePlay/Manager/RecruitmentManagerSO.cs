@@ -18,7 +18,7 @@ public class RecruitmentManagerSO : ScriptableObject
     [SerializeField] private EmployeeManagerSO _employeeManagerSO;
 
     [Header("Listening to Events")]
-    [SerializeField] private BoolEventChannelSO _isChangedEvent;
+    [SerializeField] private BoolEventChannelSO _isChangedEvent; //to recruitPanel
     
     [Space]
 

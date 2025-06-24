@@ -5,7 +5,7 @@ public class RecruitPanel : Panel
 {
     [SerializeField] private GameObject recruitmentPrefab;
     [SerializeField] private GameObject view; //parent
-    List<GameObject> recruitmentObjects; //RecruitmentElement
+    List<RecruitmentElement> recruitmentObjects; //RecruitmentElement
 
     [Header("Manager")]
     [SerializeField] private RecruitmentManagerSO _recruitmentManagerSO;
@@ -18,12 +18,7 @@ public class RecruitPanel : Panel
 
     void OnEnable()
     {
-        if (_isChangedRecruitments)
-        {
-            AllRemoveRecruitmentObjects(); //all remove
-            CreateRecruitmentObjects(); //recruitment load
-            _isChangedRecruitments = false;
-        }
+        SetUI();
     }
 
     protected override void Start()
@@ -38,6 +33,27 @@ public class RecruitPanel : Panel
         _isChangedEvent._onEventRaised -= SetIsChanged;
     }
 
+    private void SetUI()
+    {
+        if (_isChangedRecruitments)
+        {
+            AllRemoveRecruitmentObjects(); //all remove
+            CreateRecruitmentObjects(); //recruitment load
+            _isChangedRecruitments = false;
+        }
+    }
+    
+    private void AllRemoveRecruitmentObjects()
+    {
+        Init();
+        
+        for (int i = 0; i < recruitmentObjects.Count; i++)
+        {
+            recruitmentObjects[i].InitMultiLayoutGroup();
+            Destroy(recruitmentObjects[i]);
+        }
+        recruitmentObjects.Clear();
+    }
 
     //all create recruitment Objects
     private void CreateRecruitmentObjects()
@@ -55,34 +71,27 @@ public class RecruitPanel : Panel
         RecruitmentElement recruitmentContent = recruitmentObject.GetComponent<RecruitmentElement>();
 
         //recruitmentContent.SetRecruitment(employeeTypeIcons[(int)r.GetEmployeeType()], r.GetDay(), r.GetSize(), i)
-        recruitmentContent.Init(r); //여기에 multiLayoutGroup height값을 추가
+        recruitmentContent.SetEmployee(r); //여기에 multiLayoutGroup height값을 추가
             
-        recruitmentObjects.Add(recruitmentObject);
+        recruitmentObjects.Add(recruitmentContent);
     }
 
     private void Init()
     {
         if (recruitmentObjects == null)
         {
-            recruitmentObjects = new List<GameObject>();
+            recruitmentObjects = new List<RecruitmentElement>();
         }
     }
 
+    
+    
     #region PROPERTY
     private void SetIsChanged(bool isChanged)
     {
         _isChangedRecruitments = isChanged;
     }
 
-    public void AllRemoveRecruitmentObjects()
-    {
-        Init();
-        for (int i = 0; i < recruitmentObjects.Count; i++)
-        {
-            Destroy(recruitmentObjects[i]);
-        }
-        recruitmentObjects.Clear();
-    }
     #endregion
 
 }
