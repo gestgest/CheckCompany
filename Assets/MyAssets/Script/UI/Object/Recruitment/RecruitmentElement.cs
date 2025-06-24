@@ -21,7 +21,7 @@ public class RecruitmentElement : MonoBehaviour
     [SerializeField] private GameObject applicant_Prefab;
     private RectTransform layout_parent;
     
-    [SerializeField] private MultiLayoutGroup _multiLayoutGroup; //applicantsPanel
+    [SerializeField] private MultiLayoutGroup _childPanelMultiLayoutGroup; //applicantsPanel
 
     //Controller
     [Header("Manager")]
@@ -40,23 +40,13 @@ public class RecruitmentElement : MonoBehaviour
         //SetUI();
     }
     
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            Debug.Log(_multiLayoutGroup.GetOnHeight());
-            _multiLayoutGroup.RerollScreen();
-        }
-    }
-
     //init
     public void SetEmployee(Recruitment recruitment)
     {
         layout_parent = transform.parent.GetComponent<RectTransform>(); //부모 Layout 가져오기
-        _multiLayoutGroup.Init();
+        _childPanelMultiLayoutGroup.Init();
         
-        //_multiLayoutGroup.AddHeight(HEIGHT);
+        //_childPanelMultiLayoutGroup.AddHeight(HEIGHT); //self height
         
         //부모 디폴트 높이 추가
         // Vector2 v = layout_parent.sizeDelta;
@@ -136,14 +126,14 @@ public class RecruitmentElement : MonoBehaviour
 
         applicant_objects.Add(tmp);
         
-        _multiLayoutGroup.AddOnHeight(HEIGHT);
+        _childPanelMultiLayoutGroup.AddOnHeight(HEIGHT);
     }
 
     public void RemoveRecruitment()
     {
         _recruitmentControllerSO.RemoveRecruitment(recruitment.GetID());
-        _multiLayoutGroup.AddOnHeight(-HEIGHT);
-        _multiLayoutGroup.RerollScreen();
+        _childPanelMultiLayoutGroup.AddOnHeight(-HEIGHT);
+        _childPanelMultiLayoutGroup.RerollScreen();
         Destroy(gameObject);
         //이 오브젝트 제거
     }
@@ -172,13 +162,7 @@ public class RecruitmentElement : MonoBehaviour
 
     private void SwitchingScreen(bool isShow)
     {
-        _multiLayoutGroup.SwitchingScreen(isShow);
-    }
-
-    public void InitMultiLayoutGroup()
-    {
-        _multiLayoutGroup.SwitchingScreen(false);
-        _multiLayoutGroup.AddOnHeight(-_multiLayoutGroup.GetOnHeight()); //부모 오브젝트까지 초기화
+        _childPanelMultiLayoutGroup.SwitchingScreen(isShow);
     }
 
     #region binary_search

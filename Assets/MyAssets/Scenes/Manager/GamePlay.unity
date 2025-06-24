@@ -8395,6 +8395,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40958b6619c6d78468bad9b7eb3a8864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onHeight: 0
 --- !u!1 &341125226
 GameObject:
   m_ObjectHideFlags: 0
@@ -10679,6 +10680,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40958b6619c6d78468bad9b7eb3a8864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onHeight: 0
 --- !u!114 &385334362
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11832,6 +11834,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40958b6619c6d78468bad9b7eb3a8864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onHeight: 0
 --- !u!1 &430060134
 GameObject:
   m_ObjectHideFlags: 0
@@ -12628,6 +12631,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40958b6619c6d78468bad9b7eb3a8864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onHeight: 0
 --- !u!1 &452797644
 GameObject:
   m_ObjectHideFlags: 0
@@ -27171,6 +27175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40958b6619c6d78468bad9b7eb3a8864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onHeight: 0
 --- !u!1 &973629317
 GameObject:
   m_ObjectHideFlags: 0
@@ -30600,6 +30605,7 @@ MonoBehaviour:
   hasMini: 1
   recruitmentPrefab: {fileID: 8974342152770559031, guid: 32efdf2fedeb42c45ac036900fd03e16, type: 3}
   view: {fileID: 329780243}
+  _rootLayoutGroup: {fileID: 329780248}
   _recruitmentManagerSO: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
   _isChangedEvent: {fileID: 11400000, guid: 5859071bc8867ff4c92321d91d8c1bea, type: 2}
 --- !u!1001 &1111795697
@@ -39815,6 +39821,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40958b6619c6d78468bad9b7eb3a8864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onHeight: 0
 --- !u!1001 &1453654198
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44084,6 +44091,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40958b6619c6d78468bad9b7eb3a8864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onHeight: 0
 --- !u!1 &1617269942
 GameObject:
   m_ObjectHideFlags: 0

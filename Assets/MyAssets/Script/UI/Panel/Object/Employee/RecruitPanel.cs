@@ -7,6 +7,8 @@ public class RecruitPanel : Panel
     [SerializeField] private GameObject view; //parent
     List<RecruitmentElement> recruitmentObjects; //RecruitmentElement
 
+    [SerializeField] private MultiLayoutGroup _rootLayoutGroup;
+    
     [Header("Manager")]
     [SerializeField] private RecruitmentManagerSO _recruitmentManagerSO;
     
@@ -15,6 +17,8 @@ public class RecruitPanel : Panel
     //[Header("Broadcasting on events")]
     [SerializeField] private BoolEventChannelSO _isChangedEvent;
     private bool _isChangedRecruitments = true;
+    
+    private static readonly int RECRUITMENT_HEIGHT = 150; //recruitmentElement height : 100 + space : 50
 
     void OnEnable()
     {
@@ -35,8 +39,15 @@ public class RecruitPanel : Panel
 
     private void SetUI()
     {
+        Init();
         if (_isChangedRecruitments)
         {
+            if (_rootLayoutGroup.GetIsInit())
+            {
+                _rootLayoutGroup.Init();
+            }
+                
+            _rootLayoutGroup.SetParentZeroHeight();
             AllRemoveRecruitmentObjects(); //all remove
             CreateRecruitmentObjects(); //recruitment load
             _isChangedRecruitments = false;
@@ -45,13 +56,11 @@ public class RecruitPanel : Panel
     
     private void AllRemoveRecruitmentObjects()
     {
-        Init();
-        
         for (int i = 0; i < recruitmentObjects.Count; i++)
         {
-            recruitmentObjects[i].InitMultiLayoutGroup();
-            Destroy(recruitmentObjects[i]);
+            Destroy(recruitmentObjects[i].gameObject);
         }
+
         recruitmentObjects.Clear();
     }
 
@@ -72,7 +81,8 @@ public class RecruitPanel : Panel
 
         //recruitmentContent.SetRecruitment(employeeTypeIcons[(int)r.GetEmployeeType()], r.GetDay(), r.GetSize(), i)
         recruitmentContent.SetEmployee(r); //여기에 multiLayoutGroup height값을 추가
-            
+        _rootLayoutGroup.AddHeight(RECRUITMENT_HEIGHT);
+        
         recruitmentObjects.Add(recruitmentContent);
     }
 
