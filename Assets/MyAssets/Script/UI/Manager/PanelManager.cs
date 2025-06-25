@@ -48,7 +48,6 @@ public class PanelManager : MonoBehaviour
         {
             panels[i].gameObject.SetActive(false);
         }
-        
         indexList.Add(0);
         panels[0].OnPanel();
     }
@@ -60,6 +59,11 @@ public class PanelManager : MonoBehaviour
         indexList.Clear();
         indexList.Add(main_index);
         OnPanel(indexList);
+        if (GetPanel(indexList).GetPanels().Length != 0)
+        {
+            indexList.Add(0);
+        }
+        
         ClearNavStack();
     }
 
@@ -117,6 +121,12 @@ public class PanelManager : MonoBehaviour
     //뒤로가기 제외 => Panel 이동, subPanel끼리 이동할 경우에만
     public void SwitchingSubPanel(bool isNav, List<int> indexList)
     {
+        
+        for (int i = 0; i < this.indexList.Count; i++)
+        {
+            Debug.Log("네비의 index["+ i + "] : "  + this.indexList[i]);            
+        }
+        
         if(isNav){
             Push_NavPanelStack(this.indexList); //이전 panel 값 nav 저장
         }
@@ -140,6 +150,18 @@ public class PanelManager : MonoBehaviour
         //set beforeIndex
         indexList = output;
         SwitchingPanel(indexList);
+    }
+
+    public void PopIndexList()
+    {
+        GetPanel(indexList).OffPanel();
+        indexList.RemoveAt(indexList.Count - 1);
+    }
+    public void SwitchingIndexList(int value)
+    {
+        indexList.RemoveAt(indexList.Count - 1);
+        GetPanel(indexList).SwitchingPanel(value);
+        indexList.Add(value);
     }
 
 

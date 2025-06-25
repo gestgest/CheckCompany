@@ -101,6 +101,7 @@ public class Panel : MonoBehaviour
             panels[this.panel_index].OffPanel();
         gameObject.SetActive(false);
     }
+    
 
     #region PROPERTY
 

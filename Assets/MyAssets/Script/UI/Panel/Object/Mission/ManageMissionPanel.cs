@@ -23,7 +23,7 @@ public class ManagerMissionPanel : Panel
     protected virtual void Init()
     {
         _multiLayoutGroup.Init();
-        
+
         todo_mission_size = 7;
         //you should make 210 size
         //Debug.Log(SMALL_MISSION_HEIGHT * smallMission_size - layoutGroup.GetHeight());
