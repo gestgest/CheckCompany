@@ -14,6 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _employeeManager: {fileID: 11400000, guid: 6a695d970d94e0a4bb81e3e309e1fadf, type: 2}
   _missionManager: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
-  _AddRefEmployeeID: {fileID: 11400000, guid: a8293ea419198474e984d7683370aee6, type: 2}
-  _RemoveRefEmployeeID: {fileID: 11400000, guid: 1ef82531c8a496b49923c1828b34d255, type: 2}
   _ChangeAssignedEmployeeEventChannel: {fileID: 11400000, guid: bbcb714acc99da748ac825e9d5476609, type: 2}
+  _refEmployeesID: 16000000

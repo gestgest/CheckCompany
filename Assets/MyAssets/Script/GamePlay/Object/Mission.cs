@@ -3,20 +3,20 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-
+[Serializable]
 //MissionSO를 Todo_Mission으로 교체 => 동적으로 생성가능
 public class Mission
 {
-    private int id;
-    private EmployeeType mission_type = EmployeeType.DEVELOPER; //회복, 지능, 기술, 명상 이런식으로 해야하나
-    private string missionName;
-    private int iconID;
-    private Sprite icon;
+    [SerializeField] private int id;
+    [SerializeField] private EmployeeType mission_type = EmployeeType.DEVELOPER; //회복, 지능, 기술, 명상 이런식으로 해야하나
+    [SerializeField] private string missionName;
+    [SerializeField] private int iconID;
+    [SerializeField] private Sprite icon;
 
-    private int level; //easy, medium, hard, very hard
-    private List<Todo_Mission> todo_missions;
+    [SerializeField] private int level; //easy, medium, hard, very hard
+    [SerializeField] private List<Todo_Mission> todo_missions;
 
-    private List<int> refEmployees;
+    [SerializeField] private List<int> refEmployees;
 
     //private bool isDone = false; //전체 다 완료했는지 => 그냥 GetIsDone
     private Date doneDate;
@@ -81,6 +81,7 @@ public class Mission
     {
         return todo_missions;
     }
+
     public Todo_Mission GetTodoMission(int index)
     {
         return todo_missions[index];
@@ -114,7 +115,7 @@ public class Mission
 
         return count;
     }
-    
+
     private void SetDoneDate(Date date)
     {
         doneDate = date;
@@ -149,7 +150,11 @@ public class Mission
         return doneDate;
     }
 
-    public List<int> RefEmployees { get; set; }
+    public List<int> RefEmployees
+    {
+        get { return refEmployees; }
+        set { refEmployees = value; }
+    }
 
     //서버 보내기
     public Dictionary<string, object> MissionToJSON()
@@ -161,7 +166,7 @@ public class Mission
             { "icon", iconID },
             { "level", level },
             { "todo_missions", todo_missions }, //배열임
-            {"refEmployees", refEmployees}
+            { "refEmployees", refEmployees }
         };
 
         if (GetIsDone())
@@ -170,6 +175,7 @@ public class Mission
                 "doneDate", DateToJSON()
             );
         }
+
         return result;
     }
 
@@ -189,7 +195,8 @@ public class Mission
     public void JSONToMission(Dictionary<string, object> data)
     {
         //mission_type = (EmployeeType)(Convert.ToInt32(data["type"]));
-        mission_type = ConvertJSON.SafeGet<EmployeeType>(data, "type", EmployeeType.DEVELOPER); missionName = ConvertJSON.SafeGet<string>(data, "name", "Unknown");
+        mission_type = ConvertJSON.SafeGet<EmployeeType>(data, "type", EmployeeType.DEVELOPER);
+        missionName = ConvertJSON.SafeGet<string>(data, "name", "Unknown");
         iconID = ConvertJSON.SafeGet<int>(data, "icon", 0);
         level = ConvertJSON.SafeGet<int>(data, "level", 0);
 
@@ -205,7 +212,8 @@ public class Mission
         // 완료된 날짜
         if (GetIsDone())
         {
-            Dictionary<string, object> doneDate = ConvertJSON.SafeGet<Dictionary<string, object>>(data, "doneDate", null);
+            Dictionary<string, object> doneDate =
+                ConvertJSON.SafeGet<Dictionary<string, object>>(data, "doneDate", null);
             if (doneDate != null)
             {
                 this.doneDate.Year = ConvertJSON.SafeGet<int>(doneDate, "year", 0);
@@ -214,7 +222,12 @@ public class Mission
             }
         }
 
-        refEmployees = ConvertJSON.SafeGet<List<int>>(data, "refEmployee", new List<int>());
+        List<object> refEmployees = ConvertJSON.SafeGet<List<object>>(data, "refEmployees", new List<object>());
+        this.refEmployees = new List<int>();
+        for (int i = 0; i < refEmployees.Count; i++)
+        {
+            this.refEmployees.Add(Convert.ToInt32(refEmployees[i]));
+        }
     }
 }
 

@@ -4,19 +4,21 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 
 //그냥 자료형으로 하자 그냥
+[Serializable]
 public class Date
 {
-    int year;
-    int month;
-    int day;
-    Week week; //MON ~ 
+    [SerializeField] int year;
+    [SerializeField] int month;
+    [SerializeField] int day;
+    [SerializeField] Week week; //MON ~ 
 
-    int hour;
-    int minute;
+    [SerializeField] int hour;
+    [SerializeField] int minute;
 
-    public Date()
+    public Date(bool isNow = false)
     {
-        SetDateNow();
+        if(isNow)
+            SetDateNow();
     }
 
     #region PROPERTY
@@ -316,15 +318,26 @@ public class Date
 
     public virtual void GetDateFromJSON(Dictionary<string, object> data)
     {
-        Year = ConvertJSON.SafeGet<int>(data, "year", 2020);
-        Month = ConvertJSON.SafeGet<int>(data, "month", 1);
-        Day = ConvertJSON.SafeGet<int>(data, "day", 1);
-        _Week = ConvertJSON.SafeGet<Week>(data, "week", Week.WED);
-        Hour = ConvertJSON.SafeGet<int>(data,"hour", 0);
-        Minute = ConvertJSON.SafeGet<int>(data,"minute", 0);
+        year = ConvertJSON.SafeGet<int>(data, "year", 2020);
+        month = ConvertJSON.SafeGet<int>(data, "month", 1);
+        day = ConvertJSON.SafeGet<int>(data, "day", 1);
+        week = ConvertJSON.SafeGet<Week>(data, "week", Week.WED);
+        hour = ConvertJSON.SafeGet<int>(data,"hour", 0);
+        minute = ConvertJSON.SafeGet<int>(data,"minute", 0);
+
+        Year = year;
+        Month = month;
+        Day = day;
+        _Week = week;
+        Hour = hour;
+        Minute = minute;
     }
     #endregion
     
+    protected void DebugDate()
+    {
+        Debug.Log(Year +"년 "+ Month +"월 "+ Day +"일 "+ _Week +"요일 "+ Hour + "시 "+Minute + "분");
+    }
     
 }
 

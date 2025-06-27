@@ -3911,11 +3911,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4639581009264427018, guid: 499433410ee2fd1448c5029bafe4f60a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 4639581009264427018, guid: 499433410ee2fd1448c5029bafe4f60a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -100
       objectReference: {fileID: 0}
     - target: {fileID: 4639581009264427018, guid: 499433410ee2fd1448c5029bafe4f60a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6364,7 +6364,7 @@ MonoBehaviour:
   hasMini: 0
   missionPrefab: {fileID: 4904320000939938416, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
   missionEditPanel: {fileID: 1208356401}
-  multiLayoutGroup: {fileID: 968920552}
+  _multiLayoutGroup: {fileID: 968920552}
   missionElementPoolObjects:
   - {fileID: 139947312}
   - {fileID: 437952998}
@@ -15973,7 +15973,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &564611525
 RectTransform:
   m_ObjectHideFlags: 0
@@ -21702,11 +21702,11 @@ RectTransform:
   - {fileID: 2128672038}
   m_Father: {fileID: 1208356400}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -270}
   m_SizeDelta: {x: 160, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &749935069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24115,11 +24115,11 @@ RectTransform:
   - {fileID: 898842615}
   m_Father: {fileID: 67827081}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 93}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -370}
   m_SizeDelta: {x: 160, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &870605383
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24268,7 +24268,7 @@ MonoBehaviour:
   hasMini: 0
   missionPrefab: {fileID: 4904320000939938416, guid: 5b01e13344efe814f8a29023293fb052, type: 3}
   missionEditPanel: {fileID: 1208356401}
-  multiLayoutGroup: {fileID: 385334361}
+  _multiLayoutGroup: {fileID: 385334361}
   missionElementPoolObjects:
   - {fileID: 1411075566}
   - {fileID: 1192698325}
@@ -32411,9 +32411,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1645881918}
-        m_TargetAssemblyTypeName: MiniPanel, Assembly-CSharp
-        m_MethodName: OffPanelButton
+      - m_Target: {fileID: 924872976}
+        m_TargetAssemblyTypeName: PanelManager, Assembly-CSharp
+        m_MethodName: PopIndexList
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -32622,9 +32622,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 108196844}
-        m_TargetAssemblyTypeName: MiniPanel, Assembly-CSharp
-        m_MethodName: OffPanelButton
+      - m_Target: {fileID: 924872976}
+        m_TargetAssemblyTypeName: PanelManager, Assembly-CSharp
+        m_MethodName: PopIndexList
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -33492,7 +33492,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1208356400
 RectTransform:
   m_ObjectHideFlags: 0
@@ -34593,7 +34593,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5243127675918490630, guid: ef3f4c91cf9cae249b1c6ed3fbf29e87, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8037801010729141495, guid: ef3f4c91cf9cae249b1c6ed3fbf29e87, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -45197,7 +45197,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1645881914
 RectTransform:
   m_ObjectHideFlags: 0
@@ -46727,11 +46727,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4639581009264427018, guid: 499433410ee2fd1448c5029bafe4f60a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -165
       objectReference: {fileID: 0}
     - target: {fileID: 4639581009264427018, guid: 499433410ee2fd1448c5029bafe4f60a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -100
       objectReference: {fileID: 0}
     - target: {fileID: 4639581009264427018, guid: 499433410ee2fd1448c5029bafe4f60a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -47700,10 +47700,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 924872976}
-        m_TargetAssemblyTypeName: PanelManager, Assembly-CSharp
-        m_MethodName: SwitchingIndexList
-        m_Mode: 3
+      - m_Target: {fileID: 873169011}
+        m_TargetAssemblyTypeName: CompleteMissionPanel, Assembly-CSharp
+        m_MethodName: OnCompleteMissionPanelEvent
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -50767,11 +50767,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4639581009264427018, guid: 499433410ee2fd1448c5029bafe4f60a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 195
       objectReference: {fileID: 0}
     - target: {fileID: 4639581009264427018, guid: 499433410ee2fd1448c5029bafe4f60a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -100
       objectReference: {fileID: 0}
     - target: {fileID: 4639581009264427018, guid: 499433410ee2fd1448c5029bafe4f60a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -57641,11 +57641,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4639581009264427018, guid: 499433410ee2fd1448c5029bafe4f60a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -345
       objectReference: {fileID: 0}
     - target: {fileID: 4639581009264427018, guid: 499433410ee2fd1448c5029bafe4f60a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -100
       objectReference: {fileID: 0}
     - target: {fileID: 4639581009264427018, guid: 499433410ee2fd1448c5029bafe4f60a, type: 3}
       propertyPath: m_LocalPosition.z

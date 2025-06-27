@@ -20,8 +20,8 @@ public class EditMissionPanel : ManagerMissionPanel
     public void SetMission(Mission mission)
     {
         Init();
+
         
-        //refEmployees
         refEmployees = mission.RefEmployees;
         _createMissionManager.SetRefEmployeesID(refEmployees);
         

@@ -17,7 +17,7 @@ public class MissionManagerSO : ScriptableObject
     private bool _isQuery = false;
 
 
-    private List<Mission> missions;
+    [SerializeField] private List<Mission> missions;
     private int mission_count;
 
 
@@ -26,7 +26,10 @@ public class MissionManagerSO : ScriptableObject
     {
         if (missions == null)
             missions = new List<Mission>();
-
+        else
+        {
+            missions.Clear();
+        }
         _completeDate = new Date();
 
     }

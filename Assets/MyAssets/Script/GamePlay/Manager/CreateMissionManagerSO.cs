@@ -12,7 +12,7 @@ public class CreateMissionManagerSO : ScriptableObject
     [SerializeField] private VoidEventChannelSO _ChangeAssignedEmployeeEventChannel; //to AssignMissionPanel
 
     private int assignableEmployeeSize;
-    private List<int> _refEmployeesID;
+    [SerializeField] private List<int> _refEmployeesID; //not set SerializeField 
 
     //이미지? => 정말 나중에 만들 예정 => 지금은 그냥 0으로 default
     private int employee_type = 0;
@@ -23,10 +23,6 @@ public class CreateMissionManagerSO : ScriptableObject
     {
         if(_refEmployeesID == null)
             _refEmployeesID = new List<int>();
-        else
-        {
-            _refEmployeesID.Clear();
-        }
     }
 
     public void AddRefEmployeeID(int id)

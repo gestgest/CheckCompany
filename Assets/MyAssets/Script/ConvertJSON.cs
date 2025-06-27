@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 
 public static class ConvertJSON
@@ -8,8 +9,13 @@ public static class ConvertJSON
     public static T SafeGet<T>(Dictionary<string, object> data, string key, T defaultValue)
     {
         if (!data.TryGetValue(key, out object val))
+        {
             return defaultValue;
-
+        }
+        if (data[key] == null)
+        {
+            return defaultValue;
+        }
         try
         {
             return (T)Convert.ChangeType(val, typeof(T));

@@ -1,13 +1,14 @@
+using System;
 using System.Collections.Generic;
 using Firebase.Firestore;
 using UnityEngine;
 
-[FirestoreData]
+[FirestoreData] [Serializable]
 public class Todo_Mission
 {
-    [FirestoreProperty]
+    [FirestoreProperty][SerializeField] 
     public string Title { get; set; }
-    [FirestoreProperty]
+    [FirestoreProperty][SerializeField] 
     public bool IsDone { get; set; }
 
     public Todo_Mission()

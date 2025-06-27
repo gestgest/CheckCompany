@@ -89,8 +89,9 @@ public class ManagerMissionPanel : Panel
     public void SwitchingAssignEmployeePanel()
     {
         AssignMissionPanel p = panels[0].GetComponent<AssignMissionPanel>();
-
-        panels[0].OnPanel();
+        
+        GamePanelManager.instance.PushIndexList(0);
         p.Init();
+        //panels[0].OnPanel();
     }
 }

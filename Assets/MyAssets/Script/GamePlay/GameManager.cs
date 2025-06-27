@@ -35,8 +35,8 @@ public class GameManager : MonoBehaviour
 
     int employee_count = 0;
     long money;
-    private GameDate _gameDate;
-    private Date _currentDate;
+    [SerializeField] private GameDate _gameDate;
+    [SerializeField] private Date _currentDate;
     
 
     void Awake()
@@ -121,10 +121,10 @@ public class GameManager : MonoBehaviour
             dateData = new Dictionary<string, object>();
         }
 
-        _currentDate = new Date();
-        _currentDate.GetDateFromJSON(
-            ConvertJSON.SafeGet<Dictionary<string, object>>(dateData,"currentDate", new Date().DateToJSON())
-        );  
+        _currentDate = new Date(true);
+        // _currentDate.GetDateFromJSON(
+        //     ConvertJSON.SafeGet<Dictionary<string, object>>(dateData,"currentDate", new Date().DateToJSON())
+        // );  
         _gameDate.GetDateFromJSON(
             ConvertJSON.SafeGet<Dictionary<string, object>>(dateData,"gameDate", new Dictionary<string, object>())
         );
