@@ -8,7 +8,7 @@ public class MissionPanel : Panel
     [SerializeField] private GameObject missionPrefab;
     [SerializeField] private EditMissionPanel missionEditPanel;
 
-    [SerializeField] protected MultiLayoutGroup _multiLayoutGroup;
+    [SerializeField] protected MultiLayoutGroup _multiLayoutGroup; //
 
     //pool링 예정
     [SerializeField] protected MissionElement [] missionElementPoolObjects = new MissionElement[MISSION_MAX_SIZE];
@@ -51,6 +51,7 @@ public class MissionPanel : Panel
         mission_count = 0;
         for (int i = 0; i < MISSION_MAX_SIZE; i++)
         {
+            //이때 height도 
             missionElementPoolObjects[i].gameObject.SetActive(false);
         }
 
