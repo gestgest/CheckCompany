@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51c8f18b573e3a6428872ea20fcfbbfa, type: 3}
+  m_Name: CreateMissionManagerSO
+  m_EditorClassIdentifier: 
+  _employeeManager: {fileID: 11400000, guid: 6a695d970d94e0a4bb81e3e309e1fadf, type: 2}
+  _missionManager: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
+  _ChangeAssignedEmployeeEventChannel: {fileID: 11400000, guid: bbcb714acc99da748ac825e9d5476609, type: 2}
+  _refEmployeesID: 16000000

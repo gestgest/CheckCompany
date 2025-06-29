@@ -77,8 +77,8 @@ public class Panel : MonoBehaviour
 
         this.panel_index = index;
         panels[index].OnPanel();
+        
     }
-
     public virtual void CloseAllPanels()
     {
         for (int i = 0; i < panels.Length; i++)
@@ -101,6 +101,7 @@ public class Panel : MonoBehaviour
             panels[this.panel_index].OffPanel();
         gameObject.SetActive(false);
     }
+    
 
     #region PROPERTY
 

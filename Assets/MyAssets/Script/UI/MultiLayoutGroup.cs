@@ -8,11 +8,11 @@ using UnityEngine.UI;
 public class MultiLayoutGroup : MonoBehaviour
 {
     RectTransform size; //자기 자신 size
-    private float onHeight = 0;
+    [SerializeField] private float onHeight = 0;
     
     private MultiLayoutGroup _parentMultiLayout = null;
     private VerticalLayoutGroup layoutGroup;
-    bool isInit = false;
+    bool isInit = true;
 
     //private void Awake()
     //{
@@ -28,14 +28,32 @@ public class MultiLayoutGroup : MonoBehaviour
         size = transform.GetComponent<RectTransform>();
         layoutGroup = transform.GetComponent<VerticalLayoutGroup>();
 
-        isInit = true;
+        onHeight = 0;
+        
+        isInit = false;
         if (_parentMultiLayout == null)
         {
             return;
         }
 
-        if(!_parentMultiLayout.GetIsInit())
+        //is first
+        if (_parentMultiLayout.GetIsInit())
+        {
             _parentMultiLayout.Init();
+            _parentMultiLayout.SetIsInit(false);
+        }
+    }
+
+    public void SetParentZeroHeight()
+    {
+        SetHeight(0);
+        onHeight = 0;
+        
+        if (_parentMultiLayout == null)
+        {
+            return;
+        }
+        _parentMultiLayout.SetParentZeroHeight();
     }
 
 
@@ -56,6 +74,7 @@ public class MultiLayoutGroup : MonoBehaviour
         // }
     }
 
+    
     public void SwitchingScreen(bool isOn, bool isValueChange = true)
     {
         if (isOn)
@@ -109,7 +128,7 @@ public class MultiLayoutGroup : MonoBehaviour
 
     public void AddOnHeight(float height)
     {
-        onHeight += height; //부모에게 안 줘도 됨 => 어차피 Add할때 줄거임
+        onHeight += height; //부모에게 안 줘도 됨 => 어차피 AddHeight할때 줄거임
         if (_parentMultiLayout == null)
         {
             RerollScreen();
@@ -128,5 +147,9 @@ public class MultiLayoutGroup : MonoBehaviour
     public bool GetIsInit()
     {
         return isInit;
+    }
+    public void SetIsInit(bool isInit)
+    {
+        this.isInit = isInit;
     }
 }

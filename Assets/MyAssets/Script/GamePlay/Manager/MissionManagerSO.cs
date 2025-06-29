@@ -17,7 +17,7 @@ public class MissionManagerSO : ScriptableObject
     private bool _isQuery = false;
 
 
-    private List<Mission> missions;
+    [SerializeField] private List<Mission> missions;
     private int mission_count;
 
 
@@ -26,7 +26,10 @@ public class MissionManagerSO : ScriptableObject
     {
         if (missions == null)
             missions = new List<Mission>();
-
+        else
+        {
+            missions.Clear();
+        }
         _completeDate = new Date();
 
     }
@@ -53,6 +56,7 @@ public class MissionManagerSO : ScriptableObject
 
 
         JSONToMissions(data);
+        
     }
 
     #region PROPERTY
@@ -163,6 +167,8 @@ public class MissionManagerSO : ScriptableObject
             //EmployeeSO employeeSO = RecruitmentController.instance.GetEmployeeSO(Convert.ToInt32(tmp["employeeType"]));
             //Employee employee = new EmployeeBuilder().BuildEmployee(employeeSO);
         }
+        
+        SortMission();
     }
 
     #region SERVER
@@ -256,5 +262,22 @@ public class MissionManagerSO : ScriptableObject
         }
     }
 
+
+    private void SortMission()
+    {
+        //O(n^2) => 나중에 다른 정렬로 바꾸지 않을까
+        for (int i = 0; i < missions.Count; i++)
+        {
+            for (int j = i + 1; j < missions.Count; j++)
+            {
+                if (missions[i].ID > missions[j].ID)
+                {
+                    Mission tmp = missions[i];
+                    missions[i] = missions[j];
+                    missions[j] = tmp;
+                }
+            }
+        }
+    }
     #endregion
 }

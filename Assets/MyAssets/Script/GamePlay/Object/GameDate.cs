@@ -3,6 +3,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Events;
 
+[Serializable]
 public class GameDate : Date
 {
     public UnityAction<int> _onStaminaChanged;
@@ -12,6 +13,7 @@ public class GameDate : Date
     /// <param name="onStaminaChanged">EmployeeControllerSO의 함수</param>
     public GameDate(UnityAction<int> onStaminaChanged, SendFirebaseEventChannelSO sendFirebaseEventChannelSO)
     {
+        
         this._onStaminaChanged += onStaminaChanged;
         this._sendFirebaseEventChannelSO = sendFirebaseEventChannelSO;
     }
@@ -46,8 +48,14 @@ public class GameDate : Date
         }
         set
         {
+            //31 => 1
+            if (base.Day > value)
+            {
+                Debug.Log(base.Month + "디버깅 월급 : 일단 만원만 사라짐" + value);
+                GameManager.instance.SetMoney(GameManager.instance.Money - 10000);
+            }
             base.Day = value;
-
+            
             //임시 디버깅용 회복 함수
             _onStaminaChanged.Invoke(70);
             //EmployeeControllerSO.instance.AddStamina(70);
@@ -87,7 +95,7 @@ public class GameDate : Date
         _sendFirebaseEventChannelSO._onSendEventRaised(
             "GamePlayUser",
             GameManager.instance.Nickname,
-            "date",
+            "date.gameDate",
             data
         );
     }

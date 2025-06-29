@@ -175,8 +175,21 @@ MonoBehaviour:
     m_SubObjectGUID: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
+  _myCompanyGameScene:
+    m_AssetGUID: e75245830b5746648965797656c89fc6
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  _isLoginEvent: {fileID: 11400000, guid: 1e230bf51924575488035506b8b32078, type: 2}
   _menuToLoadEvent:
     m_AssetGUID: 753df1d70f221d04b931ffa04b0f7dd9
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  _myCompanyToLoadEvent:
+    m_AssetGUID: 8d9d3da6891fefa4b879dcb5f91b7f2a
     m_SubObjectName: 
     m_SubObjectGUID: 
     m_SubObjectType: 

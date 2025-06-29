@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "GetRecruitmentEventChannelSO", menuName = "ScriptableObject/Event/GetRecruitmentEventChannelSO")]
+[CreateAssetMenu(fileName = "GetRecruitmentEventChannelSO", menuName = "ScriptableObject/Event/Get/GetRecruitmentEventChannelSO")]
 
 public class GetRecruitmentEventChannelSO : ScriptableObject
 {

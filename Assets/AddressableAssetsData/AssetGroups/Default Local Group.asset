@@ -30,6 +30,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8d9d3da6891fefa4b879dcb5f91b7f2a
+    m_Address: Assets/MyAssets/ScriptableObject/Event/LoadLocationEventChannelSO.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9fc0d4010bbf28b4594072e72b8655ab
     m_Address: Assets/MyAssets/Scenes/Manager/GamePlay.unity
     m_ReadOnly: 0

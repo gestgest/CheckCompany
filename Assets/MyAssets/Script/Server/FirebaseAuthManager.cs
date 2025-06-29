@@ -5,32 +5,20 @@ using UnityEngine;
 using Firebase;
 using Firebase.Auth;
 using System.Threading.Tasks;
-using System.ComponentModel;
-using Unity.VisualScripting;
-using UnityEngine.Serialization;
+using Firebase.Extensions;
 using UnityEngine.AddressableAssets;
 
 
 public class FirebaseAuthManager : MonoBehaviour
 {
-    [Header("Firebase")]
     private DependencyStatus dependencyStatus;
-    [SerializeField] private FirebaseAuth auth;
-    [SerializeField] private FirebaseUser user;
+    private FirebaseAuth auth;
+    private FirebaseUser user;
 
     [Header("Listening to eventChannels")]
     [SerializeField] private String2EventChannelSO _loginEvent;
     [SerializeField] private String4EventChannelSO _registerEvent;
     
-    
-    // [SerializeField] private GetStringEventChannelSO _getLoginEmailEvent;
-    // [SerializeField] private GetStringEventChannelSO _getLoginPasswordEvent;
-    //
-    // [SerializeField] private GetStringEventChannelSO _getRegisterNameEvent;
-    // [SerializeField] private GetStringEventChannelSO _getRegisterEmailEvent;
-    // [SerializeField] private GetStringEventChannelSO _getRegisterPasswordEvent;
-    // [SerializeField] private GetStringEventChannelSO _getRegisterConfirmPasswordEvent;
-
     [Space]
     //서버 send 함수
     [Header("Broadcasting on firebaseChannels")]
@@ -38,14 +26,15 @@ public class FirebaseAuthManager : MonoBehaviour
     [SerializeField] private SendFirebaseEventChannelSO _setNewFireStoreEvent;
     [SerializeField] private SendFirebaseEventChannelSO _setFireStoreEvent;
 
-    //함수로 => _loadLocation
-    [SerializeField] private LoadEventChannelSO _loadLocation;
+    [SerializeField] private BoolEventChannelSO _isLoginEvent;
+    [SerializeField] private LoadEventChannelSO _loadLocation; //sceneLoader?
     [SerializeField] private AssetReference _myCompanyScene;
-    
+
+    private bool isInit = true;
     void Awake()
     {
         //파이어베이스 서버 체크 => 전역 무언가를 생성
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
+        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
         {
             dependencyStatus = task.Result;
             //이용가능하다면
@@ -88,26 +77,43 @@ public class FirebaseAuthManager : MonoBehaviour
 
     void AuthStatusChanged(object sender, System.EventArgs eventArgs)
     {
-        bool userSame = auth.CurrentUser == user;
-        if (!userSame)
+        try
         {
-            //로그인했는지
-            bool signedIn = auth.CurrentUser != null;
-
-            //로그인 안했는데 user값이 있다면
-            if (!signedIn && user != null)
+            bool userSame = auth.CurrentUser == user;
+            if (!userSame)
             {
-                //로그아웃
-            }
-            user = auth.CurrentUser;
+                bool signedIn = auth.CurrentUser != null;
 
-            if (signedIn)
-            {
-                //로그인
+                if (!signedIn && user != null)
+                {
+                    // 로그아웃 처리
+                }
+
+                user = auth.CurrentUser;
+                if (signedIn)
+                {
+                    LoginEvent(true);
+                }
+                
             }
+            LoginEvent(false);
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"[AuthStatusChanged Error] {ex.GetType().Name}: {ex.Message}\n{ex.StackTrace}");
         }
     }
 
+    private void LoginEvent(bool isLogin)
+    {
+        if (isInit)
+        {
+            isInit = false;
+            _isLoginEvent.RaiseEvent(isLogin);
+        }
+
+    }
+    
     public void Login(string email, string password)
     {
         StartCoroutine(LoginAynsc(
@@ -159,7 +165,6 @@ public class FirebaseAuthManager : MonoBehaviour
         else //로그인 성공
         {
             user = loginTask.Result.User;
-            Debug.Log("성공" + user);
             _loadLocation.RaiseEvent(_myCompanyScene);
         }
     }

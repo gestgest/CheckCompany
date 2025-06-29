@@ -18,12 +18,12 @@ public class GameManager : MonoBehaviour
     private FirebaseUser user;
 
 
-    //컨트롤러 리스트
+    //managers
     [Header("Manager")]
     [SerializeField] RecruitmentManagerSO recruitmentControllerSO;
     [SerializeField] MissionManagerSO missionControllerSO;
     [SerializeField] EmployeeManagerSO employeeControllerSO;
-    [FormerlySerializedAs("_placeSystemSO")] [SerializeField] PlacedObjectManager _placeManager;
+    [SerializeField] PlacedObjectManager _placeManager;
     
     [Header("ServerEvent")]
     [SerializeField] private DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
@@ -33,13 +33,11 @@ public class GameManager : MonoBehaviour
 
     private string nickname;
 
-    //int executive = 1; //임원, 임원 생성할때 이거 참조해야한다
     int employee_count = 0;
     long money;
-    private GameDate date;
+    [SerializeField] private GameDate _gameDate;
+    [SerializeField] private Date _currentDate;
     
-    //Reputation reputation = Reputation.single; //레벨 [명예]
-    //int exp = 0;
 
     void Awake()
     {
@@ -62,31 +60,29 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        //컨트롤러 넣고
         recruitmentControllerSO.Init();
         missionControllerSO.Init();
         employeeControllerSO.Init();
         
         _placeManager.Init();
         
-        date = new GameDate(employeeControllerSO.AddStamina, _sendFirebaseEventChannelSO);
+        _gameDate = new GameDate(employeeControllerSO.AddStamina, _sendFirebaseEventChannelSO);
 
         GameServerStart();
-        //절대로 LoginScene에 넣지마 => 메인 스레드 충돌 오류
+        //Don't put the LoginScene => main thread error
         //fireStoreManager.Init();
         //SetDateUI();
     }
     
     public async void GameServerStart()
     {
-        //Auth로 가져오고
         auth = FirebaseAuth.DefaultInstance;
         user = auth.CurrentUser;
 
-        //만약 로그인 안했을 경우 무조건 디폴트 계정을 넣어야 한다.★★★
+        //if you are not logged in, you must enter the default account
         if (user == null)
         {
-            //디폴트 계정
+            //default account
         }
         Debug.Log(user.Email);
 
@@ -94,25 +90,16 @@ public class GameManager : MonoBehaviour
         //타입이 64비트가 나온다. => 8바이트 => long
         //int는 4바이트
         //convert로 하면 null이 0으로 바뀌어진다
-
-        //user.Email으로 쿼리 만들고 => null 처리 안함 => 그냥 
+        
         nickname = (string)await _getJSONEventChannelSO.RaiseEvent("User", user.Email, "nickname");
 
         long money;
-        money = (long)(await _getJSONEventChannelSO.RaiseEvent("User", user.Email, "money") ?? (long)0);
+        money = (long)(await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "money") ?? (long)0);
         SetMoney(money, false);
 
-        object tmp_employee_count =
+        int employee_count =
             Convert.ToInt32(await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "employee_count"));
 
-        if (tmp_employee_count == null)
-        {
-            Employee_count = 0;
-        }
-        else
-        {
-            employee_count = Convert.ToInt32(tmp_employee_count);
-        }
         
         //MissionController.instance.Init();
         missionControllerSO.SetMissionData(
@@ -125,14 +112,33 @@ public class GameManager : MonoBehaviour
 
         Dictionary<string, object> employees = (Dictionary<string, object>)await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "employees");
         employeeControllerSO.JSONToEmployees(employees);
-        
-        date.GetDateFromJSON(
-            (Dictionary<string, object>)await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "date")
+
+        Dictionary<string, object> dateData =
+            (Dictionary<string, object>)await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "date");
+
+        if (dateData == null)
+        {
+            dateData = new Dictionary<string, object>();
+        }
+
+        _currentDate = new Date(true);
+        // _currentDate.GetDateFromJSON(
+        //     ConvertJSON.SafeGet<Dictionary<string, object>>(dateData,"currentDate", new Date().DateToJSON())
+        // );  
+        _gameDate.GetDateFromJSON(
+            ConvertJSON.SafeGet<Dictionary<string, object>>(dateData,"gameDate", new Dictionary<string, object>())
         );
+        
+        _sendFirebaseEventChannelSO._onSendEventRaised(
+            "GamePlayUser",
+            GameManager.instance.Nickname,
+            "date.currentDate",
+            _currentDate.DateToJSON()
+        );
+        
         SetDateUI();
         
         //object_count 가져오고
-        
         int object_count =
             Convert.ToInt32(await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "placeableObject_id"));
         
@@ -186,10 +192,10 @@ public class GameManager : MonoBehaviour
     public GameDate _Date
     {
         //애초에 서버에 데이터를 넣는 게 낫지 않나
-        get { return date; }
+        get { return _gameDate; }
         set
         {
-            date = value;
+            _gameDate = value;
             //서버 로딩
             SetDateUI();
         }
@@ -197,14 +203,14 @@ public class GameManager : MonoBehaviour
 
     public void AddDateMinute(int value)
     {
-        date.Minute += value;
+        _gameDate.Minute += value;
         recruitmentControllerSO.AddRandomApplicants(60 / value);
         SetDateUI();
     }
 
     public void SetDateUI()
     {
-        ui_manager.SetDateText(date);
+        ui_manager.SetDateText(_gameDate);
     }
 
     #endregion

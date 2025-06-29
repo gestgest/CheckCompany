@@ -23,31 +23,29 @@ public class EmployeeStatusPanel : MiniPanel
     [SerializeField] private Gauge staminaGauge;
     [SerializeField] private Gauge mentalGauge;
 
-    [Space]
-
-    [Header("EmployeeMissionPanel")]
-    [SerializeField] private GameObject missionObjectParent; //5개
-    private MissionIconElement[] missionUIs; //5개 
-    //나중에 MissionElementUI에서 클릭 하면 바로바로 여기서 미션을 가져와야 함
-    // ㄴ 원래 이거였지만 어쩌다 보니 바뀜
-
-    [Space]
-    [Header("Mission UI")]
-    [SerializeField] private GameObject descriptionPanel;
-    [SerializeField] private GameObject addMissionMiniWindow;
-    [SerializeField] private GameObject processBar;
-    [SerializeField] private TextMeshProUGUI processBar_text;
-
-    [Space]
-    [Header("MissionPanel's AddMissionMiniWindow")]
-    //private Mission[] missions;  //추가할 미션  => 아직  안쓴다. 대신 미션 필터링할때 여기에 담을 수 있다.
-    [SerializeField] private Transform addMissionElement_parent;
-    [SerializeField] private GameObject addMissionElement_prefab;
-
-    [Space]
-    [Header("MissionPanel의 Mission")]
-    [SerializeField] private GameObject[] todoMission_PoolObjects; //풀링용 오브젝트 (7개)
-    [SerializeField] private GameObject todoMission_prefab; //토글
+    // [Header("EmployeeMissionPanel")]
+    // [SerializeField] private GameObject missionObjectParent; //5개
+    // private MissionIconElement[] missionUIs; //5개 
+    // //나중에 MissionElementUI에서 클릭 하면 바로바로 여기서 미션을 가져와야 함
+    // // ㄴ 원래 이거였지만 어쩌다 보니 바뀜
+    //
+    // [Space]
+    // [Header("Mission UI")]
+    // [SerializeField] private GameObject descriptionPanel;
+    // [SerializeField] private GameObject addMissionMiniWindow;
+    // [SerializeField] private GameObject processBar;
+    // [SerializeField] private TextMeshProUGUI processBar_text;
+    //
+    // [Space]
+    // [Header("MissionPanel's AddMissionMiniWindow")]
+    // //private Mission[] missions;  //추가할 미션  => 아직  안쓴다. 대신 미션 필터링할때 여기에 담을 수 있다.
+    // [SerializeField] private Transform addMissionElement_parent;
+    // [SerializeField] private GameObject addMissionElement_prefab;
+    //
+    // [Space]
+    // [Header("MissionPanel의 Mission")]
+    // [SerializeField] private GameObject[] todoMission_PoolObjects; //풀링용 오브젝트 (7개)
+    // [SerializeField] private GameObject todoMission_prefab; //토글
 
     [Space]
     [Header("Manager")]
@@ -103,6 +101,10 @@ public class EmployeeStatusPanel : MiniPanel
     public void SetUI()
     {
         this.employee = _employeeManager.GetSelectedEmployee();
+        if (employee == null)
+        {
+            return;
+        }
 
         for(int i = 0; i < nameTexts.Length; i++)
         {
@@ -128,7 +130,7 @@ public class EmployeeStatusPanel : MiniPanel
     }
 
 
-
+    /*
     ///////////////////////AddMissionMiniWindow
     /// AddMissionMiniWindow 에게 값 전달
     public void AddMissionToMiniWindow()
@@ -347,7 +349,8 @@ public class EmployeeStatusPanel : MiniPanel
         }
         
     }
-    
+    */
+
     public void SetStaminaBarUI(int employee_id, int value)
     {
         if (employee == null)

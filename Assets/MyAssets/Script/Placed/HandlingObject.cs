@@ -16,6 +16,7 @@ public class HandlingObject : MonoBehaviour
     
     [SerializeField] private Vector2 _screenEdge;
     
+    
     //down
     private void Update()
     {

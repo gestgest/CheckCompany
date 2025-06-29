@@ -8,6 +8,8 @@ public class VoidEventChannelSO : ScriptableObject
 
     public void RaiseEvent()
     {
+                        
+
         if (_onEventRaised != null)
         {
             _onEventRaised.Invoke();

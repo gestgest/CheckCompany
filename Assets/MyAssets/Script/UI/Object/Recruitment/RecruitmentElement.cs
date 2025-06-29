@@ -21,7 +21,7 @@ public class RecruitmentElement : MonoBehaviour
     [SerializeField] private GameObject applicant_Prefab;
     private RectTransform layout_parent;
     
-    [SerializeField]private MultiLayoutGroup _multiLayoutGroup; //applicantsPanel
+    [SerializeField] private MultiLayoutGroup _childPanelMultiLayoutGroup; //applicantsPanel
 
     //Controller
     [Header("Manager")]
@@ -31,44 +31,27 @@ public class RecruitmentElement : MonoBehaviour
     //지원자 정보 리스트
     private Recruitment recruitment;
     private List<GameObject> applicant_objects;
-    private bool _isChangedApplicants = false;
 
     private static int HEIGHT = 100;
-    
-    
+    //change event => RecruitPanel's persistent
     
     private void OnEnable()
     {
-        //draw UI
-        if (!_isChangedApplicants)
-        {
-            return;
-        }
-        SetUI();
-        RemoveAllApplicantObjects();
-        AllCreateApplicantObjects();
+        //SetUI();
     }
     
-
-    private void Update()
+    //init
+    public void SetEmployee(Recruitment recruitment)
     {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            Debug.Log("RecruitmentElement : T 버튼 누름");
-            _multiLayoutGroup.RerollScreen();
-        }
-    }
-
-    public void Init(Recruitment recruitment)
-    {
-        layout_parent = transform.parent.GetComponent<RectTransform>(); //부모 가져오기
-        _multiLayoutGroup.Init();
-        //_multiLayoutGroup.AddHeight(HEIGHT);
+        layout_parent = transform.parent.GetComponent<RectTransform>(); //부모 Layout 가져오기
+        _childPanelMultiLayoutGroup.Init();
+        
+        //_childPanelMultiLayoutGroup.AddHeight(HEIGHT); //self height
         
         //부모 디폴트 높이 추가
-        Vector2 v = layout_parent.sizeDelta;
-        v.y += HEIGHT;
-        layout_parent.sizeDelta = v;
+        // Vector2 v = layout_parent.sizeDelta;
+        // v.y += HEIGHT;
+        // layout_parent.sizeDelta = v;
         
         //_multiLayoutGroup.AddOnHeight(-HEIGHT);
         //레이아웃 처음 만들때 자기 자신은 제외.
@@ -76,17 +59,23 @@ public class RecruitmentElement : MonoBehaviour
         
         if(applicant_objects == null)
             applicant_objects = new List<GameObject>();
-
-        SetRecruitment(recruitment);
         
-        _isChangedApplicants = true;
+        this.recruitment = recruitment;
+
+        SetUI();
     }
 
-    #region PROPERTY
-    private void SetRecruitment(Recruitment recruitment)
+    private void SetUI()
     {
-        this.recruitment = recruitment;
+        SetIcon(recruitment.GetEmployeeSO().GetIcon());
+        SetDDay(recruitment.GetDay());
+        SetApplicantsNumber(recruitment.GetApplicantCount());
+        
+        //RemoveAllApplicantObjects(); => 정말 상관없음, 어차피 RecruitPanel에서 다 새로로 만들어서
+        AllCreateApplicantObjects();
     }
+    
+    #region PROPERTY
     private void SetIcon(Sprite sprite)
     {
         icon.sprite = sprite;
@@ -124,50 +113,45 @@ public class RecruitmentElement : MonoBehaviour
             CreateEmployeeObject(recruitment.GetApplicant(i));
         }
         SelectionApplicantSort();
-
         //RerollScreen();
     }
 
-    private void SetUI()
-    {
-        SetIcon(recruitment.GetEmployeeSO().GetIcon());
-        SetDDay(recruitment.GetDay());
-        SetApplicantsNumber(recruitment.GetApplicantCount());
-    }
 
     private void CreateEmployeeObject(Employee employee)
     {
-        GameObject tmp = Instantiate(applicant_Prefab);
+        GameObject tmp = Instantiate(applicant_Prefab, applicantsPanel.transform);
 
         ApplicantElement applicantElement = tmp.GetComponent<ApplicantElement>();
         applicantElement.SetValue(employee, recruitment.GetID());
 
-        tmp.transform.SetParent(applicantsPanel.transform);
         applicant_objects.Add(tmp);
         
-        _multiLayoutGroup.AddOnHeight(HEIGHT);
+        _childPanelMultiLayoutGroup.AddOnHeight(HEIGHT);
     }
 
     public void RemoveRecruitment()
     {
         _recruitmentControllerSO.RemoveRecruitment(recruitment.GetID());
-        _multiLayoutGroup.AddOnHeight(-HEIGHT);
-        _multiLayoutGroup.RerollScreen();
+        _childPanelMultiLayoutGroup.AddOnHeight(-HEIGHT);
+        _childPanelMultiLayoutGroup.RerollScreen();
         Destroy(gameObject);
         //이 오브젝트 제거
     }
 
-    private void RemoveAllApplicantObjects()
-    {
-        //이거 무조건 문제될 거 같은데
-        _multiLayoutGroup.Init();
-        for (int i = 0; i < applicant_objects.Count; i++)
-        {
-            Destroy(applicant_objects[i]);
-        }
-        applicant_objects.Clear();
-    }
-
+    // private void RemoveAllApplicantObjects()
+    // {
+    //     //만약 지원자 리스트들이 보이게 하고 나간다면 => 부모 오브젝트는 크기만 커지고 onHeight는 그대로
+    //     if(applicantsPanel.activeSelf)
+    //         _multiLayoutGroup.SwitchingScreen(false); //비활성화 => _multiLayoutGroup.AddHeight(-_multiLayoutGroup.GetOnHeight());
+    //      
+    //     _multiLayoutGroup.AddOnHeight(-_multiLayoutGroup.GetOnHeight()); //부모 오브젝트까지 초기화
+    //     
+    //     for (int i = 0; i < applicant_objects.Count; i++)
+    //     {
+    //         Destroy(applicant_objects[i]);
+    //     }
+    //     applicant_objects.Clear();
+    // }
 
 
     public void SwitchPanel()
@@ -178,9 +162,8 @@ public class RecruitmentElement : MonoBehaviour
 
     private void SwitchingScreen(bool isShow)
     {
-        _multiLayoutGroup.SwitchingScreen(isShow);
+        _childPanelMultiLayoutGroup.SwitchingScreen(isShow);
     }
-
 
     #region binary_search
     //이진탐색

@@ -9,7 +9,10 @@ public class CompleteMissionPanel : MissionPanel
     protected override void OnEnable()
     {
         bool isQuery = _missionManager.GetIsQuery();
-
+        
+        if (mission_count != 0)
+            _multiLayoutGroup.AddHeight(-_multiLayoutGroup.GetHeight());
+        
         SetMissionCount(0);
         for (int i = 0; i < MISSION_MAX_SIZE; i++)
         {
@@ -60,5 +63,10 @@ public class CompleteMissionPanel : MissionPanel
         }
         return true;
     }
-    
+
+    public void OnCompleteMissionPanelEvent()
+    {
+        _missionManager.SetIsQuery(false);
+        PanelManager.instance.SwitchingIndexList(2);
+    }
 }

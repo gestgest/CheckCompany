@@ -101,7 +101,6 @@ public class PlacedObjectManager : ScriptableObject
 
     public List<PlacedObjectData> GetPlacedObjects()
     {
-        Debug.Log("사이즈 크기는? " + _placedObjects.Count);
         return _placedObjects;
     }
 

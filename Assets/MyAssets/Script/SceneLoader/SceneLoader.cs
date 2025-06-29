@@ -27,7 +27,6 @@ public class SceneLoader : MonoBehaviour
     //private float _fadeDuration = .5f;
     private bool _isLoading = false; //To prevent a new loading request while already loading a new scene
 
-
     private void OnEnable()
     {
         _loadLocation.OnLoadingRequested += LoadLocation;
@@ -40,7 +39,7 @@ public class SceneLoader : MonoBehaviour
         _loadMenu.OnLoadingRequested -= LoadMenu;
     }
 
-
+    
     /// <summary>
     /// This function loads the location scenes passed as array parameter
     /// </summary>
@@ -52,13 +51,15 @@ public class SceneLoader : MonoBehaviour
         _sceneToLoad = locationToLoad;
         //_showLoadingScreen = showLoadingScreen;
         _isLoading = true;
+        
+        
 
         //처음 시작하면 실행
         if (_gameplayManagerSceneInstance.Scene == null || !_gameplayManagerSceneInstance.Scene.isLoaded)
         {
             //게임매니저 씬 따로 저장
             //AsyncOperationHandle<SceneInstance> _gameplayManagerLoadingOpHandle  
-
+            
             _gameplayManagerLoadingOpHandle = _gameplayScene.LoadSceneAsync(LoadSceneMode.Additive, true);
             _gameplayManagerLoadingOpHandle.Completed += OnGameplayManagersLoaded;
         }

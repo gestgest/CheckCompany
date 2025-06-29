@@ -651,6 +651,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40958b6619c6d78468bad9b7eb3a8864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onHeight: 0
 --- !u!1 &2106845461754606363
 GameObject:
   m_ObjectHideFlags: 0
@@ -844,7 +845,7 @@ MonoBehaviour:
   applicantNumber_Text: {fileID: 2106845460131550434}
   applicantsPanel: {fileID: 2106845461655963815}
   applicant_Prefab: {fileID: 3574423401577469288, guid: 6f8bd351da971344abb7d815ff2ca37b, type: 3}
-  _multiLayoutGroup: {fileID: 3669712219086700055}
+  _childPanelMultiLayoutGroup: {fileID: 3669712219086700055}
   _recruitmentControllerSO: {fileID: 11400000, guid: 97d6ecad93d91804abbab3d55e4cb3e7, type: 2}
   _employeeControllerSO: {fileID: 11400000, guid: 6a695d970d94e0a4bb81e3e309e1fadf, type: 2}
 --- !u!114 &7520629813391628149
@@ -885,3 +886,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40958b6619c6d78468bad9b7eb3a8864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onHeight: 0

@@ -8,7 +8,7 @@ public class MissionPanel : Panel
     [SerializeField] private GameObject missionPrefab;
     [SerializeField] private EditMissionPanel missionEditPanel;
 
-    [SerializeField] private MultiLayoutGroup multiLayoutGroup;
+    [SerializeField] protected MultiLayoutGroup _multiLayoutGroup; //
 
     //pool링 예정
     [SerializeField] protected MissionElement [] missionElementPoolObjects = new MissionElement[MISSION_MAX_SIZE];
@@ -16,8 +16,7 @@ public class MissionPanel : Panel
     [SerializeField] protected MissionManagerSO _missionManager;
 
 
-    private int mission_count = 0; //현재 미션 카운트
-    protected List<int> editPanelIndex; 
+    protected int mission_count = 0; //현재 미션 카운터
 
     protected const int MISSION_MAX_SIZE = 20;
     private const int MISSION_HEIGHT = 100;
@@ -27,7 +26,7 @@ public class MissionPanel : Panel
     //그냥 활성화할때마다 쿼리해야할듯 => Mission은 다른 Panel에서도 너무 바뀜
     protected virtual void OnEnable()
     {
-        RerollPanel();
+        SetUI();
         //base.Start();
         // List<Mission> missions = missionsSO.GetMissions();
         // for (i = 0; i < missions.Count; i++)
@@ -42,14 +41,29 @@ public class MissionPanel : Panel
 
 
     }
-
-    /// <summary> EditPanel index 리스트 추가하는 함수 </summary>
-    protected void CreateEditPanelIndex()
+    
+    private void SetUI()
     {
-        editPanelIndex = new List<int>();
-        editPanelIndex.Add(1);
-        editPanelIndex.Add(1);
+        //Initialize Layout 
+        if (mission_count != 0)
+            _multiLayoutGroup.AddHeight(-_multiLayoutGroup.GetHeight());
+
+        mission_count = 0;
+        for (int i = 0; i < MISSION_MAX_SIZE; i++)
+        {
+            //이때 height도 
+            missionElementPoolObjects[i].gameObject.SetActive(false);
+        }
+
+
+        foreach (Mission mission in _missionManager.GetMissions())
+        {
+            //여기서 if문만 따로 함수를 만들면 됨 => 상속버전
+            if (!mission.GetIsDone())
+                CreateMissionElementObject(mission);
+        }
     }
+    
     
     public void CreateMissionElementObject(Mission mission)
     {
@@ -60,12 +74,12 @@ public class MissionPanel : Panel
         MissionElement missionElementUI = missionElementPoolObjects[mission_count];
         missionElementUI.SetMission(mission); //미션 지정
 
-        multiLayoutGroup.AddHeight(MISSION_HEIGHT);
-        multiLayoutGroup.AddHeight(MISSION_SPACE_HEIGHT);
+        _multiLayoutGroup.AddHeight(MISSION_HEIGHT); //요놈을 빼야하는 거 아닌가
+        _multiLayoutGroup.AddHeight(MISSION_SPACE_HEIGHT);
 
         //Debug.Log(todoMission.ID);
         //editPanel 들어가는 함수를 missionElementUI에 투입
-        missionElementUI.AddEventListener(() => { EditPanelOn(mission.ID); });
+        missionElementUI.SetEventListener(() => { EditPanelOn(mission.ID); });
         mission_count++;
     }
 
@@ -87,8 +101,8 @@ public class MissionPanel : Panel
         }
         missionElementPoolObjects[mission_count].gameObject.SetActive(false); 
         
-        multiLayoutGroup.AddHeight(-MISSION_HEIGHT);
-        multiLayoutGroup.AddHeight(-MISSION_SPACE_HEIGHT);
+        _multiLayoutGroup.AddHeight(-MISSION_HEIGHT);
+        _multiLayoutGroup.AddHeight(-MISSION_SPACE_HEIGHT);
         
         //GamePanelManager.instance.SwitchingPanelFromInt(1); //missionPanel로 전환
     }
@@ -101,7 +115,7 @@ public class MissionPanel : Panel
     {
         int index = _missionManager.Search_Mission_Index(id);
 
-        GamePanelManager.instance.SwitchingSubPanel(true, editPanelIndex);
+        GamePanelManager.instance.SwitchingSubPanel(true, CreateEditPanelIndex());
 
         //editPanel에게 값 전달
         missionEditPanel.SetMission(_missionManager.GetMission(index));
@@ -152,32 +166,6 @@ public class MissionPanel : Panel
     #endregion
     
 
-    private void RerollPanel()
-    {
-        //Initialize Layout 
-        if (mission_count != 0)
-            multiLayoutGroup.AddHeight(-multiLayoutGroup.GetHeight());
-
-        mission_count = 0;
-        for (int i = 0; i < MISSION_MAX_SIZE; i++)
-        {
-            missionElementPoolObjects[i].gameObject.SetActive(false);
-        }
-
-
-        foreach (Mission mission in _missionManager.GetMissions())
-        {
-            //여기서 if문만 따로 함수를 만들면 됨 => 상속버전
-            if (!mission.GetIsDone())
-                CreateMissionElementObject(mission);
-        }
-
-        //for (int i = mission_count; i < MISSION_MAX_SIZE; i++)
-        //{
-        //    missionElementPoolObjects[i].gameObject.SetActive(false);
-        //}
-        CreateEditPanelIndex();
-    }
 
     //미션 오브젝트 정렬하는 함수
     
@@ -209,6 +197,17 @@ public class MissionPanel : Panel
                 }
             }
         }
+    }
+    
+
+    /// <summary> EditPanel index 리스트 추가하는 함수 </summary>
+    protected List<int> CreateEditPanelIndex()
+    {
+        List<int> editPanelIndex = new List<int>();
+        editPanelIndex.Add(1);
+        editPanelIndex.Add(1);
+
+        return editPanelIndex;
     }
     
     public void SwitchMissionElementObject(int i, int j)

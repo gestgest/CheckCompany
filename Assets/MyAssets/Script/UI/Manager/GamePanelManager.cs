@@ -31,9 +31,22 @@ public class GamePanelManager : PanelManager
             //panel 
         }
         
-        indexList.Clear();
         indexList.Add(0);
         SwitchingInfo(indexList);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Debug.Log("스택 : " + nav_panel_index_stack.Count);            
+
+            for (int i = 0; i < this.indexList.Count; i++)
+            {
+                Debug.Log("현재 위치 index["+ i + "] : "  + indexList[i]);            
+            }
+
+        }
     }
 
     public override void SwitchingPanelFromInt(int main_index)
@@ -86,7 +99,7 @@ public class GamePanelManager : PanelManager
     #region STACK
 
 
-    protected override void ClearNavStack()
+    public override void ClearNavStack()
     {
         base.ClearNavStack();
         //nav_panel_index_stack.Clear();
@@ -96,7 +109,7 @@ public class GamePanelManager : PanelManager
     protected override void Push_NavPanelStack(List<int> indexList)
     {
         base.Push_NavPanelStack(indexList);
-        //Debug.Log("push의 index : " + index);
+        
         //nav_panel_index_stack.Push(indexList);
         UpdateNavButtonState();
     }

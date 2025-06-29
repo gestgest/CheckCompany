@@ -1,17 +1,16 @@
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 using Toggle = UnityEngine.UI.Toggle;
 
 public class CustomRadioButtonGroup : MonoBehaviour
 {
-    [SerializeField] private List<Toggle> toggles;
+    [SerializeField] protected CreateMissionManagerSO _createMissionManager;
+
+    private List<Toggle> toggles;
 
     private int set_index;
     private bool isLock = false;
+
     private void Awake()
     {
         toggles = new List<Toggle>();
@@ -25,9 +24,10 @@ public class CustomRadioButtonGroup : MonoBehaviour
         return toggles;
     }
 
-    public void SetToggle(int index)
+    //toggle event
+    public virtual void SetToggle(int index)
     {
-        if(isLock)
+        if (isLock)
             return;
 
         isLock = true;
@@ -38,6 +38,7 @@ public class CustomRadioButtonGroup : MonoBehaviour
         //toggles[index].isOn = true;
         this.set_index = index;
     }
+
     public void SetIndex(int index)
     {
         isLock = true;
