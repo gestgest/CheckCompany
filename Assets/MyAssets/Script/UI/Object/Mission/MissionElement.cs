@@ -26,8 +26,8 @@ public class MissionElement : MonoBehaviour
     private MultiLayoutGroup multiLayoutGroup;
     private bool isShowContent = false;
 
-    private static int WIDTH = 800;
-    private static int TODO_MISSION_HEIGHT = 100;
+    private static readonly int WIDTH = 800;
+    private static readonly int TODO_MISSION_HEIGHT = 100;
 
     public void LayoutInit()
     {
@@ -52,6 +52,8 @@ public class MissionElement : MonoBehaviour
         Dropbox.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
         
         multiLayoutGroup.AddOnHeight(-multiLayoutGroup.GetOnHeight()); //오브젝트 초기화
+        multiLayoutGroup.AddHeight(TODO_MISSION_HEIGHT - multiLayoutGroup.GetHeight());
+        //Height도 TODO_MISSION_HEIGHT 만큼 셋팅해야한다.
         multiLayoutGroup.AddOnHeight(TODO_MISSION_HEIGHT); //게이지 크기 추가
 
         int i;

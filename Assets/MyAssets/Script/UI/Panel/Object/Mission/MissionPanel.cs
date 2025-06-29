@@ -74,7 +74,7 @@ public class MissionPanel : Panel
         MissionElement missionElementUI = missionElementPoolObjects[mission_count];
         missionElementUI.SetMission(mission); //미션 지정
 
-        _multiLayoutGroup.AddHeight(MISSION_HEIGHT);
+        _multiLayoutGroup.AddHeight(MISSION_HEIGHT); //요놈을 빼야하는 거 아닌가
         _multiLayoutGroup.AddHeight(MISSION_SPACE_HEIGHT);
 
         //Debug.Log(todoMission.ID);
