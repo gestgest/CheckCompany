@@ -16,7 +16,7 @@ public class VoidEventChannelSO : ScriptableObject
         }
         else
         {
-            Debug.LogError("대충 오류라는 내용");
+            Debug.Log("대충 비어있는 내용");
         }
     }
 }

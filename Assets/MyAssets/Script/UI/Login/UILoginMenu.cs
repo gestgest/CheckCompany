@@ -17,16 +17,18 @@ public class UILoginMenu : MonoBehaviour
     [SerializeField] private TMP_InputField _registerConfirmPasswordTextField;
 
     [Header("Listening to eventChannels")]
-    [SerializeField] private String2EventChannelSO _loginEvent;
+    [SerializeField] private String2EventChannelSO _loginEvent; //
     [SerializeField] private String4EventChannelSO _registerEvent;
 
 
     public void Login()
     {
-        _loginEvent.RaiseEvent(
-            _loginEmailTextField.text,
-            _loginPasswordTextField.text
-        );
+        //what????
+        if(_loginEvent != null)
+            _loginEvent.RaiseEvent(
+                _loginEmailTextField.text,
+                _loginPasswordTextField.text
+            );
     }
 
     public void Register()

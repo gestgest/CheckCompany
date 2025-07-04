@@ -15,7 +15,7 @@ public class InitializationLoader : MonoBehaviour
 
     //맨 처음 게임 메뉴 Scene
     [SerializeField] private AssetReference  _loginMenuScene = default;
-    [FormerlySerializedAs("_MyCompanyGameScene")] [SerializeField] private AssetReference  _myCompanyGameScene = default;
+    [SerializeField] private AssetReference  _myCompanyGameScene = default;
 
     [Header("Listening on Event")] 
     [SerializeField] private BoolEventChannelSO _isLoginEvent;
@@ -33,19 +33,21 @@ public class InitializationLoader : MonoBehaviour
     // obj는 _managerScene.LoadSceneAsync() 결과 값
     private void LoadEventChannel(AsyncOperationHandle<SceneInstance> obj)
     {
+        _menuToLoadEvent.LoadAssetAsync<LoadEventChannelSO>().Completed
+            += LoadMenuScene;
     }
     private void IsLoginEvent(bool isLogin)
     {
-        if (isLogin)
-        {
-            _myCompanyToLoadEvent.LoadAssetAsync<LoadEventChannelSO>().Completed
-                += LoadGameScene;
-        }
-        else
-        {
-            _menuToLoadEvent.LoadAssetAsync<LoadEventChannelSO>().Completed
-                += LoadMenuScene;
-        }
+        // if (isLogin)
+        // {
+        //     _myCompanyToLoadEvent.LoadAssetAsync<LoadEventChannelSO>().Completed
+        //         += LoadGameScene;
+        // }
+        // else
+        // {
+        //     _menuToLoadEvent.LoadAssetAsync<LoadEventChannelSO>().Completed
+        //         += LoadMenuScene;
+        // }
     }
 
     //이후 init씬 제거

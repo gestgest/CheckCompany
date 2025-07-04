@@ -88,7 +88,7 @@ public class CameraMoveManager : MonoBehaviour
         }
 #endif
 
-#if UNITY_EDITOR || UNITY_STANDALONE
+#if UNITY_EDITOR  || UNITY_STANDALONE_WIN
         if (EventSystem.current.IsPointerOverGameObject())
         {
             _isUI = true;
@@ -119,7 +119,7 @@ public class CameraMoveManager : MonoBehaviour
 
 #endif
     }
-#if UNITY_EDITOR || UNITY_STANDALONE
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN
 
     private Vector3 PlanePositionDeltaMouse()
     {
@@ -197,7 +197,7 @@ public class CameraMoveManager : MonoBehaviour
     }
     
     
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN
     
     public bool IsMouseOverGameView()
     {
