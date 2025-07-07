@@ -7,6 +7,7 @@ using Firebase.Auth;
 using System.Threading.Tasks;
 using Firebase.Extensions;
 using UnityEngine.AddressableAssets;
+using UnityEngine.UI;
 
 
 public class FirebaseAuthManager : MonoBehaviour
@@ -14,10 +15,12 @@ public class FirebaseAuthManager : MonoBehaviour
     private DependencyStatus dependencyStatus;
     private FirebaseAuth auth;
     private FirebaseUser user;
+    [SerializeField] private Image _debugIcon;
 
     [Header("Listening to eventChannels")]
-    [SerializeField] private String2EventChannelSO _loginEvent;
+    [SerializeField] private String2EventChannelSO _loginEvent;//UILoginMenu
     [SerializeField] private String4EventChannelSO _registerEvent;
+    [SerializeField] private String2EventChannelSO _debugLoginEvent;
     
     [Space]
     //서버 send 함수
@@ -26,7 +29,7 @@ public class FirebaseAuthManager : MonoBehaviour
     [SerializeField] private SendFirebaseEventChannelSO _setNewFireStoreEvent;
     [SerializeField] private SendFirebaseEventChannelSO _setFireStoreEvent;
 
-    [SerializeField] private BoolEventChannelSO _isLoginEvent;
+    [SerializeField] private BoolEventChannelSO _isLoginEvent; 
     [SerializeField] private LoadEventChannelSO _loadLocation; //sceneLoader?
     [SerializeField] private AssetReference _myCompanyScene;
 
@@ -56,12 +59,14 @@ public class FirebaseAuthManager : MonoBehaviour
 
     private void OnEnable()
     {
+        _debugIcon.color = Color.blue;
         _loginEvent._onEventRaised += Login;
         _registerEvent._onEventRaised += Register;
     }
 
     private void OnDisable()
     {
+        _debugIcon.color = Color.red;
         _loginEvent._onEventRaised -= Login;
         _registerEvent._onEventRaised -= Register;
     }
@@ -116,7 +121,10 @@ public class FirebaseAuthManager : MonoBehaviour
     
     public void Login(string email, string password)
     {
-        StartCoroutine(LoginAynsc(
+        _debugLoginEvent.RaiseEvent("어떻게든 나의 노력이 주변 사람들의 눈에 띄도록", "");
+
+        StartCoroutine(
+            LoginAynsc(
             email,
             password
         ));
@@ -124,14 +132,19 @@ public class FirebaseAuthManager : MonoBehaviour
 
     private IEnumerator LoginAynsc(string email, string password)
     {
+        _debugLoginEvent.RaiseEvent("안녕 난 엄준식이라고 해", "");
+
         //이메일 로그인 비동기 현황 변수
         Task<AuthResult> loginTask = auth.SignInWithEmailAndPasswordAsync(email, password);
+        _debugLoginEvent.RaiseEvent("준식준식", "");
 
         yield return new WaitUntil(() => loginTask.IsCompleted);
 
         //만약 로그인 테스크가 계속 실행중이라면
         if (loginTask.Exception != null)
         {
+            _debugLoginEvent.RaiseEvent("바이 : "+ loginTask.Exception, "");
+
             Debug.LogError(loginTask.Exception);
 
             FirebaseException firebaseException = loginTask.Exception.GetBaseException() as FirebaseException;
@@ -159,7 +172,7 @@ public class FirebaseAuthManager : MonoBehaviour
                     failedMessage += "Login Failed";
                     break;
             }
-
+            _debugLoginEvent.RaiseEvent(failedMessage, "");
             Debug.LogError(authError);
         }
         else //로그인 성공
@@ -222,7 +235,6 @@ public class FirebaseAuthManager : MonoBehaviour
                 }
 
                 Debug.LogError(failedMessage);
-
             }
             else //등록
             {
