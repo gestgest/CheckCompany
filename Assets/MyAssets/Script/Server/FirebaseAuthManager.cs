@@ -6,8 +6,8 @@ using Firebase;
 using Firebase.Auth;
 using System.Threading.Tasks;
 using Firebase.Extensions;
+using TMPro;
 using UnityEngine.AddressableAssets;
-using UnityEngine.UI;
 
 
 public class FirebaseAuthManager : MonoBehaviour
@@ -15,7 +15,7 @@ public class FirebaseAuthManager : MonoBehaviour
     private DependencyStatus dependencyStatus;
     private FirebaseAuth auth;
     private FirebaseUser user;
-    [SerializeField] private Image _debugIcon;
+    [SerializeField] private TextMeshProUGUI _debugText; 
 
     [Header("Listening to eventChannels")]
     [SerializeField] private String2EventChannelSO _loginEvent;//UILoginMenu
@@ -36,21 +36,42 @@ public class FirebaseAuthManager : MonoBehaviour
     private bool isInit = true;
     void Awake()
     {
-        //파이어베이스 서버 체크 => 전역 무언가를 생성
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
+        _debugText.text += "\n Awake() 입갤";
+        
+        //FirebaseApp.DefaultInstance
+
+        try
         {
-            dependencyStatus = task.Result;
-            //이용가능하다면
-            if (dependencyStatus == DependencyStatus.Available)
+            //파이어베이스 서버 체크 => 전역 무언가를 생성
+            FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
             {
-                InitFirebase();
-                _initFirebaseChannelEvent.RaiseEvent();
-            }
-            else
+                _debugText.text += "스레드까진 들어감";
+                dependencyStatus = task.Result;
+                //이용가능하다면
+                if (dependencyStatus == DependencyStatus.Available)
+                {
+                    _debugText.text += "dependencyStatus 이용 가능함, ";
+                    InitFirebase();
+                    _initFirebaseChannelEvent.RaiseEvent();
+                }
+                else
+                {
+                    _debugText.text += "dependencyStatus 연결오류";
+                    Debug.LogError("연결 오류" + dependencyStatus);
+                }
+            });
+        }
+        catch (Exception e)
+        {
+            _debugText.text += $"{e.GetType().Name}: {e.Message}\n{e.StackTrace}\n";
+            
+            if (e.InnerException != null)
             {
-                Debug.LogError("연결 오류" + dependencyStatus);
+                _debugText.text += $"\nInner: {e.InnerException.GetType().Name}: {e.InnerException.Message}\n{e.InnerException.StackTrace}";
             }
-        });
+            Debug.LogError(e);
+        }
+        _debugText.text += "\n Awake()끝";
         
         //이게 CheckAndFixDependenciesAsync함수를 동시에 실행되면 맛탱이가 가나.
         //정보. 파이어베이스를 두개가 동시에 실행한다면 그냥 유니티가 맛이 감
@@ -59,14 +80,14 @@ public class FirebaseAuthManager : MonoBehaviour
 
     private void OnEnable()
     {
-        _debugIcon.color = Color.blue;
+        _debugText.text += "\n탄생";
         _loginEvent._onEventRaised += Login;
         _registerEvent._onEventRaised += Register;
     }
 
     private void OnDisable()
     {
-        _debugIcon.color = Color.red;
+        _debugText.text += "\n사망";
         _loginEvent._onEventRaised -= Login;
         _registerEvent._onEventRaised -= Register;
     }
@@ -105,6 +126,7 @@ public class FirebaseAuthManager : MonoBehaviour
         }
         catch (System.Exception ex)
         {
+            _debugText.text = $"[AuthStatusChanged Error] {ex.GetType().Name}: {ex.Message}\n{ex.StackTrace}";
             Debug.LogError($"[AuthStatusChanged Error] {ex.GetType().Name}: {ex.Message}\n{ex.StackTrace}");
         }
     }
