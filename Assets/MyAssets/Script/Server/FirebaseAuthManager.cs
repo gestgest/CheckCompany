@@ -15,12 +15,10 @@ public class FirebaseAuthManager : MonoBehaviour
     private DependencyStatus dependencyStatus;
     private FirebaseAuth auth;
     private FirebaseUser user;
-    [SerializeField] private TextMeshProUGUI _debugText; 
 
     [Header("Listening to eventChannels")]
     [SerializeField] private String2EventChannelSO _loginEvent;//UILoginMenu
     [SerializeField] private String4EventChannelSO _registerEvent;
-    [SerializeField] private String2EventChannelSO _debugLoginEvent;
     
     [Space]
     //서버 send 함수
@@ -36,8 +34,6 @@ public class FirebaseAuthManager : MonoBehaviour
     private bool isInit = true;
     void Awake()
     {
-        _debugText.text += "\n Awake() 입갤";
-        
         //FirebaseApp.DefaultInstance
 
         try
@@ -45,33 +41,23 @@ public class FirebaseAuthManager : MonoBehaviour
             //파이어베이스 서버 체크 => 전역 무언가를 생성
             FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
             {
-                _debugText.text += "스레드까진 들어감";
                 dependencyStatus = task.Result;
                 //이용가능하다면
                 if (dependencyStatus == DependencyStatus.Available)
                 {
-                    _debugText.text += "dependencyStatus 이용 가능함, ";
                     InitFirebase();
                     _initFirebaseChannelEvent.RaiseEvent();
                 }
                 else
                 {
-                    _debugText.text += "dependencyStatus 연결오류";
                     Debug.LogError("연결 오류" + dependencyStatus);
                 }
             });
         }
         catch (Exception e)
         {
-            _debugText.text += $"{e.GetType().Name}: {e.Message}\n{e.StackTrace}\n";
-            
-            if (e.InnerException != null)
-            {
-                _debugText.text += $"\nInner: {e.InnerException.GetType().Name}: {e.InnerException.Message}\n{e.InnerException.StackTrace}";
-            }
-            Debug.LogError(e);
+            Debug.LogError($"[AuthStatusChanged Error] {e.GetType().Name}: {e.Message}\n{e.StackTrace}");
         }
-        _debugText.text += "\n Awake()끝";
         
         //이게 CheckAndFixDependenciesAsync함수를 동시에 실행되면 맛탱이가 가나.
         //정보. 파이어베이스를 두개가 동시에 실행한다면 그냥 유니티가 맛이 감
@@ -80,14 +66,12 @@ public class FirebaseAuthManager : MonoBehaviour
 
     private void OnEnable()
     {
-        _debugText.text += "\n탄생";
         _loginEvent._onEventRaised += Login;
         _registerEvent._onEventRaised += Register;
     }
 
     private void OnDisable()
     {
-        _debugText.text += "\n사망";
         _loginEvent._onEventRaised -= Login;
         _registerEvent._onEventRaised -= Register;
     }
@@ -126,7 +110,6 @@ public class FirebaseAuthManager : MonoBehaviour
         }
         catch (System.Exception ex)
         {
-            _debugText.text = $"[AuthStatusChanged Error] {ex.GetType().Name}: {ex.Message}\n{ex.StackTrace}";
             Debug.LogError($"[AuthStatusChanged Error] {ex.GetType().Name}: {ex.Message}\n{ex.StackTrace}");
         }
     }
@@ -143,8 +126,6 @@ public class FirebaseAuthManager : MonoBehaviour
     
     public void Login(string email, string password)
     {
-        _debugLoginEvent.RaiseEvent("어떻게든 나의 노력이 주변 사람들의 눈에 띄도록", "");
-
         StartCoroutine(
             LoginAynsc(
             email,
@@ -154,18 +135,15 @@ public class FirebaseAuthManager : MonoBehaviour
 
     private IEnumerator LoginAynsc(string email, string password)
     {
-        _debugLoginEvent.RaiseEvent("안녕 난 엄준식이라고 해", "");
 
         //이메일 로그인 비동기 현황 변수
         Task<AuthResult> loginTask = auth.SignInWithEmailAndPasswordAsync(email, password);
-        _debugLoginEvent.RaiseEvent("준식준식", "");
 
         yield return new WaitUntil(() => loginTask.IsCompleted);
 
         //만약 로그인 테스크가 계속 실행중이라면
         if (loginTask.Exception != null)
         {
-            _debugLoginEvent.RaiseEvent("바이 : "+ loginTask.Exception, "");
 
             Debug.LogError(loginTask.Exception);
 
@@ -194,7 +172,6 @@ public class FirebaseAuthManager : MonoBehaviour
                     failedMessage += "Login Failed";
                     break;
             }
-            _debugLoginEvent.RaiseEvent(failedMessage, "");
             Debug.LogError(authError);
         }
         else //로그인 성공

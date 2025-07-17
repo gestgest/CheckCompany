@@ -16,25 +16,11 @@ public class UILoginMenu : MonoBehaviour
     [SerializeField] private TMP_InputField _registerPasswordTextField;
     [SerializeField] private TMP_InputField _registerConfirmPasswordTextField;
 
-    [Header("Broadcasting on events")]
-    [SerializeField] private String2EventChannelSO _debugLoginStatusEvent; //FirebaseAuthManager
-    
     
     [Header("Listening to eventChannels")]
     [SerializeField] private String2EventChannelSO _loginEvent; //FirebaseAuthManager
     [SerializeField] private String4EventChannelSO _registerEvent;
-    
-    
-    [SerializeField] private TextMeshProUGUI _debugText;
 
-    public void Start()
-    {
-        _debugLoginStatusEvent._onEventRaised += DebugLoginEvent;
-    }
-    public void OnDestroy()
-    {
-        _debugLoginStatusEvent._onEventRaised -= DebugLoginEvent;
-    }
     public void Login()
     {
         //what????
@@ -43,10 +29,6 @@ public class UILoginMenu : MonoBehaviour
                 _loginEmailTextField.text,
                 _loginPasswordTextField.text
             );
-        else
-        {
-            _debugText.text = "이벤트가 없정";
-        }
     }
 
     public void Register()
@@ -58,11 +40,4 @@ public class UILoginMenu : MonoBehaviour
             _registerConfirmPasswordTextField.text
         );
     }
-
-    public void DebugLoginEvent(string text, string a)
-    {
-        Debug.Log(text);
-        _debugText.text = text;
-    }
-    
 }
