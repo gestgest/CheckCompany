@@ -17,7 +17,7 @@ public class ManagerMissionPanel : Panel
     [SerializeField] protected MultiLayoutGroup _multiLayoutGroup; //제일 아래 Layout => inputList
     [SerializeField] protected GameObject [] _todoMissionObjects; //todo
     
-    protected static int TODO_MISSION_HEIGHT = 30;
+    protected const int TODO_MISSION_HEIGHT = 60;
     protected int todo_mission_size;
 
     protected virtual void Init()
