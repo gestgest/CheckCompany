@@ -68,11 +68,8 @@ public class GameManager : MonoBehaviour
         
         _gameDate = new GameDate(employeeControllerSO.AddStamina, _sendFirebaseEventChannelSO);
         
-        //if ★★★★★★★★
+        //if ★★★★★★★★ => so is null...?
         GameServerStart();
-        //Don't put the LoginScene => main thread error
-        //fireStoreManager.Init();
-        //SetDateUI();
     }
     
     public async void GameServerStart()
