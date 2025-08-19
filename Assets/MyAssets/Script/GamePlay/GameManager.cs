@@ -67,7 +67,8 @@ public class GameManager : MonoBehaviour
         _placeManager.Init();
         
         _gameDate = new GameDate(employeeControllerSO.AddStamina, _sendFirebaseEventChannelSO);
-
+        
+        //if ★★★★★★★★
         GameServerStart();
         //Don't put the LoginScene => main thread error
         //fireStoreManager.Init();
