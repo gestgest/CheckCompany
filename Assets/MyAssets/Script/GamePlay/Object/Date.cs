@@ -17,11 +17,12 @@ public class Date
 
     public Date(bool isNow = false)
     {
-        if(isNow)
+        if (isNow)
             SetDateNow();
     }
 
     #region PROPERTY
+
     //헷갈리지 않기 위해 set은 protected로 설정하자.
     //괜히 외부에서 Year++ 이런거 쓰면 골치아프다 
     public virtual int Year
@@ -60,7 +61,7 @@ public class Date
 
             //day = 5일
             day = value; //0 이하는 음수
-            
+
             int dis = day - before; //음수면 음수값이 나옴
 
             //Debug.Log("정 답을 알려줘 - day : " + day + ", before : " + before + ", dis : " + dis);
@@ -124,18 +125,19 @@ public class Date
 
     public virtual int Minute
     {
-        set
-        {
-            minute = value;
-            if (minute >= 60)
-            {
-                Hour += minute / 60;
-                minute %= 60;
-            }
-        }
         get { return minute; }
     }
-    
+
+    public void SetMinute(int minute, bool isServer = true)
+    {
+        this.minute = minute;
+        if (this.minute >= 60)
+        {
+            Hour += minute / 60;
+            this.minute %= 60;
+        }
+    }
+
     virtual public void SetDateNow()
     {
         System.DateTime today = System.DateTime.Now;
@@ -163,7 +165,7 @@ public class Date
         hour = dateTime.Hour;
         minute = dateTime.Minute;
     }
-    
+
     //얇은 복사
     public void SetDate(Date date)
     {
@@ -214,13 +216,14 @@ public class Date
         {
             AddMonth(12);
         }
+
         //음수
-        for (int i = 0; i < - year; i++)
+        for (int i = 0; i < -year; i++)
         {
             AddMonth(-12);
         }
     }
-    
+
     //달을 더하거나 빼는 기능.
     //3 - 1월 31일 => 2월 31일 반례 해결 용
     public void AddMonth(int month)
@@ -230,8 +233,9 @@ public class Date
         {
             Day = Day + (MONTH_DAY[this.month - 1] + addDay_LeapYear(year, month));
         }
+
         //음수
-        for (int i = 0; i < - month; i++)
+        for (int i = 0; i < -month; i++)
         {
             Day = Day - (MONTH_DAY[this.month - 1] + addDay_LeapYear(year, month));
         }
@@ -248,7 +252,7 @@ public class Date
     }
 
     #region SERVER
-    
+
     //너무 데이터 낭비 아닐까 => year가 바뀌면 year만 수정하는 느낌으로
     //근데 또 그러기엔 여러번 서버에 전송하는 느낌
     public Dictionary<string, object> DateToJSON()
@@ -265,6 +269,7 @@ public class Date
 
         return result;
     }
+
     public Dictionary<string, object> YearToJSON()
     {
         Dictionary<string, object> result = new Dictionary<string, object>()
@@ -322,23 +327,23 @@ public class Date
         month = ConvertJSON.SafeGet<int>(data, "month", 1);
         day = ConvertJSON.SafeGet<int>(data, "day", 1);
         week = ConvertJSON.SafeGet<Week>(data, "week", Week.WED);
-        hour = ConvertJSON.SafeGet<int>(data,"hour", 0);
-        minute = ConvertJSON.SafeGet<int>(data,"minute", 0);
+        hour = ConvertJSON.SafeGet<int>(data, "hour", 0);
+        minute = ConvertJSON.SafeGet<int>(data, "minute", 0);
 
         Year = year;
         Month = month;
         Day = day;
         _Week = week;
         Hour = hour;
-        Minute = minute;
+        SetMinute(minute, false);
     }
+
     #endregion
-    
+
     protected void DebugDate()
     {
-        Debug.Log(Year +"년 "+ Month +"월 "+ Day +"일 "+ _Week +"요일 "+ Hour + "시 "+Minute + "분");
+        Debug.Log(Year + "년 " + Month + "월 " + Day + "일 " + _Week + "요일 " + Hour + "시 " + Minute + "분");
     }
-    
 }
 
 public enum Week

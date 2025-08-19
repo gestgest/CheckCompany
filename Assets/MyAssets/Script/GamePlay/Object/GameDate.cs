@@ -63,19 +63,12 @@ public class GameDate : Date
         }
     }
 
-    public override int Minute
+    public void SetMinute(int minute, bool isServer = true)
     {
-        get
-        {
-            return base.Minute;
-        }
-        set
-        {
-            base.Minute = value;
+        base.SetMinute(minute);
+        if(isServer)
             SetDateToServer(DateToJSON());
-        }
     }
-
 
     #region SERVER
 

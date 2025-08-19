@@ -13,20 +13,21 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     [SerializeField] UIManager ui_manager;
+
     //[SerializeField] FireStoreManager fireStoreManager;
     private FirebaseAuth auth;
     private FirebaseUser user;
 
 
     //managers
-    [Header("Manager")]
-    [SerializeField] RecruitmentManagerSO recruitmentControllerSO;
+    [Header("Manager")] [SerializeField] RecruitmentManagerSO recruitmentControllerSO;
     [SerializeField] MissionManagerSO missionControllerSO;
     [SerializeField] EmployeeManagerSO employeeControllerSO;
     [SerializeField] PlacedObjectManager _placeManager;
-    
-    [Header("ServerEvent")]
-    [SerializeField] private DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
+
+    [Header("ServerEvent")] [SerializeField]
+    private DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
+
     [SerializeField] private SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
     [SerializeField] private GetJSONFirebaseEventChannelSO _getJSONEventChannelSO;
 
@@ -37,7 +38,7 @@ public class GameManager : MonoBehaviour
     long money;
     [SerializeField] private GameDate _gameDate;
     [SerializeField] private Date _currentDate;
-    
+
 
     void Awake()
     {
@@ -46,6 +47,7 @@ public class GameManager : MonoBehaviour
             instance = this;
             return;
         }
+
         Destroy(gameObject);
     }
 
@@ -58,57 +60,67 @@ public class GameManager : MonoBehaviour
         }
         */
     }
+
     void Start()
     {
         recruitmentControllerSO.Init();
         missionControllerSO.Init();
         employeeControllerSO.Init();
-        
+
         _placeManager.Init();
-        
+
         _gameDate = new GameDate(employeeControllerSO.AddStamina, _sendFirebaseEventChannelSO);
-        
-        //if ★★★★★★★★ => so is null...?
+
         GameServerStart();
     }
-    
+
     public async void GameServerStart()
     {
         auth = FirebaseAuth.DefaultInstance;
         user = auth.CurrentUser;
+
+        //direction scene
+        if (_getJSONEventChannelSO._onEventRaised == null)
+        {
+            SetDefaultProperty();
+            return;
+        }
 
         //if you are not logged in, you must enter the default account
         if (user == null)
         {
             //default account
         }
+
         Debug.Log(user.Email);
 
         //서버에게 number 받는 거는 무조건 long 으로 해야한다, ToInt32
         //타입이 64비트가 나온다. => 8바이트 => long
         //int는 4바이트
         //convert로 하면 null이 0으로 바뀌어진다
-        
+
         nickname = (string)await _getJSONEventChannelSO.RaiseEvent("User", user.Email, "nickname");
 
-        long money;
         money = (long)(await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "money") ?? (long)0);
         SetMoney(money, false);
 
-        int employee_count =
+        employee_count =
             Convert.ToInt32(await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "employee_count"));
 
-        
+
         //MissionController.instance.Init();
         missionControllerSO.SetMissionData(
             (Dictionary<string, object>)await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "missions"),
             Convert.ToInt32(await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "mission_count"))
         );
 
-        Dictionary<string,object> recruitments = (Dictionary<string, object>)await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "recruitments");
+        Dictionary<string, object> recruitments =
+            (Dictionary<string, object>)await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname,
+                "recruitments");
         recruitmentControllerSO.JSONToRecruitments(recruitments);
 
-        Dictionary<string, object> employees = (Dictionary<string, object>)await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "employees");
+        Dictionary<string, object> employees =
+            (Dictionary<string, object>)await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "employees");
         employeeControllerSO.JSONToEmployees(employees);
 
         Dictionary<string, object> dateData =
@@ -124,25 +136,26 @@ public class GameManager : MonoBehaviour
         //     ConvertJSON.SafeGet<Dictionary<string, object>>(dateData,"currentDate", new Date().DateToJSON())
         // );  
         _gameDate.GetDateFromJSON(
-            ConvertJSON.SafeGet<Dictionary<string, object>>(dateData,"gameDate", new Dictionary<string, object>())
+            ConvertJSON.SafeGet<Dictionary<string, object>>(dateData, "gameDate", new Dictionary<string, object>())
         );
-        
+
         _sendFirebaseEventChannelSO._onSendEventRaised(
             "GamePlayUser",
             GameManager.instance.Nickname,
             "date.currentDate",
             _currentDate.DateToJSON()
         );
-        
+
         SetDateUI();
-        
+
         //object_count 가져오고
         int object_count =
             Convert.ToInt32(await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "placeableObject_id"));
-        
+
         //각각 object 정보 가져오고
         _placeManager.SetPlacedObjects(
-            (Dictionary<string, object>)await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname, "placeableObjects"),
+            (Dictionary<string, object>)await _getJSONEventChannelSO.RaiseEvent("GamePlayUser", nickname,
+                "placeableObjects"),
             object_count
         );
     }
@@ -159,9 +172,10 @@ public class GameManager : MonoBehaviour
         {
             toServer = true;
         }
+
         money = value;
 
-        if(toServer)
+        if (toServer)
             _sendFirebaseEventChannelSO.RaiseEvent("GamePlayUser", nickname, "money", money);
 
         //서버 로딩
@@ -178,8 +192,8 @@ public class GameManager : MonoBehaviour
             employee_count = value;
             _sendFirebaseEventChannelSO.RaiseEvent(
                 "GamePlayUser",
-                nickname ,
-                "employee_count", 
+                nickname,
+                "employee_count",
                 employee_count
             );
             //서버 로딩
@@ -201,7 +215,7 @@ public class GameManager : MonoBehaviour
 
     public void AddDateMinute(int value)
     {
-        _gameDate.Minute += value;
+        _gameDate.SetMinute(_gameDate.Minute + value);
         recruitmentControllerSO.AddRandomApplicants(60 / value);
         SetDateUI();
     }
@@ -229,4 +243,29 @@ public class GameManager : MonoBehaviour
         //글로벌
     }
 
+    private void SetDefaultProperty()
+    {
+        //default information
+        nickname = "gest";
+        SetMoney(0, false);
+        employee_count = 0;
+        missionControllerSO.SetMissionData(new Dictionary<string, object>(), 0);
+        recruitmentControllerSO.JSONToRecruitments(new Dictionary<string, object>());
+        employeeControllerSO.JSONToEmployees(new Dictionary<string, object>());
+        _currentDate = new Date(true);
+
+        _gameDate.GetDateFromJSON(
+            new Dictionary<string, object>()
+            {
+                { "year", 2020 },
+                { "month", 1 },
+                { "day", 1 },
+                { "week", Week.WED },
+                { "hour", 0 },
+                { "minute", 0 },
+            }
+        );
+        SetDateUI();
+        // object information
+    }
 }
