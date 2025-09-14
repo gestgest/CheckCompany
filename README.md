@@ -52,11 +52,16 @@ https://github.com/gestgest/CheckCompany/releases
   모집 공고 창<br><br>
 
   ### 미션
-  <img width="411" height="879" alt="image" src="https://github.com/user-attachments/assets/8ae13b57-d02f-40bd-bfad-e8749b83e393" /><br>
-  미션 목록<br><br>
+  <img width="411" height="879" alt="image" src="https://github.com/user-attachments/assets/8ae13b57-d02f-40bd-bfad-e8749b83e393" />
+  <img width="403" height="876" alt="image" src="https://github.com/user-attachments/assets/c4c41566-794f-4534-89ee-865fbe489f1c" />
+  <img width="408" height="877" alt="image" src="https://github.com/user-attachments/assets/476930e1-868d-46c4-acc5-1c69212640b0" />
+<img width="404" height="878" alt="image" src="https://github.com/user-attachments/assets/ed4e74e3-7eb2-4e99-a55e-be538c3834ad" />
+<img width="405" height="882" alt="image" src="https://github.com/user-attachments/assets/d25ec010-1ad1-4506-af40-c3bb2ad16d33" />
+<img width="407" height="884" alt="image" src="https://github.com/user-attachments/assets/d3394b26-7f6a-4b50-bfb4-16cf87022d04" />
+  
+### 배치
 
-  <img width="403" height="876" alt="image" src="https://github.com/user-attachments/assets/c4c41566-794f-4534-89ee-865fbe489f1c" /><br>
-  미션 설정
+<img width="410" height="885" alt="image" src="https://github.com/user-attachments/assets/6425d4b5-921e-4024-8ea4-916f221d32e9" />
 
 
 </details>
