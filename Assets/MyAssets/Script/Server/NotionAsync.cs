@@ -8,7 +8,7 @@ public class NotionAsync : MonoBehaviour
 
     //넥슨
     private string apiKey;
-    private const string apiUrl = "https://api.notion.com/v1/blocks/22968b85dcd641eea2dfe612af8d2375";
+    private const string apiUrl = "api키";
     void Start()
     {
         apiKey = notionAPIKey.GetAPIKey();
