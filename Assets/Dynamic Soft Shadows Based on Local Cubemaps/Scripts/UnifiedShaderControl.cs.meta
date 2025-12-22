@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e426d8c481ff2df4381c5b5c7da284bc
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61640
+  packageName: Dynamic Soft Shadows Based on Local Cubemaps
+  packageVersion: 1.5
+  assetPath: Assets/Dynamic Soft Shadows Based on Local Cubemaps/Scripts/UnifiedShaderControl.cs
+  uploadId: 402351

@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: 89d0bdf300b5cda44b48063efeff1223
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61640
+  packageName: Dynamic Soft Shadows Based on Local Cubemaps
+  packageVersion: 1.5
+  assetPath: Assets/Dynamic Soft Shadows Based on Local Cubemaps/Textures/RoomStaticShadowsCubemap.cubemap
+  uploadId: 402351

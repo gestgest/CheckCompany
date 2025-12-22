@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 548e1c3eff7bb1a4481ed55f2304a4db
+timeCreated: 1423392153
+licenseType: Store
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61640
+  packageName: Dynamic Soft Shadows Based on Local Cubemaps
+  packageVersion: 1.5
+  assetPath: Assets/Dynamic Soft Shadows Based on Local Cubemaps/Shaders/Common.cginc
+  uploadId: 402351

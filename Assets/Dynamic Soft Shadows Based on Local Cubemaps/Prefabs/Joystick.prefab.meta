@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: aaa2c939c0359ac4dbce3f49e8b90252
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61640
+  packageName: Dynamic Soft Shadows Based on Local Cubemaps
+  packageVersion: 1.5
+  assetPath: Assets/Dynamic Soft Shadows Based on Local Cubemaps/Prefabs/Joystick.prefab
+  uploadId: 402351

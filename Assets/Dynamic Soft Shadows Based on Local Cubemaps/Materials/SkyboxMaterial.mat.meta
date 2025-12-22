@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: 71802452d7ebb354682b0943bc3810a3
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61640
+  packageName: Dynamic Soft Shadows Based on Local Cubemaps
+  packageVersion: 1.5
+  assetPath: Assets/Dynamic Soft Shadows Based on Local Cubemaps/Materials/SkyboxMaterial.mat
+  uploadId: 402351

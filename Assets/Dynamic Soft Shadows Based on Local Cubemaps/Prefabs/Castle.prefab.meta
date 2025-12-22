@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 912bb6c8e3b85fb4d9dfe5416f4eaab5
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61640
+  packageName: Dynamic Soft Shadows Based on Local Cubemaps
+  packageVersion: 1.5
+  assetPath: Assets/Dynamic Soft Shadows Based on Local Cubemaps/Prefabs/Castle.prefab
+  uploadId: 402351

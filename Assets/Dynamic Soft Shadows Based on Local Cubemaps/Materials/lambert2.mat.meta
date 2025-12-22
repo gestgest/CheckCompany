@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: ba643ab13f4ed7249b458327ed3c108f
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61640
+  packageName: Dynamic Soft Shadows Based on Local Cubemaps
+  packageVersion: 1.5
+  assetPath: Assets/Dynamic Soft Shadows Based on Local Cubemaps/Materials/lambert2.mat
+  uploadId: 402351

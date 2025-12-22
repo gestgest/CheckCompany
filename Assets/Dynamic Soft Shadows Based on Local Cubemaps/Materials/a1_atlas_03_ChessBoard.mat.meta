@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 81d42ea313540f04cb09b67b3aa5df66
+timeCreated: 1431640876
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61640
+  packageName: Dynamic Soft Shadows Based on Local Cubemaps
+  packageVersion: 1.5
+  assetPath: Assets/Dynamic Soft Shadows Based on Local Cubemaps/Materials/a1_atlas_03_ChessBoard.mat
+  uploadId: 402351

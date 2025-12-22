@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: eb526b2430e2d6c4b813552adf533987
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61640
+  packageName: Dynamic Soft Shadows Based on Local Cubemaps
+  packageVersion: 1.5
+  assetPath: Assets/Dynamic Soft Shadows Based on Local Cubemaps/Scripts/GameCamera.cs
+  uploadId: 402351

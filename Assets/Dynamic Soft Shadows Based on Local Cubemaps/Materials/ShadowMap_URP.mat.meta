@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 9859987e500291e42aac041bfa22d925
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61640
+  packageName: Dynamic Soft Shadows Based on Local Cubemaps
+  packageVersion: 1.5
+  assetPath: Assets/Dynamic Soft Shadows Based on Local Cubemaps/Materials/ShadowMap_URP.mat
+  uploadId: 402351
