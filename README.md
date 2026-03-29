@@ -31,5 +31,5 @@ https://github.com/gestgest/CheckCompany/releases
 - 에디터 : Rider
 
 ---
-[주요 화면](Readme/FEATURES.md)
-[트러블 슈팅](Readme/TROUBLESHOOTING.md)
+- [주요 화면](Readme/FEATURES.md)
+- [트러블 슈팅](Readme/TROUBLESHOOTING.md)
