@@ -1,15 +1,4 @@
 
-
-### 데스크탑, 모바일 다운로드
-https://github.com/gestgest/CheckCompany/releases
-
-### 기술스택
-- 엔진 : 유니티
-- 언어 : C#
-- 서버 : Firebase
-- 버전 관리 : git, github
-- 에디터 : Rider
-
 ### 주요 화면
 <details>
   <summary>로그인 화면</summary>
