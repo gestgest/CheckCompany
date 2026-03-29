@@ -1,20 +1,69 @@
+# 주요 화면
+CheckCompany의 주요 화면
 
-### 주요 화면
-<details>
-  <summary>로그인 화면</summary>
-  <img width="406" height="879" alt="스크린샷 2025-09-14 230143" src="https://github.com/user-attachments/assets/60d1335f-a720-491b-81b9-8a693f5dbc3a" /><br>
-  메뉴<br><br>
-  
-  <img width="402" height="877" alt="스크린샷 2025-09-14 230156" src="https://github.com/user-attachments/assets/f661f7b2-baf5-473f-ae79-39d291ff9c2a" /><br>
-  로그인 화면<br><br>
- 
-  <img width="399" height="875" alt="image" src="https://github.com/user-attachments/assets/9a8b0157-f9d1-4698-92ba-f19e503bd7c8" /><br>
-  회원가입 화면<br><br>
+## 로그인 화면
+<img width="406" height="879" alt="스크린샷 2025-09-14 230143" src="https://github.com/user-attachments/assets/60d1335f-a720-491b-81b9-8a693f5dbc3a" /><br>
+메뉴<br><br>
 
-</details>
+<img width="402" height="877" alt="스크린샷 2025-09-14 230156" src="https://github.com/user-attachments/assets/f661f7b2-baf5-473f-ae79-39d291ff9c2a" /><br>
+로그인 화면<br><br>
 
-<details>
-  <summary>게임 화면</summary>
+<img width="399" height="875" alt="image" src="https://github.com/user-attachments/assets/9a8b0157-f9d1-4698-92ba-f19e503bd7c8" /><br>
+회원가입 화면<br><br>
+
+### 코
+```
+private IEnumerator LoginAynsc(string email, string password)
+{
+
+    //이메일 로그인 비동기 현황 변수
+    Task<AuthResult> loginTask = auth.SignInWithEmailAndPasswordAsync(email, password);
+
+    yield return new WaitUntil(() => loginTask.IsCompleted);
+
+    //만약 로그인 테스크가 계속 실행중이라면
+    if (loginTask.Exception != null)
+    {
+
+        Debug.LogError(loginTask.Exception);
+
+        FirebaseException firebaseException = loginTask.Exception.GetBaseException() as FirebaseException;
+        AuthError authError = (AuthError)firebaseException.ErrorCode;
+
+        string failedMessage = "Login Failed! Because ";
+
+
+        //보안을 위해 case에 상관없이 Login Failed?
+        switch (authError)
+        {
+            case AuthError.InvalidEmail:
+                failedMessage += "Email is invalid";
+                break;
+            case AuthError.WrongPassword:
+                failedMessage += "Wrong Password";
+                break;
+            case AuthError.MissingEmail:
+                failedMessage += "Email is missiong";
+                break;
+            case AuthError.MissingPassword:
+                failedMessage += "Password is missiong";
+                break;
+            default:
+                failedMessage += "Login Failed";
+                break;
+        }
+        Debug.LogError(authError);
+    }
+    else //로그인 성공
+    {
+        user = loginTask.Result.User;
+        _loadLocation.RaiseEvent(_myCompanyScene);
+    }
+}
+```
+
+---
+## 게임 화면
   <img width="404" height="884" alt="image" src="https://github.com/user-attachments/assets/f8f9a9ed-139c-4f37-8358-46025570797e" /> <br>
   직원<br><br>
 
@@ -24,14 +73,15 @@
   <img width="405" height="883" alt="image" src="https://github.com/user-attachments/assets/d9ddc794-0db3-4de4-bc65-96bd159cc1e5" /><br>
   모집 공고 창<br><br>
 
-  ### 미션
-  <img width="411" height="879" alt="image" src="https://github.com/user-attachments/assets/8ae13b57-d02f-40bd-bfad-e8749b83e393" />
-  <img width="403" height="876" alt="image" src="https://github.com/user-attachments/assets/c4c41566-794f-4534-89ee-865fbe489f1c" />
-  <img width="408" height="877" alt="image" src="https://github.com/user-attachments/assets/476930e1-868d-46c4-acc5-1c69212640b0" />
+### 미션
+<img width="411" height="879" alt="image" src="https://github.com/user-attachments/assets/8ae13b57-d02f-40bd-bfad-e8749b83e393" />
+<img width="403" height="876" alt="image" src="https://github.com/user-attachments/assets/c4c41566-794f-4534-89ee-865fbe489f1c" />
+<img width="408" height="877" alt="image" src="https://github.com/user-attachments/assets/476930e1-868d-46c4-acc5-1c69212640b0" />
+
+
 <img width="404" height="878" alt="image" src="https://github.com/user-attachments/assets/ed4e74e3-7eb2-4e99-a55e-be538c3834ad" />
 <img width="405" height="882" alt="image" src="https://github.com/user-attachments/assets/d25ec010-1ad1-4506-af40-c3bb2ad16d33" />
 <img width="407" height="884" alt="image" src="https://github.com/user-attachments/assets/d3394b26-7f6a-4b50-bfb4-16cf87022d04" />
   
 ### 배치
-
 <img width="410" height="885" alt="image" src="https://github.com/user-attachments/assets/6425d4b5-921e-4024-8ea4-916f221d32e9" />
