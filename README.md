@@ -32,3 +32,4 @@ https://github.com/gestgest/CheckCompany/releases
 
 ---
 [주요 화면](Readme/FEATURES.md)
+[트러블 슈팅](Readme/TROUBLESHOOTING.md)
