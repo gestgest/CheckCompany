@@ -13,3 +13,11 @@
 # 실행방법
 모바일과 데스크탑 둘 다 플레이 가능합니다.
 
+
+### 코드 다운로드
+```
+git clone https://github.com/gestgest/CheckCompany.git
+```
+
+---
+[플레이 화면](Readme/FEATURES.md)
