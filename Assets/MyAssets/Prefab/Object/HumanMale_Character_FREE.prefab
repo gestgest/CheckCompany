@@ -1076,9 +1076,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 278d0117ea430364db52a03f8272a231, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _workstationManagerSO: {fileID: 0}
+  _workstationManagerSO: {fileID: 11400000, guid: 56a72685b0d48674e9fd351611961844, type: 2}
   _arriveDistance: 0.15
   _retryInterval: 3
+  _seatNavMeshSampleRadius: 2
 --- !u!1 &1789272960074739661
 GameObject:
   m_ObjectHideFlags: 0

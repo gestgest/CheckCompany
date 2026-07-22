@@ -19,6 +19,7 @@ public class EmployeeWorkAI : MonoBehaviour
     [SerializeField] private WorkstationManagerSO _workstationManagerSO;
     [SerializeField] private float _arriveDistance = 0.15f;
     [SerializeField] private float _retryInterval = 3.0f; //빈 책상이 없을 때 재시도 간격
+    [SerializeField] private float _seatNavMeshSampleRadius = 2.0f; //SeatPoint 주변에서 NavMesh를 찾을 반경
 
     private NavMeshAgent _agent;
 
@@ -61,12 +62,33 @@ public class EmployeeWorkAI : MonoBehaviour
 
             if (_seat != null)
             {
-                _agent.SetDestination(_seat.position);
-                _state = State.MovingToDesk;
+                MoveToSeat();
                 yield break;
             }
 
+            Debug.Log($"[EmployeeWorkAI] employee {_employeeId} : 빈 책상이 없어 대기중 ({_retryInterval}초 후 재시도)");
             yield return new WaitForSeconds(_retryInterval);
+        }
+    }
+
+    private void MoveToSeat()
+    {
+        _state = State.MovingToDesk;
+
+        //SeatPoint(또는 그 대체값인 오브젝트 자신의 위치)가 책상 모델 안쪽 등 NavMesh가 없는 지점일 수 있으므로,
+        //주변 반경 안에서 실제로 걸어갈 수 있는 가장 가까운 지점으로 스냅한다.
+        if (!NavMesh.SamplePosition(_seat.position, out NavMeshHit hit, _seatNavMeshSampleRadius, NavMesh.AllAreas))
+        {
+            Debug.LogWarning(
+                $"[EmployeeWorkAI] employee {_employeeId} : '{_seat.name}' 주변 {_seatNavMeshSampleRadius}m 안에 NavMesh가 없습니다. " +
+                "SeatPoint 위치를 책상 옆 바닥(NavMesh가 베이크된 곳)으로 옮겨주세요."
+            );
+            return;
+        }
+
+        if (!_agent.SetDestination(hit.position))
+        {
+            Debug.LogWarning($"[EmployeeWorkAI] employee {_employeeId} : '{_seat.name}'까지 가는 경로를 계산하지 못했습니다.");
         }
     }
 
