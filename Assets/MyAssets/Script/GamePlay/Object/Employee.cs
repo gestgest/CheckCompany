@@ -97,9 +97,7 @@ public class Employee
 
     public void SetStamina(int value, bool toServer = true)
     {
-        stamina = value;
-        if (stamina > max_stamina)
-            stamina = max_stamina;
+        stamina = Mathf.Clamp(value, 0, max_stamina);
 
         if (_changedEmployeeStatus != null)
         {

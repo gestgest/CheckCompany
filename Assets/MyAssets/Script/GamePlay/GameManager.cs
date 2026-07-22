@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour
         _placeManager.Init();
         _workstationManagerSO.Init();
 
-        _gameDate = new GameDate(employeeControllerSO.AddStamina, _sendFirebaseEventChannelSO);
+        _gameDate = new GameDate(_sendFirebaseEventChannelSO);
 
         GameServerStart();
     }

@@ -17,20 +17,28 @@ public class EmployeeWorkAI : MonoBehaviour
     }
 
     [SerializeField] private WorkstationManagerSO _workstationManagerSO;
+    [SerializeField] private EmployeeManagerSO _employeeManagerSO;
     [SerializeField] private float _arriveDistance = 0.15f;
     [SerializeField] private float _retryInterval = 3.0f; //빈 책상이 없을 때 재시도 간격
     [SerializeField] private float _seatNavMeshSampleRadius = 2.0f; //SeatPoint 주변에서 NavMesh를 찾을 반경
+
+    [Header("Stamina")]
+    [SerializeField] private float _staminaDrainPerMinute = 6f;    //근무 중 분당 체력 소모량
+    [SerializeField] private float _staminaRecoverPerMinute = 12f; //비근무(이동/대기) 중 분당 체력 회복량
 
     private NavMeshAgent _agent;
 
     private State _state = State.Idle;
     private Transform _seat;
     private int _employeeId;
+    private Employee _employee;
+    private float _staminaAccumulator;
 
     /// <summary>이 오브젝트가 대표하는 Employee의 ID. EmployeeObjectSystem에서 생성 직후 호출.</summary>
     public void Init(int employeeId)
     {
         _employeeId = employeeId;
+        _employee = _employeeManagerSO.GetEmployeeById(employeeId);
     }
 
     private void Awake()
@@ -94,6 +102,8 @@ public class EmployeeWorkAI : MonoBehaviour
 
     private void Update()
     {
+        TickStamina();
+
         if (_state != State.MovingToDesk)
         {
             return;
@@ -105,6 +115,42 @@ public class EmployeeWorkAI : MonoBehaviour
         }
 
         ArriveAtDesk();
+    }
+
+    /// <summary>근무 중이면 체력을 소모하고, 그 외(이동/대기)에는 회복시킨다.</summary>
+    private void TickStamina()
+    {
+        if (_employee == null)
+        {
+            return;
+        }
+
+        bool isDraining = _state == State.Working;
+
+        //이미 한계치(0 또는 최대)라면 계산할 필요 없음 - 불필요한 서버 쓰기 방지
+        if (isDraining && _employee.Stamina <= 0)
+        {
+            _staminaAccumulator = 0f;
+            return;
+        }
+
+        if (!isDraining && _employee.Stamina >= _employee.Max_Stamina)
+        {
+            _staminaAccumulator = 0f;
+            return;
+        }
+
+        float ratePerMinute = isDraining ? -_staminaDrainPerMinute : _staminaRecoverPerMinute;
+        _staminaAccumulator += ratePerMinute / 60f * Time.deltaTime;
+
+        int wholePoints = (int)_staminaAccumulator;
+        if (wholePoints == 0)
+        {
+            return;
+        }
+
+        _staminaAccumulator -= wholePoints;
+        _employee.SetStamina(_employee.Stamina + wholePoints);
     }
 
     private void ArriveAtDesk()

@@ -1077,9 +1077,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _workstationManagerSO: {fileID: 11400000, guid: 56a72685b0d48674e9fd351611961844, type: 2}
+  _employeeManagerSO: {fileID: 11400000, guid: 6a695d970d94e0a4bb81e3e309e1fadf, type: 2}
   _arriveDistance: 0.15
   _retryInterval: 3
   _seatNavMeshSampleRadius: 2
+  _staminaDrainPerMinute: 6
+  _staminaRecoverPerMinute: 12
 --- !u!1 &1789272960074739661
 GameObject:
   m_ObjectHideFlags: 0

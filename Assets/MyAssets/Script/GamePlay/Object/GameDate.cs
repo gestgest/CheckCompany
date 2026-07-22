@@ -1,20 +1,15 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
-using UnityEngine.Events;
 
 [Serializable]
 public class GameDate : Date
 {
-    public UnityAction<int> _onStaminaChanged;
     public SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
 
     /// <summary> 생성자 </summary>
-    /// <param name="onStaminaChanged">EmployeeControllerSO의 함수</param>
-    public GameDate(UnityAction<int> onStaminaChanged, SendFirebaseEventChannelSO sendFirebaseEventChannelSO)
+    public GameDate(SendFirebaseEventChannelSO sendFirebaseEventChannelSO)
     {
-        
-        this._onStaminaChanged += onStaminaChanged;
         this._sendFirebaseEventChannelSO = sendFirebaseEventChannelSO;
     }
 
@@ -55,11 +50,7 @@ public class GameDate : Date
                 GameManager.instance.SetMoney(GameManager.instance.Money - 10000);
             }
             base.Day = value;
-            
-            //임시 디버깅용 회복 함수
-            _onStaminaChanged.Invoke(70);
-            //EmployeeControllerSO.instance.AddStamina(70);
-            Debug.Log("체력 회복");
+            //체력 회복은 이제 EmployeeWorkAI가 근무 상태에 따라 실시간으로 처리한다.
         }
     }
 

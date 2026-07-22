@@ -123,14 +123,6 @@ public class EmployeeManagerSO : ScriptableObject
     }
 
     #endregion
-    public void AddStamina(int add_value)
-    {
-        for(int i = 0; i < employees.Count; i++)
-        {
-            Employee employee = employees[i];
-            employee.SetStamina(employee.Stamina + add_value);
-        }
-    }
 
     public void ChangedEmployeeStatus()
     {
@@ -145,6 +137,13 @@ public class EmployeeManagerSO : ScriptableObject
     public Employee GetEmployee(int index)
     {
         return employees[index];
+    }
+
+    /// <summary>id로 직원을 찾는다. 없으면 null.</summary>
+    public Employee GetEmployeeById(int id)
+    {
+        int index = Search_Employee_Index(id);
+        return index == -1 ? null : employees[index];
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////서버
