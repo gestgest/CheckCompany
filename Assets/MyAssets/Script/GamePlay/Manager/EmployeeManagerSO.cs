@@ -31,7 +31,9 @@ public class EmployeeManagerSO : ScriptableObject
     [SerializeField] private Int2EventChannelSO _onChangeEvent;
 
     //직원 목록
-    List<Employee> employees;
+    //필드 초기화자로 기본값을 넣어둔다 - Init()이 아직 호출되기 전에(씬/스크립트 실행 순서 문제로
+    //EmployeeObjectSystem 등이 먼저 접근하는 경우) NullReferenceException이 나지 않도록 하기 위함.
+    List<Employee> employees = new List<Employee>();
 
     private Employee _selectedEmployee;
 

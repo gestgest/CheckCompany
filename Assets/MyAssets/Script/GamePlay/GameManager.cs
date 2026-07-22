@@ -88,10 +88,12 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        //if you are not logged in, you must enter the default account
+        //로그인되어 있지 않으면 서버 호출 없이 로컬 기본값으로 테스트 플레이한다.
         if (user == null)
         {
-            //default account
+            Debug.Log("[GameManager] 로그인되어 있지 않아 로컬 테스트 데이터로 시작합니다.");
+            SetDefaultProperty();
+            return;
         }
 
         Debug.Log(user.Email);

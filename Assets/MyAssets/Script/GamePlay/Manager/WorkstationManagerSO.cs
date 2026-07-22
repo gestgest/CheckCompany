@@ -8,13 +8,15 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "WorkstationManagerSO", menuName = "ScriptableObject/Manager/WorkstationManagerSO")]
 public class WorkstationManagerSO : ScriptableObject
 {
-    private List<PlaceableObject> _workstations;
+    //필드 초기화자로 기본값을 넣어둔다 - Init()이 아직 호출되기 전에(씬/스크립트 실행 순서에 따라
+    //EmployeeWorkAI 등이 먼저 접근하는 경우) NullReferenceException이 나지 않도록 하기 위함.
+    private List<PlaceableObject> _workstations = new List<PlaceableObject>();
 
     //employeeId -> 배정된 워크스테이션
-    private Dictionary<int, PlaceableObject> _employeeSeats;
+    private Dictionary<int, PlaceableObject> _employeeSeats = new Dictionary<int, PlaceableObject>();
 
     //중복 배정 방지용 (워크스테이션의 PlacedObjectData id 기준)
-    private HashSet<int> _occupiedWorkstationIds;
+    private HashSet<int> _occupiedWorkstationIds = new HashSet<int>();
 
     public void Init()
     {
