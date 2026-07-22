@@ -140,11 +140,14 @@ public class MissionPanel : Panel
     public int Search_MissionObject_Index(int id)
     {
         int index = Binary_Search_MissionObject_Index(0, missionElementPoolObjects.Length - 1, id);
-        if (missionElementPoolObjects[index].GetMission().ID == id)
+
+        //이진탐색은 못 찾으면 삽입 위치(0 ~ Length)를 돌려주므로 접근 전에 범위를 봐야 한다.
+        if (index < 0 || index >= missionElementPoolObjects.Length)
         {
-            return index;
+            return -1;
         }
-        return -1;
+
+        return missionElementPoolObjects[index].GetMission().ID == id ? index : -1;
     }
 
     private int Binary_Search_MissionObject_Index(int start, int end, int id)

@@ -238,11 +238,14 @@ public class MissionManagerSO : ScriptableObject
     public int Search_Mission_Index(int id)
     {
         int index = Binary_Search_Mission_Index(0, missions.Count - 1, id);
-        if (missions[index].ID == id)
+
+        //이진탐색은 못 찾으면 삽입 위치(0 ~ Count)를 돌려주므로 접근 전에 범위를 봐야 한다.
+        if (index < 0 || index >= missions.Count)
         {
-            return index;
+            return -1;
         }
-        return -1;
+
+        return missions[index].ID == id ? index : -1;
     }
 
     private int Binary_Search_Mission_Index(int start, int end, int id)

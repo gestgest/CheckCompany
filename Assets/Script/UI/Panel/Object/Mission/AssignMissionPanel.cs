@@ -87,7 +87,9 @@ public class AssignMissionPanel : MiniPanel
     void CreateAssignedEmployeeElements()
     {
         //assignedEmployees => debug one ~ two employee, but later 1 instead of mission
-        for (int i = 0; i < _createMissionManager.GetAssignableEmployeeSize(); i++)
+        //풀 크기를 넘겨서 켜지 않도록 제한
+        int slotCount = Mathf.Min(_createMissionManager.GetAssignableEmployeeSize(), _assignedEmployeeElements.Count);
+        for (int i = 0; i < slotCount; i++)
         {
             _assignedEmployeeElements[i].gameObject.SetActive(true);
             //_assignedEmployeeElements[i].IsSelected = false;
@@ -96,9 +98,17 @@ public class AssignMissionPanel : MiniPanel
         List<int> ids = _createMissionManager.GetRefEmployeesID();
 
         //assignedEmployee
-        for (int i = 0; i < ids.Count; i++)
+        for (int i = 0; i < ids.Count && i < _assignedEmployeeElements.Count; i++)
         {
             int index = _employeeManager.Search_Employee_Index(ids[i]);
+
+            //이미 해고된 직원 등 id가 더 이상 없는 경우 -1이 온다
+            if (index == -1)
+            {
+                Debug.LogWarning($"할당된 직원 id {ids[i]}를 찾을 수 없습니다. 건너뜁니다.", this);
+                continue;
+            }
+
             Employee employee = _employeeManager.GetEmployee(index);
 
             //icon setting
@@ -141,7 +151,15 @@ public class AssignMissionPanel : MiniPanel
         foreach(int id in _createMissionManager.GetRefEmployeesID())
         {
             int index = _employeeManager.Search_Employee_Index(id); //log2
-            _assignableEmployeeElements[index].IsSelected = true; 
+
+            //employees 기준 인덱스를 _assignableEmployeeElements(UI)에 그대로 쓰고 있어서
+            //두 리스트의 길이/순서가 어긋나면 깨진다. 우선 범위만 방어.
+            if (index < 0 || index >= _assignableEmployeeElements.Count)
+            {
+                continue;
+            }
+
+            _assignableEmployeeElements[index].IsSelected = true;
         }
     }
 

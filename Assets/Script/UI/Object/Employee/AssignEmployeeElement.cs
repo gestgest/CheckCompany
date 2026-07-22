@@ -9,7 +9,19 @@ public class AssignEmployeeElement : MonoBehaviour
     protected Employee employee;
     protected bool isSelected;
 
-    protected Image _icon;
+    private Image _iconCache;
+
+    //Awake는 오브젝트가 처음 활성화될 때만 돈다.
+    //꺼져있는 패널의 element에 접근하는 경로가 있어서 지연 초기화로 바꿈. (GetComponent는 비활성 오브젝트에서도 동작)
+    protected Image _icon
+    {
+        get
+        {
+            if (_iconCache == null)
+                _iconCache = GetComponent<Image>();
+            return _iconCache;
+        }
+    }
 
     [SerializeField] protected CreateMissionManagerSO _createMissionManager;
 
@@ -17,11 +29,6 @@ public class AssignEmployeeElement : MonoBehaviour
     public void SetEmployee(Employee employee)
     {
         this.employee = employee;
-    }
-
-    private void Awake()
-    {
-        _icon = GetComponent<Image>();
     }
 
     public void SetEmployee(Employee employee, Sprite icon)

@@ -70,8 +70,12 @@ public class Panel : MonoBehaviour
             panels[this.panel_index].OffPanel();
         }
 
-        if (index >= panels.Length)
+        //여기서 조용히 return하면 "패널이 그냥 안 열림"으로만 보여서 원인 추적이 안 된다.
+        if (index < 0 || index >= panels.Length)
         {
+            Debug.LogWarning(
+                $"[{name}] SwitchingPanel({index}) 무시됨. 자식 panels 크기 = {panels.Length}. " +
+                "인스펙터의 panels 배선이나 PanelManager.indexList 경로를 확인할 것.", this);
             return;
         }
 
@@ -145,8 +149,15 @@ public class Panel : MonoBehaviour
         return panels;
     }
 
+    /// <summary>자식 패널. 범위를 벗어나면 null.</summary>
     public Panel GetPanel(int index)
     {
+        if (index < 0 || index >= panels.Length)
+        {
+            Debug.LogWarning(
+                $"[{name}] GetPanel({index}) 범위 밖. 자식 panels 크기 = {panels.Length}.", this);
+            return null;
+        }
         return panels[index];
     }
 

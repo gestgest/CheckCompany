@@ -159,7 +159,19 @@ public class PanelManager : MonoBehaviour
     public void PushIndexList(int value)
     {
         //GetPanel(indexList).OffPanel();
-        GetPanel(indexList).SwitchingPanel(value);
+        Panel current = GetPanel(indexList);
+
+        //전환에 실패했는데도 indexList에 추가해버리면 경로가 오염되고,
+        //다음 호출에서 없는 경로를 걷다가 예외가 난다. 반드시 먼저 검증할 것.
+        if (current == null || value < 0 || value >= current.GetPanels().Length)
+        {
+            Debug.LogWarning(
+                $"PushIndexList({value}) 취소됨. 현재 패널 = '{(current == null ? "null" : current.name)}', " +
+                $"자식 수 = {(current == null ? 0 : current.GetPanels().Length)}.", current);
+            return;
+        }
+
+        current.SwitchingPanel(value);
         indexList.Add(value);
     }
     public void SwitchingIndexList(int value)
@@ -177,13 +189,37 @@ public class PanelManager : MonoBehaviour
     }
 
 
+    /// <summary>indexList 경로를 따라 내려간다. 경로가 끊기면 마지막으로 유효했던 패널을 돌려준다.</summary>
     public Panel GetPanel(List<int> indexList)
     {
+        if (indexList == null || indexList.Count == 0)
+        {
+            Debug.LogWarning("GetPanel: indexList가 비어있음.");
+            return null;
+        }
+
+        if (indexList[0] < 0 || indexList[0] >= panels.Count)
+        {
+            Debug.LogWarning($"GetPanel: 루트 index {indexList[0]}가 범위 밖. panels 크기 = {panels.Count}.");
+            return null;
+        }
+
         Panel panel = panels[indexList[0]];
 
         for (int i = 1; i < indexList.Count; i++)
         {
-            panel = panel.GetPanel(indexList[i]);
+            Panel child = panel.GetPanel(indexList[i]);
+
+            //경로가 실제 패널 트리와 어긋난 상태. 여기서 더 내려가면 예외가 난다.
+            if (child == null)
+            {
+                Debug.LogWarning(
+                    $"GetPanel: 경로 [{string.Join(",", indexList)}]의 {i}번째에서 끊김. " +
+                    $"'{panel.name}'에 자식 {indexList[i]}가 없음. indexList가 실제 화면과 어긋나 있음.", panel);
+                return panel;
+            }
+
+            panel = child;
         }
 
         return panel;

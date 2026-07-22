@@ -262,11 +262,15 @@ public class EmployeeManagerSO : ScriptableObject
     public int Search_Employee_Index(int id)
     {
         int index = Binary_Search_Employee_Index(0, employees.Count - 1, id);
-        if (employees[index].ID == id)
+
+        //이진탐색은 못 찾으면 삽입 위치(0 ~ Count)를 돌려준다.
+        //리스트가 비었으면 0, id가 최대값보다 크면 Count가 나오므로 접근 전에 범위를 봐야 한다.
+        if (index < 0 || index >= employees.Count)
         {
-            return index;
+            return -1;
         }
-        return -1;
+
+        return employees[index].ID == id ? index : -1;
     }
 
     private int Binary_Search_Employee_Index(int start, int end, int id)
