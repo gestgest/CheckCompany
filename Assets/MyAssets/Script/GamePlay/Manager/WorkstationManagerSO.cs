@@ -60,8 +60,14 @@ public class WorkstationManagerSO : ScriptableObject
 
         foreach (PlaceableObject workstation in _workstations)
         {
+            //파괴됐거나(이전 플레이 세션에서 남은 잔여 참조) 배치 데이터가 없는 책상은 건너뛴다
+            if (workstation == null)
+            {
+                continue;
+            }
+
             int objectId = workstation.GetObjectID();
-            if (_occupiedWorkstationIds.Contains(objectId))
+            if (objectId == -1 || _occupiedWorkstationIds.Contains(objectId))
             {
                 continue;
             }

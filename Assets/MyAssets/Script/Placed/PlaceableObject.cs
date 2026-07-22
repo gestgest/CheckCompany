@@ -119,10 +119,22 @@ public class PlaceableObject : MonoBehaviour
     }
     public int GetObjectID()
     {
+        if (_placedObjectData == null)
+        {
+            Debug.LogWarning($"[PlaceableObject] '{name}' : _placedObjectData가 없습니다 (SetPlacedObjectData 호출 필요).", this);
+            return -1;
+        }
+
         return _placedObjectData.GetID();
     }
     public int GetPropertyID()
     {
+        if (_placedObjectData == null)
+        {
+            Debug.LogWarning($"[PlaceableObject] '{name}' : _placedObjectData가 없습니다 (SetPlacedObjectData 호출 필요).", this);
+            return -1;
+        }
+
         return _placedObjectData.GetPropertyID();
     }
     public void SetPosition(Vector3 position)

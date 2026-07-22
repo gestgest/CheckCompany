@@ -156,7 +156,16 @@ public class EmployeeWorkAI : MonoBehaviour
     private void ArriveAtDesk()
     {
         _state = State.Working;
+
+        //도착 후에도 NavMeshAgent를 멈추지 않으면 계속 같은 목적지로 미세 보정을 시도해서
+        //(특히 근처에 다른 직원이 있으면 서로 밀어내는 obstacle avoidance 때문에) 제자리에서 왔다갔다 떨리게 된다.
+        _agent.isStopped = true;
+        _agent.ResetPath();
+        _agent.velocity = Vector3.zero;
+
         transform.rotation = _seat.rotation;
+
+        Debug.Log($"[EmployeeWorkAI] employee {_employeeId} : '{_seat.name}'에 도착해서 근무 시작 (Working)");
 
         //TODO: Animator Controller에 근무 애니메이션 상태/파라미터가 추가되면 여기서 재생
     }

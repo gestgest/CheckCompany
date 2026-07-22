@@ -192,6 +192,12 @@ public class GameManager : MonoBehaviour
         ui_manager.SetMoneyText(money);
     }
 
+    /// <summary>매달 직원 월급을 일괄 지급(차감)한다. 돈이 부족하면 false.</summary>
+    public bool PayEmployees()
+    {
+        return employeeControllerSO.PayEmployees();
+    }
+
 
     public int Employee_count
     {
