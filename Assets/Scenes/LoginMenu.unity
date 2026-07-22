@@ -3319,6 +3319,8 @@ MonoBehaviour:
   _registerConfirmPasswordTextField: {fileID: 1414258959}
   _loginEvent: {fileID: 11400000, guid: d95bd9c545684ba43925193f008f6d41, type: 2}
   _registerEvent: {fileID: 11400000, guid: f0d1361b51d787043a9149a076410a67, type: 2}
+  _autoLoginRequestEvent: {fileID: 11400000, guid: 9dd1f044cd024992abd7ade53bb5653b,
+    type: 2}
   _debugText: {fileID: 0}
 --- !u!1 &1414258957
 GameObject:

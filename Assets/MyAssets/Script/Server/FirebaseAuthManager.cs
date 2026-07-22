@@ -27,11 +27,19 @@ public class FirebaseAuthManager : MonoBehaviour
     [SerializeField] private SendFirebaseEventChannelSO _setNewFireStoreEvent;
     [SerializeField] private SendFirebaseEventChannelSO _setFireStoreEvent;
 
-    [SerializeField] private BoolEventChannelSO _isLoginEvent; 
+    [SerializeField] private BoolEventChannelSO _isLoginEvent;
     [SerializeField] private LoadEventChannelSO _loadLocation; //sceneLoader?
     [SerializeField] private AssetReference _myCompanyScene;
 
+    [SerializeField] private VoidEventChannelSO _autoLoginRequestEvent; //UILoginMenu가 씬 진입 시 호출
+
     private bool isInit = true;
+
+    //Firebase가 로그인 여부를 판단하기 전에 UILoginMenu가 자동로그인을 요청할 수도 있으므로 상태를 별도로 저장
+    private bool _hasCheckedInitialLogin = false;
+    private bool _isSignedIn = false;
+    private bool _autoLoginRequested = false;
+    private bool _autoLoginHandled = false;
     void Awake()
     {
         //FirebaseApp.DefaultInstance
@@ -68,12 +76,14 @@ public class FirebaseAuthManager : MonoBehaviour
     {
         _loginEvent._onEventRaised += Login;
         _registerEvent._onEventRaised += Register;
+        _autoLoginRequestEvent._onEventRaised += TryAutoLogin;
     }
 
     private void OnDisable()
     {
         _loginEvent._onEventRaised -= Login;
         _registerEvent._onEventRaised -= Register;
+        _autoLoginRequestEvent._onEventRaised -= TryAutoLogin;
     }
 
     void InitFirebase()
@@ -104,9 +114,14 @@ public class FirebaseAuthManager : MonoBehaviour
                 {
                     LoginEvent(true);
                 }
-                
+
             }
             LoginEvent(false);
+
+            //isInit 가드와 별개로 매 호출마다 실제 로그인 상태를 다시 확인.
+            //StateChanged가 맨 처음엔(파이어베이스가 저장된 세션을 아직 복원하기 전) false로 잘못 알려주고
+            //복원이 끝난 뒤 다시 true로 알려주는 경우가 있어서, isInit로 한 번만 확정지으면 그 두번째(진짜) 값을 놓친다.
+            UpdateAutoLoginState();
         }
         catch (System.Exception ex)
         {
@@ -123,7 +138,34 @@ public class FirebaseAuthManager : MonoBehaviour
         }
 
     }
-    
+
+    //LoginMenu씬에 진입했을 때 UILoginMenu가 호출. 기존에 로그인된 정보(파이어베이스가 기억하는 세션)가 있다면 바로 게임씬으로 진입시킨다.
+    private void TryAutoLogin()
+    {
+        _autoLoginRequested = true;
+        if (_hasCheckedInitialLogin)
+            ProceedAutoLogin();
+        //아직 판단 전이면 UpdateAutoLoginState()가 결과 나올 때 알아서 처리
+    }
+
+    private void UpdateAutoLoginState()
+    {
+        _hasCheckedInitialLogin = true;
+        _isSignedIn = auth.CurrentUser != null;
+
+        if (_autoLoginRequested)
+            ProceedAutoLogin();
+    }
+
+    private void ProceedAutoLogin()
+    {
+        if (_autoLoginHandled) return;
+        if (!_isSignedIn) return;
+
+        _autoLoginHandled = true;
+        _loadLocation.RaiseEvent(_myCompanyScene);
+    }
+
     public void Login(string email, string password)
     {
         StartCoroutine(

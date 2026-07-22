@@ -21,6 +21,14 @@ public class UILoginMenu : MonoBehaviour
     [SerializeField] private String2EventChannelSO _loginEvent; //FirebaseAuthManager
     [SerializeField] private String4EventChannelSO _registerEvent;
 
+    [Header("Broadcasting on eventChannels")]
+    [SerializeField] private VoidEventChannelSO _autoLoginRequestEvent; //FirebaseAuthManager: 저장된 로그인 정보가 있으면 바로 게임으로 진입 요청
+
+    private void Start()
+    {
+        _autoLoginRequestEvent.RaiseEvent();
+    }
+
     public void Login()
     {
         //what????

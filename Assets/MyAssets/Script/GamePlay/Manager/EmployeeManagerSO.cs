@@ -89,6 +89,9 @@ public class EmployeeManagerSO : ScriptableObject
         _onChangedCreateEvent.RaiseEvent(employees.Count - 1);
     }
 
+    //월급이 부족해서 지급하지 못했을 때 직원들이 잃는 스태미나/멘탈 양
+    private const int UNPAID_SALARY_PENALTY = 20;
+
     //결제 시도하고 안되면 false
     public bool PayEmployees()
     {
@@ -102,6 +105,13 @@ public class EmployeeManagerSO : ScriptableObject
         {
             GameManager.instance.SetMoney(GameManager.instance.Money - sum);
             return true;
+        }
+
+        //월급을 못 받은 직원들은 사기가 떨어진다 (스태미나/멘탈 감소)
+        for (int i = 0; i < employees.Count; i++)
+        {
+            employees[i].SetStamina(employees[i].Stamina - UNPAID_SALARY_PENALTY);
+            employees[i].SetMental(employees[i].Mental - UNPAID_SALARY_PENALTY);
         }
 
         return false;
@@ -198,6 +208,17 @@ public class EmployeeManagerSO : ScriptableObject
             nickname,
             em + id.ToString() + ".stamina",
             stamina
+        );
+    }
+
+    public void SetServerMental(string nickname, int id, int mental)
+    {
+        string em = "employees.";
+        _sendFirebaseEventChannelSO.RaiseEvent(
+            "GamePlayUser",
+            nickname,
+            em + id.ToString() + ".mental",
+            mental
         );
     }
 

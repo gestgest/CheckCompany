@@ -36,6 +36,7 @@ public class Employee
     private UnityAction<string, int> _removeAllServerMissions;
     private UnityAction<Mission, string, int> _addServerMission;
     private UnityAction<string, int, int> _setServerStamina;
+    private UnityAction<string, int, int> _setServerMental;
 
     //Controller Function
     private UnityAction _changedEmployeeStatus;
@@ -127,6 +128,19 @@ public class Employee
         }
     }
 
+    public void SetMental(int value, bool toServer = true)
+    {
+        mental = Mathf.Clamp(value, 0, max_mental);
+
+        if (_changedEmployeeStatus != null)
+        {
+            _changedEmployeeStatus.Invoke();
+        }
+
+        if (toServer)
+            _setServerMental.Invoke(GameManager.instance.Nickname, id, mental);
+    }
+
     public int Max_Mental
     {
         get { return max_mental; }
@@ -185,6 +199,7 @@ public class Employee
         _removeAllServerMissions += employeeManager.RemoveAllServerMissions;
         _addServerMission += employeeManager.AddServerMission;
         _setServerStamina += employeeManager.SetServerStamina;
+        _setServerMental += employeeManager.SetServerMental;
 
         //applicant라면
         if (!isEmployee)
