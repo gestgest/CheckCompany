@@ -222,9 +222,14 @@ public class EmployeeManagerSO : ScriptableObject
 
             employee.JSONToEmployee(serverEmployee);
             this.employees.Add(employee);
+
+            //예전엔 이 호출이 loop 밖에서 한 번만 일어나서
+            //  1) 직원이 여러 명이면 마지막 직원 오브젝트만 생성되고
+            //  2) 직원이 0명이면 RaiseEvent(-1)이 호출되어 EmployeeObjectSystem에서 IndexOutOfRangeException이 났다.
+            //직원을 추가할 때마다 즉시 이벤트를 발생시켜 각 직원마다 오브젝트가 생성되도록 수정.
+            _onChangedCreateEvent.RaiseEvent(employees.Count - 1);
         }
         _isChangedEmployeePanelEventChannelSO.RaiseEvent(true);
-        _onChangedCreateEvent.RaiseEvent(employees.Count - 1);
     }
 
     #endregion

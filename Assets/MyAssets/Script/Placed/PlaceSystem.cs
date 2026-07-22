@@ -37,6 +37,7 @@ public class PlaceSystem : MonoBehaviour
     [Space]
     [Header("Manager")]
     [SerializeField] private PlacedObjectManager _placedObjectManager;
+    [SerializeField] private WorkstationManagerSO _workstationManagerSO;
 
     [Space]
     [Header("Listening to Event")]
@@ -131,6 +132,7 @@ public class PlaceSystem : MonoBehaviour
         obj.Place();
 
         _placedObjects.Add(obj);
+        _workstationManagerSO.RegisterWorkstation(obj);
     }
 
 
@@ -210,11 +212,16 @@ public class PlaceSystem : MonoBehaviour
             
             TakeOffPlaceMode();
 
-            //배치 하는 순간 조종 권한 제거  
+            //배치 하는 순간 조종 권한 제거
             Destroy(selectedObject.gameObject.GetComponent<HandlingObject>());
+
+            //selectedObject를 null로 비우기 전에 참조를 저장해둬야 한다
+            //(이전 코드는 null을 비운 뒤 리스트에 추가해서 항상 null이 쌓이는 버그가 있었음)
+            PlaceableObject placed = selectedObject;
             selectedObject = null;
-            
-            _placedObjects.Add(selectedObject);
+
+            _placedObjects.Add(placed);
+            _workstationManagerSO.RegisterWorkstation(placed);
         }
         
         //아무일도 없다

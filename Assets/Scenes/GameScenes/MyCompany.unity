@@ -1024,6 +1024,7 @@ MonoBehaviour:
   _shopPlaceableObjects:
   - {fileID: 132292087961979328, guid: ec71814fb4ff65441989d0088126ae12, type: 3}
   _placedObjectManager: {fileID: 11400000, guid: 78992eda014fc4149a161456aaedd847, type: 2}
+  _workstationManagerSO: {fileID: 11400000, guid: 56a72685b0d48674e9fd351611961844, type: 2}
   _takenAreaEvent: {fileID: 11400000, guid: 767a94b576ed3cf4abacb6b5b867d660, type: 2}
   _gridEvent: {fileID: 11400000, guid: ae3fd948f4be3da45a40c6cca018c9b3, type: 2}
   _createPlaceableObjectEvent: {fileID: 11400000, guid: 81fcc363f02503546814d9b98feb975d, type: 2}

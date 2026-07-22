@@ -16,6 +16,18 @@ public class PlaceableObject : MonoBehaviour
     // private int object_id;
     // [SerializeField] private int property_id;
 
+    [Header("Workstation")]
+    [SerializeField] private bool _isWorkstation;
+    [SerializeField] private Transform _seatPoint;
+
+    public bool IsWorkstation => _isWorkstation;
+
+    /// <summary>직원이 근무할 위치. 지정하지 않으면 오브젝트 자신의 Transform을 사용한다.</summary>
+    public Transform GetSeatPoint()
+    {
+        return _seatPoint != null ? _seatPoint : transform;
+    }
+
     public void SetPlacedObjectData(PlacedObjectData placedObjectData)
     {
         _placedObjectData = placedObjectData;

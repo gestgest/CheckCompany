@@ -48,11 +48,15 @@ public class EmployeeObjectSystem : MonoBehaviour
         Employee e = _employeeManagerSO.GetEmployee(index);
 
         GameObject obj = Instantiate(_employeePrefab, _employeeParent);
+        obj.GetComponent<EmployeeWorkAI>().Init(e.ID);
         _employeeObjects.Add(obj);
     }
 
     private void RemoveEmployeeObject(int index)
     {
+        //기존 코드는 Destroy 없이 리스트에서만 제거해서 오브젝트가 파괴되지 않고 남아있었고,
+        //그 결과 EmployeeWorkAI.OnDestroy도 호출되지 않아 배정된 책상이 영원히 반납되지 않는 문제가 있었다.
+        Destroy(_employeeObjects[index]);
         _employeeObjects.RemoveAt(index);
     }
 

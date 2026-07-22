@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] MissionManagerSO missionControllerSO;
     [SerializeField] EmployeeManagerSO employeeControllerSO;
     [SerializeField] PlacedObjectManager _placeManager;
+    [SerializeField] WorkstationManagerSO _workstationManagerSO;
 
     [Header("ServerEvent")] [SerializeField]
     private DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
@@ -68,6 +69,7 @@ public class GameManager : MonoBehaviour
         employeeControllerSO.Init();
 
         _placeManager.Init();
+        _workstationManagerSO.Init();
 
         _gameDate = new GameDate(employeeControllerSO.AddStamina, _sendFirebaseEventChannelSO);
 
