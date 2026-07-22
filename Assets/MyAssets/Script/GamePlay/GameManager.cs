@@ -32,6 +32,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
     [SerializeField] private GetJSONFirebaseEventChannelSO _getJSONEventChannelSO;
 
+    [Header("Test (서버/로그인 없이 테스트할 때 자동 배치)")]
+    [SerializeField] private bool _testMode = false;
+    [SerializeField] private GameObject _testWorkstationPrefab;
+    [SerializeField] private Vector3 _testWorkstationPosition;
+    [SerializeField] private bool _testSpawnEmployee = false;
+
 
     private string nickname;
 
@@ -271,5 +277,52 @@ public class GameManager : MonoBehaviour
         );
         SetDateUI();
         // object information
+
+        if (_testMode)
+        {
+            SpawnTestSetup();
+        }
+    }
+
+    /// <summary>
+    /// 서버/로그인 없이 테스트할 때 배치 UI를 거치지 않고 책상(워크스테이션)과 직원을 바로 하나 만들어준다.
+    /// _testWorkstationPrefab이 지정돼 있으면 책상을 놓고, _testSpawnEmployee가 켜져 있으면 직원도 만든다.
+    /// </summary>
+    private void SpawnTestSetup()
+    {
+        if (_testWorkstationPrefab != null)
+        {
+            GameObject deskObj = Instantiate(_testWorkstationPrefab, _testWorkstationPosition, Quaternion.identity);
+            PlaceableObject placeableObject = deskObj.GetComponent<PlaceableObject>();
+
+            if (placeableObject != null)
+            {
+                placeableObject.SetPlacedObjectData(new PlacedObjectData(0, 0, _testWorkstationPosition));
+                placeableObject.Place();
+                _workstationManagerSO.RegisterWorkstation(placeableObject);
+            }
+            else
+            {
+                Debug.LogWarning("[GameManager] _testWorkstationPrefab에 PlaceableObject 컴포넌트가 없습니다.");
+            }
+        }
+
+        if (_testSpawnEmployee)
+        {
+            Employee employee = new Employee(employeeControllerSO, true);
+            employee.ID = Employee_count;
+            Employee_count = employee.ID + 1;
+            employee.Name = "테스트 직원";
+            employee.Age = 20;
+            employee.Max_Stamina = 100;
+            employee.SetStamina(100, false);
+            employee.Max_Mental = 100;
+            employee.Mental = 100;
+            employee.CareerPeriod = 0;
+            employee.Salary = 1000000;
+            employee._EmployeeSO = recruitmentControllerSO.GetEmployeeSO(0);
+
+            employeeControllerSO.CreateEmployee(employee);
+        }
     }
 }

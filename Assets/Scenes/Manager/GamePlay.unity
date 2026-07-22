@@ -17423,6 +17423,10 @@ MonoBehaviour:
   _deleteFirebaseEventChannelSO: {fileID: 11400000, guid: 7a1f9e67b78693248b645e9629191902, type: 2}
   _sendFirebaseEventChannelSO: {fileID: 11400000, guid: bc6e20a0b24975943a58a86b83f606ea, type: 2}
   _getJSONEventChannelSO: {fileID: 11400000, guid: 273b81728c703114aa820167d4b00c02, type: 2}
+  _testMode: 1
+  _testWorkstationPrefab: {fileID: 1289936835854364, guid: ec71814fb4ff65441989d0088126ae12, type: 3}
+  _testWorkstationPosition: {x: 0, y: 0, z: 0}
+  _testSpawnEmployee: 0
   _gameDate:
     year: 0
     month: 0
