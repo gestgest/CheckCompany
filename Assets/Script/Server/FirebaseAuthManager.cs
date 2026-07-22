@@ -33,7 +33,8 @@ public class FirebaseAuthManager : MonoBehaviour
 
     [SerializeField] private VoidEventChannelSO _autoLoginRequestEvent; //UILoginMenu가 씬 진입 시 호출
 
-    private bool isInit = true;
+    private bool _initialLoginBroadcastSent = false;
+    [SerializeField] private float _initialLoginGraceSeconds = 2f; //세션 복원을 기다려줄 최대 시간
 
     //Firebase가 로그인 여부를 판단하기 전에 UILoginMenu가 자동로그인을 요청할 수도 있으므로 상태를 별도로 저장
     private bool _hasCheckedInitialLogin = false;
@@ -92,8 +93,25 @@ public class FirebaseAuthManager : MonoBehaviour
 
         auth.StateChanged += AuthStatusChanged;
         AuthStatusChanged(this, null);
+        StartCoroutine(FallbackToNotLoggedInAfterGrace());
     }
 
+    //StateChanged가 맨 처음엔(파이어베이스가 저장된 세션을 아직 복원하기 전) false로 잘못 알려주고
+    //복원이 끝난 뒤 다시 true로 알려주는 경우가 있다.
+    //로그인 확정(true)은 확인되는 즉시 반영하고, 로그인 안 됨(false)은 일정 시간 기다려도
+    //true가 안 오면 그때 확정짓는다. (그래야 진짜 로그인 상태를 false로 잘못 확정짓지 않는다)
+    private IEnumerator FallbackToNotLoggedInAfterGrace()
+    {
+        yield return new WaitForSecondsRealtime(_initialLoginGraceSeconds);
+        BroadcastInitialLoginStateOnce(auth.CurrentUser != null);
+    }
+
+    private void BroadcastInitialLoginStateOnce(bool isLogin)
+    {
+        if (_initialLoginBroadcastSent) return;
+        _initialLoginBroadcastSent = true;
+        _isLoginEvent.RaiseEvent(isLogin);
+    }
 
     void AuthStatusChanged(object sender, System.EventArgs eventArgs)
     {
@@ -112,31 +130,18 @@ public class FirebaseAuthManager : MonoBehaviour
                 user = auth.CurrentUser;
                 if (signedIn)
                 {
-                    LoginEvent(true);
+                    BroadcastInitialLoginStateOnce(true);
                 }
 
             }
-            LoginEvent(false);
 
             //isInit 가드와 별개로 매 호출마다 실제 로그인 상태를 다시 확인.
-            //StateChanged가 맨 처음엔(파이어베이스가 저장된 세션을 아직 복원하기 전) false로 잘못 알려주고
-            //복원이 끝난 뒤 다시 true로 알려주는 경우가 있어서, isInit로 한 번만 확정지으면 그 두번째(진짜) 값을 놓친다.
             UpdateAutoLoginState();
         }
         catch (System.Exception ex)
         {
             Debug.LogError($"[AuthStatusChanged Error] {ex.GetType().Name}: {ex.Message}\n{ex.StackTrace}");
         }
-    }
-
-    private void LoginEvent(bool isLogin)
-    {
-        if (isInit)
-        {
-            isInit = false;
-            _isLoginEvent.RaiseEvent(isLogin);
-        }
-
     }
 
     //LoginMenu씬에 진입했을 때 UILoginMenu가 호출. 기존에 로그인된 정보(파이어베이스가 기억하는 세션)가 있다면 바로 게임씬으로 진입시킨다.

@@ -26,28 +26,22 @@ public class InitializationLoader : MonoBehaviour
     
     private void Start()
     {
-        _isLoginEvent._onEventRaised = IsLoginEvent;
-        _managersScene.LoadSceneAsync(LoadSceneMode.Additive, true).Completed += LoadEventChannel;
+        _isLoginEvent._onEventRaised += IsLoginEvent;
+        _managersScene.LoadSceneAsync(LoadSceneMode.Additive, true);
     }
 
-    // obj는 _managerScene.LoadSceneAsync() 결과 값
-    private void LoadEventChannel(AsyncOperationHandle<SceneInstance> obj)
-    {
-        _menuToLoadEvent.LoadAssetAsync<LoadEventChannelSO>().Completed
-            += LoadMenuScene;
-    }
     private void IsLoginEvent(bool isLogin)
     {
-        // if (isLogin)
-        // {
-        //     _myCompanyToLoadEvent.LoadAssetAsync<LoadEventChannelSO>().Completed
-        //         += LoadGameScene;
-        // }
-        // else
-        // {
-        //     _menuToLoadEvent.LoadAssetAsync<LoadEventChannelSO>().Completed
-        //         += LoadMenuScene;
-        // }
+        if (isLogin)
+        {
+            _myCompanyToLoadEvent.LoadAssetAsync<LoadEventChannelSO>().Completed
+                += LoadGameScene;
+        }
+        else
+        {
+            _menuToLoadEvent.LoadAssetAsync<LoadEventChannelSO>().Completed
+                += LoadMenuScene;
+        }
     }
 
     //이후 init씬 제거
