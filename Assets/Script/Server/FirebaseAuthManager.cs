@@ -33,6 +33,11 @@ public class FirebaseAuthManager : MonoBehaviour
 
     [SerializeField] private VoidEventChannelSO _autoLoginRequestEvent; //UILoginMenu가 씬 진입 시 호출
 
+    [Space]
+    [Header("Settings")]
+    //false면 저장된 세션이 있어도 자동으로 게임씬에 들어가지 않고 항상 로그인 화면부터 시작한다.
+    [SerializeField] private bool _autoLogin = true;
+
     private bool _initialLoginBroadcastSent = false;
     [SerializeField] private float _initialLoginGraceSeconds = 2f; //세션 복원을 기다려줄 최대 시간
 
@@ -106,11 +111,12 @@ public class FirebaseAuthManager : MonoBehaviour
         BroadcastInitialLoginStateOnce(auth.CurrentUser != null);
     }
 
+    //_autoLogin이 꺼져있으면 실제로 로그인되어 있어도 false로 알려서 InitializationLoader가 로그인 화면을 띄우게 한다.
     private void BroadcastInitialLoginStateOnce(bool isLogin)
     {
         if (_initialLoginBroadcastSent) return;
         _initialLoginBroadcastSent = true;
-        _isLoginEvent.RaiseEvent(isLogin);
+        _isLoginEvent.RaiseEvent(isLogin && _autoLogin);
     }
 
     void AuthStatusChanged(object sender, System.EventArgs eventArgs)
@@ -164,6 +170,7 @@ public class FirebaseAuthManager : MonoBehaviour
 
     private void ProceedAutoLogin()
     {
+        if (!_autoLogin) return;
         if (_autoLoginHandled) return;
         if (!_isSignedIn) return;
 

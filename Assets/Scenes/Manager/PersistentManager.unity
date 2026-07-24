@@ -166,8 +166,8 @@ MonoBehaviour:
   _gameplayScene:
     m_AssetGUID: 9fc0d4010bbf28b4594072e72b8655ab
     m_SubObjectName: 
-    m_SubObjectGUID: 
     m_SubObjectType: 
+    m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   _loadLocation: {fileID: 11400000, guid: 8d9d3da6891fefa4b879dcb5f91b7f2a, type: 2}
   _loadMenu: {fileID: 11400000, guid: 753df1d70f221d04b931ffa04b0f7dd9, type: 2}
@@ -238,14 +238,15 @@ MonoBehaviour:
   _setFireStoreEvent: {fileID: 11400000, guid: bc6e20a0b24975943a58a86b83f606ea, type: 2}
   _isLoginEvent: {fileID: 11400000, guid: 1e230bf51924575488035506b8b32078, type: 2}
   _loadLocation: {fileID: 11400000, guid: 8d9d3da6891fefa4b879dcb5f91b7f2a, type: 2}
-  _autoLoginRequestEvent: {fileID: 11400000, guid: 9dd1f044cd024992abd7ade53bb5653b,
-    type: 2}
   _myCompanyScene:
     m_AssetGUID: e75245830b5746648965797656c89fc6
     m_SubObjectName: 
-    m_SubObjectGUID: 
     m_SubObjectType: 
+    m_SubObjectGUID: 
     m_EditorAssetChanged: 0
+  _autoLoginRequestEvent: {fileID: 11400000, guid: 9dd1f044cd024992abd7ade53bb5653b, type: 2}
+  _autoLogin: 0
+  _initialLoginGraceSeconds: 2
 --- !u!4 &1751107973
 Transform:
   m_ObjectHideFlags: 0
