@@ -31,6 +31,12 @@ public class Panel : MonoBehaviour
                 continue;
             }
 
+            // 이 버튼이 리스트에서 갖게 될 인덱스를 클로저에 고정 캡처한다.
+            // (select_index 같은 공유 필드를 캡처하면 클릭 시점의 값이 넘어가서
+            //  클릭한 버튼 자신의 위치로 이동하지 못한다.)
+            int selfIndex = selected_objects.Count;
+            selected_objects.Add(sel);
+
             // 클릭 이벤트를 추가하기 위해 EventTrigger 컴포넌트를 동적으로 추가합니다.
             EventTrigger trigger = sel.gameObject.AddComponent<EventTrigger>();
 
@@ -39,9 +45,8 @@ public class Panel : MonoBehaviour
             entry.eventID = EventTriggerType.PointerClick;
 
             // 클릭 시 호출할 메서드를 설정합니다.
-            entry.callback.AddListener((eventData) => { GetSelectIndex(sel, select_index); });
+            entry.callback.AddListener((eventData) => { GetSelectIndex(sel, selfIndex); });
 
-            selected_objects.Add(sel);
             // EventTrigger에 클릭 이벤트 항목을 추가합니다.
             trigger.triggers.Add(entry);
         }
