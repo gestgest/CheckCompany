@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class HandlingObject : MonoBehaviour
 {
@@ -15,23 +16,40 @@ public class HandlingObject : MonoBehaviour
     
     
     [SerializeField] private Vector2 _screenEdge;
-    
-    
+
+    //fix : 오브젝트를 옮기고 버튼을 누를때 버튼을 누르면 그 위치로 순간이동을 먼저하고 놓아지는 버그
+    //ㄴ 그거를 막는 변수
+    private bool _isPressStartedOverUI;
+
+    //UI 레이캐스트 결과 재사용(매 프레임 GC 방지)
+    private static readonly List<RaycastResult> _uiRaycastResults = new List<RaycastResult>();
+
+
     //down
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            // UI 위를 클릭했다면 아무 일도 하지 않는다
-            if (EventSystem.current.IsPointerOverGameObject())
+            // UI 위를 눌렀다면 이 제스처는 통째로 무시한다
+            _isPressStartedOverUI = IsPointerOverUI(Input.mousePosition);
+            if (_isPressStartedOverUI)
+            {
                 return;
-            
+            }
+
             Vector3 mousePos = Input.mousePosition;
             MoveObject(mousePos);
             OffButton();
         }
         if (Input.GetMouseButtonUp(0))
         {
+            //UI에서 시작한 제스처면 버튼을 끈 적이 없으므로 다시 켤 필요도 없다
+            if (_isPressStartedOverUI)
+            {
+                _isPressStartedOverUI = false;
+                return;
+            }
+
             OnButton();
         }
     }
@@ -39,9 +57,50 @@ public class HandlingObject : MonoBehaviour
     //OnMouseDrag()
     private void OnMouseDrag()
     {
+        //버튼 위에서 시작한 드래그로는 오브젝트가 따라오면 안 된다
+        if (_isPressStartedOverUI)
+        {
+            return;
+        }
+
         Vector3 mousePos = Input.mousePosition;
         MoveObject(mousePos);
         MoveCamera(mousePos); //화면 움직이는 함수
+    }
+
+    /// <summary>
+    /// 화면 좌표가 UI 위인지 확인한다.
+    ///
+    /// EventSystem.IsPointerOverGameObject()는 인자가 없으면 마우스 포인터(id -1) 기준이라
+    /// 안드로이드 터치(fingerId 0,1,...)에서는 항상 false가 나온다.
+    /// fingerId를 넘기는 오버로드도 터치가 시작된 프레임에는 EventSystem 갱신 순서에 따라 결과가 흔들리므로,
+    /// 실행 순서에 영향받지 않도록 GraphicRaycaster로 직접 쏜다.
+    /// </summary>
+    private static bool IsPointerOverUI(Vector3 screenPosition)
+    {
+        if (EventSystem.current == null)
+        {
+            return false;
+        }
+
+        PointerEventData eventData = new PointerEventData(EventSystem.current)
+        {
+            position = screenPosition
+        };
+
+        _uiRaycastResults.Clear();
+        EventSystem.current.RaycastAll(eventData, _uiRaycastResults);
+
+        for (int i = 0; i < _uiRaycastResults.Count; i++)
+        {
+            //PhysicsRaycaster가 카메라에 붙어 있으면 3D 오브젝트도 결과에 섞이므로 UI(Canvas)만 센다
+            if (_uiRaycastResults[i].module is GraphicRaycaster)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
     
     public void Init(
