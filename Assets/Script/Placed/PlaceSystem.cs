@@ -8,6 +8,13 @@ using UnityEngine.UIElements;
 public class PlaceSystem : MonoBehaviour
 {
     private List<PlaceableObject> _placedObjects = new List<PlaceableObject>();
+
+    //이미 씬에 만들어 놓은 오브젝트의 id.
+    //AllCreatePlacedObjects()가 Start()와 _onChangedEvent 양쪽에서 불리기 때문에,
+    //서버 데이터를 다시 받아오면(재접속/새로고침) 같은 오브젝트를 한 번 더 만들게 된다.
+    //복제본이 생기면 SetAllArea(true)가 같은 칸을 두 번 칠해서 전부 빨간 타일이 되고,
+    //그 자리에는 아무것도 놓을 수 없게 된다.
+    private readonly HashSet<int> _createdObjectIds = new HashSet<int>();
     
     private GridLayout gridLayout;
     private Grid grid;
@@ -139,7 +146,15 @@ public class PlaceSystem : MonoBehaviour
     
     private void AllCreatePlacedObjects()
     {
-        foreach(PlacedObjectData obj in _placedObjectManager.GetPlacedObjects())
+        List<PlacedObjectData> placedObjectDatas = _placedObjectManager.GetPlacedObjects();
+
+        //PlacedObjectManager.Init()보다 먼저 불릴 수 있다
+        if (placedObjectDatas == null)
+        {
+            return;
+        }
+
+        foreach(PlacedObjectData obj in placedObjectDatas)
         {
             PlaceObject(obj);
         }
@@ -147,8 +162,14 @@ public class PlaceSystem : MonoBehaviour
     
     private void PlaceObject(PlacedObjectData data)
     {
-        Vector3Int startPos = gridLayout.WorldToCell(data.GetPosition());
         int id = data.GetID();
+
+        //이미 만들어 놓은 오브젝트다. 두 번 만들면 복제본이 겹쳐 쌓인다.
+        if (!_createdObjectIds.Add(id))
+        {
+            return;
+        }
+
         int pid = data.GetPropertyID();
         //생성
         PlaceableObject obj = Instantiate(_shopPlaceableObjects[pid], _objectParent);
@@ -287,7 +308,10 @@ public class PlaceSystem : MonoBehaviour
         {
             selectedObject.Place();
 
-            selectedObject.SetPosition(pos);
+            //pos는 CheckTile용 셀 좌표(Vector3Int)다. 여기 그대로 넘기면 Vector3로 암묵 변환되면서
+            //"셀 인덱스"가 "월드 좌표"인 것처럼 저장된다 (예: 셀 (3,0,5) → 월드 (3,0,5), 실제로는 (6,0,10)이어야 함).
+            //데이터에는 반드시 월드 좌표를 넣어야 한다.
+            selectedObject.SetPosition(selectedObject.GetStartPosition());
 
             startPos = pos;
             BeforeClearArea();
@@ -299,6 +323,12 @@ public class PlaceSystem : MonoBehaviour
             if (!_isMoving)
             {
                 _placedObjectManager.SetObjectID(selectedObject.GetObjectID() + 1);
+
+                //이번에 새로 놓은 오브젝트는 서버에만 쓰고 로컬 목록에는 없었다.
+                //목록에 넣어야 나중에 데이터를 다시 받아왔을 때 상태가 어긋나지 않고,
+                //id를 기억해둬야 그때 AllCreatePlacedObjects()가 이걸 또 만들지 않는다.
+                _placedObjectManager.RegisterPlacedObjectData(selectedObject.GetPlacedObjectData());
+                _createdObjectIds.Add(selectedObject.GetObjectID());
             }
 
             _isMoving = false;
@@ -341,6 +371,7 @@ public class PlaceSystem : MonoBehaviour
         //StartMoveMode에서 이미 _placedObjects와 워크스테이션 풀에서 빼놨으므로
         //여기서는 서버 데이터만 지우고 파괴하면 된다.
         _placedObjectManager.RemovePlaceableObject(target.GetObjectID());
+        _createdObjectIds.Remove(target.GetObjectID());
 
         //들고 있던 자리의 초록/빨강 타일과 버튼 정리
         TakeOffPlaceMode();

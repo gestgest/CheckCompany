@@ -103,6 +103,31 @@ public class PlacedObjectManager : ScriptableObject
     }
 
     /// <summary>
+    /// 새로 배치한 오브젝트를 로컬 목록에 넣는다.
+    /// 서버에서 받아온 것들과 달리 이번 세션에 만든 데이터는 목록에 없어서,
+    /// 넣어주지 않으면 "서버에는 있는데 로컬 목록에는 없는" 상태가 된다.
+    /// </summary>
+    public void RegisterPlacedObjectData(PlacedObjectData data)
+    {
+        if (data == null)
+        {
+            return;
+        }
+
+        if (_placedObjects == null)
+        {
+            _placedObjects = new List<PlacedObjectData>();
+        }
+
+        if (_placedObjects.Exists(placedObject => placedObject.GetID() == data.GetID()))
+        {
+            return;
+        }
+
+        _placedObjects.Add(data);
+    }
+
+    /// <summary>
     /// 배치된 오브젝트를 서버와 로컬 목록에서 지운다.
     /// 로컬 목록에서도 빼야 _onChangedEvent로 AllCreatePlacedObjects()가 다시 돌 때 되살아나지 않는다.
     /// </summary>

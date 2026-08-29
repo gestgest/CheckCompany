@@ -66,6 +66,11 @@ public class PlaceableObject : MonoBehaviour
         return _seatPoint != null ? _seatPoint : transform;
     }
 
+    public PlacedObjectData GetPlacedObjectData()
+    {
+        return _placedObjectData;
+    }
+
     public void SetPlacedObjectData(PlacedObjectData placedObjectData)
     {
         _placedObjectData = placedObjectData;

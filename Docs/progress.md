@@ -48,10 +48,11 @@
 
 ## 🟠 P1.5 — 배치 시스템 미완성 기능
 
-- [ ] **삭제 / 판매 경로가 아예 없음**
-  - 오브젝트를 놓기만 하고 치울 수 없다. `DeleteFirebaseEventChannelSO`는 만들어져 있는데
-    `PlacedObjectManager`에서 쓰지 않는다
-  - 롱프레스 UI에 "이동 / 삭제"를 같이 붙이면 한 번에 끝난다
+- [x] **삭제 경로** (판매/환불은 아직 없음)
+  - 이동 모드(롱프레스)에서 ok/deny 옆에 삭제 버튼이 뜬다. `DeleteConfirmPopup`으로 한 번 확인받고
+    `PlacedObjectManager.RemovePlaceableObject()`가 `DeleteFirebaseEventChannelSO`로
+    `placeableObjects.<id>`를 지운다
+  - 판매(환불 금액 지급)는 미구현
 - [ ] **회전 없음**
   - `EmployeeWorkAI.ArriveAtDesk()`가 `transform.rotation = _seat.rotation`으로 앉는 방향을 정하는데,
     회전이 없으면 모든 책상이 같은 방향만 본다 (벽에 붙인 책상 방향이 안 맞음)
@@ -62,9 +63,14 @@
 - [ ] **앉는 애니메이션 미구현**
   - `EmployeeWorkAI.cs`의 `//TODO: Animator Controller...` 그대로.
     직원이 책상 옆에 서 있기만 해서 "앉는다"는 느낌이 안 난다
-- [ ] **`AllCreatePlacedObjects` 중복 방지 가드**
+- [x] **`AllCreatePlacedObjects` 중복 방지 가드**
   - `Start()`에서도 부르고 `_onChangedEvent`로도 불린다. 지금은 호출 순서상 한 번만 돌지만,
     리로드/재접속을 넣으면 오브젝트가 두 배로 쌓인다
+  - `PlaceSystem._createdObjectIds`(HashSet)로 이미 만든 id는 건너뛴다.
+    데이터를 다시 받아와도 같은 오브젝트를 두 번 만들지 않는다
+  - **전부 지우고 다시 만드는 방식은 쓸 수 없다.** 이번 세션에 새로 놓은 오브젝트는
+    `SendPlaceableObject()`가 서버에만 쓰고 로컬 목록에는 없어서 같이 사라진다.
+    그래서 배치 확정 시 `RegisterPlacedObjectData()`로 목록에도 넣어준다
 
 ---
 
