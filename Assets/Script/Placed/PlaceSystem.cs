@@ -1,4 +1,4 @@
-
+﻿
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -24,6 +24,10 @@ public class PlaceSystem : MonoBehaviour
     private bool isFirst = true;
     private Vector3Int object_size;
     private Vector3Int startPos;
+
+    //이동(move) 모드 상태. 새로 만드는 배치와 달리, 취소하면 파괴가 아니라 원래 자리로 되돌려야 한다.
+    private bool _isMoving;
+    private Vector3 _moveOriginPosition;
 
     private GameObject _okButton;
     private GameObject _denyButton;
@@ -52,14 +56,23 @@ public class PlaceSystem : MonoBehaviour
     [Header("Broadcasting on Events")]
     [SerializeField] private BoolEventChannelSO _isHandlingEvent;
     
+    private void Awake()
+    {
+        //롱프레스 감지기는 반드시 PlaceSystem과 같은 오브젝트에 있어야 하는데,
+        //씬마다 손으로 Add Component 하는 걸 잊기 쉬우므로 없으면 직접 붙인다.
+        //(참조는 LongPressSelector.Awake()가 GetComponent로 알아서 채운다)
+        if (GetComponent<LongPressSelector>() == null)
+        {
+            gameObject.AddComponent<LongPressSelector>();
+        }
+    }
+
     private void Start()
     {
         grid = GetComponent<Grid>();
         gridLayout = GetComponent<GridLayout>();
 
         AllCreatePlacedObjects();
-
-        SetHandlingPropertys();
     }
 
     private void OnEnable()
@@ -74,7 +87,6 @@ public class PlaceSystem : MonoBehaviour
 
         _okEvent._onEventRaised += PlaceHandlingObject;
         _denyEvent._onEventRaised += TakeOffObject;
-        
     }
     private void OnDisable()
     {
@@ -89,7 +101,6 @@ public class PlaceSystem : MonoBehaviour
 
         _okEvent._onEventRaised -= PlaceHandlingObject;
         _denyEvent._onEventRaised -= TakeOffObject;
-        
     }
 
     //어차피 안드로이드인데 키보드를 넣을 이유가 있나.
@@ -140,6 +151,12 @@ public class PlaceSystem : MonoBehaviour
     //오브젝트 버튼 누르면 오브젝트 나오는 함수
     private void StartPlaceMode(GameObject obj)
     {
+        if (!TryFetchHandlingProperties())
+        {
+            return;
+        }
+
+        _isMoving = false;
         _isHandlingEvent.RaiseEvent(true);
         //before selected object => current selected object
         if (selectedObject != null)
@@ -151,6 +168,57 @@ public class PlaceSystem : MonoBehaviour
     }
     
     
+    /// <summary>지금 무언가를 손에 들고 있는지 (배치 중이거나 이동 중).</summary>
+    public bool IsHandling => selectedObject != null;
+
+    /// <summary>
+    /// 이미 배치된 오브젝트를 다시 손에 들어 이동시킨다.
+    /// 같은 오브젝트에 붙은 LongPressSelector가 롱프레스를 감지하면 직접 호출한다.
+    /// </summary>
+    public void StartMoveMode(PlaceableObject target)
+    {
+        //이미 무언가 들고 있거나 대상이 없으면 무시
+        if (target == null || IsHandling)
+        {
+            return;
+        }
+
+        if (!TryFetchHandlingProperties())
+        {
+            return;
+        }
+
+        _isHandlingEvent.RaiseEvent(true);
+
+        //이동하는 동안에는 배치 목록에서 빼야 한다.
+        //안 빼면 SetAllArea(true)가 이 오브젝트의 옛 발자국을 칠하고,
+        //CheckTile()이 그 빨간 타일 때문에 제자리에 다시 놓는 것조차 거부한다.
+        _placedObjects.Remove(target);
+        _workstationManagerSO.UnregisterWorkstation(target);
+
+        //취소했을 때 돌아갈 자리
+        _isMoving = true;
+        _moveOriginPosition = target.transform.position;
+
+        target.UnPlace();
+
+        target.gameObject.AddComponent<HandlingObject>().Init(
+            _okButton,
+            _denyButton,
+            _camera,
+            _takenAreaEvent,
+            _gridEvent
+        );
+
+        selectedObject = target;
+
+        //isFirst가 true로 남아있으면 BeforeClearArea()가 계속 no-op이라
+        //드래그하는 동안 지나간 타일이 지워지지 않고 자국으로 남는다
+        isFirst = false;
+
+        SetArea();
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -208,8 +276,16 @@ public class PlaceSystem : MonoBehaviour
             BeforeClearArea();
 
             _placedObjectManager.SendPlaceableObject(selectedObject);
-            _placedObjectManager.SetObjectID(selectedObject.GetObjectID() + 1);
-            
+
+            //이동은 기존 id를 그대로 쓴다. 카운터를 올리면 id가 새고 서버 문서가 고아가 된다.
+            //(SendPlaceableObject가 placeableObjects.<id>로 쓰므로 같은 id면 서버가 알아서 덮어쓴다)
+            if (!_isMoving)
+            {
+                _placedObjectManager.SetObjectID(selectedObject.GetObjectID() + 1);
+            }
+
+            _isMoving = false;
+
             TakeOffPlaceMode();
 
             //배치 하는 순간 조종 권한 제거
@@ -230,9 +306,41 @@ public class PlaceSystem : MonoBehaviour
     // deny
     public void TakeOffObject()
     {
+        //_denyEvent로도 들어오는 경로라 들고 있는 게 없을 수 있다
+        if (selectedObject == null)
+        {
+            return;
+        }
+
+        //이동 취소는 파괴가 아니라 원위치
+        if (_isMoving)
+        {
+            RestoreMovedObject();
+            return;
+        }
+
         TakeOffPlaceMode();
         Destroy(selectedObject.gameObject);
         selectedObject = null;
+    }
+
+    /// <summary>이동을 취소하고 원래 자리에 다시 배치한다.</summary>
+    private void RestoreMovedObject()
+    {
+        PlaceableObject moved = selectedObject;
+
+        moved.transform.position = _moveOriginPosition;
+
+        TakeOffPlaceMode();
+
+        //Place()가 HandlingObject를 제거하고 Placed를 다시 true로 만든다
+        moved.Place();
+
+        _placedObjects.Add(moved);
+        _workstationManagerSO.RegisterWorkstation(moved);
+
+        selectedObject = null;
+        _isMoving = false;
     }
 
     private void TakeOffPlaceMode()
@@ -254,6 +362,11 @@ public class PlaceSystem : MonoBehaviour
     /// </summary>
     public void SetArea() //handling object drag
     {
+        if (selectedObject == null)
+        {
+            return;
+        }
+
         BeforeClearArea();
         SetAllArea(false);
         SetAllArea(true);
@@ -372,6 +485,31 @@ public class PlaceSystem : MonoBehaviour
         }
     }
     #endregion
+
+    /// <summary>
+    /// ok/deny 버튼과 카메라는 GamePlay 씬의 UIPlaceableObject가 PlacedObjectManager(SO)에 넣어준다.
+    ///
+    /// PlacedObjectManager는 ScriptableObject = 에셋이라 플레이를 껐다 켜도 값이 남는데,
+    /// 그 값은 이미 파괴된 씬 오브젝트다(MissingReferenceException).
+    /// 게다가 PlaceSystem.Start()와 UIPlaceableObject.Start()는 서로 다른 씬에 있어 실행 순서도 보장되지 않는다.
+    /// 그래서 Start()에서 한 번 캐싱하면 안 되고, 실제로 쓰기 직전에 매번 다시 받아와야 한다.
+    /// </summary>
+    private bool TryFetchHandlingProperties()
+    {
+        SetHandlingPropertys();
+
+        //Unity의 == 는 "파괴된 오브젝트"도 null로 쳐주므로 죽은 참조까지 여기서 걸러진다
+        if (_okButton == null || _denyButton == null || _camera == null)
+        {
+            Debug.LogError(
+                "[PlaceSystem] ok/deny 버튼 또는 카메라를 아직 받지 못했습니다. " +
+                "GamePlay 씬의 UIPlaceableObject가 PlacedObjectManager에 값을 넣어주는지 확인하세요."
+            );
+            return false;
+        }
+
+        return true;
+    }
 
     private void SetHandlingPropertys()
     {

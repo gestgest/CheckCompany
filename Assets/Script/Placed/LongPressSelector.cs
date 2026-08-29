@@ -1,29 +1,23 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 /// <summary>
-/// 이미 배치된 오브젝트를 일정 시간 이상 꾹 누르면 이동 대상으로 방송한다.
+/// 이미 배치된 오브젝트를 일정 시간 이상 꾹 누르면 PlaceSystem에 이동 모드를 요청한다.
 /// CameraMoveManager가 같은 입력(터치/좌클릭)으로 화면을 끌기 때문에,
 /// 누른 채로 화면이 _cancelMoveDistance 이상 움직이면 "카메라 드래그"로 보고 롱프레스를 취소한다.
-/// PlaceSystem이 있는 오브젝트(Grid_PlaceSystem)에 같이 붙이면 된다.
+/// PlaceSystem과 같은 오브젝트(Grid_PlaceSystem)에 붙는다.
+/// 둘이 같은 오브젝트에 있으므로 SO 이벤트 채널을 거치지 않고 직접 호출한다.
 /// </summary>
+[RequireComponent(typeof(PlaceSystem))]
 public class LongPressSelector : MonoBehaviour
 {
     [SerializeField] private Camera _camera;
+    [SerializeField] private PlaceSystem _placeSystem;
 
     [Header("Settings")]
     [SerializeField] private float _longPressSeconds = 0.5f;
     [SerializeField] private float _cancelMoveDistance = 20f; //화면 픽셀 기준
     [SerializeField] private float _rayMaxDistance = 200f;
-
-    [Header("Listening to Event")]
-    [SerializeField] private BoolEventChannelSO _isHandlingEvent;
-
-    [Header("Broadcasting on Event")]
-    [SerializeField] private GameObjectEventChannelSO _longPressObjectEvent;
-
-    //이미 무언가를 손에 들고 있는 동안(배치/이동 중)에는 새로 잡지 않는다
-    private bool _isHandling;
 
     private bool _isTracking;
     private bool _isFired;
@@ -31,18 +25,31 @@ public class LongPressSelector : MonoBehaviour
     private Vector2 _pressStartPosition;
     private PlaceableObject _pressTarget;
 
-    private void OnEnable()
+#if UNITY_EDITOR
+    //컴포넌트를 붙였을 때 / 인스펙터에서 값이 바뀔 때 자동으로 채워준다
+    private void Reset()
     {
-        _isHandlingEvent._onEventRaised += SetIsHandling;
+        AutoAssignReferences();
     }
 
-    private void OnDisable()
+    private void OnValidate()
     {
-        _isHandlingEvent._onEventRaised -= SetIsHandling;
+        AutoAssignReferences();
+    }
+#endif
+
+    private void AutoAssignReferences()
+    {
+        if (_placeSystem == null)
+        {
+            _placeSystem = GetComponent<PlaceSystem>();
+        }
     }
 
     private void Awake()
     {
+        AutoAssignReferences();
+
         if (_camera == null)
         {
             _camera = Camera.main;
@@ -80,7 +87,8 @@ public class LongPressSelector : MonoBehaviour
     {
         CancelTracking();
 
-        if (_isHandling || IsPointerOverUI())
+        //이미 무언가를 손에 들고 있는 동안(배치/이동 중)에는 새로 잡지 않는다
+        if (_placeSystem.IsHandling || IsPointerOverUI())
         {
             return;
         }
@@ -130,16 +138,9 @@ public class LongPressSelector : MonoBehaviour
 
     private void Fire(PlaceableObject target)
     {
-        Debug.Log($"[LongPressSelector] '{target.name}' (id {target.GetObjectID()}) 롱프레스 - 이동 모드 요청", target);
+        Debug.Log($"[LongPressSelector] '{target.name}' (id {target.GetObjectID()}) 롱프레스 - 이동 시작", target);
 
-        //아직 (b) StartMoveMode를 붙이지 않았다면 구독자가 없다
-        if (_longPressObjectEvent == null || _longPressObjectEvent._onEventRaised == null)
-        {
-            Debug.LogWarning("[LongPressSelector] _longPressObjectEvent를 받는 쪽이 없습니다. (PlaceSystem.StartMoveMode 연결 필요)");
-            return;
-        }
-
-        _longPressObjectEvent.RaiseEvent(target.gameObject);
+        _placeSystem.StartMoveMode(target);
     }
 
     private void CancelTracking()
@@ -184,15 +185,5 @@ public class LongPressSelector : MonoBehaviour
         }
 
         return EventSystem.current.IsPointerOverGameObject();
-    }
-
-    private void SetIsHandling(bool isHandling)
-    {
-        _isHandling = isHandling;
-
-        if (isHandling)
-        {
-            CancelTracking();
-        }
     }
 }

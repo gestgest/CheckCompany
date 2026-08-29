@@ -15,22 +15,24 @@
   - 배치된 `PlaceableObject`를 `_longPressSeconds` 이상 누르면 `GameObjectEventChannelSO`로 방송
   - `CameraMoveManager`가 같은 입력으로 화면을 끌기 때문에, 화면 이동 거리가 `_cancelMoveDistance`를
     넘으면 카메라 드래그로 보고 롱프레스를 취소한다
-  - 멀티터치(핀치 줌)와 UI 위 터치는 무시. `_isHandlingEvent`가 true면(이미 무언가 들고 있으면) 동작 안 함
-- [ ] **(b) `PlaceSystem.StartMoveMode(PlaceableObject)`**
+  - 멀티터치(핀치 줌)와 UI 위 터치는 무시. `PlaceSystem.IsHandling`이면(이미 무언가 들고 있으면) 동작 안 함
+  - **SO 이벤트 채널을 쓰지 않는다.** PlaceSystem과 같은 오브젝트에 붙으므로 `GetComponent`로 직접 호출.
+    처음엔 `GameObjectEventChannelSO`를 끼웠다가 제거 - 서로 아는 사이에는 채널이 낭비다
+- [x] **(b) `PlaceSystem.StartMoveMode(PlaceableObject)`**
   - `HandlingObject`를 다시 붙여 `Init(...)`, `selectedObject`에 대입, `_isHandlingEvent.RaiseEvent(true)`
   - `StartPlaceMode`와 대부분 공유 가능
-- [ ] **(c) 이동 시작 시 `_placedObjects`에서 제거**
+- [x] **(c) 이동 시작 시 `_placedObjects`에서 제거**
   - 타일 칠하기/지우기 로직 자체는 이미 맞다. `SetArea()`가 매 프레임 전체를 지우고 다시 그리고,
     handling 중인 오브젝트는 `_placedObjects`에 없어서 자기 타일과 충돌하지 않는다
   - **다만 이동은 다르다.** 이미 놓인 오브젝트는 `_placedObjects`에 들어있는데,
     이 리스트에는 `Add`만 있고 `Remove`가 한 번도 없다 (`PlaceSystem.cs:134,223`)
   - 빼주지 않으면 `SetAllArea(true)`가 자기 옛 발자국을 칠하고,
     `CheckTile()`이 `_redTile`을 보고 **제자리에 다시 놓는 것조차 거부한다** (`PlaceSystem.cs:283`)
-- [ ] **(d) 취소(deny)는 Destroy가 아니라 원위치**
+- [x] **(d) 취소(deny)는 Destroy가 아니라 원위치**
   - 지금 `TakeOffObject()`는 `Destroy(selectedObject.gameObject)` (`PlaceSystem.cs:216`)
   - 이동 모드는 시작 위치를 기억해뒀다가 되돌려야 하므로 분기 필요
   - 덤: 이 함수는 `selectedObject`가 null이면 그냥 터진다. `_denyEvent` 경로에 가드가 없음
-- [ ] **(e) 이동 시 object_id를 올리지 않기**
+- [x] **(e) 이동 시 object_id를 올리지 않기**
   - `PlaceHandlingObject()`의 `SetObjectID(GetObjectID() + 1)` (`PlaceSystem.cs:199`)는 신규 배치 전용
   - `SendPlaceableObject`가 `placeableObjects.<id>`로 쓰므로 같은 id면 서버는 알아서 덮어써진다.
     카운터만 안 올리면 됨
@@ -117,3 +119,5 @@
 <!-- 작업 완료 시 날짜와 함께 여기에 기록 -->
 - (2026-07-22) 코드베이스 분석 및 TODO 작성
 - (2026-08-29) 오브젝트 이동 로드맵 정리, (a) 롱프레스 감지 구현
+- (2026-08-30) (b)~(e) 이동 모드 구현. 드래그 중 자기 콜라이더에 레이가 맞던 문제 + 바닥 못 찾으면 원점으로 순간이동하던 문제 같이 수정
+- (2026-08-30) 롱프레스-PlaceSystem 사이 SO 이벤트 채널 제거, 직접 참조로 변경 (씬 배선 0개)

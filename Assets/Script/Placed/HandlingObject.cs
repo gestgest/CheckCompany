@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -86,21 +86,41 @@ public class HandlingObject : MonoBehaviour
         _denyButton.SetActive(false);
     }
     
-    ///<summary>선택된 오브젝트의 포지션 값 출력</summary>
+    ///<summary>
+    /// 커서 아래 바닥 좌표를 구한다.
+    /// 드래그 중인 오브젝트는 항상 커서 바로 아래(=카메라에 제일 가까움)에 있어서
+    /// 단순 Raycast를 쓰면 자기 자신에게 맞아버린다. 그래서 자기 자신은 건너뛴다.
+    ///</summary>
     private Vector3 GetObjectPos(Vector3 mousePos)
     {
-        RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(mousePos);
+        RaycastHit[] hits = Physics.RaycastAll(ray);
 
-        if (Physics.Raycast(ray, out hit))
+        float nearest = float.MaxValue;
+        Vector3 result = Vector3.zero;
+        bool found = false;
+
+        foreach (RaycastHit hit in hits)
         {
-            BoxCollider boxCollider = hit.collider as BoxCollider;
-            if (boxCollider != null)
+            //자기 자신(과 자식)에 맞은 것은 무시
+            if (hit.collider.transform.IsChildOf(transform))
             {
-                return hit.point;
+                continue;
             }
+
+            if (!(hit.collider is BoxCollider) || hit.distance >= nearest)
+            {
+                continue;
+            }
+
+            nearest = hit.distance;
+            result = hit.point;
+            found = true;
         }
-        return Vector3.zero;
+
+        //바닥을 못 찾았으면 제자리를 유지한다.
+        //(기존에는 Vector3.zero를 돌려줘서 오브젝트가 월드 원점으로 순간이동했다)
+        return found ? result : transform.position;
     }
 
     private void MoveCamera(Vector3 mousePos)

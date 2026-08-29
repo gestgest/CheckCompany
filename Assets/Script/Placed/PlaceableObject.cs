@@ -79,6 +79,15 @@ public class PlaceableObject : MonoBehaviour
         VertexLocalPosition();
         CalculateTileSize();
     }
+    /// <summary>
+    /// 배치를 풀고 다시 "손에 든" 상태로 되돌린다 (이동 모드 진입).
+    /// Placed를 내려야 LongPressSelector가 지금 들고 있는 오브젝트를 또 잡지 않는다.
+    /// </summary>
+    public void UnPlace()
+    {
+        Placed = false;
+    }
+
     /// <summary> 손에 있는 selectedObject 제거 </summary>
     public virtual void Place()
     {
