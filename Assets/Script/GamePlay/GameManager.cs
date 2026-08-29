@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -84,12 +84,25 @@ public class GameManager : MonoBehaviour
 
     public async void GameServerStart()
     {
-        auth = FirebaseAuth.DefaultInstance;
-        user = auth.CurrentUser;
-
-        //direction scene
+        //PersistentManager(AuthManager/FirestoreManager)가 없는 테스트 실행이면 Firebase를 아예 건들지 않는다.
+        //FirebaseApp.CheckAndFixDependenciesAsync()는 AuthManager가 호출하므로, PersistentManager 없이
+        //FirebaseAuth.DefaultInstance에 접근하면 초기화 예외가 나고, GameServerStart가 async void라
+        //그 예외가 그대로 터져서 아래 SetDefaultProperty()까지 도달하지 못한다.
         if (_getJSONEventChannelSO._onEventRaised == null)
         {
+            Debug.Log("[GameManager] 서버 매니저(PersistentManager)가 없어 로컬 테스트 데이터로 시작합니다.");
+            SetDefaultProperty();
+            return;
+        }
+
+        try
+        {
+            auth = FirebaseAuth.DefaultInstance;
+            user = auth.CurrentUser;
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[GameManager] Firebase 초기화 전이라 로컬 테스트 데이터로 시작합니다. ({e.Message})");
             SetDefaultProperty();
             return;
         }

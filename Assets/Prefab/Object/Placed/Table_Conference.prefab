@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 65995999139357618}
   - component: {fileID: 132292087961979328}
   - component: {fileID: 9066295966506656642}
+  - component: {fileID: 4776062131386846083}
   m_Layer: 0
   m_Name: Table_Conference
   m_TagString: Untagged
@@ -145,6 +146,24 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0.367, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &4776062131386846083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1289936835854364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10595024be9b1d4bb1ab7a0f5aa6569, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _camera: {fileID: 0}
+  _longPressSeconds: 0.5
+  _cancelMoveDistance: 20
+  _rayMaxDistance: 200
+  _isHandlingEvent: {fileID: 0}
+  _longPressObjectEvent: {fileID: 0}
 --- !u!1 &8123456789012345
 GameObject:
   m_ObjectHideFlags: 0

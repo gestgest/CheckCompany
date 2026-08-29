@@ -48,7 +48,8 @@ public class EmployeeWorkAI : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(ClaimDeskRoutine());
+        //todo 일단 막아놓음
+        //StartCoroutine(ClaimDeskRoutine());
     }
 
     private void OnDestroy()
@@ -102,19 +103,20 @@ public class EmployeeWorkAI : MonoBehaviour
 
     private void Update()
     {
-        TickStamina();
-
-        if (_state != State.MovingToDesk)
-        {
-            return;
-        }
-
-        if (_agent.pathPending || _agent.remainingDistance > _arriveDistance)
-        {
-            return;
-        }
-
-        ArriveAtDesk();
+        // todo : 일단 막아놓음
+        // TickStamina();
+        //
+        // if (_state != State.MovingToDesk)
+        // {
+        //     return;
+        // }
+        //
+        // if (_agent.pathPending || _agent.remainingDistance > _arriveDistance)
+        // {
+        //     return;
+        // }
+        //
+        // ArriveAtDesk();
     }
 
     /// <summary>근무 중이면 체력을 소모하고, 그 외(이동/대기)에는 회복시킨다.</summary>
