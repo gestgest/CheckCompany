@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -55,7 +55,13 @@ public class WorkstationManagerSO : ScriptableObject
     {
         if (_employeeSeats.TryGetValue(employeeId, out PlaceableObject assigned))
         {
-            return assigned.GetSeatPoint();
+            //배정받은 책상이 삭제됐을 수 있다. 그러면 자리를 반납하고 새로 찾는다.
+            if (assigned != null)
+            {
+                return assigned.GetSeatPoint();
+            }
+
+            _employeeSeats.Remove(employeeId);
         }
 
         foreach (PlaceableObject workstation in _workstations)

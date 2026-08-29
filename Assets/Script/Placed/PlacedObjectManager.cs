@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +10,7 @@ public class PlacedObjectManager : ScriptableObject
     private GameObject _myCamera;
     private GameObject _okButton;
     private GameObject _denyButton;
+    private GameObject _deleteButton;
     
 
     //UIPlaceableObject
@@ -17,9 +18,11 @@ public class PlacedObjectManager : ScriptableObject
     [SerializeField] private GameObjectEventChannelSO _createPlaceableObjectEvent;
     [SerializeField] private VoidEventChannelSO _okEvent;
     [SerializeField] private VoidEventChannelSO _denyEvent;
+    [SerializeField] private VoidEventChannelSO _deleteEvent;
     [SerializeField] private VoidEventChannelSO _onChangedEvent;
     
     [SerializeField] private SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
+    [SerializeField] private DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
     
 
     
@@ -99,6 +102,33 @@ public class PlacedObjectManager : ScriptableObject
         );
     }
 
+    /// <summary>
+    /// 배치된 오브젝트를 서버와 로컬 목록에서 지운다.
+    /// 로컬 목록에서도 빼야 _onChangedEvent로 AllCreatePlacedObjects()가 다시 돌 때 되살아나지 않는다.
+    /// </summary>
+    public void RemovePlaceableObject(int id)
+    {
+        if (id == -1)
+        {
+            Debug.LogWarning("[PlacedObjectManager] id가 없는 오브젝트라 서버에서 지울 수 없습니다.");
+            return;
+        }
+
+        _deleteFirebaseEventChannelSO.RaiseEvent(
+            "GamePlayUser",
+            GameManager.instance.Nickname,
+            "placeableObjects." + id
+        );
+
+        if (_placedObjects == null)
+        {
+            return;
+        }
+
+        //서버에서 받아온 목록에만 들어있다. 이번 플레이에서 새로 놓은 것은 없을 수도 있다.
+        _placedObjects.RemoveAll(placedObject => placedObject.GetID() == id);
+    }
+
     public List<PlacedObjectData> GetPlacedObjects()
     {
         return _placedObjects;
@@ -124,11 +154,22 @@ public class PlacedObjectManager : ScriptableObject
         _denyEvent.RaiseEvent();
     }
 
-    public void SetHandlingObjectProperties(GameObject camera, GameObject okButton, GameObject denyButton)
+    //DeleteButton의 OnClick에 연결된다
+    public void DeleteEvent()
+    {
+        _deleteEvent.RaiseEvent();
+    }
+
+    public void SetHandlingObjectProperties(
+        GameObject camera,
+        GameObject okButton,
+        GameObject denyButton,
+        GameObject deleteButton)
     {
         this._myCamera = camera;
         this._okButton = okButton;
         this._denyButton = denyButton;
+        this._deleteButton = deleteButton;
     }
     
     public GameObject GetOkButton()
@@ -138,6 +179,11 @@ public class PlacedObjectManager : ScriptableObject
     public GameObject GetDenyButton()
     {
         return this._denyButton;
+    }
+
+    public GameObject GetDeleteButton()
+    {
+        return this._deleteButton;
     }
 
     public GameObject GetCamera()

@@ -31,6 +31,7 @@ public class PlaceSystem : MonoBehaviour
 
     private GameObject _okButton;
     private GameObject _denyButton;
+    private GameObject _deleteButton;
     private GameObject _camera;
     
     [Space]
@@ -52,6 +53,7 @@ public class PlaceSystem : MonoBehaviour
     [SerializeField] private VoidEventChannelSO _onChangedEvent;
     [SerializeField] private VoidEventChannelSO _okEvent;
     [SerializeField] private VoidEventChannelSO _denyEvent;
+    [SerializeField] private VoidEventChannelSO _deleteEvent;
 
     [Header("Broadcasting on Events")]
     [SerializeField] private BoolEventChannelSO _isHandlingEvent;
@@ -87,6 +89,12 @@ public class PlaceSystem : MonoBehaviour
 
         _okEvent._onEventRaised += PlaceHandlingObject;
         _denyEvent._onEventRaised += TakeOffObject;
+
+        //삭제 채널이 비어있어도 배치/이동 자체는 동작해야 한다
+        if (_deleteEvent != null)
+        {
+            _deleteEvent._onEventRaised += DeleteHandlingObject;
+        }
     }
     private void OnDisable()
     {
@@ -101,6 +109,11 @@ public class PlaceSystem : MonoBehaviour
 
         _okEvent._onEventRaised -= PlaceHandlingObject;
         _denyEvent._onEventRaised -= TakeOffObject;
+
+        if (_deleteEvent != null)
+        {
+            _deleteEvent._onEventRaised -= DeleteHandlingObject;
+        }
     }
 
     //어차피 안드로이드인데 키보드를 넣을 이유가 있나.
@@ -205,9 +218,11 @@ public class PlaceSystem : MonoBehaviour
         target.gameObject.AddComponent<HandlingObject>().Init(
             _okButton,
             _denyButton,
+            _deleteButton,
             _camera,
             _takenAreaEvent,
-            _gridEvent
+            _gridEvent,
+            true //이미 배치된 오브젝트라 삭제할 수 있다
         );
 
         selectedObject = target;
@@ -249,9 +264,11 @@ public class PlaceSystem : MonoBehaviour
         obj.AddComponent<HandlingObject>().Init(
             _okButton,
             _denyButton,
+            _deleteButton,
             _camera,
             _takenAreaEvent,
-            _gridEvent
+            _gridEvent,
+            false //아직 놓지도 않은 오브젝트는 취소(deny)가 곧 삭제다
         );
         selectedObject = tmp;
 
@@ -303,6 +320,37 @@ public class PlaceSystem : MonoBehaviour
         //아무일도 없다
     }
 
+    // delete : 이동중인(이미 배치돼 있던) 오브젝트를 월드/서버에서 완전히 지운다
+    public void DeleteHandlingObject()
+    {
+        if (selectedObject == null)
+        {
+            return;
+        }
+
+        //이동 모드가 아니면 = 상점에서 막 꺼낸, 서버에 아직 없는 오브젝트다.
+        //지울 서버 데이터가 없으므로 취소와 똑같이 처리한다.
+        if (!_isMoving)
+        {
+            TakeOffObject();
+            return;
+        }
+
+        PlaceableObject target = selectedObject;
+
+        //StartMoveMode에서 이미 _placedObjects와 워크스테이션 풀에서 빼놨으므로
+        //여기서는 서버 데이터만 지우고 파괴하면 된다.
+        _placedObjectManager.RemovePlaceableObject(target.GetObjectID());
+
+        //들고 있던 자리의 초록/빨강 타일과 버튼 정리
+        TakeOffPlaceMode();
+
+        selectedObject = null;
+        _isMoving = false;
+
+        Destroy(target.gameObject);
+    }
+
     // deny
     public void TakeOffObject()
     {
@@ -351,6 +399,13 @@ public class PlaceSystem : MonoBehaviour
         //버튼 안 보이게
         _okButton.SetActive(false);
         _denyButton.SetActive(false);
+
+        //삭제 버튼은 씬에 연결 안 돼 있을 수도 있다
+        if (_deleteButton != null)
+        {
+            _deleteButton.SetActive(false);
+        }
+
         _isHandlingEvent.RaiseEvent(false);
     }
 
@@ -498,6 +553,15 @@ public class PlaceSystem : MonoBehaviour
     {
         SetHandlingPropertys();
 
+        //삭제 버튼은 필수가 아니다 - 없으면 삭제만 못 할 뿐 배치/이동은 그대로 동작해야 한다
+        if (_deleteButton == null)
+        {
+            Debug.LogWarning(
+                "[PlaceSystem] 삭제 버튼이 연결되지 않았습니다. " +
+                "GamePlay 씬 UIPlaceObject의 UIPlaceableObject에 DeleteObjectButton을 넣어주세요."
+            );
+        }
+
         //Unity의 == 는 "파괴된 오브젝트"도 null로 쳐주므로 죽은 참조까지 여기서 걸러진다
         if (_okButton == null || _denyButton == null || _camera == null)
         {
@@ -515,6 +579,7 @@ public class PlaceSystem : MonoBehaviour
     {
         this._okButton = _placedObjectManager.GetOkButton();
         this._denyButton = _placedObjectManager.GetDenyButton();
+        this._deleteButton = _placedObjectManager.GetDeleteButton();
         this._camera = _placedObjectManager.GetCamera();
     }
 

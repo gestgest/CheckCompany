@@ -8,7 +8,18 @@ public class HandlingObject : MonoBehaviour
 {
     private GameObject _okButton;
     private GameObject _denyButton;
+    private GameObject _deleteButton;
     private Transform _cameraTransform;
+
+    //이미 배치가 끝난 오브젝트를 이동중일 때만 삭제할 수 있다.
+    //상점에서 막 꺼내 아직 놓지도 않은 오브젝트는 취소(deny)가 곧 삭제라 버튼을 띄울 이유가 없다.
+    private bool _canDelete;
+
+    //오브젝트를 기준으로 버튼을 놓을 위치(월드 오프셋).
+    //런타임에 AddComponent로 붙기 때문에 인스펙터 값이 아니라 이 기본값이 그대로 쓰인다.
+    private static readonly Vector3 OkButtonOffset = new Vector3(-1.0f, 0.0f, -3.0f);
+    private static readonly Vector3 DenyButtonOffset = new Vector3(-3.0f, 0.0f, -1.0f);
+    private static readonly Vector3 DeleteButtonOffset = new Vector3(-3.0f, 0.0f, -3.0f);
 
     
     private VoidEventChannelSO _takenAreaEvent;
@@ -106,12 +117,16 @@ public class HandlingObject : MonoBehaviour
     public void Init(
         GameObject okButton,
         GameObject denyButton,
+        GameObject deleteButton,
         GameObject camera,
         VoidEventChannelSO takenAreaEvent,
-        Vector3TransformChannelSO snapCoordinateToGrid)
+        Vector3TransformChannelSO snapCoordinateToGrid,
+        bool canDelete)
     {
         this._okButton = okButton;
         this._denyButton = denyButton;
+        this._deleteButton = deleteButton;
+        this._canDelete = canDelete;
 
         //camera null
         this._cameraTransform = camera.GetComponent<Transform>();
@@ -132,17 +147,42 @@ public class HandlingObject : MonoBehaviour
 
     private void OnButton()
     {
-        _okButton.SetActive(true);
-        _denyButton.SetActive(true);
-        
-        //UI도 그거에 따라 옮기는 함수
-        _okButton.transform.position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(-1.0f, 0.0f, -3.0f));
-        _denyButton.transform.position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(-3.0f, 0.0f, -1.0f));
+        PlaceButton(_okButton, OkButtonOffset);
+        PlaceButton(_denyButton, DenyButtonOffset);
+
+        //이동 모드가 아니면 삭제 버튼은 계속 숨겨둔다
+        if (_canDelete)
+        {
+            PlaceButton(_deleteButton, DeleteButtonOffset);
+        }
     }
     private void OffButton()
     {
-        _okButton.SetActive(false);
-        _denyButton.SetActive(false);
+        SetButtonActive(_okButton, false);
+        SetButtonActive(_denyButton, false);
+        SetButtonActive(_deleteButton, false);
+    }
+
+    /// <summary>버튼을 켜고 오브젝트 옆(월드 오프셋 위치)으로 옮긴다.</summary>
+    private void PlaceButton(GameObject button, Vector3 worldOffset)
+    {
+        if (button == null)
+        {
+            return;
+        }
+
+        button.SetActive(true);
+        button.transform.position = Camera.main.WorldToScreenPoint(transform.position + worldOffset);
+    }
+
+    private static void SetButtonActive(GameObject button, bool isActive)
+    {
+        if (button == null)
+        {
+            return;
+        }
+
+        button.SetActive(isActive);
     }
     
     ///<summary>
