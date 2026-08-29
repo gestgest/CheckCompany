@@ -49,10 +49,23 @@ public class LongPressSelector : MonoBehaviour
     private void Awake()
     {
         AutoAssignReferences();
+    }
 
-        if (_camera == null)
+    /// <summary>
+    /// Main Camera는 GamePlay.unity에 있고 PlaceSystem은 MyCompany.unity에 있어서,
+    /// Awake 시점에는 아직 Camera.main이 null일 수 있다(씬 로드 순서 미보장).
+    /// 그래서 캐싱하지 않고 필요할 때마다 확인한다.
+    /// </summary>
+    private Camera TargetCamera
+    {
+        get
         {
-            _camera = Camera.main;
+            if (_camera == null)
+            {
+                _camera = Camera.main;
+            }
+
+            return _camera;
         }
     }
 
@@ -153,7 +166,15 @@ public class LongPressSelector : MonoBehaviour
     /// <summary>화면 좌표 아래에 있는, 이미 배치가 끝난 PlaceableObject를 찾는다.</summary>
     private PlaceableObject RaycastPlacedObject(Vector3 screenPosition)
     {
-        Ray ray = _camera.ScreenPointToRay(screenPosition);
+        Camera camera = TargetCamera;
+
+        if (camera == null)
+        {
+            Debug.LogError("[LongPressSelector] Camera.main을 찾지 못했습니다. 게임 카메라에 MainCamera 태그가 있는지 확인하세요.");
+            return null;
+        }
+
+        Ray ray = camera.ScreenPointToRay(screenPosition);
 
         if (!Physics.Raycast(ray, out RaycastHit hit, _rayMaxDistance))
         {
