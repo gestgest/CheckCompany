@@ -2301,6 +2301,10 @@ PrefabInstance:
     - target: {fileID: 4151312420460643049, guid: a26129d0066509b4ba70ecd743be26bd, type: 3}
       propertyPath: m_Name
       value: PO_Element (7)
+    - target: {fileID: 8447667668411032412, guid: a26129d0066509b4ba70ecd743be26bd, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 1117446987303300, guid: 71d35664952a947fc0b035fd1b08608a, type: 3}
       objectReference: {fileID: 0}
     - target: {fileID: 5920708641875376039, guid: a26129d0066509b4ba70ecd743be26bd, type: 3}
       propertyPath: m_Pivot.x
@@ -2710,6 +2714,10 @@ PrefabInstance:
     - target: {fileID: 4151312420460643049, guid: a26129d0066509b4ba70ecd743be26bd, type: 3}
       propertyPath: m_Name
       value: PO_Element (5)
+    - target: {fileID: 8447667668411032412, guid: a26129d0066509b4ba70ecd743be26bd, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 2443946853473700, guid: 28db55c2d06e881230d0716dfbc04271, type: 3}
       objectReference: {fileID: 0}
     - target: {fileID: 5920708641875376039, guid: a26129d0066509b4ba70ecd743be26bd, type: 3}
       propertyPath: m_Pivot.x
@@ -10966,6 +10974,10 @@ PrefabInstance:
     - target: {fileID: 4151312420460643049, guid: a26129d0066509b4ba70ecd743be26bd, type: 3}
       propertyPath: m_Name
       value: PO_Element (2)
+    - target: {fileID: 8447667668411032412, guid: a26129d0066509b4ba70ecd743be26bd, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 2681238846410900, guid: bef9cc037623aa13af4246a3a1783618, type: 3}
       objectReference: {fileID: 0}
     - target: {fileID: 5920708641875376039, guid: a26129d0066509b4ba70ecd743be26bd, type: 3}
       propertyPath: m_Pivot.x
@@ -12868,6 +12880,10 @@ PrefabInstance:
     - target: {fileID: 4151312420460643049, guid: a26129d0066509b4ba70ecd743be26bd, type: 3}
       propertyPath: m_Name
       value: PO_Element (6)
+    - target: {fileID: 8447667668411032412, guid: a26129d0066509b4ba70ecd743be26bd, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 2308091726393500, guid: 897acffa0fd27c64251a0166d494f82a, type: 3}
       objectReference: {fileID: 0}
     - target: {fileID: 5920708641875376039, guid: a26129d0066509b4ba70ecd743be26bd, type: 3}
       propertyPath: m_Pivot.x
@@ -15483,6 +15499,10 @@ PrefabInstance:
     - target: {fileID: 4151312420460643049, guid: a26129d0066509b4ba70ecd743be26bd, type: 3}
       propertyPath: m_Name
       value: PO_Element (4)
+    - target: {fileID: 8447667668411032412, guid: a26129d0066509b4ba70ecd743be26bd, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 2368004510963000, guid: 319f6a0c978df27efd610c26aa6a5495, type: 3}
       objectReference: {fileID: 0}
     - target: {fileID: 5920708641875376039, guid: a26129d0066509b4ba70ecd743be26bd, type: 3}
       propertyPath: m_Pivot.x
@@ -26338,6 +26358,10 @@ PrefabInstance:
     - target: {fileID: 4151312420460643049, guid: a26129d0066509b4ba70ecd743be26bd, type: 3}
       propertyPath: m_Name
       value: PO_Element (1)
+    - target: {fileID: 8447667668411032412, guid: a26129d0066509b4ba70ecd743be26bd, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 2649339848780700, guid: 7cda44f43693608bfee12e167a90b355, type: 3}
       objectReference: {fileID: 0}
     - target: {fileID: 5920708641875376039, guid: a26129d0066509b4ba70ecd743be26bd, type: 3}
       propertyPath: m_Pivot.x
@@ -52173,6 +52197,10 @@ PrefabInstance:
     - target: {fileID: 4151312420460643049, guid: a26129d0066509b4ba70ecd743be26bd, type: 3}
       propertyPath: m_Name
       value: PO_Element (3)
+    - target: {fileID: 8447667668411032412, guid: a26129d0066509b4ba70ecd743be26bd, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 2055982069299100, guid: 9f16628a1d1834042d9a7ff4ddad3cbc, type: 3}
       objectReference: {fileID: 0}
     - target: {fileID: 5920708641875376039, guid: a26129d0066509b4ba70ecd743be26bd, type: 3}
       propertyPath: m_Pivot.x
@@ -52484,6 +52512,10 @@ PrefabInstance:
     - target: {fileID: 4151312420460643049, guid: a26129d0066509b4ba70ecd743be26bd, type: 3}
       propertyPath: m_Name
       value: PO_Element (8)
+    - target: {fileID: 8447667668411032412, guid: a26129d0066509b4ba70ecd743be26bd, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 1705404836633200, guid: df9bdf6742da74b7d2e361335f619943, type: 3}
       objectReference: {fileID: 0}
     - target: {fileID: 5920708641875376039, guid: a26129d0066509b4ba70ecd743be26bd, type: 3}
       propertyPath: m_Pivot.x

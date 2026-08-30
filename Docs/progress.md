@@ -68,8 +68,18 @@
   - 이동을 취소하면 위치뿐 아니라 각도도 되돌린다 (`_moveOriginRotation`)
   - `EmployeeWorkAI.ArriveAtDesk()`의 `transform.rotation = _seat.rotation`은 그대로 둔다.
     SeatPoint가 책상 자식이라 책상을 돌리면 앉는 방향도 같이 돌아간다
-- [ ] **배치 가능 가구가 1종뿐**
-  - `Assets/Prefab/Object/Placed/`에 `Table_Conference` 하나. `_isWorkstation: 1`인 것도 그것뿐
+- [x] **배치 가능 가구가 1종뿐**
+  - `LowPolyOfficeProps_LITE`의 메시로 8종을 추가해 `Assets/Prefab/Object/Placed/`가 9종이 됐다.
+    스케일은 `Table_Conference`와 같은 2로 맞췄다
+  - `property_id`는 `PlaceSystem._shopPlaceableObjects`의 **인덱스와 같아야 한다.**
+    `CreateHandlingObject()`가 프리팹의 `property_id`를 그대로 저장하고
+    `PlaceObject()`가 그 값으로 배열을 인덱싱하기 때문에, 어긋나면 불러올 때 다른 가구가 나온다.
+    가구를 추가할 때는 **배열 끝에만 붙인다** (중간에 끼우면 이미 저장된 데이터가 전부 밀린다)
+  - 워크스테이션은 1인용 책상 2종(`Table_OfficeDesk`, `Table_OfficeDesk2`)뿐이다.
+    의자/캐비닛/화분은 `_isWorkstation: 0`인 장식
+  - 상점 버튼은 `GamePlay` 씬에 이미 있던 `PO_Element` 12칸 중 8칸의 OnClick 인자를 새 프리팹으로 덮어썼다.
+    남은 3칸((9)(10)(11))은 아직 회의 책상을 가리킨다
+  - **아이콘은 12칸이 전부 같다.** `PO_Element`의 Icon 스프라이트를 인스턴스별로 바꿔야 구분된다
 - [ ] **앉는 애니메이션 미구현**
   - `EmployeeWorkAI.cs`의 `//TODO: Animator Controller...` 그대로.
     직원이 책상 옆에 서 있기만 해서 "앉는다"는 느낌이 안 난다
@@ -139,6 +149,12 @@
 - (2026-08-30) 롱프레스-PlaceSystem 사이 SO 이벤트 채널 제거, 직접 참조로 변경 (씬 배선 0개)
 - (2026-08-30) 오브젝트 90도 회전 구현. 회전을 서버에 저장하고, 그 김에 비대칭이던 칸 수 계산과
   회전하면 어긋나던 시작 모서리 계산을 바로잡음
+- (2026-08-30) 칸 수 계산에 여유 한 칸(`TilePadding`)을 되살림. 회전 작업에서 실측값으로 바꾸면서
+  예전 `+1` 여백이 사라져 배치 범위가 줄어 보였다 (회의 책상 3x5 -> 2x5 -> 3x6)
+- (2026-08-30) 씬에 남아있던 `DebugNav`(랜덤 배회 테스트 스크립트)를 지우고 그 동작을
+  `EmployeeWorkAI`의 Idle 상태 행동(`WanderRoutine`)으로 옮김. 목적지를 NavMesh에 스냅하고,
+  책상으로 이동중/근무중일 때는 목적지를 덮어쓰지 않는다
+- (2026-08-30) 배치 가능 가구 8종 추가 (1인용 책상 2, 의자 3, 캐비닛 2, 화분 1)
 
 ---
 

@@ -238,7 +238,7 @@ Transform:
   m_GameObject: {fileID: 177504715}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.01, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1008,6 +1008,14 @@ MonoBehaviour:
   _objectParent: {fileID: 310482686}
   _shopPlaceableObjects:
   - {fileID: 132292087961979328, guid: ec71814fb4ff65441989d0088126ae12, type: 3}
+  - {fileID: 2649339848780705, guid: 7cda44f43693608bfee12e167a90b355, type: 3}
+  - {fileID: 2681238846410905, guid: bef9cc037623aa13af4246a3a1783618, type: 3}
+  - {fileID: 2055982069299105, guid: 9f16628a1d1834042d9a7ff4ddad3cbc, type: 3}
+  - {fileID: 2368004510963005, guid: 319f6a0c978df27efd610c26aa6a5495, type: 3}
+  - {fileID: 2443946853473705, guid: 28db55c2d06e881230d0716dfbc04271, type: 3}
+  - {fileID: 2308091726393505, guid: 897acffa0fd27c64251a0166d494f82a, type: 3}
+  - {fileID: 1117446987303305, guid: 71d35664952a947fc0b035fd1b08608a, type: 3}
+  - {fileID: 1705404836633205, guid: df9bdf6742da74b7d2e361335f619943, type: 3}
   _placedObjectManager: {fileID: 11400000, guid: 78992eda014fc4149a161456aaedd847, type: 2}
   _workstationManagerSO: {fileID: 11400000, guid: 56a72685b0d48674e9fd351611961844, type: 2}
   _takenAreaEvent: {fileID: 11400000, guid: 767a94b576ed3cf4abacb6b5b867d660, type: 2}
@@ -1018,7 +1026,6 @@ MonoBehaviour:
   _denyEvent: {fileID: 11400000, guid: eecae7648030d354fad1b4f7689f1fa0, type: 2}
   _deleteEvent: {fileID: 11400000, guid: 722b041155624124b3b82512a99e433f, type: 2}
   _rotateEvent: {fileID: 11400000, guid: 3f7ac21d95e64b3a9c0d8e5f1a2b6c47, type: 2}
-  _longPressObjectEvent: {fileID: 11400000, guid: f08f4e9ab3184444fabec11ee97bb5eb, type: 2}
   _isHandlingEvent: {fileID: 11400000, guid: 841d2e50e36a44343a21420305260597, type: 2}
 --- !u!114 &2059868570
 MonoBehaviour:
