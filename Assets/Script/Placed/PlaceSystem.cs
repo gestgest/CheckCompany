@@ -19,6 +19,9 @@ public class PlaceSystem : MonoBehaviour
     private GridLayout gridLayout;
     private Grid grid;
 
+    //소유한 사무실 범위. 같은 오브젝트에 붙어있고, 없으면 예전처럼 범위 제한 없이 동작한다.
+    private OfficeArea _officeArea;
+
     //selected
     private PlaceableObject selectedObject;
 
@@ -79,6 +82,9 @@ public class PlaceSystem : MonoBehaviour
         {
             gameObject.AddComponent<LongPressSelector>();
         }
+
+        //LongPressSelector와 같은 규칙 - 같은 오브젝트에 있으므로 채널 없이 직접 참조한다
+        _officeArea = GetComponent<OfficeArea>();
     }
 
     private void Start()
@@ -541,6 +547,13 @@ public class PlaceSystem : MonoBehaviour
     //타일이 비어있는지  
     public bool CheckTile(PlaceableObject ob, Vector3Int position)
     {
+        //사무실 밖(아직 못 산 땅)에는 놓을 수 없다.
+        //빨간 타일 검사만으로는 못 막는다 - 사무실 밖은 아무것도 안 놓여있어서 타일이 비어있기 때문이다.
+        if (_officeArea != null && !_officeArea.Contains(position, ob.Size))
+        {
+            return false;
+        }
+
         //타일 베이스 [타일 가져오기]  
         for (int i = 0; i < ob.Size.z; i++)
         {
@@ -594,19 +607,26 @@ public class PlaceSystem : MonoBehaviour
         {
             for (int j = 0; j < object_size.x; j++)
             {
+                Vector3Int cell = startPos + new Vector3Int(j, i, 0);
+
+                //사무실 밖은 CheckTile이 어차피 거부한다. 누르기 전에 빨갛게 보여줘야 왜 안 놓이는지 안다.
+                bool isOutside = _officeArea != null && !_officeArea.Contains(cell);
+
                 //초록색인데 이미 초록색, 빨간색인 경우 => 빨간색 
-                if (isSelected && mainTilemap.GetTile(startPos + new Vector3Int(j, i, 0)) != null)
+                if (isSelected && (isOutside || mainTilemap.GetTile(cell) != null))
                 {
-                    mainTilemap.SetTile(startPos + new Vector3Int(j, i, 0), _redTile);
+                    mainTilemap.SetTile(cell, _redTile);
                 }
                 //비어있는데 이미 빨간색인 경우 
-                else if (!isSelected && mainTilemap.GetTile(startPos + new Vector3Int(j, i, 0)) == _redTile)
+                else if (!isSelected && mainTilemap.GetTile(cell) == _redTile)
                 {
-                    mainTilemap.SetTile(startPos + new Vector3Int(j, i, 0), _takenTile);
+                    //사무실 밖이라 빨갛던 칸은 밑에 깔린 초록이 없다.
+                    //되돌린답시고 초록을 칠하면 아무것도 없는 자리에 유령 타일이 남는다.
+                    mainTilemap.SetTile(cell, isOutside ? null : _takenTile);
                 }
                 else
                 {
-                    mainTilemap.SetTile(startPos + new Vector3Int(j, i, 0), tile);
+                    mainTilemap.SetTile(cell, tile);
                 }
             }
         }
