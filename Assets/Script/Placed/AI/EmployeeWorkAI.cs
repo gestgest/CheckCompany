@@ -4,7 +4,7 @@ using UnityEngine.AI;
 
 /// <summary>
 /// 직원이 빈 책상(워크스테이션)을 배정받아 이동하고, 도착하면 근무 상태로 전환한다.
-/// 기존 DebugNav(랜덤 배회 테스트 스크립트)를 대체한다.
+/// 책상을 못 받은 동안에는 주변을 어슬렁거린다(기존 DebugNav가 하던 일).
 /// EmployeeObjectSystem이 생성 직후 Init(employeeId)를 호출해줘야 한다.
 /// </summary>
 public class EmployeeWorkAI : MonoBehaviour
@@ -21,6 +21,11 @@ public class EmployeeWorkAI : MonoBehaviour
     [SerializeField] private float _arriveDistance = 0.15f;
     [SerializeField] private float _retryInterval = 3.0f; //빈 책상이 없을 때 재시도 간격
     [SerializeField] private float _seatNavMeshSampleRadius = 2.0f; //SeatPoint 주변에서 NavMesh를 찾을 반경
+
+    [Header("Idle Wander")]
+    [SerializeField] private float _wanderRadius = 3.0f;        //현재 자리에서 돌아다닐 반경
+    [SerializeField] private float _wanderIntervalMin = 1.0f;   //다음 목적지를 고르기까지 최소 대기
+    [SerializeField] private float _wanderIntervalMax = 5.0f;   //최대 대기
 
     [Header("Stamina")]
     [SerializeField] private float _staminaDrainPerMinute = 6f;    //근무 중 분당 체력 소모량
@@ -50,6 +55,7 @@ public class EmployeeWorkAI : MonoBehaviour
     {
         //todo 일단 막아놓음
         //StartCoroutine(ClaimDeskRoutine());
+        //StartCoroutine(WanderRoutine());
     }
 
     private void OnDestroy()
@@ -60,6 +66,47 @@ public class EmployeeWorkAI : MonoBehaviour
         {
             _workstationManagerSO.ReleaseSeat(_employeeId);
         }
+    }
+
+    /// <summary>
+    /// 책상을 기다리는 동안 제자리에 굳어 있지 않도록 주변을 어슬렁거린다.
+    /// 씬에 따로 붙여두던 DebugNav가 하던 일을 Idle 상태의 행동으로 가져온 것이다.
+    /// </summary>
+    private IEnumerator WanderRoutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(Random.Range(_wanderIntervalMin, _wanderIntervalMax));
+
+            //책상으로 가는 중이거나 근무중이면 목적지를 덮어쓰면 안 된다
+            if (_state != State.Idle)
+            {
+                continue;
+            }
+
+            Wander();
+        }
+    }
+
+    /// <summary>반경 안의 아무 데나 한 곳을 골라 걸어간다.</summary>
+    private void Wander()
+    {
+        //NavMesh 위에 없으면 SetDestination이 에러만 뱉는다 (스폰 직후/베이크 안 된 바닥)
+        if (!_agent.isOnNavMesh)
+        {
+            return;
+        }
+
+        Vector2 offset = Random.insideUnitCircle * _wanderRadius;
+        Vector3 target = transform.position + new Vector3(offset.x, 0f, offset.y);
+
+        //벽 너머처럼 갈 수 없는 지점을 찍으면 근처의 걸어갈 수 있는 곳으로 스냅한다
+        if (!NavMesh.SamplePosition(target, out NavMeshHit hit, _wanderRadius, NavMesh.AllAreas))
+        {
+            return;
+        }
+
+        _agent.SetDestination(hit.position);
     }
 
     /// <summary>빈 책상이 생길 때까지 주기적으로 재시도한다.</summary>

@@ -31,6 +31,9 @@ public class PlaceableObject : MonoBehaviour
     //타일 격자에 칸 단위로 맞춰야 하므로 90도 단위로만 돈다.
     private const int RotationStep = 90;
 
+    //차지하는 칸을 가로/세로로 한 칸씩 더 잡는다 (여유 공간).
+    private const int TilePadding = 1;
+
     //타일 한 칸의 월드 크기. Grid의 CellSwizzle이 XZY라서 cellSize.y가 월드 z축 길이다.
     private Vector2 _cellSize = Vector2.zero;
 
@@ -199,9 +202,11 @@ public class PlaceableObject : MonoBehaviour
 
         Vector2 cellSize = GetCellSize();
 
-        //한 칸이라도 걸치면 그 칸은 차지한 것으로 본다
-        int x = Mathf.Max(1, Mathf.CeilToInt(width / cellSize.x));
-        int y = Mathf.Max(1, Mathf.CeilToInt(depth / cellSize.y));
+        //한 칸이라도 걸치면 그 칸은 차지한 것으로 본다.
+        //거기에 한 칸씩 더 준다 - 딱 맞게 잡으면 오브젝트끼리 붙어버려서
+        //애초부터 프리팹 크기보다 넉넉하게 자리를 잡아주도록 되어 있었다.
+        int x = Mathf.Max(1, Mathf.CeilToInt(width / cellSize.x)) + TilePadding;
+        int y = Mathf.Max(1, Mathf.CeilToInt(depth / cellSize.y)) + TilePadding;
 
         Size = new Vector3Int(x, 0, y);
         /*
