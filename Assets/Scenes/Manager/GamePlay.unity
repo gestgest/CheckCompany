@@ -17398,6 +17398,7 @@ GameObject:
   - component: {fileID: 602332988}
   - component: {fileID: 602332989}
   - component: {fileID: 602332990}
+  - component: {fileID: 771000020}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -60678,6 +60679,23 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &771000020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 602332987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f83490a8074b511c96d7099c3c977c5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gameMinutesPerTick: 60
+  _realSecondsPerTick: 1
+  _speed: 1
+  _runOnStart: 1
+  _saveEveryTicks: 24
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

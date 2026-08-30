@@ -1326,6 +1326,7 @@ MonoBehaviour:
   _wallThickness: 1
   _lockedTilemap: {fileID: 771000003}
   _lockedTile: {fileID: 11400000, guid: 21392dfefc9efddecd82e1e093a213d8, type: 2}
+  _isHandlingEvent: {fileID: 11400000, guid: 841d2e50e36a44343a21420305260597, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

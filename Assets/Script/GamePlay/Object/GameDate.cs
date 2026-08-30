@@ -11,6 +11,12 @@ public class GameDate : Date
     //월급을 차감하면 안 된다(로그인할 때마다 월급이 빠지는 걸 방지).
     private bool _isLoaded;
 
+    //서버가 없다는 로그는 한 번만 남긴다. 시간이 자동으로 흐르면 저장 시도가 계속 반복된다.
+    private bool _warnedNoServer;
+
+    /// <summary>서버(또는 기본값) 로딩이 끝났는지. 끝나기 전에는 시간을 돌리면 안 된다.</summary>
+    public bool IsLoaded => _isLoaded;
+
     /// <summary> 생성자 </summary>
     public GameDate(SendFirebaseEventChannelSO sendFirebaseEventChannelSO)
     {
@@ -82,7 +88,21 @@ public class GameDate : Date
 
     public void SetDateToServer(Dictionary<string, object> data)
     {
-        _sendFirebaseEventChannelSO._onSendEventRaised(
+        //서버 매니저(PersistentManager)가 없는 로컬 테스트에서는 아무도 채널을 구독하지 않는다.
+        //예전에는 델리게이트를 직접 부르고 있어서 그때마다 NullReferenceException이 났다.
+        //(GameManager가 로그인 실패를 "로컬 테스트로 시작합니다"로 넘기는 것과 같은 취급을 해야 한다)
+        if (_sendFirebaseEventChannelSO == null || _sendFirebaseEventChannelSO._onSendEventRaised == null)
+        {
+            if (!_warnedNoServer)
+            {
+                _warnedNoServer = true;
+                Debug.Log("[GameDate] 서버 매니저가 없어 날짜 저장을 건너뜁니다. (로컬 테스트)");
+            }
+
+            return;
+        }
+
+        _sendFirebaseEventChannelSO.RaiseEvent(
             "GamePlayUser",
             GameManager.instance.Nickname,
             "date.gameDate",

@@ -6,7 +6,9 @@ using UnityEngine.Tilemaps;
 ///
 /// - Land   : 바닥 전체 = 최대 확장 범위. 여기서 더는 못 넓힌다
 /// - Office : 지금 소유한 범위. 벽 2개가 이 경계에 선다
-/// - Locked : Land - Office. 아직 못 산 땅이라 어두운 타일로 덮어서 "여기까지 넓힐 수 있다"를 보여준다
+/// - Locked : Land - Office. 아직 못 산 땅. 평소엔 안 보이고, PlaceSystem이 오브젝트를
+///            배치/이동하는 동안(_isHandlingEvent)에만 어두운 타일로 덮어서 "여기까지 넓힐 수 있다"를 보여준다
+///            (건물을 만지지도 않았는데 주변이 계속 어두우면 어수선하다 - 만지는 동안만 보여준다)
 ///
 /// 확장은 Office를 키우는 것이고, 바닥/벽/배치 가능 범위는 전부 여기서 파생되므로
 /// 씬에서 벽을 손으로 옮길 필요가 없다.
@@ -43,6 +45,14 @@ public class OfficeArea : MonoBehaviour
     [SerializeField] private Tilemap _lockedTilemap;
     [SerializeField] private TileBase _lockedTile;
 
+    [Header("Listening to Event")]
+    //PlaceSystem이 오브젝트를 배치/이동하는 동안 true, 끝나면 false로 쏘는 채널.
+    //PlaceSystem 인스펙터에 물린 것과 같은 에셋을 여기도 그대로 물리면 된다.
+    [SerializeField] private BoolEventChannelSO _isHandlingEvent;
+
+    //지금 잠긴 타일을 보여주는 중인지. Apply()가 Expand() 도중에도 이 상태를 유지해서 갱신한다.
+    private bool _lockedTilesVisible;
+
     private Grid _grid;
 
     /// <summary>지금 소유한 칸의 범위. z축은 셀 좌표의 y로 들어간다 (CellSwizzle이 XZY).</summary>
@@ -56,8 +66,27 @@ public class OfficeArea : MonoBehaviour
         _grid = GetComponent<Grid>();
     }
 
+    private void OnEnable()
+    {
+        if (_isHandlingEvent != null)
+        {
+            _isHandlingEvent._onEventRaised += SetLockedTilesVisible;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (_isHandlingEvent != null)
+        {
+            _isHandlingEvent._onEventRaised -= SetLockedTilesVisible;
+        }
+    }
+
     private void Start()
     {
+        //_lockedTilesVisible은 항상 false로 시작하지만, 에디터에서 미리 칠해둔 타일이
+        //씬에 남아있을 수 있으니 확실히 지우고 시작한다.
+        ClearLockedTiles();
         Apply();
     }
 
@@ -104,7 +133,9 @@ public class OfficeArea : MonoBehaviour
         Apply();
     }
 
-    /// <summary>바닥, 벽, 잠긴 타일을 지금 값에 맞춘다.</summary>
+    /// <summary>
+    /// 바닥, 벽을 지금 값에 맞춘다. 잠긴 타일은 지금 보여주는 중일 때만(SetLockedTilesVisible(true) 상태) 같이 갱신한다.
+    /// </summary>
     [ContextMenu("사무실 범위 적용")]
     public void Apply()
     {
@@ -115,7 +146,30 @@ public class OfficeArea : MonoBehaviour
 
         PlaceFloor();
         PlaceWalls();
-        PaintLockedTiles();
+
+        if (_lockedTilesVisible)
+        {
+            PaintLockedTiles();
+        }
+    }
+
+    /// <summary>
+    /// 확장 가능 범위(잠긴 타일)를 보여줄지 정한다. 평소엔 꺼둔 채로 시작한다 -
+    /// 아직 건드리지도 않은 땅을 계속 어둡게 깔아두면 어수선하다.
+    /// _isHandlingEvent가 이 메서드를 그대로 구독한다 (오브젝트 배치/이동 중일 때만 true).
+    /// </summary>
+    public void SetLockedTilesVisible(bool visible)
+    {
+        _lockedTilesVisible = visible;
+
+        if (visible)
+        {
+            PaintLockedTiles();
+        }
+        else
+        {
+            ClearLockedTiles();
+        }
     }
 
     //CellSwizzle이 XZY라 cellSize.y가 월드 z축 길이다
@@ -189,6 +243,25 @@ public class OfficeArea : MonoBehaviour
             {
                 Vector3Int cell = new Vector3Int(x, z, 0);
                 _lockedTilemap.SetTile(cell, Contains(cell) ? null : _lockedTile);
+            }
+        }
+    }
+
+    /// <summary>잠긴 타일을 전부 지운다. SetLockedTilesVisible(false)가 부른다.</summary>
+    private void ClearLockedTiles()
+    {
+        if (_lockedTilemap == null)
+        {
+            return;
+        }
+
+        RectInt land = LandCells;
+
+        for (int z = land.yMin; z < land.yMax; z++)
+        {
+            for (int x = land.xMin; x < land.xMax; x++)
+            {
+                _lockedTilemap.SetTile(new Vector3Int(x, z, 0), null);
             }
         }
     }

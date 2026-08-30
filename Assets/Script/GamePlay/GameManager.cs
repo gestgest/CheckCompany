@@ -162,7 +162,8 @@ public class GameManager : MonoBehaviour
             ConvertJSON.SafeGet<Dictionary<string, object>>(dateData, "gameDate", new Dictionary<string, object>())
         );
 
-        _sendFirebaseEventChannelSO._onSendEventRaised(
+        //RaiseEvent는 구독자가 없으면 조용히 넘어간다. 델리게이트를 직접 부르면 로컬 테스트에서 터진다.
+        _sendFirebaseEventChannelSO.RaiseEvent(
             "GamePlayUser",
             GameManager.instance.Nickname,
             "date.currentDate",
@@ -242,11 +243,35 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void AddDateMinute(int value)
+    /// <summary>날짜 로딩이 끝나 시간을 흘려도 되는 상태인지. GameClock이 이걸 보고 기다린다.</summary>
+    public bool IsDateReady => _gameDate != null && _gameDate.IsLoaded;
+
+    /// <param name="toServer">
+    /// 서버에 바로 쓸지. GameClock처럼 자주 부르는 쪽은 false로 넘기고 나중에 SaveDate()로 몰아서 쓴다.
+    /// 매번 쓰면 초당 1회 쓰기가 되어 Firestore 할당량이 남아나지 않는다.
+    /// </param>
+    public void AddDateMinute(int value, bool toServer = true)
     {
-        _gameDate.SetMinute(_gameDate.Minute + value);
+        //AddRandomApplicants의 60/value가 0으로 나누기가 된다
+        if (value <= 0)
+        {
+            return;
+        }
+
+        _gameDate.SetMinute(_gameDate.Minute + value, toServer);
         recruitmentControllerSO.AddRandomApplicants(60 / value);
         SetDateUI();
+    }
+
+    /// <summary>지금 날짜를 서버에 쓴다. 틱마다 쓰지 않고 모았다가 부르는 용도.</summary>
+    public void SaveDate()
+    {
+        if (!IsDateReady)
+        {
+            return;
+        }
+
+        _gameDate.SetDateToServer(_gameDate.DateToJSON());
     }
 
     public void SetDateUI()
