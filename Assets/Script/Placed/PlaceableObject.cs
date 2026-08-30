@@ -140,7 +140,7 @@ public class PlaceableObject : MonoBehaviour
     }
     /// <summary>
     /// 배치를 풀고 다시 "손에 든" 상태로 되돌린다 (이동 모드 진입).
-    /// Placed를 내려야 LongPressSelector가 지금 들고 있는 오브젝트를 또 잡지 않는다.
+    /// Placed를 내려야 PlacedObjectInput이 지금 들고 있는 오브젝트를 또 잡지 않는다.
     /// </summary>
     public void UnPlace()
     {

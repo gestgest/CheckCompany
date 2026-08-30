@@ -14,7 +14,7 @@ using UnityEngine.Tilemaps;
 /// 씬에서 벽을 손으로 옮길 필요가 없다.
 ///
 /// PlaceSystem과 같은 오브젝트(Grid_PlaceSystem)에 붙는다.
-/// LongPressSelector와 같은 방식으로 GetComponent로 직접 참조한다 - 서로 아는 사이에는 이벤트 채널이 낭비다.
+/// PlacedObjectInput과 같은 방식으로 GetComponent로 직접 참조한다 - 서로 아는 사이에는 이벤트 채널이 낭비다.
 /// </summary>
 [RequireComponent(typeof(Grid))]
 public class OfficeArea : MonoBehaviour

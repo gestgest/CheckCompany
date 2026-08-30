@@ -2,14 +2,17 @@
 using UnityEngine.EventSystems;
 
 /// <summary>
-/// 이미 배치된 오브젝트를 일정 시간 이상 꾹 누르면 PlaceSystem에 이동 모드를 요청한다.
+/// 이미 배치된 오브젝트를 누른 것을 두 가지로 나눠서 처리한다.
+/// - 꾹 누르기(_longPressSeconds 이상) : PlaceSystem에 이동 모드를 요청한다
+/// - 짧게 누르기                        : _tapEvent로 그 오브젝트를 UI 쪽에 넘긴다 (직원 배정 창 등)
+///
 /// CameraMoveManager가 같은 입력(터치/좌클릭)으로 화면을 끌기 때문에,
-/// 누른 채로 화면이 _cancelMoveDistance 이상 움직이면 "카메라 드래그"로 보고 롱프레스를 취소한다.
-/// PlaceSystem과 같은 오브젝트(Grid_PlaceSystem)에 붙는다.
-/// 둘이 같은 오브젝트에 있으므로 SO 이벤트 채널을 거치지 않고 직접 호출한다.
+/// 누른 채로 화면이 _cancelMoveDistance 이상 움직이면 "카메라 드래그"로 보고 둘 다 취소한다.
+/// PlaceSystem과 같은 오브젝트(Grid_PlaceSystem)에 붙는다 - PlaceSystem이 RequireComponent로 끌고 온다.
+/// 둘이 같은 오브젝트에 있으므로 이동 요청은 SO 이벤트 채널을 거치지 않고 직접 호출한다.
+/// (탭은 다른 씬의 UI가 받아야 해서 채널을 거친다)
 /// </summary>
-[RequireComponent(typeof(PlaceSystem))]
-public class LongPressSelector : MonoBehaviour
+public class PlacedObjectInput : MonoBehaviour
 {
     [SerializeField] private Camera _camera;
     [SerializeField] private PlaceSystem _placeSystem;
@@ -18,6 +21,10 @@ public class LongPressSelector : MonoBehaviour
     [SerializeField] private float _longPressSeconds = 0.5f;
     [SerializeField] private float _cancelMoveDistance = 20f; //화면 픽셀 기준
     [SerializeField] private float _rayMaxDistance = 200f;
+
+    [Header("Broadcasting on Events")]
+    //짧게 누른 오브젝트. 안 넣으면 탭은 그냥 무시되고 롱프레스만 동작한다.
+    [SerializeField] private PlaceableObjectEventChannelSO _tapEvent;
 
     private bool _isTracking;
     private bool _isFired;
@@ -86,6 +93,9 @@ public class LongPressSelector : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
+            //손을 뗀 시점에 "짧게 눌렀다 뗀 것"인지 판정한다.
+            //CancelTracking()이 상태를 지워버리므로 반드시 그 전에 봐야 한다.
+            TryFireTap();
             CancelTracking();
             return;
         }
@@ -149,9 +159,30 @@ public class LongPressSelector : MonoBehaviour
         Fire(_pressTarget);
     }
 
+    /// <summary>
+    /// 손을 뗀 것이 "탭"이면 이벤트를 쏜다.
+    /// 롱프레스가 이미 터졌으면(_isFired) 이동 모드로 들어간 것이므로 탭이 아니다.
+    /// 끌어서 취소된 경우는 _isTracking이 이미 false라 여기까지 오지 않는다.
+    /// </summary>
+    private void TryFireTap()
+    {
+        if (!_isTracking || _isFired || _pressTarget == null || _tapEvent == null)
+        {
+            return;
+        }
+
+        //누르고 있는 사이에 손가락이 많이 움직였으면 카메라를 끈 것이다
+        if (Vector2.Distance(Input.mousePosition, _pressStartPosition) > _cancelMoveDistance)
+        {
+            return;
+        }
+
+        _tapEvent.RaiseEvent(_pressTarget);
+    }
+
     private void Fire(PlaceableObject target)
     {
-        Debug.Log($"[LongPressSelector] '{target.name}' (id {target.GetObjectID()}) 롱프레스 - 이동 시작", target);
+        Debug.Log($"[PlacedObjectInput] '{target.name}' (id {target.GetObjectID()}) 롱프레스 - 이동 시작", target);
 
         _placeSystem.StartMoveMode(target);
     }
@@ -170,7 +201,7 @@ public class LongPressSelector : MonoBehaviour
 
         if (camera == null)
         {
-            Debug.LogError("[LongPressSelector] Camera.main을 찾지 못했습니다. 게임 카메라에 MainCamera 태그가 있는지 확인하세요.");
+            Debug.LogError("[PlacedObjectInput] Camera.main을 찾지 못했습니다. 게임 카메라에 MainCamera 태그가 있는지 확인하세요.");
             return null;
         }
 

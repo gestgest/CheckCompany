@@ -5,6 +5,11 @@ using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
 
 
+//입력 감지기는 반드시 같은 오브젝트에 있어야 한다.
+//예전에는 없으면 Awake에서 AddComponent로 붙였는데, 그러면 런타임에 생긴 컴포넌트라
+//인스펙터에서 채워야 할 참조(_tapEvent 등)가 전부 null인 채로 돌아간다.
+//RequireComponent로 바꿔서 항상 씬에 실제로 존재하게 만든다.
+[RequireComponent(typeof(PlacedObjectInput))]
 public class PlaceSystem : MonoBehaviour
 {
     private List<PlaceableObject> _placedObjects = new List<PlaceableObject>();
@@ -75,15 +80,7 @@ public class PlaceSystem : MonoBehaviour
     
     private void Awake()
     {
-        //롱프레스 감지기는 반드시 PlaceSystem과 같은 오브젝트에 있어야 하는데,
-        //씬마다 손으로 Add Component 하는 걸 잊기 쉬우므로 없으면 직접 붙인다.
-        //(참조는 LongPressSelector.Awake()가 GetComponent로 알아서 채운다)
-        if (GetComponent<LongPressSelector>() == null)
-        {
-            gameObject.AddComponent<LongPressSelector>();
-        }
-
-        //LongPressSelector와 같은 규칙 - 같은 오브젝트에 있으므로 채널 없이 직접 참조한다
+        //PlacedObjectInput과 같은 규칙 - 같은 오브젝트에 있으므로 채널 없이 직접 참조한다
         _officeArea = GetComponent<OfficeArea>();
     }
 
@@ -229,7 +226,7 @@ public class PlaceSystem : MonoBehaviour
 
     /// <summary>
     /// 이미 배치된 오브젝트를 다시 손에 들어 이동시킨다.
-    /// 같은 오브젝트에 붙은 LongPressSelector가 롱프레스를 감지하면 직접 호출한다.
+    /// 같은 오브젝트에 붙은 PlacedObjectInput이 롱프레스를 감지하면 직접 호출한다.
     /// </summary>
     public void StartMoveMode(PlaceableObject target)
     {
@@ -409,7 +406,11 @@ public class PlaceSystem : MonoBehaviour
 
         PlaceableObject target = selectedObject;
 
-        //StartMoveMode에서 이미 _placedObjects와 워크스테이션 풀에서 빼놨으므로
+        //StartMoveMode에서 이미 _placedObjects와 워크스테이션 풀에서 빼놨지만,
+        //자리 배정은 "옮기는 중"일 수도 있어서 일부러 남겨둔 상태다.
+        //이번엔 진짜로 없어지는 것이므로 앉아있던 직원을 일으켜 세운다.
+        _workstationManagerSO.ReleaseSeatOf(target);
+
         //여기서는 서버 데이터만 지우고 파괴하면 된다.
         _placedObjectManager.RemovePlaceableObject(target.GetObjectID());
         _createdObjectIds.Remove(target.GetObjectID());
