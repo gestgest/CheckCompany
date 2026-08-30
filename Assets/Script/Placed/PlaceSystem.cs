@@ -36,9 +36,13 @@ public class PlaceSystem : MonoBehaviour
     private bool _isMoving;
     private Vector3 _moveOriginPosition;
 
+    //이동 중에 회전까지 했을 수 있으므로 취소하면 각도도 같이 되돌린다
+    private int _moveOriginRotation;
+
     private GameObject _okButton;
     private GameObject _denyButton;
     private GameObject _deleteButton;
+    private GameObject _rotateButton;
     private GameObject _camera;
     
     [Space]
@@ -61,6 +65,7 @@ public class PlaceSystem : MonoBehaviour
     [SerializeField] private VoidEventChannelSO _okEvent;
     [SerializeField] private VoidEventChannelSO _denyEvent;
     [SerializeField] private VoidEventChannelSO _deleteEvent;
+    [SerializeField] private VoidEventChannelSO _rotateEvent;
 
     [Header("Broadcasting on Events")]
     [SerializeField] private BoolEventChannelSO _isHandlingEvent;
@@ -102,6 +107,12 @@ public class PlaceSystem : MonoBehaviour
         {
             _deleteEvent._onEventRaised += DeleteHandlingObject;
         }
+
+        //회전 채널도 마찬가지 - 없으면 회전만 못 한다
+        if (_rotateEvent != null)
+        {
+            _rotateEvent._onEventRaised += RotateHandlingObject;
+        }
     }
     private void OnDisable()
     {
@@ -120,6 +131,11 @@ public class PlaceSystem : MonoBehaviour
         if (_deleteEvent != null)
         {
             _deleteEvent._onEventRaised -= DeleteHandlingObject;
+        }
+
+        if (_rotateEvent != null)
+        {
+            _rotateEvent._onEventRaised -= RotateHandlingObject;
         }
     }
 
@@ -230,9 +246,10 @@ public class PlaceSystem : MonoBehaviour
         _placedObjects.Remove(target);
         _workstationManagerSO.UnregisterWorkstation(target);
 
-        //취소했을 때 돌아갈 자리
+        //취소했을 때 돌아갈 자리와 각도
         _isMoving = true;
         _moveOriginPosition = target.transform.position;
+        _moveOriginRotation = target.GetRotation();
 
         target.UnPlace();
 
@@ -240,6 +257,7 @@ public class PlaceSystem : MonoBehaviour
             _okButton,
             _denyButton,
             _deleteButton,
+            _rotateButton,
             _camera,
             _takenAreaEvent,
             _gridEvent,
@@ -286,6 +304,7 @@ public class PlaceSystem : MonoBehaviour
             _okButton,
             _denyButton,
             _deleteButton,
+            _rotateButton,
             _camera,
             _takenAreaEvent,
             _gridEvent,
@@ -350,6 +369,22 @@ public class PlaceSystem : MonoBehaviour
         //아무일도 없다
     }
 
+    // rotate : 손에 든 오브젝트를 90도 돌린다
+    public void RotateHandlingObject()
+    {
+        //_rotateEvent로도 들어오는 경로라 들고 있는 게 없을 수 있다
+        if (selectedObject == null)
+        {
+            return;
+        }
+
+        selectedObject.Rotate();
+
+        //돌면 차지하는 칸이 달라진다.
+        //SetArea()의 BeforeClearArea()가 아직 "돌기 전" 발자국을 기억하고 있어서 그것부터 지우고 다시 칠한다.
+        SetArea();
+    }
+
     // delete : 이동중인(이미 배치돼 있던) 오브젝트를 월드/서버에서 완전히 지운다
     public void DeleteHandlingObject()
     {
@@ -409,6 +444,7 @@ public class PlaceSystem : MonoBehaviour
         PlaceableObject moved = selectedObject;
 
         moved.transform.position = _moveOriginPosition;
+        moved.SetRotation(_moveOriginRotation);
 
         TakeOffPlaceMode();
 
@@ -431,10 +467,15 @@ public class PlaceSystem : MonoBehaviour
         _okButton.SetActive(false);
         _denyButton.SetActive(false);
 
-        //삭제 버튼은 씬에 연결 안 돼 있을 수도 있다
+        //삭제/회전 버튼은 씬에 연결 안 돼 있을 수도 있다
         if (_deleteButton != null)
         {
             _deleteButton.SetActive(false);
+        }
+
+        if (_rotateButton != null)
+        {
+            _rotateButton.SetActive(false);
         }
 
         _isHandlingEvent.RaiseEvent(false);
@@ -593,6 +634,15 @@ public class PlaceSystem : MonoBehaviour
             );
         }
 
+        //회전 버튼도 마찬가지
+        if (_rotateButton == null)
+        {
+            Debug.LogWarning(
+                "[PlaceSystem] 회전 버튼이 연결되지 않았습니다. " +
+                "GamePlay 씬 UIPlaceObject의 UIPlaceableObject에 RotateObjectButton을 넣어주세요."
+            );
+        }
+
         //Unity의 == 는 "파괴된 오브젝트"도 null로 쳐주므로 죽은 참조까지 여기서 걸러진다
         if (_okButton == null || _denyButton == null || _camera == null)
         {
@@ -611,6 +661,7 @@ public class PlaceSystem : MonoBehaviour
         this._okButton = _placedObjectManager.GetOkButton();
         this._denyButton = _placedObjectManager.GetDenyButton();
         this._deleteButton = _placedObjectManager.GetDeleteButton();
+        this._rotateButton = _placedObjectManager.GetRotateButton();
         this._camera = _placedObjectManager.GetCamera();
     }
 

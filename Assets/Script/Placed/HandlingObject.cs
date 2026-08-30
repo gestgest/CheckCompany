@@ -9,6 +9,7 @@ public class HandlingObject : MonoBehaviour
     private GameObject _okButton;
     private GameObject _denyButton;
     private GameObject _deleteButton;
+    private GameObject _rotateButton;
     private Transform _cameraTransform;
 
     //이미 배치가 끝난 오브젝트를 이동중일 때만 삭제할 수 있다.
@@ -20,6 +21,7 @@ public class HandlingObject : MonoBehaviour
     private static readonly Vector3 OkButtonOffset = new Vector3(-1.0f, 0.0f, -3.0f);
     private static readonly Vector3 DenyButtonOffset = new Vector3(-3.0f, 0.0f, -1.0f);
     private static readonly Vector3 DeleteButtonOffset = new Vector3(-3.0f, 0.0f, -3.0f);
+    private static readonly Vector3 RotateButtonOffset = new Vector3(-1.0f, 0.0f, -1.0f);
 
     
     private VoidEventChannelSO _takenAreaEvent;
@@ -118,6 +120,7 @@ public class HandlingObject : MonoBehaviour
         GameObject okButton,
         GameObject denyButton,
         GameObject deleteButton,
+        GameObject rotateButton,
         GameObject camera,
         VoidEventChannelSO takenAreaEvent,
         Vector3TransformChannelSO snapCoordinateToGrid,
@@ -126,6 +129,7 @@ public class HandlingObject : MonoBehaviour
         this._okButton = okButton;
         this._denyButton = denyButton;
         this._deleteButton = deleteButton;
+        this._rotateButton = rotateButton;
         this._canDelete = canDelete;
 
         //camera null
@@ -150,6 +154,9 @@ public class HandlingObject : MonoBehaviour
         PlaceButton(_okButton, OkButtonOffset);
         PlaceButton(_denyButton, DenyButtonOffset);
 
+        //회전은 새로 놓을 때나 옮길 때나 똑같이 필요하다
+        PlaceButton(_rotateButton, RotateButtonOffset);
+
         //이동 모드가 아니면 삭제 버튼은 계속 숨겨둔다
         if (_canDelete)
         {
@@ -161,6 +168,7 @@ public class HandlingObject : MonoBehaviour
         SetButtonActive(_okButton, false);
         SetButtonActive(_denyButton, false);
         SetButtonActive(_deleteButton, false);
+        SetButtonActive(_rotateButton, false);
     }
 
     /// <summary>버튼을 켜고 오브젝트 옆(월드 오프셋 위치)으로 옮긴다.</summary>

@@ -11,6 +11,7 @@ public class PlacedObjectManager : ScriptableObject
     private GameObject _okButton;
     private GameObject _denyButton;
     private GameObject _deleteButton;
+    private GameObject _rotateButton;
     
 
     //UIPlaceableObject
@@ -19,6 +20,7 @@ public class PlacedObjectManager : ScriptableObject
     [SerializeField] private VoidEventChannelSO _okEvent;
     [SerializeField] private VoidEventChannelSO _denyEvent;
     [SerializeField] private VoidEventChannelSO _deleteEvent;
+    [SerializeField] private VoidEventChannelSO _rotateEvent;
     [SerializeField] private VoidEventChannelSO _onChangedEvent;
     
     [SerializeField] private SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
@@ -86,7 +88,11 @@ public class PlacedObjectManager : ScriptableObject
             Convert.ToSingle(server_pos["y"]),
             Convert.ToSingle(server_pos["z"])
         );
-        PlacedObjectData pod = new PlacedObjectData(id, property_id, pos);
+
+        //회전은 나중에 추가된 필드다. 그 전에 저장한 데이터에는 없으므로 없으면 0도로 본다.
+        int rotation = keyValues.ContainsKey("rotation") ? Convert.ToInt32(keyValues["rotation"]) : 0;
+
+        PlacedObjectData pod = new PlacedObjectData(id, property_id, pos, rotation);
 
         _placedObjects.Add(pod);
     }
@@ -185,16 +191,30 @@ public class PlacedObjectManager : ScriptableObject
         _deleteEvent.RaiseEvent();
     }
 
+    //RotateButton의 OnClick에 연결된다
+    public void RotateEvent()
+    {
+        if (_rotateEvent == null)
+        {
+            Debug.LogError("[PlacedObjectManager] 회전 이벤트 채널이 연결되지 않았습니다.", this);
+            return;
+        }
+
+        _rotateEvent.RaiseEvent();
+    }
+
     public void SetHandlingObjectProperties(
         GameObject camera,
         GameObject okButton,
         GameObject denyButton,
-        GameObject deleteButton)
+        GameObject deleteButton,
+        GameObject rotateButton)
     {
         this._myCamera = camera;
         this._okButton = okButton;
         this._denyButton = denyButton;
         this._deleteButton = deleteButton;
+        this._rotateButton = rotateButton;
     }
     
     public GameObject GetOkButton()
@@ -209,6 +229,11 @@ public class PlacedObjectManager : ScriptableObject
     public GameObject GetDeleteButton()
     {
         return this._deleteButton;
+    }
+
+    public GameObject GetRotateButton()
+    {
+        return this._rotateButton;
     }
 
     public GameObject GetCamera()

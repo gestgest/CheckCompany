@@ -1150,6 +1150,7 @@ MonoBehaviour:
   _onChangedEvent: {fileID: 11400000, guid: 08a1a7add6255fb478e97537dc3adfde, type: 2}
   _okEvent: {fileID: 11400000, guid: eb94e3168489db24dbd3e64a60e0f1cb, type: 2}
   _denyEvent: {fileID: 11400000, guid: eecae7648030d354fad1b4f7689f1fa0, type: 2}
+  _rotateEvent: {fileID: 11400000, guid: 3f7ac21d95e64b3a9c0d8e5f1a2b6c47, type: 2}
   _isHandlingEvent: {fileID: 11400000, guid: 841d2e50e36a44343a21420305260597, type: 2}
 --- !u!114 &2059868570
 MonoBehaviour:

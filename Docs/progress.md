@@ -53,11 +53,21 @@
     `PlacedObjectManager.RemovePlaceableObject()`가 `DeleteFirebaseEventChannelSO`로
     `placeableObjects.<id>`를 지운다
   - 판매(환불 금액 지급)는 미구현
-- [ ] **회전 없음**
-  - `EmployeeWorkAI.ArriveAtDesk()`가 `transform.rotation = _seat.rotation`으로 앉는 방향을 정하는데,
-    회전이 없으면 모든 책상이 같은 방향만 본다 (벽에 붙인 책상 방향이 안 맞음)
-  - `PlaceableObject.CalculateTileSize()`의 Size 계산(x축만 `*2 + 1`인 비대칭)까지 건드려야 해서
-    이동보다 무겁다. 이동 다음에 할 것
+- [x] **회전**
+  - 배치/이동 중에 ok/deny 옆에 회전 버튼(파란색)이 뜬다. 누를 때마다 90도씩 돈다.
+    `RotateEventChannelSO` -> `PlaceSystem.RotateHandlingObject()` -> `PlaceableObject.Rotate()`
+  - 회전은 `PlacedObjectData.rotation`(0/90/180/270)으로 서버에 같이 저장한다.
+    예전에 저장한 데이터에는 이 필드가 없으므로 없으면 0도로 읽는다
+  - **`CalculateTileSize()`를 고쳤다.** 기존 `(int)길이 * 2 + 1` / `(int)길이 + 1`은 x축만 두 배로
+    세는 비대칭이라, 돌리면 같은 책상이 3x5 <-> 9x2가 돼서 회전이 성립하지 않았다.
+    이제 콜라이더 길이에 스케일을 곱해 월드 길이를 구하고 `Grid.cellSize`로 나눠 올림한다
+    (`CellSwizzle`이 XZY라 `cellSize.y`가 월드 z축). 회의 책상은 3x5칸 -> 2x5칸이 된다
+  - **`GetStartPosition()`도 고쳤다.** 타일은 시작 모서리에서 +x, +z로만 칠하는데
+    돌리고 나면 `vertices[0]`이 더 이상 최소 모서리가 아니다. 네 꼭짓점 중 x, z 최소값을 쓴다
+    (0도면 예전과 같은 값이 나온다)
+  - 이동을 취소하면 위치뿐 아니라 각도도 되돌린다 (`_moveOriginRotation`)
+  - `EmployeeWorkAI.ArriveAtDesk()`의 `transform.rotation = _seat.rotation`은 그대로 둔다.
+    SeatPoint가 책상 자식이라 책상을 돌리면 앉는 방향도 같이 돌아간다
 - [ ] **배치 가능 가구가 1종뿐**
   - `Assets/Prefab/Object/Placed/`에 `Table_Conference` 하나. `_isWorkstation: 1`인 것도 그것뿐
 - [ ] **앉는 애니메이션 미구현**
@@ -127,3 +137,18 @@
 - (2026-08-29) 오브젝트 이동 로드맵 정리, (a) 롱프레스 감지 구현
 - (2026-08-30) (b)~(e) 이동 모드 구현. 드래그 중 자기 콜라이더에 레이가 맞던 문제 + 바닥 못 찾으면 원점으로 순간이동하던 문제 같이 수정
 - (2026-08-30) 롱프레스-PlaceSystem 사이 SO 이벤트 채널 제거, 직접 참조로 변경 (씬 배선 0개)
+- (2026-08-30) 오브젝트 90도 회전 구현. 회전을 서버에 저장하고, 그 김에 비대칭이던 칸 수 계산과
+  회전하면 어긋나던 시작 모서리 계산을 바로잡음
+
+---
+
+## 발견한 버그 (아직 안 고침)
+
+- **저장한 위치가 중심이 아니라 모서리다**
+  - `PlaceSystem.PlaceHandlingObject()`가 `SetPosition(GetStartPosition())`로 **모서리** 좌표를 저장하는데
+    (`PlaceSystem.cs:314`), 불러올 때 `PlaceableObject.SetPlacedObjectData()`는 그 값을
+    `transform.position`(**중심**)에 그대로 넣는다
+  - 그래서 껐다 켤 때마다 모든 오브젝트가 모서리 오프셋만큼(회의 책상 기준 x -1.5, z -4.1) 밀린다.
+    회전을 넣으면 밀리는 방향까지 각도에 따라 달라진다
+  - 고치려면 저장 값을 `transform.position`으로 바꾸면 되는데, 이미 저장돼 있는 데이터의
+    해석이 바뀌므로(기존 오브젝트가 한 번 더 움직인다) 별도로 판단할 것
