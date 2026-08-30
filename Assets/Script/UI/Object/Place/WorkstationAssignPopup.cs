@@ -151,8 +151,13 @@ public class WorkstationAssignPopup : MonoBehaviour
         List<Employee> employees = _employeeManagerSO.GetEmployees();
 
         //직원 데이터가 아직 안 왔을 수 있다
-        if (employees == null)
+        if (employees == null || employees.Count == 0)
         {
+            //목록이 비면 창만 덩그러니 뜨는데, 배선이 틀린 건지 진짜 직원이 없는 건지 구분이 안 된다
+            Debug.LogWarning(
+                "[WorkstationAssignPopup] 배정할 직원이 없습니다. " +
+                "고용한 직원이 0명이거나, 서버에서 직원 목록을 아직 못 받았습니다.",
+                this);
             return;
         }
 
