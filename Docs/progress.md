@@ -7,59 +7,42 @@
 
 ---
 
-## 🟣 진행 중 — 직원 AI가 부자연스럽다
+## 🟣 진행 중 — 직원 AI 다듬기
 
-`EmployeeWorkAI`의 `ClaimDeskRoutine()`(`:52`)과 `Update()`의 `TickStamina()`(`:107`)를
-주석 처리해 둔 상태다. **켜보니 부자연스러워서 껐다.** 원인은 연출이 아니라 상태 기계 모양이다.
-
-```
-Idle → MovingToDesk → Working (끝)
-```
-
-`Working`이 종착역이다. `ArriveAtDesk()`가 `isStopped = true`로 세우고 나면 다시는 안 움직인다.
-그래서 실제로는 이렇게 보인다.
-
-- 스폰되자마자 책상으로 직진한다 — **시간 개념이 없어서 새벽 3시에도 출근한다**
-- 도착하면 영원히 그 자리에 굳는다
-- 서 있기만 한다 (앉는 애니메이션 없음)
-- 체력이 0이 돼도 계속 근무한다
-- 퇴근도 휴식도 없다
-
-사람이 아니라 가구가 하나 더 놓인 걸로 보인다.
-
-### 재료는 이미 있다
-
-`Employee.workTime`(기본 9~18시)이 **데이터에 이미 있고** `EmployeeStatusPanel.cs:117`에서
-"근무시간 : 9 ~ 18"로 표시까지 한다. 그런데 **행동에는 아무 데서도 안 쓴다.**
-이제 `GameClock`으로 시간이 실제로 흐르니 이 값이 상태 기계를 돌리는 축이 될 수 있다.
+상태 기계는 시간 축을 얻었다. `EmployeeWorkAI`가 `Employee._WorkTime`을 보고 출근하고,
+퇴근하고, 체력이 바닥나면 쉰다. 남은 건 **연출**이다.
 
 ```
 OffDuty ──출근시간──> GoingToDesk ──도착──> Working
    ↑                                          │
    └──── 퇴근시간 ────────────────────────────┘
-              체력 낮음 ↓        ↑ 회복
+              체력 0 ↓         ↑ 회복(최대의 50%)
                      Resting ────┘
 ```
 
-핵심은 **직원이 이유가 있어서 움직인다**는 것. 출퇴근만 붙여도 절반은 해결된다.
-
-- [ ] **(1) `workTime` 기반 출퇴근** ← 여기부터
-  - `OffDuty` / `GoingToDesk` / `Working` / `Resting`로 상태를 늘리고 `Working`을 종착역에서 뺀다
-  - 퇴근하면 자리를 반납(`ReleaseSeat`)해야 다음 날 다시 배정이 돈다
-- [ ] **(2) 도착 직전 떨림**
+- [x] **(1) `workTime` 기반 출퇴근** (2026-09-01)
+  - `DecisionRoutine()`이 주기적으로 근무시간·체력을 보고 상태를 옮긴다.
+    시각은 `GameManager.instance._Date`, 판단은 `IsWorkTime()`(자정을 넘기는 근무도 처리)
+  - **퇴근할 때 `ReleaseSeat`을 부르지 않기로 했다.** 원래 계획과 다른 선택이다 —
+    자리는 이제 플레이어가 `WorkstationAssignPopup`으로 꽂는 것이라, 매일 밤 반납하면
+    지정해둔 배정이 그때마다 지워진다. 퇴근은 **자리를 비우는 것이지 자리를 잃는 게 아니다**.
+    배정이 진짜로 지워지는 곳은 퇴사(`OnDestroy`)와 UI 빼기 버튼(`ReleaseSeatOf`)뿐
+  - `IsSeatStale()`이 매 판단마다 배정을 다시 조회한다. 그래서 팝업에서 자리를 바꾸면
+    이벤트 배선 없이 다음 판단(≤0.9초)에 반영된다
+- [x] **(4) 우르르 몰림** (2026-09-01)
+  - `_decisionIntervalMin/Max` 사이의 랜덤 간격으로 판단한다. 시작 시점도 한 번 흩뜨린다
+- [ ] **(2) 도착 직전 떨림** ← 여기부터
   - `_arriveDistance = 0.15f`가 너무 빡빡하다. `_agent.stoppingDistance`를 안 쓰고
     `remainingDistance`로 직접 재고 있어서 도착 직전에 미세 보정이 계속 걸린다
   - `ArriveAtDesk()` 주석에도 떨림 얘기가 적혀 있는데, 멈추는 것으로 덮었을 뿐 원인은 그대로다
 - [ ] **(3) 회전 스냅**
   - `transform.rotation = _seat.rotation`이 한 프레임에 홱 돈다. Lerp 필요
-- [ ] **(4) 우르르 몰림**
-  - 직원이 여럿이면 전부 같은 순간에 같은 판단을 해서 떼로 움직인다. 개체별 랜덤 지연 필요
 - [ ] **(5) 먼 자리 배정**
   - `WorkstationManagerSO.RequestSeat`이 리스트 순서대로 첫 빈 자리를 준다.
     바로 옆 책상을 두고 반대편까지 걸어갈 수 있다. 가까운 자리 우선으로
 - [ ] **(6) 앉는 애니메이션**
   - `EmployeeWorkAI`의 `//TODO: Animator Controller...` 그대로
-  - **(1)~(5) 다음에.** 모양이 틀린 상태에서 애니메이션을 넣으면 동상에 옷을 입히는 꼴이다
+  - **(2)(3)(5) 다음에.** 모양이 틀린 상태에서 애니메이션을 넣으면 동상에 옷을 입히는 꼴이다
 
 ---
 
@@ -86,8 +69,10 @@ OffDuty ──출근시간──> GoingToDesk ──도착──> Working
   - 돈이 **나가는** 건 월 1회 월급뿐(`GameDate.Month` setter). 지금은 나가기만 한다
   - `Working`인 직원이 시간당 벌게 하고 업무속도(`weight_speed`)와 체력을 곱하면
     "좋은 직원을 뽑을 이유"와 "체력을 관리할 이유"가 같이 생긴다
-- [ ] **체력 0 처리**
-  - 지금은 0이 돼도 계속 일한다. 강제 퇴근/휴식이 있어야 방치에 손해가 생긴다
+- [x] **체력 0 처리** (2026-09-01)
+  - 체력이 0이면 근무시간이어도 자리에서 일어나 쉰다(`Resting`). 최대의 50%까지 회복하면 복귀
+  - **아직 손해가 아니다.** 쉬는 동안 못 버는 돈이 있어야 손해가 되는데 수입이 없다.
+    바로 위 "근무 → 수입"이 붙어야 의미가 생긴다
 - [ ] **지원자가 너무 빨리 쌓인다**
   - `AddDateMinute`이 `AddRandomApplicants(60 / value)`를 부르는데, 시계가 `value = 60`으로
     부르므로 `Random.Range(0, 1)` = 항상 0 → **공고당 게임 1시간에 1명씩 무조건 추가**된다
@@ -139,12 +124,13 @@ OffDuty ──출근시간──> GoingToDesk ──도착──> Working
 
 ## 🟠 P4 — 배치 시스템 남은 것
 
-- [ ] **책상을 옮길 때 앉아있는 직원 처리**
-  - `EmployeeWorkAI`는 `ArriveAtDesk()` 이후 경로를 재계산하지 않는다. `Working`이면 다시 걷지 않음
-  - 책상 프리팹에 `NavMeshObstacle`이 있어서 옮기면 NavMesh가 다시 파이고 직원이 허공에 서 있게 된다
-  - 이동 시작: `UnregisterWorkstation` + 직원을 `Idle`로 / 확정: `RegisterWorkstation` + 배정 재시작
-  - `EmployeeWorkAI`에 `OnSeatMoved()` 진입점을 하나 만드는 게 깔끔.
-    진행 중 항목 (1)에서 상태 기계를 손볼 때 같이 하는 게 낫다
+- [x] **책상을 옮길 때 앉아있는 직원 처리** (2026-09-01)
+  - 진입점(`OnSeatMoved()`)을 따로 만드는 대신 `IsSeatStale()`이 판단마다 확인한다.
+    출발할 때의 SeatPoint 위치(`_seatAnchor`)와 지금 위치를 비교해서, 책상이 움직였으면 다시 걸어간다
+  - 배선이 0개다. `PlaceSystem`이 이미 부르고 있는 `Unregister/RegisterWorkstation` 외에
+    새로 부를 곳이 없다 (같은 오브젝트끼리 이벤트 채널을 안 쓰는 것과 같은 이유)
+  - 남은 것 : 들고 있는 동안 직원이 커서를 따라 걷는다. 보기 싫으면 배치 중(`_isHandlingEvent`)에는
+    판단을 멈추게 하면 된다
 - [ ] **판매 / 환불**
   - 삭제는 되는데 환불 금액 지급이 없다
 
@@ -201,6 +187,11 @@ OffDuty ──출근시간──> GoingToDesk ──도착──> Working
   `SetArea()`가 매 프레임 `mainTilemap`을 지웠다 다시 칠하므로 같이 쓰면 잠긴 타일이 같이 지워진다
 - **날짜를 틱마다 서버에 쓰지 않는다.** 시간이 자동으로 흐르므로 매번 쓰면 초당 1회 쓰기가 된다.
   `AddDateMinute(value, toServer: false)`로 로컬에만 반영하고 `SaveDate()`로 몰아서 쓴다
+- **퇴근할 때 `ReleaseSeat`을 부르지 않는다.** 자리 배정은 플레이어가 UI로 꽂아두는 값이다.
+  퇴근마다 반납하면 그 지정이 매일 밤 지워진다. 배정을 지우는 건 퇴사와 UI 빼기 버튼뿐
+- **체력을 매 틱 서버에 쓰지 않는다.** `TickStamina()`는 `SetStamina(..., toServer: false)`로
+  로컬에만 반영하고, 상태가 바뀌는 순간에만 `SaveStamina()`로 남긴다.
+  날짜를 `SaveDate()`로 몰아 쓰는 것과 같은 이유다 (여기는 직원 수만큼 곱해진다)
 - **서버 채널은 `RaiseEvent()`로 부른다.** `_onSendEventRaised(...)`처럼 델리게이트를 직접 부르면
   구독자가 없는 로컬 테스트에서 NullReferenceException이 난다 (`RaiseEvent`는 `?.Invoke`)
 - **같은 오브젝트에 붙은 것끼리는 SO 이벤트 채널을 쓰지 않는다.**
@@ -236,6 +227,10 @@ OffDuty ──출근시간──> GoingToDesk ──도착──> Working
 - (2026-08-31) `GameClock` 추가. 시간이 스스로 흐른다.
   날짜 서버 쓰기를 틱마다에서 게임 하루에 한 번(+ 일시정지/종료 시점)으로 묶음
 - (2026-08-31) `GameDate.SetDateToServer`가 델리게이트를 직접 불러 로컬 테스트에서 NRE가 나던 것 수정
+- (2026-09-01) `EmployeeWorkAI`에 `workTime` 기반 출퇴근 상태 기계.
+  `Idle/MovingToDesk/Working`(종착역) → `OffDuty/GoingToDesk/Working/Resting`.
+  막아뒀던 `TickStamina()`와 이동 루틴을 다시 켜고, 체력 서버 쓰기는 상태 전환 시점으로 몰았다
+  (1점 바뀔 때마다 쓰면 직원 수만큼 초당 쓰기가 된다)
 
 ---
 
