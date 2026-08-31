@@ -32,11 +32,14 @@ OffDuty ──출근시간──> GoingToDesk ──도착──> Working
     이벤트 배선 없이 다음 판단(≤0.9초)에 반영된다
 - [x] **(4) 우르르 몰림** (2026-09-01)
   - `_decisionIntervalMin/Max` 사이의 랜덤 간격으로 판단한다. 시작 시점도 한 번 흩뜨린다
-- [ ] **(2) 도착 직전 떨림** ← 여기부터
-  - `_arriveDistance = 0.15f`가 너무 빡빡하다. `_agent.stoppingDistance`를 안 쓰고
-    `remainingDistance`로 직접 재고 있어서 도착 직전에 미세 보정이 계속 걸린다
-  - `ArriveAtDesk()` 주석에도 떨림 얘기가 적혀 있는데, 멈추는 것으로 덮었을 뿐 원인은 그대로다
-- [ ] **(3) 회전 스냅**
+- [x] **(2) 도착 직전 떨림** (2026-09-01)
+  - `_arriveDistance`를 0.15f → 0.3f로 완화하고, `Awake()`에서 `_agent.stoppingDistance`에
+    같은 값을 넣었다. `remainingDistance`만 보고 판정하면 agent는 전속력으로 오다가 문턱을
+    넘는 순간 급정지 + 주변 회피(obstacle avoidance) 보정이 겹쳐 떨렸는데, `stoppingDistance`를
+    맞춰주면 그 반경부터 agent 스스로(`autoBraking`) 미리 감속해서 문턱을 넘을 땐 이미 거의 멈춰 있다
+  - 프리팹(`HumanMale_Character_FREE.prefab`)에 `_arriveDistance: 0.15`로 박혀 있던 값도
+    0.3으로 같이 맞췄다 — 스크립트 기본값만 바꾸면 이미 저장된 오버라이드가 이긴다
+- [ ] **(3) 회전 스냅** ← 여기부터
   - `transform.rotation = _seat.rotation`이 한 프레임에 홱 돈다. Lerp 필요
 - [ ] **(5) 먼 자리 배정**
   - `WorkstationManagerSO.RequestSeat`이 리스트 순서대로 첫 빈 자리를 준다.
@@ -275,6 +278,10 @@ OffDuty ──출근시간──> GoingToDesk ──도착──> Working
   `EmployeePanel`이 하드코딩해 넘기던 `1`을 실제 값으로 교체
 - (2026-09-01) 상단 HUD에 돈 아이콘 + 직원 수(`n/m`) 추가.
   기존 아이콘 팩에서 골라 새 이미지 반입 없이 처리. 씬 변경은 Unity 배치 모드로 직접 로드해 검증
+- (2026-09-01) 도착 직전 떨림 수정. `_arriveDistance`를 0.3으로 완화하고
+  `_agent.stoppingDistance`에 같이 넣어 agent가 스스로 미리 감속하게 함.
+  프리팹에 박혀 있던 구버전 값(0.15)도 같이 갱신. (이번엔 Unity 에디터가 없어 코드 리뷰로만 검증 —
+  이전 HUD 작업과 달리 배치 모드 실행 확인은 못 했다)
 
 ---
 

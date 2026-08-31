@@ -30,7 +30,11 @@ public class EmployeeWorkAI : MonoBehaviour
 
     [SerializeField] private WorkstationManagerSO _workstationManagerSO;
     [SerializeField] private EmployeeManagerSO _employeeManagerSO;
-    [SerializeField] private float _arriveDistance = 0.15f;
+
+    //자리 도착 판정 반경. NavMeshAgent.stoppingDistance에도 그대로 넣어서(Awake) 이 반경 안에서부터
+    //agent 스스로 감속하게 만든다. remainingDistance만으로 판정하면 agent는 끝까지 전속력으로 오다가
+    //문턱을 넘는 순간 급정지 + 주변 회피(obstacle avoidance) 보정이 겹쳐 도착 직전에 떨린다.
+    [SerializeField] private float _arriveDistance = 0.3f;
     [SerializeField] private float _seatNavMeshSampleRadius = 2.0f; //SeatPoint 주변에서 NavMesh를 찾을 반경
 
     [Header("Decision")]
@@ -79,6 +83,10 @@ public class EmployeeWorkAI : MonoBehaviour
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
+
+        //agent 자신의 감속 반경을 도착 판정 반경과 맞춘다. autoBraking이 이 값부터 미리 속도를 줄이므로
+        //remainingDistance가 문턱을 넘을 때는 이미 거의 멈춰 있는 상태다.
+        _agent.stoppingDistance = _arriveDistance;
     }
 
     private void Start()
