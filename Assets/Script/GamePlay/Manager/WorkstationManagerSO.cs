@@ -35,6 +35,9 @@ public class WorkstationManagerSO : ScriptableObject
         _seatOwners = new Dictionary<int, int>();
     }
 
+    /// <summary>지금까지 배치된 책상 수. HUD의 직원 수(n/m)에서 m으로 쓰인다.</summary>
+    public int WorkstationCount => _workstations.Count;
+
     /// <summary>배치가 확정된 오브젝트를 책상 풀에 등록한다. IsWorkstation이 아니면 무시.</summary>
     public void RegisterWorkstation(PlaceableObject workstation)
     {

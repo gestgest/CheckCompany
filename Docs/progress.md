@@ -126,8 +126,18 @@ OffDuty ──출근시간──> GoingToDesk ──도착──> Working
   - `GamePlay` 씬 `PO_Element` 12칸 중 (9)(10)(11)은 아직 회의 책상을 가리킨다
 - [ ] **직원 머리 위 표시**
   - 이름 / 체력 바가 없어서 화면상 저 사람이 누구인지, 뭘 하는지 알 방법이 없다
-- [ ] **상단 HUD**
-  - 재화가 아이콘 없는 숫자 하나뿐이다. 돈 아이콘 + 직원 수(`n/m`) 정도는 있어야 HUD로 읽힌다
+- [x] **상단 HUD** (2026-09-01)
+  - 돈 텍스트 왼쪽에 아이콘(`112-01.png`, 지폐 모양)을 붙이고, 그 아래 줄에 직원 아이콘(`88-01.png`,
+    서류가방)과 `n/m` 텍스트를 새로 놓았다. 둘 다 프로젝트에 이미 들어 있던 범용 아이콘 팩
+    (`Assets/Resources/Img/ICON/`)에서 골랐다 — 새 이미지 반입 없음
+  - `n` = 고용된 직원 수(`EmployeeManagerSO.GetEmployees().Count`), `m` = 놓인 책상 수
+    (`WorkstationManagerSO.WorkstationCount`, 신규). 최대 인원 개념이 없어서 "직원 수 / 자리 수"로
+    정의했다 — 자리보다 사람이 많아지면 자연히 티가 난다
+  - `n`은 `_isChangedEmployeePanelEventChannelSO`(고용/해고 시 이미 울리던 채널)를 `UIManager`가
+    직접 구독해 즉시 갱신한다. `m`은 배치/삭제를 알려주는 채널이 없어서 `SetDateUI()`가 도는
+    주기(게임 시계 틱, ≤1초)에 묻어간다 — `IsSeatStale()`처럼 즉시 반영 대신 짧은 지연을 택함
+  - 씬 편집은 Unity 배치 모드(`-executeMethod`)로 로드해 실제로 검증했다: 필드 4개 전부 연결,
+    두 아이콘 스프라이트 로드, `TimeButton`(y 870~970)과 겹치지 않는 좌표(새 줄 y 810~860) 확인
 
 ---
 
@@ -263,6 +273,8 @@ OffDuty ──출근시간──> GoingToDesk ──도착──> Working
   재화 서버 쓰기는 날짜와 같은 주기(`GameClock.Save()`)로 묶었다.
   데이터가 없던 업무속도(`Employee.WorkSpeed`)를 실제 스탯으로 만들고
   `EmployeePanel`이 하드코딩해 넘기던 `1`을 실제 값으로 교체
+- (2026-09-01) 상단 HUD에 돈 아이콘 + 직원 수(`n/m`) 추가.
+  기존 아이콘 팩에서 골라 새 이미지 반입 없이 처리. 씬 변경은 Unity 배치 모드로 직접 로드해 검증
 
 ---
 
