@@ -15,6 +15,15 @@ public class EmployeeManagerSO : ScriptableObject
     [SerializeField] private RecruitmentManagerSO _recruitmentManager;
     [SerializeField] private EmployeeAssetsSO _employeeAssetsSO;
 
+    [Header("수입")]
+    //근무중인 직원 한 명이 게임 1시간 동안 버는 기본 금액. 업무속도 100 / 체력 최대일 때의 값이다.
+    //월급 100만원짜리 직원이 하루 9시간 × 30일 = 270시간 일하므로 손익분기점은 시간당 약 3,700원.
+    //5,000원이면 체력이 넉넉할 때 흑자, 체력이 바닥나 쉬는 시간이 길어지면 적자로 기운다.
+    [SerializeField] private float _incomePerWorkHour = 5000f;
+
+    //정산하고 남은 1원 미만. 게임 1분씩 들어와도 버려지지 않도록 다음 정산으로 넘긴다.
+    private float _incomeRemainder;
+
     [Space]
 
     [Header("Broadingcast on Events")]
@@ -42,6 +51,7 @@ public class EmployeeManagerSO : ScriptableObject
     public void Init()
     {
         employees = new List<Employee>();
+        _incomeRemainder = 0f;
     }
 
 
@@ -115,6 +125,51 @@ public class EmployeeManagerSO : ScriptableObject
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// 흘러간 게임 시간만큼 근무중인 직원들이 번 돈을 합산해 돌려준다.
+    ///
+    ///   시간당 수입 = _incomePerWorkHour × (업무속도 / 100) × (체력 / 최대체력)
+    ///
+    /// 월급(PayEmployees)이 나가기만 하던 흐름에 들어오는 쪽을 붙이는 자리다.
+    /// 체력이 0이면 EmployeeWorkAI가 자리에서 일으켜 세우므로(Resting) IsWorking이 꺼지고 수입도 끊긴다.
+    /// - 쉬는 동안 못 버는 돈이 곧 체력을 관리할 이유가 된다.
+    /// </summary>
+    /// <param name="gameMinutes">이번 틱에 흐른 게임 시간(분)</param>
+    /// <returns>이번 틱에 번 돈. 1원 미만은 다음 틱으로 넘긴다</returns>
+    public long CollectIncome(int gameMinutes)
+    {
+        if (gameMinutes <= 0)
+        {
+            return 0;
+        }
+
+        float hours = gameMinutes / 60f;
+
+        for (int i = 0; i < employees.Count; i++)
+        {
+            Employee employee = employees[i];
+
+            if (!employee.IsWorking)
+            {
+                continue;
+            }
+
+            float speedRatio = employee.WorkSpeed / (float)Employee.DEFAULT_WORK_SPEED;
+
+            //max_stamina가 0인 데이터가 들어와도 0으로 나누지 않도록 막는다
+            float staminaRatio = employee.Max_Stamina > 0
+                ? employee.Stamina / (float)employee.Max_Stamina
+                : 0f;
+
+            _incomeRemainder += _incomePerWorkHour * speedRatio * staminaRatio * hours;
+        }
+
+        long earned = (long)_incomeRemainder;
+        _incomeRemainder -= earned;
+
+        return earned;
     }
 
     #region PROPERTY

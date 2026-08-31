@@ -85,7 +85,7 @@ public class EmployeePanel : Panel
         EmployeeElement employeeContent = employeeObject.GetComponent<EmployeeElement>();
         Button button = employeeObject.GetComponent<Button>();
 
-        employeeContent.SetEmployee(e._EmployeeSO.GetIcon(), e.Name, e.CareerPeriod, 1, e.Salary, e.ID);
+        employeeContent.SetEmployee(e._EmployeeSO.GetIcon(), e.Name, e.CareerPeriod, e.WorkSpeed, e.Salary, e.ID);
         employeeElementObjects.Add(employeeObject);
         employeeObject.transform.SetParent(element_parent.transform);
 

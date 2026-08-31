@@ -17,6 +17,12 @@ public class RecruitmentManagerSO : ScriptableObject
     [Header("Manager")]
     [SerializeField] private EmployeeManagerSO _employeeManagerSO;
 
+    [Header("지원자 능력치")]
+    //지원자의 업무속도 범위(100이 표준). 월급이 100만원 고정이라, 지금은 이 값이
+    //"이 지원자를 뽑을 것인가"를 가르는 유일한 기준이다.
+    [SerializeField] private int _applicantWorkSpeedMin = 80;
+    [SerializeField] private int _applicantWorkSpeedMax = 120;
+
     [Header("Listening to Events")]
     [SerializeField] private BoolEventChannelSO _isChangedEvent; //to recruitPanel
     
@@ -162,6 +168,7 @@ public class RecruitmentManagerSO : ScriptableObject
         employee.Mental = 100;
         employee.CareerPeriod = 12; //1 year
         employee.Salary = 1000000; //월 100만원
+        employee.WorkSpeed = Random.Range(_applicantWorkSpeedMin, _applicantWorkSpeedMax + 1);
         employee._EmployeeSO = employeeSO;
         //(int)(recruitment.GetEmployeeSO().GetEmployeeType()
 

@@ -23,6 +23,12 @@ public class Employee
     private int max_mental = 100; //최대 멘탈
     private int careerPeriod;
     private int salary; //월급
+    private int workSpeed = DEFAULT_WORK_SPEED; //업무속도 가중치. 100이 표준
+
+    //지금 자리에서 근무중인지. EmployeeWorkAI가 상태를 옮길 때마다 갱신한다.
+    //서버에 저장하지 않는다 - 접속할 때마다 근무시간과 체력을 보고 다시 결정되는 값이라 저장할 이유가 없다.
+    private bool isWorking = false;
+
     private WorkTime workTime;
     private EmployeeRank rank;
 
@@ -44,6 +50,7 @@ public class Employee
 
     public const int MAX_MISSION_SIZE = 5;
     public const int MAX_TODO_MISSION_SIZE = 7; //소미션
+    public const int DEFAULT_WORK_SPEED = 100; //업무속도의 표준값. 이 값이 1.0배속이다
 
 
     #region PROPERTY
@@ -157,6 +164,23 @@ public class Employee
     {
         get { return salary; }
         set { salary = value; }
+    }
+
+    /// <summary>
+    /// 업무속도 가중치. DEFAULT_WORK_SPEED(100)가 1.0배속이고, 120이면 같은 시간에 1.2배를 번다.
+    /// 월급은 채용할 때 고정되므로, 이 값이 높은 지원자를 골라야 하는 이유가 여기서 생긴다.
+    /// </summary>
+    public int WorkSpeed
+    {
+        get { return workSpeed; }
+        set { workSpeed = Mathf.Max(0, value); }
+    }
+
+    /// <summary>지금 자리에서 근무중인지. EmployeeWorkAI만 쓴다(수입 정산 대상을 고르는 기준).</summary>
+    public bool IsWorking
+    {
+        get { return isWorking; }
+        set { isWorking = value; }
     }
 
     public EmployeeRank _Rank
@@ -289,6 +313,7 @@ public class Employee
             { "careerPeriod", CareerPeriod },
             { "rank", _Rank },
             { "salary", Salary },
+            { "workSpeed", WorkSpeed },
             { "employeeType", (int)_EmployeeSO.GetEmployeeType() }, //고용하면 채용공고가 없어지기 때문에 넣어야함
             { "worktime", _worktime },
             { "isEmployee", isEmployee },
@@ -318,6 +343,8 @@ public class Employee
         Name = ConvertJSON.SafeGet<string>(keyValues, "name", "지철");
         _Rank = ConvertJSON.SafeGet<EmployeeRank>(keyValues, "rank", EmployeeRank.INTERN);
         Salary = ConvertJSON.SafeGet<int>(keyValues, "salary", 0);
+        //workSpeed가 생기기 전에 저장된 직원은 이 키가 없다. 표준값으로 읽어야 갑자기 0배속이 되지 않는다.
+        WorkSpeed = ConvertJSON.SafeGet<int>(keyValues, "workSpeed", DEFAULT_WORK_SPEED);
         IsEmployee = ConvertJSON.SafeGet<bool>(keyValues, "isEmployee", true);
 
         Dictionary<string, object> worktime = ConvertJSON.SafeGet<Dictionary<string, object>>(keyValues, "worktime", null);

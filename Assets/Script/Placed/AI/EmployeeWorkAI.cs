@@ -91,6 +91,13 @@ public class EmployeeWorkAI : MonoBehaviour
     {
         StopAllCoroutines();
 
+        //오브젝트만 사라지고 Employee 데이터는 남는 경우(씬 전환 등)에 근무중으로 굳어 있으면
+        //아무도 앉아 있지 않은데 계속 돈이 들어온다
+        if (_employee != null)
+        {
+            _employee.IsWorking = false;
+        }
+
         //퇴사는 진짜로 자리를 비우는 것이다 (퇴근과 달리 배정까지 지운다)
         if (_seat != null)
         {
@@ -247,7 +254,7 @@ public class EmployeeWorkAI : MonoBehaviour
             return;
         }
 
-        _state = State.GoingToDesk;
+        SetState(State.GoingToDesk);
     }
 
     /// <summary>
@@ -319,7 +326,7 @@ public class EmployeeWorkAI : MonoBehaviour
 
     private void ArriveAtDesk()
     {
-        _state = State.Working;
+        SetState(State.Working);
 
         //도착 후에도 NavMeshAgent를 멈추지 않으면 계속 같은 목적지로 미세 보정을 시도해서
         //(특히 근처에 다른 직원이 있으면 서로 밀어내는 obstacle avoidance 때문에) 제자리에서 왔다갔다 떨리게 된다.
@@ -350,7 +357,7 @@ public class EmployeeWorkAI : MonoBehaviour
             return;
         }
 
-        _state = State.Resting;
+        SetState(State.Resting);
         ResumeAgent();
         SaveStamina();
 
@@ -364,7 +371,7 @@ public class EmployeeWorkAI : MonoBehaviour
             return;
         }
 
-        _state = State.OffDuty;
+        SetState(State.OffDuty);
         ResumeAgent();
         SaveStamina();
 
@@ -372,6 +379,20 @@ public class EmployeeWorkAI : MonoBehaviour
         //플레이어가 UI로 "이 자리에 이 직원"을 꽂아두는데, 퇴근할 때마다 ReleaseSeat을 부르면
         //그 배정이 매일 밤 지워지고 다음 날 아무나 앉게 된다. 퇴근은 자리를 비우는 것이지 자리를 잃는 게 아니다.
         //진짜로 배정을 지우는 건 퇴사(OnDestroy)와 UI의 빼기 버튼(ReleaseSeatOf)뿐이다.
+    }
+
+    /// <summary>
+    /// 상태를 옮기고, 수입 정산이 보는 IsWorking을 같이 맞춘다.
+    /// _state를 직접 대입하면 둘이 어긋나서 퇴근한 직원이 계속 돈을 벌거나 그 반대가 된다.
+    /// </summary>
+    private void SetState(State next)
+    {
+        _state = next;
+
+        if (_employee != null)
+        {
+            _employee.IsWorking = next == State.Working;
+        }
     }
 
     /// <summary>Agent를 세운다. NavMesh 밖이면 아무것도 하지 않는다(에러만 뱉는다).</summary>

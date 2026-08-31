@@ -127,6 +127,9 @@ public class GameClock : MonoBehaviour
         if (GameManager.instance != null)
         {
             GameManager.instance.SaveDate();
+
+            //수입이 틱마다 들어오므로 재화도 날짜와 같이 몰아서 쓴다 (틱마다 쓰면 초당 1회 쓰기)
+            GameManager.instance.SaveMoney();
         }
     }
 

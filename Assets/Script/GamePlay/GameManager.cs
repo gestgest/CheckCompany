@@ -260,7 +260,30 @@ public class GameManager : MonoBehaviour
 
         _gameDate.SetMinute(_gameDate.Minute + value, toServer);
         recruitmentControllerSO.AddRandomApplicants(60 / value);
+
+        //근무중인 직원이 번 돈. 시간이 흐르는 곳에 붙여야 빨리감기(TimeButton)와 자동 시계가 같은 양을 번다.
+        //체력을 실제 시간(Time.deltaTime)으로 깎는 EmployeeWorkAI와 달리 여기는 게임 시간 기준이다.
+        long earned = employeeControllerSO.CollectIncome(value);
+
+        if (earned > 0)
+        {
+            //toServer를 그대로 넘긴다 - GameClock은 false로 불러 로컬에만 쌓고 SaveMoney()로 몰아서 쓴다
+            SetMoney(money + earned, toServer);
+        }
+
         SetDateUI();
+    }
+
+    /// <summary>지금 재화를 서버에 쓴다. 수입이 틱마다 들어오므로 날짜와 같이 몰아서 쓴다.</summary>
+    public void SaveMoney()
+    {
+        //로그인 전(nickname이 없는 로컬 테스트)에는 쓸 곳이 없다
+        if (string.IsNullOrEmpty(nickname))
+        {
+            return;
+        }
+
+        _sendFirebaseEventChannelSO.RaiseEvent("GamePlayUser", nickname, "money", money);
     }
 
     /// <summary>지금 날짜를 서버에 쓴다. 틱마다 쓰지 않고 모았다가 부르는 용도.</summary>
