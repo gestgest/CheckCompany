@@ -16,7 +16,7 @@
 ```
 OffDuty ──출근시간──> GoingToDesk ──도착──> Working
    ↑                                          │
-   └──── 퇴근시간 ────────────────────────────┘
+   └─ GoingHome(출입구로 이동) ←── 퇴근시간 ──────┘
               체력 0 ↓         ↑ 회복(최대의 50%)
                      Resting ────┘
 ```
@@ -44,9 +44,57 @@ OffDuty ──출근시간──> GoingToDesk ──도착──> Working
 - [ ] **(5) 먼 자리 배정**
   - `WorkstationManagerSO.RequestSeat`이 리스트 순서대로 첫 빈 자리를 준다.
     바로 옆 책상을 두고 반대편까지 걸어갈 수 있다. 가까운 자리 우선으로
-- [ ] **(6) 앉는 애니메이션**
-  - `EmployeeWorkAI`의 `//TODO: Animator Controller...` 그대로
-  - **(2)(3)(5) 다음에.** 모양이 틀린 상태에서 애니메이션을 넣으면 동상에 옷을 입히는 꼴이다
+- [x] **(6) 근무/이동 대체 애니메이션** (2026-09-01)
+  - **진짜 앉기 모션은 여전히 없다** — 에셋팩(`Animations_Starter_Pack`)에 Movement/Combat/Gathering뿐이라
+    Sit 클립 자체가 없음. 대신 `IsWorking`/`IsMoving` bool 두 개를 `LowPolyHumanAnimator.controller`에
+    추가하고, `Working` 상태는 채굴 반복 동작(`MiningLoop`), `Moving` 상태는 `RunForward`를 0.6배속으로
+    돌려서 걷는 것처럼 대체했다. `Idle ↔ Working`, `Idle ↔ Moving` 전환뿐이라 두 상태가 겹칠 일은 없다
+    (agent가 멈춘 뒤에야 Working으로 들어간다)
+  - `EmployeeWorkAI.SetState()` 한 곳에서 두 bool을 같이 세팅한다 — `IsWorking`/이동 상태 판정과
+    같은 이유로, 여기 말고 다른 데서 애니메이터를 건드리면 조용히 어긋난다
+  - **다음:** 정식 Walk 클립으로 교체, 진짜 앉기(의자별 포즈) 붙이기, 방향 전환을 Lerp로((3)과 같이)
+- [x] **퇴근 이동(GoingHome)** (2026-09-01)
+  - `LeaveWork()`가 무조건 그 자리에서 `OffDuty`로 바뀌던 것을, `WorkstationManagerSO.GetExitPoint()`가
+    있으면 거기까지 걸어나간 뒤(`GoingHome`) 도착해서야 `OffDuty`로 바뀌게 확장. 출입구가 없거나
+    경로를 못 찾으면 예전처럼 그 자리에서 바로 처리(안전한 폴백)
+  - `CompanyExitPoint`(신규, `Assets/Script/Placed/CompanyExitPoint.cs`)를 씬에 놓고 `OnEnable`에서
+    `WorkstationManagerSO.RegisterExitPoint()`로 스스로 등록하는 방식 — 프리팹은 씬 오브젝트를
+    직접 참조 못 해서 `RegisterWorkstation`과 같은 패턴을 그대로 씀
+  - `WorkstationManagerSO.Init()`에서 일부러 `_exitPoint`를 안 지운다 — `CompanyExitPoint.OnEnable()`이
+    `GameManager.Start()`(Init을 부르는 곳)보다 먼저 도는 경우 Init이 등록을 바로 지워버리기 때문
+  - **다음(액션 필요): 씬에 `CompanyExitPoint`를 실제로 배치 안 했다.** 문 앞 등 NavMesh가 베이크된
+    위치에 빈 오브젝트로 하나 놓고 `_workstationManagerSO` 필드를 연결해야 실제로 동작한다.
+    안 놓으면 이전처럼 그 자리에서 바로 퇴근 처리되니 깨지진 않는다
+
+---
+
+## 🔵 기획 결정 필요
+
+구현 TODO가 아니라 **먼저 정해야 할 것들**. 코드를 훑다 보니 저자 스스로도 확정 못 지은
+채 남겨둔 지점들이 있어서 따로 뺐다.
+
+- [ ] **직원 이탈(퇴사) 조건**
+  - `PayEmployees()`는 월급을 못 주면 스태미나/멘탈만 깎을 뿐(`UNPAID_SALARY_PENALTY`),
+    그게 계속되거나 멘탈이 바닥나도 실제로 그만두는 로직이 없다.
+    지금 유일한 퇴사 경로는 플레이어가 `EmployeeElement`에서 수동으로 해고하는 것뿐
+  - 이게 없으면 "월급 안 줘도 그만"이라 P1의 수입/체력 밸런스가 압박으로 이어지지 않는다.
+    **P1 밸런스 항목들과 묶어서 볼 것**
+- [ ] **미션 시스템 설계**
+  - `Mission.cs`에 저자가 직접 남긴 주석: `//회복, 지능, 기술, 명상 이런식으로 해야하나`.
+    미션이 수입/직원 성장/스탯에 실제로 어떻게 연결되는지 아직 안 정해졌다
+- [ ] **근무시간(WorkTime) 플레이어 편집**
+  - 채용 시점에 고정되는 값으로 보이고(`Employee.cs:355`), 바꾸는 UI가 안 보인다.
+    직원별 출퇴근 시간 조정을 플레이 요소로 쓸지 결정 필요
+- [ ] **성장/승진 시스템**
+  - `Employee.CareerPeriod` 필드는 있는데, 시간이 지나면 실제로 `WorkSpeed`나 `Salary`에
+    영향을 주는 로직이 코드에 없다. 그냥 표시용 숫자인지 성장 시스템으로 키울지 결정 필요
+- [ ] **엔드게임 / 목표**
+  - `GameManager.Reputation`(개인 → 팀 프로젝트 → 동아리 → 스타트업 → …) enum이 정의만
+    돼 있고 아무 데서도 참조되지 않는다. "승리 조건"이 뭔지 아직 정해지지 않은 상태
+- [ ] **퇴근 후 행동**
+  - `GoingHome`(위)은 출입구까지 걸어나가 멈추는 이동만 구현한 것. 사용자가 원한다고 밝힌
+    "키보드 딸깍/토크/탕비실" 같은 목적 있는 유휴 행동은 기획 자체가 아직 없다.
+    `WanderRoutine`을 되살릴지, 새 상태(휴게실 등)로 대체할지부터 정할 것
 
 ---
 
@@ -102,6 +150,8 @@ OffDuty ──출근시간──> GoingToDesk ──도착──> Working
   - 손으로 누를 때는 티가 안 났는데 시간이 자동으로 흐르니 금방 눈에 띈다. 가중치 재조정 필요
 - [ ] **`WED요일`**
   - `Date.ToString()`(`:249`)이 `Week` enum을 그대로 이어붙인다. 한글 매핑 테이블 필요
+- [ ] **월급 밀려도 직원이 안 나간다** ← 기획 결정 먼저(위 🔵 참고)
+  - `PayEmployees()`가 스태미나/멘탈만 깎고 끝난다. 압박이 되려면 결국 퇴사로 이어져야 한다
 
 ---
 
@@ -129,6 +179,8 @@ OffDuty ──출근시간──> GoingToDesk ──도착──> Working
   - `GamePlay` 씬 `PO_Element` 12칸 중 (9)(10)(11)은 아직 회의 책상을 가리킨다
 - [ ] **직원 머리 위 표시**
   - 이름 / 체력 바가 없어서 화면상 저 사람이 누구인지, 뭘 하는지 알 방법이 없다
+- [ ] **사운드가 아예 없다**
+  - 발소리·UI SFX·알림음 등 오디오 관련 코드가 프로젝트 전체에 안 보인다. 필요 시점에 처음부터 설계
 - [x] **상단 HUD** (2026-09-01)
   - 돈 텍스트 왼쪽에 아이콘(`112-01.png`, 지폐 모양)을 붙이고, 그 아래 줄에 직원 아이콘(`88-01.png`,
     서류가방)과 `n/m` 텍스트를 새로 놓았다. 둘 다 프로젝트에 이미 들어 있던 범용 아이콘 팩
@@ -204,7 +256,10 @@ OffDuty ──출근시간──> GoingToDesk ──도착──> Working
 - [ ] **매직 스트링 상수화**
   - `"GamePlayUser"`, `"missions."`, `"employees."` 등 경로를 상수/헬퍼로 추출
 - [ ] **EditMode 테스트 추가**
-  - `Date` 계산, `Mission`/`Employee` JSON 직렬화 왕복, 이진탐색부터 커버
+  - `Date` 계산, `Mission`/`Employee` JSON 직렬화 왕복, 이진탐색부터 커버.
+    직원 stamina/mental/WorkTime 등이 저장→로드 왕복에서 그대로 돌아오는지도 여기서 같이 검증할 것
+- [ ] **`Mission.cs`의 안 쓰는 `using NUnit.Framework;`**
+  - `Assert` 등 실제로 안 쓰는데 테스트 프레임워크를 프로덕션 코드에 import해뒀다. 제거 대상
 
 ---
 
@@ -282,6 +337,14 @@ OffDuty ──출근시간──> GoingToDesk ──도착──> Working
   `_agent.stoppingDistance`에 같이 넣어 agent가 스스로 미리 감속하게 함.
   프리팹에 박혀 있던 구버전 값(0.15)도 같이 갱신. (이번엔 Unity 에디터가 없어 코드 리뷰로만 검증 —
   이전 HUD 작업과 달리 배치 모드 실행 확인은 못 했다)
+- (2026-09-01) `WorkstationAssignPopup`이 열려 있는 동안 직원 목록이 갱신돼도(서버 응답 지연,
+  고용/해고) 창이 그대로 "직원 없음"에 머물던 버그 수정. `EmployeePanel`/`UIManager`와 같은 패턴으로
+  `_isChangedEmployeePanelEventChannelSO`를 구독해 열려 있을 때만 다시 그리도록 함
+- (2026-09-01) 테스트모드(`_testMode`)에서 `J` 키로 채용 UI 없이 직원을 즉시 하나 추가하는 단축키 추가.
+  `SpawnTestSetup()`에 있던 직원 생성 코드를 `SpawnTestEmployee()`로 분리해 재사용.
+  씬의 `_testSpawnEmployee`도 꺼져 있던 걸 켜서 로컬/오프라인 테스트에서 시작부터 직원이 있게 함
+- (2026-09-01) `Working`/`Moving` 애니메이션 상태 추가(위 "🟣 진행 중" 참고) 및
+  퇴근 이동(`GoingHome`) + `CompanyExitPoint` 구현
 
 ---
 

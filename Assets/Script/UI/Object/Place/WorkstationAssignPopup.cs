@@ -34,6 +34,11 @@ public class WorkstationAssignPopup : MonoBehaviour
     //배치/이동이 시작되면(오브젝트를 손에 들면) 이 창이 떠 있을 이유가 없다
     [SerializeField] private BoolEventChannelSO _isHandlingEvent;
 
+    //직원 목록이 바뀌면(고용/퇴사/서버에서 뒤늦게 도착) 알려주는 이벤트.
+    //씬 진입 직후 서버 응답이 오기 전에 책상을 누르면 Rebuild()가 0명으로 스냅샷을 떠버리는데,
+    //그 이후 목록이 채워져도 이 이벤트를 안 들으면 창이 계속 "직원 없음"으로 남는다.
+    [SerializeField] private BoolEventChannelSO _isChangedEmployeePanelEventChannelSO;
+
     private readonly List<WorkstationEmployeeElement> _elements = new List<WorkstationEmployeeElement>();
 
     private PlaceableObject _workstation;
@@ -54,6 +59,11 @@ public class WorkstationAssignPopup : MonoBehaviour
         {
             _isHandlingEvent._onEventRaised += OnHandlingChanged;
         }
+
+        if (_isChangedEmployeePanelEventChannelSO != null)
+        {
+            _isChangedEmployeePanelEventChannelSO._onEventRaised += OnEmployeeListChanged;
+        }
     }
 
     private void OnDisable()
@@ -66,6 +76,11 @@ public class WorkstationAssignPopup : MonoBehaviour
         if (_isHandlingEvent != null)
         {
             _isHandlingEvent._onEventRaised -= OnHandlingChanged;
+        }
+
+        if (_isChangedEmployeePanelEventChannelSO != null)
+        {
+            _isChangedEmployeePanelEventChannelSO._onEventRaised -= OnEmployeeListChanged;
         }
     }
 
@@ -205,6 +220,21 @@ public class WorkstationAssignPopup : MonoBehaviour
         }
 
         _elements.Clear();
+    }
+
+    /// <summary>
+    /// 직원 목록이 바뀌었을 때(고용/퇴사/서버 응답 도착). 창이 열려 있는 동안 도착한
+    /// 서버 데이터도 반영되도록 다시 그린다. 닫혀 있으면(_workstation == null) 무시 -
+    /// 다음에 열릴 때 Rebuild()가 어차피 최신 상태로 그린다.
+    /// </summary>
+    private void OnEmployeeListChanged(bool isChanged)
+    {
+        if (_workstation == null)
+        {
+            return;
+        }
+
+        Rebuild();
     }
 
     /// <summary>오브젝트를 손에 들면(배치/이동 시작) 창을 닫는다.</summary>

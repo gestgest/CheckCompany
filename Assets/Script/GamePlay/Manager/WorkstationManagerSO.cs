@@ -28,11 +28,39 @@ public class WorkstationManagerSO : ScriptableObject
     //반대 방향도 알아야 해서 표로 바꿨다. 중복 배정 방지도 이 표가 겸한다.
     private Dictionary<int, int> _seatOwners = new Dictionary<int, int>();
 
+    //퇴근할 때 걸어나갈 회사 출입구. 프리팹(직원)은 씬 오브젝트를 직접 참조할 수 없어서,
+    //CompanyExitPoint가 씬에 배치된 채 스스로 등록해준다 (RegisterWorkstation과 같은 방식).
+    //
+    //일부러 Init()에서 안 지운다 - CompanyExitPoint는 OnEnable에서 등록하는데, 그게
+    //GameManager.Start()(Init을 부르는 곳)보다 먼저 도는 경우 Init이 등록을 바로 지워버린다.
+    //출입구는 세션 데이터가 아니라 씬 배치 그 자체라 리셋할 이유도 없다.
+    private Transform _exitPoint;
+
     public void Init()
     {
         _workstations = new List<PlaceableObject>();
         _employeeSeats = new Dictionary<int, PlaceableObject>();
         _seatOwners = new Dictionary<int, int>();
+    }
+
+    /// <summary>씬에 놓인 CompanyExitPoint가 자신을 등록한다. 씬에 하나만 있다고 가정.</summary>
+    public void RegisterExitPoint(Transform exitPoint)
+    {
+        _exitPoint = exitPoint;
+    }
+
+    public void UnregisterExitPoint(Transform exitPoint)
+    {
+        if (_exitPoint == exitPoint)
+        {
+            _exitPoint = null;
+        }
+    }
+
+    /// <summary>퇴근길에 걸어갈 출입구. 씬에 CompanyExitPoint가 없으면 null(그 자리에서 그냥 퇴근 처리).</summary>
+    public Transform GetExitPoint()
+    {
+        return _exitPoint;
     }
 
     /// <summary>지금까지 배치된 책상 수. HUD의 직원 수(n/m)에서 m으로 쓰인다.</summary>

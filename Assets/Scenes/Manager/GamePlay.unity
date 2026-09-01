@@ -17664,7 +17664,7 @@ MonoBehaviour:
   _testMode: 1
   _testWorkstationPrefab: {fileID: 1289936835854364, guid: ec71814fb4ff65441989d0088126ae12, type: 3}
   _testWorkstationPosition: {x: 0, y: 0, z: 0}
-  _testSpawnEmployee: 0
+  _testSpawnEmployee: 1
   _gameDate:
     year: 0
     month: 0
@@ -50200,6 +50200,7 @@ MonoBehaviour:
   _employeeManagerSO: {fileID: 11400000, guid: 6a695d970d94e0a4bb81e3e309e1fadf, type: 2}
   _tapEvent: {fileID: 11400000, guid: 1fa0c19d7f4a8f845aa82c80ef34218f, type: 2}
   _isHandlingEvent: {fileID: 11400000, guid: 841d2e50e36a44343a21420305260597, type: 2}
+  _isChangedEmployeePanelEventChannelSO: {fileID: 11400000, guid: 90c535dc7bf60c74aa646d37d2a0d9ac, type: 2}
 --- !u!1 &1752348372
 GameObject:
   m_ObjectHideFlags: 0

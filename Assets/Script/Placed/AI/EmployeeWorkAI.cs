@@ -8,9 +8,11 @@ using UnityEngine.AI;
 ///
 ///   OffDuty ──출근시간──> GoingToDesk ──도착──> Working
 ///      ↑                                          │
-///      └──── 퇴근시간 ────────────────────────────┘
+///      └─ GoingHome(출입구로 이동) ←── 퇴근시간 ─────┘
 ///                 체력 0 ↓        ↑ 회복
 ///                        Resting ─┘
+///
+/// GoingHome은 씬에 CompanyExitPoint가 있을 때만 거친다. 없으면 예전처럼 그 자리에서 바로 OffDuty.
 ///
 /// 예전에는 스폰되자마자 빈 책상으로 직진해서 도착하면 영원히 굳어 있었다(Working이 종착역).
 /// 그래서 새벽 3시에도 출근해 있고, 체력이 0이 돼도 계속 일했다.
@@ -25,7 +27,8 @@ public class EmployeeWorkAI : MonoBehaviour
         OffDuty,     //퇴근 상태. 배정받을 자리가 없어 대기하는 동안도 여기에 머문다
         GoingToDesk, //자리로 이동중
         Working,     //자리에서 근무중
-        Resting      //체력이 바닥나 쉬는 중 (근무시간이어도)
+        Resting,     //체력이 바닥나 쉬는 중 (근무시간이어도)
+        GoingHome    //퇴근길, 출입구(CompanyExitPoint)로 이동중
     }
 
     [SerializeField] private WorkstationManagerSO _workstationManagerSO;
@@ -61,7 +64,17 @@ public class EmployeeWorkAI : MonoBehaviour
     //휴식에서 복귀하는 기준. 최대 체력 대비 비율이라 max_stamina가 다른 직원에게도 같이 통한다.
     [SerializeField, Range(0f, 1f)] private float _restExitStaminaRatio = 0.5f;
 
+    //진짜 앉는 모션은 에셋팩에 없어서(Movement/Combat/Gathering뿐), 근무 중이라는 걸 보여주는
+    //대체 동작으로 채굴 반복 동작(MiningLoop)을 빌려 쓴다. Idle <-> Working은 Animator 쪽 bool 전환.
+    private static readonly int IsWorkingHash = Animator.StringToHash("IsWorking");
+
+    //출퇴근(자리로 걸어가는 GoingToDesk, 출입구로 걸어나가는 GoingHome)도 마찬가지로 전용 Walk 클립이
+    //없어서 RunForward를 느리게(m_Speed 0.6) 재생해 걷는 것처럼 대체한다. 실제로 agent가 움직이는
+    //상태는 지금은 이 둘뿐이라 상태만 보고 켜고 꺼도 충분하다 (WanderRoutine이 나중에 다시 켜지면 같이 고려).
+    private static readonly int IsMovingHash = Animator.StringToHash("IsMoving");
+
     private NavMeshAgent _agent;
+    private Animator _animator;
 
     private State _state = State.OffDuty;
     private Transform _seat;
@@ -83,6 +96,7 @@ public class EmployeeWorkAI : MonoBehaviour
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
+        _animator = GetComponent<Animator>();
 
         //agent 자신의 감속 반경을 도착 판정 반경과 맞춘다. autoBraking이 이 값부터 미리 속도를 줄이므로
         //remainingDistance가 문턱을 넘을 때는 이미 거의 멈춰 있는 상태다.
@@ -92,7 +106,8 @@ public class EmployeeWorkAI : MonoBehaviour
     private void Start()
     {
         StartCoroutine(DecisionRoutine());
-        StartCoroutine(WanderRoutine());
+        //StartCoroutine(WanderRoutine());
+        ////일단 돌아다니는게 근본없어서 뺌. 나중에 키보드 딸깍거리고 토크하고 탕비실가고 이런거 원함
     }
 
     private void OnDestroy()
@@ -191,6 +206,14 @@ public class EmployeeWorkAI : MonoBehaviour
                     LeaveWork();
                 }
                 else if (IsRecovered())
+                {
+                    GoToDesk();
+                }
+                break;
+
+            case State.GoingHome:
+                //출입구로 걸어나가는 도중에 다시 근무시간이 된 경우(근무시간이 짧게 붙어있는 등) 발길을 돌린다
+                if (onDuty && !IsExhausted())
                 {
                     GoToDesk();
                 }
@@ -307,25 +330,33 @@ public class EmployeeWorkAI : MonoBehaviour
 
     private bool MoveToSeat()
     {
+        return MoveTo(_seat.position, $"'{_seat.name}'", "SeatPoint 위치를 책상 옆 바닥(NavMesh가 베이크된 곳)으로 옮겨주세요.");
+    }
+
+    /// <summary>
+    /// destination 주변에서 실제로 걸어갈 수 있는 가장 가까운 지점을 찾아 그리로 출발시킨다.
+    /// SeatPoint/출입구 자체가 책상 모델 안쪽 등 NavMesh가 없는 지점일 수 있어서 스냅이 필요하다.
+    /// GoToDesk(자리)와 LeaveWork(출입구) 둘 다 이 함수를 쓴다.
+    /// </summary>
+    private bool MoveTo(Vector3 destination, string label, string hint = "")
+    {
         if (!ResumeAgent())
         {
             return false;
         }
 
-        //SeatPoint(또는 그 대체값인 오브젝트 자신의 위치)가 책상 모델 안쪽 등 NavMesh가 없는 지점일 수 있으므로,
-        //주변 반경 안에서 실제로 걸어갈 수 있는 가장 가까운 지점으로 스냅한다.
-        if (!NavMesh.SamplePosition(_seat.position, out NavMeshHit hit, _seatNavMeshSampleRadius, NavMesh.AllAreas))
+        if (!NavMesh.SamplePosition(destination, out NavMeshHit hit, _seatNavMeshSampleRadius, NavMesh.AllAreas))
         {
             Debug.LogWarning(
-                $"[EmployeeWorkAI] employee {_employeeId} : '{_seat.name}' 주변 {_seatNavMeshSampleRadius}m 안에 NavMesh가 없습니다. " +
-                "SeatPoint 위치를 책상 옆 바닥(NavMesh가 베이크된 곳)으로 옮겨주세요."
+                $"[EmployeeWorkAI] employee {_employeeId} : {label} 주변 {_seatNavMeshSampleRadius}m 안에 NavMesh가 없습니다. " +
+                hint
             );
             return false;
         }
 
         if (!_agent.SetDestination(hit.position))
         {
-            Debug.LogWarning($"[EmployeeWorkAI] employee {_employeeId} : '{_seat.name}'까지 가는 경로를 계산하지 못했습니다.");
+            Debug.LogWarning($"[EmployeeWorkAI] employee {_employeeId} : {label}까지 가는 경로를 계산하지 못했습니다.");
             return false;
         }
 
@@ -346,15 +377,35 @@ public class EmployeeWorkAI : MonoBehaviour
         SaveStamina();
 
         Debug.Log($"[EmployeeWorkAI] employee {_employeeId} : '{_seat.name}'에 도착해서 근무 시작 (Working)");
-
-        //TODO: Animator Controller에 근무 애니메이션 상태/파라미터가 추가되면 여기서 재생
     }
 
-    /// <summary>퇴근한다.</summary>
+    /// <summary>
+    /// 퇴근한다. 씬에 CompanyExitPoint가 등록돼 있으면 거기까지 걸어나간 뒤(GoingHome) 도착해서야
+    /// 진짜로 OffDuty가 되고, 없거나 경로를 못 찾으면 예전처럼 그 자리에서 바로 OffDuty로 처리한다.
+    /// </summary>
     private void LeaveWork()
     {
+        Transform exitPoint = _workstationManagerSO.GetExitPoint();
+
+        if (exitPoint != null && MoveTo(exitPoint.position, "출입구", "CompanyExitPoint 위치를 NavMesh가 베이크된 곳으로 옮겨주세요."))
+        {
+            SetState(State.GoingHome);
+            Debug.Log($"[EmployeeWorkAI] employee {_employeeId} : 퇴근길, 출입구로 이동중 (GoingHome)");
+            return;
+        }
+
         Debug.Log($"[EmployeeWorkAI] employee {_employeeId} : 퇴근 (OffDuty)");
         EnterOffDuty();
+    }
+
+    /// <summary>출입구에 도착해서 진짜로 퇴근 완료.</summary>
+    private void ArriveHome()
+    {
+        //ArriveAtDesk와 같은 이유 - 도착 후에도 계속 목적지로 미세 보정하면 제자리에서 떨린다.
+        StopAgent();
+        EnterOffDuty();
+
+        Debug.Log($"[EmployeeWorkAI] employee {_employeeId} : 출입구 도착, 퇴근 완료 (OffDuty)");
     }
 
     /// <summary>체력이 바닥나 자리에서 일어난다. 근무시간이어도 일을 멈춘다.</summary>
@@ -397,9 +448,17 @@ public class EmployeeWorkAI : MonoBehaviour
     {
         _state = next;
 
+        bool isWorking = next == State.Working;
+
         if (_employee != null)
         {
-            _employee.IsWorking = next == State.Working;
+            _employee.IsWorking = isWorking;
+        }
+
+        if (_animator != null)
+        {
+            _animator.SetBool(IsWorkingHash, isWorking);
+            _animator.SetBool(IsMovingHash, next == State.GoingToDesk || next == State.GoingHome);
         }
     }
 
@@ -479,7 +538,7 @@ public class EmployeeWorkAI : MonoBehaviour
     {
         TickStamina();
 
-        if (_state != State.GoingToDesk)
+        if (_state != State.GoingToDesk && _state != State.GoingHome)
         {
             return;
         }
@@ -489,7 +548,14 @@ public class EmployeeWorkAI : MonoBehaviour
             return;
         }
 
-        ArriveAtDesk();
+        if (_state == State.GoingToDesk)
+        {
+            ArriveAtDesk();
+        }
+        else
+        {
+            ArriveHome();
+        }
     }
 
     /// <summary>근무 중이면 체력을 소모하고, 그 외(이동/대기/휴식)에는 회복시킨다.</summary>

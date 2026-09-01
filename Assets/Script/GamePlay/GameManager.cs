@@ -60,12 +60,12 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        /*
-        if (Input.GetKeyDown(KeyCode.T))
+
+        //테스트모드에서 J를 누르면 채용 UI를 거치지 않고 직원을 바로 하나 추가한다.
+        if (_testMode && Input.GetKeyDown(KeyCode.J))
         {
-            Debug.Log("RecruitmentElement : T 버튼 누름");
+            SpawnTestEmployee();
         }
-        */
     }
 
     void Start()
@@ -376,20 +376,29 @@ public class GameManager : MonoBehaviour
 
         if (_testSpawnEmployee)
         {
-            Employee employee = new Employee(employeeControllerSO, true);
-            employee.ID = Employee_count;
-            Employee_count = employee.ID + 1;
-            employee.Name = "테스트 직원";
-            employee.Age = 20;
-            employee.Max_Stamina = 100;
-            employee.SetStamina(100, false);
-            employee.Max_Mental = 100;
-            employee.Mental = 100;
-            employee.CareerPeriod = 0;
-            employee.Salary = 1000000;
-            employee._EmployeeSO = recruitmentControllerSO.GetEmployeeSO(0);
-
-            employeeControllerSO.CreateEmployee(employee);
+            SpawnTestEmployee();
         }
+    }
+
+    /// <summary>
+    /// 테스트모드에서 채용 UI(지원자 뽑기)를 거치지 않고 직원을 바로 하나 만들어 고용시킨다.
+    /// SpawnTestSetup()의 시작 시 자동 생성과, Update()의 J 키 단축키가 이 함수를 함께 쓴다.
+    /// </summary>
+    private void SpawnTestEmployee()
+    {
+        Employee employee = new Employee(employeeControllerSO, true);
+        employee.ID = Employee_count;
+        Employee_count = employee.ID + 1;
+        employee.Name = "테스트 직원 " + employee.ID;
+        employee.Age = 20;
+        employee.Max_Stamina = 100;
+        employee.SetStamina(100, false);
+        employee.Max_Mental = 100;
+        employee.Mental = 100;
+        employee.CareerPeriod = 0;
+        employee.Salary = 1000000;
+        employee._EmployeeSO = recruitmentControllerSO.GetEmployeeSO(0);
+
+        employeeControllerSO.CreateEmployee(employee);
     }
 }
