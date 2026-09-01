@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+//놓여진 데이터
 [Serializable]
 public class PlacedObjectData
 {

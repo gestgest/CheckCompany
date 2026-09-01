@@ -19,13 +19,13 @@ public class ShopObjectElement : MonoBehaviour
     //보통 이 칸 자신에 붙어있다. 비어있으면 직접 찾는다.
     [SerializeField] private Button _button;
 
-    private ObjectSO _objectSO;
+    private PlaceableObjectSO _placeableObjectSO;
     private PlacedObjectManager _placedObjectManager;
 
     /// <summary>ShopObjectPanel이 칸을 만들면서 부른다.</summary>
-    public void Init(ObjectSO objectSO, PlacedObjectManager placedObjectManager)
+    public void Init(PlaceableObjectSO placeableObjectSO, PlacedObjectManager placedObjectManager)
     {
-        _objectSO = objectSO;
+        _placeableObjectSO = placeableObjectSO;
         _placedObjectManager = placedObjectManager;
 
         if (_button == null)
@@ -50,31 +50,31 @@ public class ShopObjectElement : MonoBehaviour
     {
         if (_icon != null)
         {
-            _icon.sprite = _objectSO.GetIcon();
+            _icon.sprite = _placeableObjectSO.GetIcon();
         }
 
         if (_nameText != null)
         {
-            _nameText.text = _objectSO.GetName();
+            _nameText.text = _placeableObjectSO.GetName();
         }
 
         if (_moneyText != null)
         {
-            _moneyText.text = _objectSO.GetMoney().ToString();
+            _moneyText.text = _placeableObjectSO.GetMoney().ToString();
         }
     }
 
     /// <summary>이 칸의 오브젝트를 손에 들려준다. 버튼 OnClick으로도 직접 연결할 수 있다.</summary>
     public void Place()
     {
-        GameObject prefab = _objectSO.GetPrefab();
+        GameObject prefab = _placeableObjectSO.GetPrefab();
 
         //프리팹을 안 넣은 SO는 눌러도 아무 일이 없어서 원인을 찾기 어렵다
         if (prefab == null)
         {
             Debug.LogError(
-                $"[ShopObjectElement] '{_objectSO.name}' : prefab이 비어 있어 배치할 수 없습니다.",
-                _objectSO);
+                $"[ShopObjectElement] '{_placeableObjectSO.name}' : prefab이 비어 있어 배치할 수 없습니다.",
+                _placeableObjectSO);
             return;
         }
 

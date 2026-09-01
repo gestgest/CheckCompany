@@ -4,9 +4,10 @@ using UnityEngine;
 
 //놓는 물체
 [CreateAssetMenu(fileName = "ObjectSO", menuName = "ScriptableObject/ObjectSO")]
-public class ObjectSO : ScriptableObject
+public class PlaceableObjectSO : ScriptableObject
 {
     [SerializeField] private string object_name;
+    [SerializeField] private int id;
     [SerializeField] private int width;
     [SerializeField] private int length;
     [SerializeField] private int money;
@@ -25,6 +26,11 @@ public class ObjectSO : ScriptableObject
     public string GetName()
     {
         return object_name;
+    }
+
+    public int GetID()
+    {
+        return id;
     }
 
     public ObjectType GetObjectType()

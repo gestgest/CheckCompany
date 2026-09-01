@@ -14,10 +14,10 @@ public class PlaceableObject : MonoBehaviour
     private Vector3[] vertices;
 
     
-    [SerializeField] private PlacedObjectData _placedObjectData;
-    // private int object_id;
-    // [SerializeField] private int property_id;
-
+    //PlacedObjectData 대체
+    private int id;
+    [SerializeField] private PlaceableObjectSO _placeableObjectSO;
+    
     [Header("Workstation")]
     [SerializeField] private bool _isWorkstation;
     [SerializeField] private Transform _seatPoint;
@@ -75,14 +75,11 @@ public class PlaceableObject : MonoBehaviour
         return _seatPoint != null ? _seatPoint : transform;
     }
 
-    public PlacedObjectData GetPlacedObjectData()
-    {
-        return _placedObjectData;
-    }
 
+    //init와 동일
     public void SetPlacedObjectData(PlacedObjectData placedObjectData)
     {
-        _placedObjectData = placedObjectData;
+        id = placedObjectData.GetID();
 
         transform.position = placedObjectData.GetPosition();
 
@@ -115,10 +112,7 @@ public class PlaceableObject : MonoBehaviour
         CalculateTileSize();
 
         //서버에 보낼 데이터도 같이 맞춰둔다
-        if (_placedObjectData != null)
-        {
-            _placedObjectData.SetRotation(degrees);
-        }
+        //todo 서버
     }
 
     /// <summary>0 이상 360 미만의 90도 배수로 정리한다. (-90 -> 270, 360 -> 0)</summary>
@@ -292,33 +286,17 @@ public class PlaceableObject : MonoBehaviour
         Dictionary<string, object> result = new Dictionary<string, object>
         {
             {"startPosition", pos},
-            {"property_id", _placedObjectData.GetPropertyID()},
+            {"property_id", _placeableObjectSO.GetID()},
             {"rotation", GetRotation()},
         };
         return result;
     }
     public int GetObjectID()
     {
-        if (_placedObjectData == null)
-        {
-            Debug.LogWarning($"[PlaceableObject] '{name}' : _placedObjectData가 없습니다 (SetPlacedObjectData 호출 필요).", this);
-            return -1;
-        }
-
-        return _placedObjectData.GetID();
+        return id;
     }
     public int GetPropertyID()
     {
-        if (_placedObjectData == null)
-        {
-            Debug.LogWarning($"[PlaceableObject] '{name}' : _placedObjectData가 없습니다 (SetPlacedObjectData 호출 필요).", this);
-            return -1;
-        }
-
-        return _placedObjectData.GetPropertyID();
-    }
-    public void SetPosition(Vector3 position)
-    {
-        _placedObjectData.SetPosition(position);
+        return _placeableObjectSO.GetID();
     }
 }

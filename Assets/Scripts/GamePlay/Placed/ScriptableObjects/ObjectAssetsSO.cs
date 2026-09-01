@@ -9,16 +9,16 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ObjectAssetsSO", menuName = "ScriptableObject/ObjectAssetsSO")]
 public class ObjectAssetsSO : ScriptableObject
 {
-    [SerializeField] private ObjectSO[] _objects;
+    [SerializeField] private PlaceableObjectSO[] _objects;
 
     /// <summary>그 카테고리의 오브젝트만 골라준다. 순서는 배열에 넣은 순서 그대로다.</summary>
-    public List<ObjectSO> GetObjects(ObjectType type)
+    public List<PlaceableObjectSO> GetObjects(ObjectType type)
     {
-        List<ObjectSO> result = new List<ObjectSO>();
+        List<PlaceableObjectSO> result = new List<PlaceableObjectSO>();
 
         for (int i = 0; i < _objects.Length; i++)
         {
-            ObjectSO obj = _objects[i];
+            PlaceableObjectSO obj = _objects[i];
 
             //배열에 빈 칸을 남겨둔 경우. 여기서 걸러야 쓰는 쪽에서 NRE가 안 난다.
             if (obj == null)

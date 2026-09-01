@@ -59,7 +59,7 @@ public class ShopObjectPanel : CategoryPanel
         }
 
         Transform parent = _elementParent != null ? _elementParent : transform;
-        List<ObjectSO> objects = _objectAssetsSO.GetObjects(_type);
+        List<PlaceableObjectSO> objects = _objectAssetsSO.GetObjects(_type);
 
         for (int i = 0; i < objects.Count; i++)
         {
@@ -77,7 +77,7 @@ public class ShopObjectPanel : CategoryPanel
         _isBuilt = true;
     }
 
-    private void CreateElement(ObjectSO objectSO, Transform parent)
+    private void CreateElement(PlaceableObjectSO placeableObjectSO, Transform parent)
     {
         GameObject obj = Instantiate(_elementPrefab, parent);
         ShopObjectElement element = obj.GetComponent<ShopObjectElement>();
@@ -91,7 +91,7 @@ public class ShopObjectPanel : CategoryPanel
             return;
         }
 
-        element.Init(objectSO, _placedObjectManager);
+        element.Init(placeableObjectSO, _placedObjectManager);
         _elements.Add(element);
     }
 }

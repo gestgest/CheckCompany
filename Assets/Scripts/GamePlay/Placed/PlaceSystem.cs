@@ -330,11 +330,6 @@ public class PlaceSystem : MonoBehaviour
         {
             selectedObject.Place();
 
-            //pos는 CheckTile용 셀 좌표(Vector3Int)다. 여기 그대로 넘기면 Vector3로 암묵 변환되면서
-            //"셀 인덱스"가 "월드 좌표"인 것처럼 저장된다 (예: 셀 (3,0,5) → 월드 (3,0,5), 실제로는 (6,0,10)이어야 함).
-            //데이터에는 반드시 월드 좌표를 넣어야 한다.
-            selectedObject.SetPosition(selectedObject.GetStartPosition());
-
             startPos = pos;
             BeforeClearArea();
 
@@ -349,7 +344,16 @@ public class PlaceSystem : MonoBehaviour
                 //이번에 새로 놓은 오브젝트는 서버에만 쓰고 로컬 목록에는 없었다.
                 //목록에 넣어야 나중에 데이터를 다시 받아왔을 때 상태가 어긋나지 않고,
                 //id를 기억해둬야 그때 AllCreatePlacedObjects()가 이걸 또 만들지 않는다.
-                _placedObjectManager.RegisterPlacedObjectData(selectedObject.GetPlacedObjectData());
+                //PlaceableObject는 더 이상 PlacedObjectData를 통째로 들고 있지 않으므로
+                //(위치/회전은 Transform이 진실) 지금 라이브 값으로 새로 조립한다.
+                _placedObjectManager.RegisterPlacedObjectData(
+                    new PlacedObjectData(
+                        selectedObject.GetObjectID(),
+                        selectedObject.GetPropertyID(),
+                        selectedObject.GetStartPosition(),
+                        selectedObject.GetRotation()
+                    )
+                );
                 _createdObjectIds.Add(selectedObject.GetObjectID());
             }
 
