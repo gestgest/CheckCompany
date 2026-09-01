@@ -159,9 +159,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _icon: {fileID: 1727758193201419119}
   _nameText: {fileID: 1714030624671173967}
-  _seatedMark: {fileID: 278555763670604486}
-  _otherSeatMark: {fileID: 0}
-  _button: {fileID: 0}
+  _statusMark: {fileID: 278555763670604486}
+  _statusMarkText: {fileID: 5287862714816461974}
+  _button: {fileID: 475808481225601823}
 --- !u!1 &278555763670604486
 GameObject:
   m_ObjectHideFlags: 0
@@ -174,7 +174,7 @@ GameObject:
   - component: {fileID: 5528107548586923196}
   - component: {fileID: 5287862714816461974}
   m_Layer: 0
-  m_Name: SeatedMark
+  m_Name: StatusMark
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -236,7 +236,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4279926810
   m_fontColor: {r: 0.1, g: 0.5, b: 0.1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -249,7 +249,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -448,7 +448,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4278190080
   m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -461,7 +461,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2

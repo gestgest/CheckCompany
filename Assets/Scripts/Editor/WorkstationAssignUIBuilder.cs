@@ -345,15 +345,16 @@ public static class WorkstationAssignUIBuilder
         tmp.color = Color.black;
         tmp.alignment = TextAlignmentOptions.MidlineLeft;
 
-        //"이 자리에 앉아있음" 표시
-        GameObject seatedMark = NewUIObject("SeatedMark", row.transform);
-        RectTransform markRect = seatedMark.GetComponent<RectTransform>();
+        //"이 자리에 앉아있음"/"다른 자리에 앉아있음" 표시. 두 조건이 겹칠 일이 없어서
+        //오브젝트 하나에 텍스트만 바꿔 쓴다 (WorkstationEmployeeElement.Init() 참고)
+        GameObject statusMark = NewUIObject("StatusMark", row.transform);
+        RectTransform markRect = statusMark.GetComponent<RectTransform>();
         markRect.anchorMin = new Vector2(1f, 0.5f);
         markRect.anchorMax = new Vector2(1f, 0.5f);
         markRect.pivot = new Vector2(1f, 0.5f);
         markRect.anchoredPosition = new Vector2(-20f, 0f);
         markRect.sizeDelta = new Vector2(120f, 60f);
-        TextMeshProUGUI markText = seatedMark.AddComponent<TextMeshProUGUI>();
+        TextMeshProUGUI markText = statusMark.AddComponent<TextMeshProUGUI>();
         markText.text = "근무중";
         markText.fontSize = 30f;
         markText.color = new Color(0.1f, 0.5f, 0.1f);
@@ -364,7 +365,8 @@ public static class WorkstationAssignUIBuilder
         SerializedObject so = new SerializedObject(element);
         SetRef(so, "_icon", icon.GetComponent<Image>());
         SetRef(so, "_nameText", tmp);
-        SetRef(so, "_seatedMark", seatedMark);
+        SetRef(so, "_statusMark", statusMark);
+        SetRef(so, "_statusMarkText", markText);
         so.ApplyModifiedProperties();
 
         GameObject prefab = PrefabUtility.SaveAsPrefabAsset(row, ElementPrefabPath);
