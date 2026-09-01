@@ -16,8 +16,7 @@ public class ShopObjectPanel : CategoryPanel
     [Header("Shop")]
     //이 탭이 맡을 카테고리
     [SerializeField] private ObjectType _type;
-
-    [FormerlySerializedAs("_objectAssetsSO")] [SerializeField] private PlaceableObjectAssetsSO placeableObjectAssetsSO;
+    [SerializeField] private PlaceableObjectAssetsSO _placeableObjectAssetsSO;
 
     [SerializeField] private GameObject _elementPrefab;
 
@@ -50,7 +49,7 @@ public class ShopObjectPanel : CategoryPanel
         }
 
         //하나라도 비어 있으면 칸이 안 생기는데, 화면에는 그냥 빈 탭으로만 보여서 원인을 찾기 어렵다
-        if (placeableObjectAssetsSO == null || _elementPrefab == null || _placedObjectManager == null)
+        if (_placeableObjectAssetsSO == null || _elementPrefab == null || _placedObjectManager == null)
         {
             Debug.LogError(
                 $"[ShopObjectPanel] '{name}' : _objectAssetsSO / _elementPrefab / _placedObjectManager를 " +
@@ -60,7 +59,7 @@ public class ShopObjectPanel : CategoryPanel
         }
 
         Transform parent = _elementParent != null ? _elementParent : transform;
-        List<PlaceableObjectSO> objects = placeableObjectAssetsSO.GetObjects(_type);
+        List<PlaceableObjectSO> objects = _placeableObjectAssetsSO.GetObjects(_type);
 
         for (int i = 0; i < objects.Count; i++)
         {

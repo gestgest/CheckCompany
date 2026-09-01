@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CategoryPanel : Panel
 {
-    public CategoryElement categoryElement;
+    private CategoryElement categoryElement; //왼쪽 toggle 버튼 => 
     public override void OnPanel()
     {
         base.OnPanel();
@@ -13,5 +13,10 @@ public class CategoryPanel : Panel
     {
         base.OffPanel();
         categoryElement.IsSelected = false;
+    }
+
+    public void SetCategoryElement(CategoryElement categoryElement)
+    {
+        this.categoryElement = categoryElement;
     }
 }

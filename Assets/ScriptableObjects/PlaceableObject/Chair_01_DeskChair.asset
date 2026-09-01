@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 672bf21884217ce489a114bb830b2482, type: 3}
-  m_Name: Chair_01_Office
+  m_Name: Chair_01_DeskChair
   m_EditorClassIdentifier: 
-  object_name: Chair
+  object_name: DeskChair
   id: 101
   width: 1
   length: 1
   money: 0
   type: 2
-  icon: {fileID: 21300000, guid: f6c805ea7ba12df458de85fe1b4a7208, type: 3}
+  icon: {fileID: 21300000, guid: 217a18d555d5326479dac8138277a7a3, type: 3}
   prefab: {fileID: 2055982069299100, guid: 9f16628a1d1834042d9a7ff4ddad3cbc, type: 3}

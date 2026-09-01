@@ -18,13 +18,14 @@ public class ShopPanel : Panel
         }
     }
 
+    //왼쪽 버튼 생성
     public void CreateCategoryElement(Panel panel)
     {
         GameObject obj = Instantiate(_categoryElementPrefab, parent);
         CategoryElement tmp = obj.GetComponent<CategoryElement>();
 
-       CategoryPanel categoryPanel = panel as CategoryPanel;
-       categoryPanel.categoryElement = tmp;
+        CategoryPanel categoryPanel = panel as CategoryPanel;
+        categoryPanel.SetCategoryElement(tmp);
         tmp.Init(panel.GetSprite());
 
         _categoryElements.Add(tmp);

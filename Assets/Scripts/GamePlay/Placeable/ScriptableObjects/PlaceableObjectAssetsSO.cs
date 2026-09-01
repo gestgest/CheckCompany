@@ -1,141 +1,201 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 상점에서 파는 오브젝트 전부. 카테고리별로 배열을 나눠 갖지 않고 여기 한 곳에만 모아둔다.
-/// 탭이 늘어나도 채워 넣을 곳은 여전히 이 배열 하나뿐이고,
-/// 카테고리는 각 PlaceableObjectSO가 들고 있는 ObjectType으로 갈린다.
+/// 상점에서 파는 오브젝트 전부. 타입마다 그룹을 따로 두고, 그 안에서 id % 100으로 바로 인덱싱한다.
 ///
-/// 서버는 오브젝트 종류를 property_id(숫자)로만 기억하므로 id -> SO 변환도 여기서 맡는다.
-/// 배열의 몇 번째 칸인지가 아니라 각 SO에 박아둔 id로 찾기 때문에,
-/// 인스펙터에서 순서를 바꾸거나 중간에 하나를 끼워 넣어도 저장된 데이터가 안 틀어진다.
+/// id 규칙 : (타입 블록 * 100) + 그룹 안에서의 순번.
+///   예) Desk 블록 0  -> id 1, 2, 3
+///       Chair 블록 1 -> id 101, 102, 103
+/// 0번 칸은 비워두고 1번부터 채운다 (이미 그렇게 만들어 둔 id를 그대로 쓰기 위함).
+///
+/// _objects[i]의 id % 100은 반드시 i와 같아야 한다 - 인스펙터에서 순서를 바꾸면 이 규칙이 깨지므로
+/// OnValidate가 저장할 때마다 확인해서 어긋나면 에러로 알려준다.
 /// </summary>
 [CreateAssetMenu(fileName = "PlaceableObjectAssetsSO", menuName = "ScriptableObject/PlaceableObjectAssetsSO")]
 public class PlaceableObjectAssetsSO : ScriptableObject
 {
-    //인스펙터에서 채우는 원본. 유니티는 Dictionary를 직렬화하지 못하므로 이쪽은 반드시 배열이어야 한다.
+    
+    //인덱스 == id % 100. 순번이 비어도 되지만(0번 칸 등), 채운 칸의 위치는 반드시 id와 맞아야 한다.
     [SerializeField] private PlaceableObjectSO[] _objects;
+    
+    [Serializable]
+    private class ObjectGroup
+    {
+        [SerializeField] private ObjectType _type;
 
-    //id -> SO. _objects에서 만들어내는 값이라 직렬화하지 않는다.
-    //여기에 직접 뭔가를 넣는 코드가 생기면 원본이 두 개가 되므로, 오직 BuildLookup()만 채운다.
-    private Dictionary<int, PlaceableObjectSO> _lookup;
+        //id를 100으로 나눈 몫. 이 그룹에 속한 모든 SO의 id는 반드시 (_block * 100 + 배열 인덱스)여야 한다.
+        [SerializeField] private int _block;
 
-    /// <summary>서버에서 받은 property_id로 SO를 찾는다. 목록에 없으면 null.</summary>
+        //인덱스 == id % 100. 순번이 비어도 되지만(0번 칸 등), 채운 칸의 위치는 반드시 id와 맞아야 한다.
+        [SerializeField] private PlaceableObjectSO[] _objects;
+
+        public ObjectType Type => _type;
+        public int Block => _block;
+        public PlaceableObjectSO[] Objects => _objects;
+
+        public PlaceableObjectSO GetByLocalIndex(int localIndex)
+        {
+            if (_objects == null || localIndex < 0 || localIndex >= _objects.Length)
+            {
+                return null;
+            }
+
+            return _objects[localIndex];
+        }
+    }
+
+    [SerializeField] private ObjectGroup[] _groups;
+
+    /// <summary>서버에서 받은 property_id로 SO를 찾는다. id % 100으로 바로 인덱싱하므로 O(1)이다.</summary>
     public PlaceableObjectSO GetObject(int id)
     {
-        //에디터에서는 개별 SO의 id를 아무 때나 고칠 수 있는데, 그때 이 에셋의 OnValidate는 불리지 않아
-        //캐시가 낡는다. 플레이 중에는 id가 바뀔 일이 없으니 그때만 캐시하고 에디터에서는 매번 새로 만든다.
-        if (_lookup == null || !Application.isPlaying)
+        int block = id / 100;
+        int localIndex = id % 100;
+
+        if (_groups == null)
         {
-            BuildLookup();
+            return null;
         }
 
-        if (_lookup.TryGetValue(id, out PlaceableObjectSO result))
+        for (int i = 0; i < _groups.Length; i++)
         {
+            if (_groups[i].Block != block)
+            {
+                continue;
+            }
+
+            PlaceableObjectSO result = _groups[i].GetByLocalIndex(localIndex);
+
+            if (result == null)
+            {
+                Debug.LogError(
+                    $"[PlaceableObjectAssetsSO] '{name}' : id {id}(블록 {block}, 순번 {localIndex})에 " +
+                    "해당하는 오브젝트가 없습니다.",
+                    this);
+            }
+
             return result;
         }
 
-        //서버에는 있는데 목록에서 빠진 경우. 그 오브젝트만 화면에 안 나온다.
         Debug.LogError(
-            $"[PlaceableObjectAssetsSO] '{name}' : id {id}인 오브젝트가 목록에 없습니다. " +
-            "_objects에 넣었는지, 그 SO의 id 값이 맞는지 확인하세요.",
+            $"[PlaceableObjectAssetsSO] '{name}' : id {id} - 블록 {block}을 담당하는 그룹이 없습니다.",
             this);
 
         return null;
     }
 
-    /// <summary>그 카테고리의 오브젝트만 골라준다. 순서는 배열에 넣은 순서 그대로다.</summary>
+    /// <summary>그 카테고리의 오브젝트만 골라준다. 순서는 그룹 안 배열 순서 그대로다.</summary>
     public List<PlaceableObjectSO> GetObjects(ObjectType type)
     {
         List<PlaceableObjectSO> result = new List<PlaceableObjectSO>();
 
-        if (_objects == null)
+        if (_groups == null)
         {
             return result;
         }
 
-        for (int i = 0; i < _objects.Length; i++)
+        for (int i = 0; i < _groups.Length; i++)
         {
-            PlaceableObjectSO obj = _objects[i];
-
-            //배열에 빈 칸을 남겨둔 경우. 여기서 걸러야 쓰는 쪽에서 NRE가 안 난다.
-            if (obj == null)
+            if (_groups[i].Type != type)
             {
-                Debug.LogWarning($"[PlaceableObjectAssetsSO] '{name}' : _objects[{i}]가 비어 있습니다.", this);
                 continue;
             }
 
-            if (obj.GetObjectType() == type)
+            PlaceableObjectSO[] objects = _groups[i].Objects;
+
+            if (objects == null)
             {
-                result.Add(obj);
+                continue;
+            }
+
+            for (int j = 0; j < objects.Length; j++)
+            {
+                if (objects[j] != null)
+                {
+                    result.Add(objects[j]);
+                }
             }
         }
 
         return result;
     }
 
+#if UNITY_EDITOR
     /// <summary>
-    /// id -> SO 표를 만든다.
-    ///
-    /// 여기서 id 중복과 prefab 중복을 같이 잡는다. 둘 다 그냥 두면 에러 없이 조용히 넘어가고,
-    /// 나중에 "가끔 다른 물건이 나온다"로만 나타나서 원인을 찾기가 매우 어렵다.
+    /// id % 100 == 배열 인덱스 규칙이 깨졌는지 저장할 때마다 확인한다.
+    /// 이걸 안 하면 인스펙터에서 드래그로 순서 한 번만 바꿔도 GetObject()가 조용히 엉뚱한 물건을
+    /// 돌려주는데, 그걸 원인 찾기가 매우 어렵다 - 그래서 여기서 바로 크게 알린다.
     /// </summary>
-    private void BuildLookup()
+    private void OnValidate()
     {
-        _lookup = new Dictionary<int, PlaceableObjectSO>();
-
-        if (_objects == null)
+        if (_groups == null)
         {
             return;
         }
 
-        //prefab 중복 검사용. id와 달리 표를 만드는 것만으로는 안 걸리는 실수다
-        //(SO를 복사해놓고 prefab 칸만 안 바꾼 경우).
+        HashSet<int> blockOwners = new HashSet<int>();
         Dictionary<GameObject, PlaceableObjectSO> prefabOwners = new Dictionary<GameObject, PlaceableObjectSO>();
 
-        for (int i = 0; i < _objects.Length; i++)
+        for (int g = 0; g < _groups.Length; g++)
         {
-            PlaceableObjectSO obj = _objects[i];
+            ObjectGroup group = _groups[g];
 
-            if (obj == null)
-            {
-                continue;
-            }
-
-            int id = obj.GetID();
-
-            //id가 겹치면 어느 쪽을 써야 할지 알 수 없다
-            if (_lookup.ContainsKey(id))
+            if (!blockOwners.Add(group.Block))
             {
                 Debug.LogError(
-                    $"[PlaceableObjectAssetsSO] '{name}' : id {id}가 겹칩니다. " +
-                    $"'{obj.name}'와 '{_lookup[id].name}' 중 하나의 id를 바꿔주세요.",
-                    obj);
-                continue;
+                    $"[PlaceableObjectAssetsSO] '{name}' : 블록 {group.Block}을 담당하는 그룹이 두 개 이상입니다.",
+                    this);
             }
 
-            _lookup.Add(id, obj);
+            PlaceableObjectSO[] objects = group.Objects;
 
-            GameObject prefab = obj.GetPrefab();
-
-            if (prefab == null)
+            if (objects == null)
             {
-                Debug.LogWarning(
-                    $"[PlaceableObjectAssetsSO] '{obj.name}' : prefab이 비어 있어 놓을 수 없습니다.",
-                    obj);
                 continue;
             }
 
-            if (prefabOwners.TryGetValue(prefab, out PlaceableObjectSO owner))
+            for (int i = 0; i < objects.Length; i++)
             {
-                Debug.LogWarning(
-                    $"[PlaceableObjectAssetsSO] '{obj.name}'와 '{owner.name}'가 같은 프리팹" +
-                    $"('{prefab.name}')을 가리킵니다. 복사한 뒤 prefab을 안 바꾼 게 아닌지 확인하세요.",
-                    obj);
-                continue;
-            }
+                PlaceableObjectSO obj = objects[i];
 
-            prefabOwners.Add(prefab, obj);
+                if (obj == null)
+                {
+                    continue;
+                }
+
+                int expectedId = group.Block * 100 + i;
+
+                if (obj.GetID() != expectedId)
+                {
+                    Debug.LogError(
+                        $"[PlaceableObjectAssetsSO] '{name}' : {group.Type} 그룹의 {i}번 칸에는 " +
+                        $"id {expectedId}인 SO가 있어야 하는데 '{obj.name}'(id {obj.GetID()})이 들어있습니다. " +
+                        "드래그로 순서가 바뀌었는지 확인하세요.",
+                        obj);
+                }
+
+                GameObject prefab = obj.GetPrefab();
+
+                if (prefab == null)
+                {
+                    continue;
+                }
+
+                if (prefabOwners.TryGetValue(prefab, out PlaceableObjectSO owner))
+                {
+                    Debug.LogWarning(
+                        $"[PlaceableObjectAssetsSO] '{obj.name}'와 '{owner.name}'가 같은 프리팹" +
+                        $"('{prefab.name}')을 가리킵니다. 복사한 뒤 prefab을 안 바꾼 게 아닌지 확인하세요.",
+                        obj);
+                }
+                else
+                {
+                    prefabOwners.Add(prefab, obj);
+                }
+            }
         }
     }
+#endif
 }
