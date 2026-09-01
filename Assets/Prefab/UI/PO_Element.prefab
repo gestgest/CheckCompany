@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2536245051064565226}
   - component: {fileID: 3607002618210189356}
   - component: {fileID: 8447667668411032412}
+  - component: {fileID: 6968526642242972732}
   m_Layer: 5
   m_Name: PO_Element
   m_TagString: Untagged
@@ -134,6 +135,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6968526642242972732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4151312420460643049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79990361950aa854d8591119ba982024, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _icon: {fileID: 0}
+  _nameText: {fileID: 0}
+  _moneyText: {fileID: 0}
+  _button: {fileID: 0}
 --- !u!1 &6581621156071290164
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,6 +329,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
