@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// 상점 카테고리 탭 하나(의자, 책상 ...). 자기 ObjectType에 해당하는 오브젝트만 칸으로 깔아준다.
@@ -16,7 +17,7 @@ public class ShopObjectPanel : CategoryPanel
     //이 탭이 맡을 카테고리
     [SerializeField] private ObjectType _type;
 
-    [SerializeField] private ObjectAssetsSO _objectAssetsSO;
+    [FormerlySerializedAs("_objectAssetsSO")] [SerializeField] private PlaceableObjectAssetsSO placeableObjectAssetsSO;
 
     [SerializeField] private GameObject _elementPrefab;
 
@@ -49,7 +50,7 @@ public class ShopObjectPanel : CategoryPanel
         }
 
         //하나라도 비어 있으면 칸이 안 생기는데, 화면에는 그냥 빈 탭으로만 보여서 원인을 찾기 어렵다
-        if (_objectAssetsSO == null || _elementPrefab == null || _placedObjectManager == null)
+        if (placeableObjectAssetsSO == null || _elementPrefab == null || _placedObjectManager == null)
         {
             Debug.LogError(
                 $"[ShopObjectPanel] '{name}' : _objectAssetsSO / _elementPrefab / _placedObjectManager를 " +
@@ -59,7 +60,7 @@ public class ShopObjectPanel : CategoryPanel
         }
 
         Transform parent = _elementParent != null ? _elementParent : transform;
-        List<PlaceableObjectSO> objects = _objectAssetsSO.GetObjects(_type);
+        List<PlaceableObjectSO> objects = placeableObjectAssetsSO.GetObjects(_type);
 
         for (int i = 0; i < objects.Count; i++)
         {
