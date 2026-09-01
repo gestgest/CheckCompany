@@ -58,9 +58,10 @@ public class PlaceableObjectSO : ScriptableObject
 //값을 지우거나 순서를 바꾸면 이미 만들어 둔 ObjectSO 에셋이 엉뚱한 카테고리로 간다 - 뒤에 추가만 할 것.
 public enum ObjectType
 {
-    Chair = 0,
-    Table = 1,
-    Cabinet = 2,
-    Plant = 3,
-    Etc = 4,
+    Etc = 0,
+    Chair = 1,
+    Table = 2,
+    Cabinet = 3,
+    Plant = 4,
+    Computer = 4,
 }
