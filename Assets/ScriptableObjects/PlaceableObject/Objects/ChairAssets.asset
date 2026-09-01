@@ -12,10 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70243bc1d59097741a2ae135a8e2ee4b, type: 3}
   m_Name: ChairAssets
   m_EditorClassIdentifier: 
+  _type: 2
   _objects:
   - {fileID: 11400000, guid: 689e06d8eb475d44893b1c9d961aee35, type: 2}
   - {fileID: 11400000, guid: 4f07341653771d34ab021e7be3ef4991, type: 2}
   - {fileID: 11400000, guid: 40e363a60a93e2f4b8f024cf8e0e8934, type: 2}
-  - {fileID: 11400000, guid: e1b8655db0e752e49815ad0a70b8bc97, type: 2}
-  - {fileID: 11400000, guid: 39b0802b9fbe207478dd49fa7d69285a, type: 2}
-  - {fileID: 11400000, guid: b52952573327e9d47abbf485c375df01, type: 2}

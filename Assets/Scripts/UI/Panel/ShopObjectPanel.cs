@@ -58,12 +58,12 @@ public class ShopObjectPanel : CategoryPanel
             return;
         }
 
-        Transform parent = _elementParent != null ? _elementParent : transform;
-        List<PlaceableObjectSO> objects = _placeableObjectAssetsSO.GetObjects(_type);
+        //에셋 하나가 카테고리 하나를 맡으므로, 꽂아준 에셋의 목록이 곧 이 탭의 목록이다
+        List<PlaceableObjectSO> objects = _placeableObjectAssetsSO.GetObjects();
 
         for (int i = 0; i < objects.Count; i++)
         {
-            CreateElement(objects[i], parent);
+            CreateElement(objects[i], _elementParent);
         }
 
         //카테고리는 만들었는데 그 종류의 ObjectSO를 아직 안 만든 상태
@@ -77,6 +77,7 @@ public class ShopObjectPanel : CategoryPanel
         _isBuilt = true;
     }
 
+    //PlaceableObject UI 칸 만들기 => 근데 여기서 프리펩에 없다고?
     private void CreateElement(PlaceableObjectSO placeableObjectSO, Transform parent)
     {
         GameObject obj = Instantiate(_elementPrefab, parent);

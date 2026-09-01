@@ -121,10 +121,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af41d452d1e63ed469679f5c8c2e5ae0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _placedObjectData:
-    id: 0
-    property_id: 4
-    position: {x: 0, y: 0, z: 0}
-    rotation: 0
+  _placeableObjectSO: {fileID: 11400000, guid: 4f07341653771d34ab021e7be3ef4991, type: 2}
   _isWorkstation: 0
   _seatPoint: {fileID: 0}
