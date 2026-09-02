@@ -116,7 +116,6 @@ public class CameraMoveManager : MonoBehaviour
         {
             _camera.transform.Translate(0, 0, mouseScroll.y * 2);
         }
-
 #endif
     }
 #if UNITY_EDITOR || UNITY_STANDALONE_WIN
