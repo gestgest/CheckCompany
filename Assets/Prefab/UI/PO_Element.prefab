@@ -147,10 +147,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79990361950aa854d8591119ba982024, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _icon: {fileID: 0}
+  _icon: {fileID: 659233914293383910}
   _nameText: {fileID: 0}
-  _moneyText: {fileID: 0}
-  _button: {fileID: 0}
+  _moneyText: {fileID: 4764273989428707072}
+  _button: {fileID: 8447667668411032412}
 --- !u!1 &6581621156071290164
 GameObject:
   m_ObjectHideFlags: 0

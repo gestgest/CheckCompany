@@ -92,8 +92,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1.85, y: 1.1698, z: 1.4824}
+  m_Center: {x: 0.265, y: 0.5849, z: 0.1246}
 --- !u!114 &-8962092937288363122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -107,5 +107,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _placeableObjectSO: {fileID: 11400000, guid: 844233b2439002e4f85d8c65862e1982, type: 2}
-  _isWorkstation: 0
+  _isWorkstation: 1
   _seatPoint: {fileID: 0}

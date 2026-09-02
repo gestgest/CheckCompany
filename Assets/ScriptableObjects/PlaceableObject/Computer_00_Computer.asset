@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 672bf21884217ce489a114bb830b2482, type: 3}
   m_Name: Computer_00_Computer
   m_EditorClassIdentifier: 
-  object_name: ConferenceDesk
+  object_name: Computer
   id: 200
   width: 1
   length: 1

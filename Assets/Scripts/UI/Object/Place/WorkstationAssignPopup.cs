@@ -24,6 +24,16 @@ public class WorkstationAssignPopup : MonoBehaviour
     //지금 앉아있는 직원을 빼는 버튼. 비어 있는 자리에서는 꺼둔다.
     [SerializeField] private GameObject _releaseButton;
 
+    [Header("근무 자리 조건 안내")]
+    //컴퓨터가 책상 위에 없을 때. 지금은 배치 단계에서 막고 있지만,
+    //깔고 있던 책상을 나중에 치우면 이 상태가 될 수 있다.
+    [TextArea]
+    [SerializeField] private string _needDeskMessage = "책상 위에 놓인 컴퓨터가 아닙니다.";
+
+    //책상은 맞는데 의자가 없을 때
+    [TextArea]
+    [SerializeField] private string _needChairMessage = "의자가 있어야 합니다.\n이 책상에 의자를 붙여주세요.";
+
     [Header("Manager")]
     [SerializeField] private WorkstationManagerSO _workstationManagerSO;
     [SerializeField] private EmployeeManagerSO _employeeManagerSO;
@@ -84,7 +94,13 @@ public class WorkstationAssignPopup : MonoBehaviour
         }
     }
 
-    /// <summary>탭한 오브젝트가 근무 자리면 창을 연다. 그냥 장식(화분 등)이면 무시한다.</summary>
+    /// <summary>
+    /// 탭한 오브젝트가 근무 자리면 창을 연다.
+    ///
+    /// 직원을 배정하는 단위는 컴퓨터다 - 책상이나 의자, 장식을 눌렀을 때는 아무 일도 일어나지 않는다.
+    /// 컴퓨터라도 "책상 위에 있고 그 책상에 의자가 붙어있어야" 실제로 앉힐 수 있으므로,
+    /// 조건이 안 맞으면 직원 목록 대신 왜 안 되는지를 보여준다.
+    /// </summary>
     public void Open(PlaceableObject workstation)
     {
         if (workstation == null || !workstation.IsWorkstation)
@@ -92,10 +108,42 @@ public class WorkstationAssignPopup : MonoBehaviour
             return;
         }
 
+        if (workstation.Type != ObjectType.Computer)
+        {
+            return;
+        }
+
         _workstation = workstation;
 
         SetRootActive(true);
+
+        if (_workstationManagerSO != null
+            && !_workstationManagerSO.TryResolveSeat(workstation, out PlaceableObject desk, out _))
+        {
+            ShowBlocked(desk == null ? _needDeskMessage : _needChairMessage);
+            return;
+        }
+
         Rebuild();
+    }
+
+    /// <summary>
+    /// 아직 근무 자리가 아닐 때. 직원 목록은 만들지 않고 이유만 보여준다.
+    /// (배정해봐야 WorkstationManagerSO가 거부하므로 고를 수 있게 두면 안 된다)
+    /// </summary>
+    private void ShowBlocked(string message)
+    {
+        ClearElements();
+
+        if (_titleText != null)
+        {
+            _titleText.text = message;
+        }
+
+        if (_releaseButton != null)
+        {
+            _releaseButton.SetActive(false);
+        }
     }
 
     //닫기 버튼의 OnClick

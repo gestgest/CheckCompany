@@ -505,12 +505,71 @@ public class PlaceSystem : MonoBehaviour
             return;
         }
 
+        //칸을 칠하기 전에 높이부터 맞춘다. 칸 계산은 x/z만 쓰므로 순서가 결과를 바꾸지는 않지만,
+        //드래그 중에 컴퓨터가 책상 상판에 붙어 따라다니는 게 보여야 한다.
+        ApplyStackHeight(selectedObject);
+
         BeforeClearArea();
         SetAllArea(false);
         SetAllArea(true);
-        
+
         Vector3Int startpos = gridLayout.WorldToCell(selectedObject.GetStartPosition());
+
+        //컴퓨터는 책상 칸과 겹치는 게 정상이라 칸마다 따로 판정할 수 없다.
+        //"지금 놓을 수 있는지" 하나로 발자국 전체를 칠해준다.
+        if (selectedObject.Type == ObjectType.Computer)
+        {
+            PaintHeldArea(startpos, selectedObject.Size, CheckTile(selectedObject, startpos));
+            return;
+        }
+
         TakenArea(startpos, selectedObject.Size, true);
+    }
+
+    /// <summary>
+    /// 컴퓨터를 책상 상판 높이에 올려놓는다.
+    /// SnapCoordinateToGrid는 칸 중심(그리드 평면)을 돌려주기 때문에 그대로 두면 바닥에 깔린다.
+    /// 책상을 못 찾으면(바닥 위) 손대지 않는다 - 어차피 CheckTile이 배치를 거부한다.
+    /// </summary>
+    private void ApplyStackHeight(PlaceableObject held)
+    {
+        if (held == null || held.Type != ObjectType.Computer || _workstationManagerSO == null)
+        {
+            return;
+        }
+
+        PlaceableObject desk = _workstationManagerSO.FindDeskUnder(held);
+
+        if (desk == null)
+        {
+            return;
+        }
+
+        Vector3 position = held.transform.position;
+        position.y = desk.GetTopY() - held.GetBottomOffset();
+        held.transform.position = position;
+    }
+
+    /// <summary>
+    /// 손에 든 오브젝트의 발자국을 한 가지 색으로 칠한다.
+    /// 다른 오브젝트 위에 올라가는 것(컴퓨터)은 칸이 겹치는 게 정상이라
+    /// TakenArea의 "이미 타일이 있으면 빨강" 규칙을 그대로 쓸 수 없다.
+    /// </summary>
+    private void PaintHeldArea(Vector3Int startpos, Vector3Int size, bool isValid)
+    {
+        //BeforeClearArea()가 다음 프레임에 이 범위를 지워야 하므로 기억해둔다
+        this.startPos = startpos;
+        this.object_size = size;
+
+        TileBase tile = isValid ? _takenTile : _redTile;
+
+        for (int i = 0; i < size.z; i++)
+        {
+            for (int j = 0; j < size.x; j++)
+            {
+                mainTilemap.SetTile(startpos + new Vector3Int(j, i, 0), tile);
+            }
+        }
     }
     
     /// <summary> 모든 건물 타일 색칠 => false면 색칠no </summary>
@@ -557,6 +616,23 @@ public class PlaceSystem : MonoBehaviour
         if (_officeArea != null && !_officeArea.Contains(position, ob.Size))
         {
             return false;
+        }
+
+        //컴퓨터는 바닥에 못 놓는다 - 반드시 책상 위여야 한다.
+        //책상과 칸이 겹치는 것이 오히려 정상이므로 아래의 빨간 타일 검사는 건너뛰고,
+        //대신 "책상 위인지"와 "같은 자리에 다른 컴퓨터가 없는지"만 본다.
+        if (ob.Type == ObjectType.Computer)
+        {
+            if (_workstationManagerSO == null)
+            {
+                Debug.LogError(
+                    "[PlaceSystem] WorkstationManagerSO가 연결되지 않아 컴퓨터를 놓을 수 없습니다. " +
+                    "Grid_PlaceSystem의 PlaceSystem 인스펙터를 확인하세요.", this);
+                return false;
+            }
+
+            return _workstationManagerSO.FindDeskUnder(ob) != null
+                && !_workstationManagerSO.IsOverlappedByAnotherComputer(ob);
         }
 
         //타일 베이스 [타일 가져오기]  

@@ -24,6 +24,15 @@ public class PlaceableObject : MonoBehaviour
 
     public bool IsWorkstation => _isWorkstation;
 
+    /// <summary>상점 카테고리이자 배치 규칙의 기준. SO가 안 꽂혀 있으면 Etc로 본다.</summary>
+    public ObjectType Type => _placeableObjectSO != null ? _placeableObjectSO.GetObjectType() : ObjectType.Etc;
+
+    /// <summary>
+    /// 컴퓨터처럼 자기 자리(의자)를 런타임에 찾아야 하는 오브젝트용.
+    /// 인스펙터의 _seatPoint보다 우선한다. WorkstationManagerSO가 채워준다.
+    /// </summary>
+    private Transform _runtimeSeatPoint;
+
     //상점 가구가 수백 개로 늘어나면 프리팩마다 손으로 끌어다 넣는 것은 불가능하므로,
     //이름 규칙만 지키면 에디터에서 자동으로 채워준다.
     private const string SeatPointName = "SeatPoint";
@@ -36,6 +45,9 @@ public class PlaceableObject : MonoBehaviour
 
     //타일 한 칸의 월드 크기. Grid의 CellSwizzle이 XZY라서 cellSize.y가 월드 z축 길이다.
     private Vector2 _cellSize = Vector2.zero;
+
+    //씬에 하나뿐인 Grid. 칸 좌표 계산에 매번 필요해서 캐싱한다.
+    private Grid _grid;
 
 #if UNITY_EDITOR
     //컴포넌트를 처음 붙였을 때 1회
@@ -72,7 +84,21 @@ public class PlaceableObject : MonoBehaviour
     /// <summary>직원이 근무할 위치. 지정하지 않으면 오브젝트 자신의 Transform을 사용한다.</summary>
     public Transform GetSeatPoint()
     {
+        if (_runtimeSeatPoint != null)
+        {
+            return _runtimeSeatPoint;
+        }
+
         return _seatPoint != null ? _seatPoint : transform;
+    }
+
+    /// <summary>
+    /// 런타임에 찾아낸 자리를 꽂아준다 (컴퓨터 -> 붙어있는 의자).
+    /// 의자를 옮기거나 치우면 다시 불려서 갱신되므로, 여기서는 마지막 값만 들고 있으면 된다.
+    /// </summary>
+    public void SetRuntimeSeatPoint(Transform seatPoint)
+    {
+        _runtimeSeatPoint = seatPoint;
     }
 
 
@@ -81,12 +107,16 @@ public class PlaceableObject : MonoBehaviour
     {
         id = placedObjectData.GetID();
 
-        transform.position = placedObjectData.GetPosition();
-
         //회전을 Init()보다 먼저 적용해야 칸 수 계산이 "돌아간 뒤"의 가로/세로를 본다
         transform.rotation = Quaternion.Euler(0f, placedObjectData.GetRotation(), 0f);
 
         Init();
+
+        //서버에 저장되는 값은 피벗이 아니라 '시작 모서리'(ObjectToJSON이 GetStartPosition을 쓴다).
+        //예전에는 그 값을 transform.position에 그대로 넣어서, 새로고침할 때마다 오브젝트가
+        //콜라이더 모서리만큼(책상이면 한 칸 가까이) 밀렸다.
+        //모서리가 저장된 자리에 오도록 피벗을 역산해서 넣는다.
+        transform.position += placedObjectData.GetPosition() - GetStartPosition();
     }
 
     /// <summary>현재 y축 회전(도). 항상 0/90/180/270 중 하나다.</summary>
@@ -235,7 +265,7 @@ public class PlaceableObject : MonoBehaviour
             return _cellSize;
         }
 
-        Grid grid = FindFirstObjectByType<Grid>();
+        Grid grid = GetGrid();
 
         if (grid == null)
         {
@@ -249,6 +279,66 @@ public class PlaceableObject : MonoBehaviour
         }
 
         return _cellSize;
+    }
+
+    /// <summary>씬의 Grid는 PlaceSystem이 붙은 것 하나뿐이다. 매번 찾지 않도록 캐싱한다.</summary>
+    private Grid GetGrid()
+    {
+        if (_grid == null)
+        {
+            _grid = FindFirstObjectByType<Grid>();
+        }
+
+        return _grid;
+    }
+
+    /// <summary>
+    /// 이 오브젝트가 차지하는 칸 범위. 타일맵에 실제로 칠해지는 범위와 같다
+    /// (= 시작 모서리에서 Size만큼, Size에는 여유 한 칸이 포함되어 있다).
+    ///
+    /// 칸 좌표는 Grid의 CellSwizzle이 XZY라 y가 월드 z축이다.
+    /// "책상 위인지", "의자가 붙어있는지" 같은 판정은 전부 이 범위로 한다 -
+    /// 플레이어가 화면에서 보는 초록 타일과 정확히 같은 범위여야 납득이 되기 때문이다.
+    /// </summary>
+    public RectInt GetCellRect()
+    {
+        Grid grid = GetGrid();
+
+        if (grid == null)
+        {
+            return new RectInt(0, 0, 0, 0);
+        }
+
+        Vector3Int start = grid.WorldToCell(GetStartPosition());
+        return new RectInt(start.x, start.y, Size.x, Size.z);
+    }
+
+    /// <summary>콜라이더 윗면의 월드 Y. 이 위에 다른 오브젝트(컴퓨터)를 올릴 때 기준이 된다.</summary>
+    public float GetTopY()
+    {
+        BoxCollider box = GetComponent<BoxCollider>();
+
+        if (box == null)
+        {
+            return transform.position.y;
+        }
+
+        float scaleY = Mathf.Abs(transform.lossyScale.y);
+        return transform.position.y + (box.center.y + box.size.y * 0.5f) * scaleY;
+    }
+
+    /// <summary>transform.position.y에서 콜라이더 밑면까지의 거리. 윗면에 딱 맞춰 올릴 때 쓴다.</summary>
+    public float GetBottomOffset()
+    {
+        BoxCollider box = GetComponent<BoxCollider>();
+
+        if (box == null)
+        {
+            return 0f;
+        }
+
+        float scaleY = Mathf.Abs(transform.lossyScale.y);
+        return (box.center.y - box.size.y * 0.5f) * scaleY;
     }
 
     /// <summary>

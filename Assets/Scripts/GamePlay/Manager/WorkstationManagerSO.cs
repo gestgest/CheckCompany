@@ -20,6 +20,11 @@ public class WorkstationManagerSO : ScriptableObject
     //EmployeeWorkAI 등이 먼저 접근하는 경우) NullReferenceException이 나지 않도록 하기 위함.
     private List<PlaceableObject> _workstations = new List<PlaceableObject>();
 
+    //배치된 오브젝트 전부(책상/의자/컴퓨터/장식). 워크스테이션만으로는
+    //"컴퓨터 밑에 책상이 있는지", "그 책상에 의자가 붙어있는지"를 볼 수 없어서 따로 들고 있는다.
+    //PlaceSystem이 Register/Unregister를 부르는 시점이 곧 배치/해제 시점이라 여기서 같이 관리한다.
+    private List<PlaceableObject> _placedObjects = new List<PlaceableObject>();
+
     //employeeId -> 배정된 워크스테이션
     private Dictionary<int, PlaceableObject> _employeeSeats = new Dictionary<int, PlaceableObject>();
 
@@ -39,6 +44,7 @@ public class WorkstationManagerSO : ScriptableObject
     public void Init()
     {
         _workstations = new List<PlaceableObject>();
+        _placedObjects = new List<PlaceableObject>();
         _employeeSeats = new Dictionary<int, PlaceableObject>();
         _seatOwners = new Dictionary<int, int>();
     }
@@ -66,15 +72,34 @@ public class WorkstationManagerSO : ScriptableObject
     /// <summary>지금까지 배치된 책상 수. HUD의 직원 수(n/m)에서 m으로 쓰인다.</summary>
     public int WorkstationCount => _workstations.Count;
 
-    /// <summary>배치가 확정된 오브젝트를 책상 풀에 등록한다. IsWorkstation이 아니면 무시.</summary>
+    /// <summary>
+    /// 배치가 확정된 오브젝트를 등록한다.
+    /// 전체 목록에는 무조건 넣고(배치 규칙 판정에 필요), 자리 풀에는 IsWorkstation인 것만 넣는다.
+    /// </summary>
     public void RegisterWorkstation(PlaceableObject workstation)
     {
-        if (workstation == null || !workstation.IsWorkstation || _workstations.Contains(workstation))
+        if (workstation == null)
+        {
+            return;
+        }
+
+        if (!_placedObjects.Contains(workstation))
+        {
+            _placedObjects.Add(workstation);
+        }
+
+        if (!workstation.IsWorkstation || _workstations.Contains(workstation))
         {
             return;
         }
 
         _workstations.Add(workstation);
+    }
+
+    /// <summary>지금 배치되어 있는 오브젝트 전부. 배치 규칙 판정용이라 수정하면 안 된다.</summary>
+    public IReadOnlyList<PlaceableObject> GetPlacedObjects()
+    {
+        return _placedObjects;
     }
 
     /// <summary>
@@ -92,6 +117,7 @@ public class WorkstationManagerSO : ScriptableObject
         }
 
         _workstations.Remove(workstation);
+        _placedObjects.Remove(workstation);
     }
 
     /// <summary>
@@ -122,6 +148,13 @@ public class WorkstationManagerSO : ScriptableObject
                 continue;
             }
 
+            //책상 위에 없거나 의자가 안 붙어있는 컴퓨터는 아직 앉을 수 없는 자리다.
+            //(TryResolveSeat이 여기서 의자를 찾아 자리로 꽂아주기도 한다)
+            if (!IsReadyForWork(workstation))
+            {
+                continue;
+            }
+
             Occupy(employeeId, workstation, objectId);
             return workstation.GetSeatPoint();
         }
@@ -148,6 +181,15 @@ public class WorkstationManagerSO : ScriptableObject
         {
             Debug.LogWarning(
                 $"[WorkstationManagerSO] '{workstation.name}' : 아직 배치되지 않아 배정할 수 없습니다.",
+                workstation);
+            return false;
+        }
+
+        //컴퓨터는 책상 위 + 의자가 붙어있어야 근무 자리로 인정된다
+        if (!IsReadyForWork(workstation))
+        {
+            Debug.LogWarning(
+                $"[WorkstationManagerSO] '{workstation.name}' : 책상 위에 없거나 의자가 붙어있지 않아 배정할 수 없습니다.",
                 workstation);
             return false;
         }
@@ -240,4 +282,169 @@ public class WorkstationManagerSO : ScriptableObject
         _seatOwners[objectId] = employeeId;
         _employeeSeats[employeeId] = workstation;
     }
+
+    #region 배치 규칙 (컴퓨터 - 책상 - 의자)
+
+    /// <summary>
+    /// 컴퓨터가 올라가 있는 책상. 바닥에 놓였으면 null.
+    ///
+    /// 컴퓨터가 차지하는 칸이 책상 칸 안에 온전히 들어가야 "책상 위"로 본다.
+    /// 걸쳐만 놓은 것을 허용하면 상판 밖으로 삐져나온 채 놓이기 때문이다.
+    /// </summary>
+    public PlaceableObject FindDeskUnder(PlaceableObject computer)
+    {
+        if (computer == null)
+        {
+            return null;
+        }
+
+        RectInt computerRect = computer.GetCellRect();
+
+        for (int i = 0; i < _placedObjects.Count; i++)
+        {
+            PlaceableObject other = _placedObjects[i];
+
+            if (other == null || other == computer || other.Type != ObjectType.Table)
+            {
+                continue;
+            }
+
+            if (ContainsRect(other.GetCellRect(), computerRect))
+            {
+                return other;
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// 같은 자리에 이미 다른 컴퓨터가 올라가 있는지.
+    ///
+    /// 책상 위는 타일맵 겹침 검사를 건너뛰기 때문에, 그것만으로는 한 칸에 컴퓨터가
+    /// 여러 대 쌓이는 것을 못 막는다. 그래서 컴퓨터끼리는 따로 본다.
+    /// (책상 외의 다른 오브젝트는 애초에 책상과 칸이 겹칠 수 없으므로 검사할 필요가 없다)
+    /// </summary>
+    public bool IsOverlappedByAnotherComputer(PlaceableObject computer)
+    {
+        if (computer == null)
+        {
+            return false;
+        }
+
+        RectInt computerRect = computer.GetCellRect();
+
+        for (int i = 0; i < _placedObjects.Count; i++)
+        {
+            PlaceableObject other = _placedObjects[i];
+
+            if (other == null || other == computer || other.Type != ObjectType.Computer)
+            {
+                continue;
+            }
+
+            if (computerRect.Overlaps(other.GetCellRect()))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>책상에 맞닿아 있는 의자. 없으면 null. 모서리만 닿은 대각선은 인정하지 않는다.</summary>
+    public PlaceableObject FindChairNextTo(PlaceableObject desk)
+    {
+        if (desk == null)
+        {
+            return null;
+        }
+
+        RectInt deskRect = desk.GetCellRect();
+
+        for (int i = 0; i < _placedObjects.Count; i++)
+        {
+            PlaceableObject other = _placedObjects[i];
+
+            if (other == null || other == desk || other.Type != ObjectType.Chair)
+            {
+                continue;
+            }
+
+            if (AreEdgeAdjacent(deskRect, other.GetCellRect()))
+            {
+                return other;
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// 이 컴퓨터가 근무 가능한 자리인지 확인한다.
+    /// 조건 : 책상 위에 있을 것 + 그 책상에 의자가 맞닿아 있을 것.
+    ///
+    /// 통과하면 찾아낸 의자를 컴퓨터의 자리로 꽂아준다(직원이 그 의자로 걸어간다).
+    /// 의자를 옮기거나 치우면 다음 호출에서 갱신되므로 따로 정리할 필요는 없다.
+    /// </summary>
+    public bool TryResolveSeat(PlaceableObject computer, out PlaceableObject desk, out PlaceableObject chair)
+    {
+        desk = FindDeskUnder(computer);
+        chair = desk != null ? FindChairNextTo(desk) : null;
+
+        if (computer != null)
+        {
+            computer.SetRuntimeSeatPoint(chair != null ? chair.GetSeatPoint() : null);
+        }
+
+        return desk != null && chair != null;
+    }
+
+    /// <summary>책상 위에 있고 의자까지 붙어 있어 실제로 직원을 앉힐 수 있는 자리인지.</summary>
+    public bool IsReadyForWork(PlaceableObject workstation)
+    {
+        if (workstation == null || !workstation.IsWorkstation)
+        {
+            return false;
+        }
+
+        //컴퓨터가 아닌 자리는 예전처럼 그 자체로 근무 가능한 자리로 본다
+        if (workstation.Type != ObjectType.Computer)
+        {
+            return true;
+        }
+
+        return TryResolveSeat(workstation, out _, out _);
+    }
+
+    /// <summary>inner가 outer 안에 온전히 들어가는지.</summary>
+    private static bool ContainsRect(RectInt outer, RectInt inner)
+    {
+        if (outer.width <= 0 || outer.height <= 0 || inner.width <= 0 || inner.height <= 0)
+        {
+            return false;
+        }
+
+        return inner.xMin >= outer.xMin && inner.xMax <= outer.xMax
+            && inner.yMin >= outer.yMin && inner.yMax <= outer.yMax;
+    }
+
+    /// <summary>두 칸 범위가 변끼리 맞닿아 있는지. 겹치거나 떨어져 있거나 대각선이면 false.</summary>
+    private static bool AreEdgeAdjacent(RectInt a, RectInt b)
+    {
+        if (a.width <= 0 || a.height <= 0 || b.width <= 0 || b.height <= 0)
+        {
+            return false;
+        }
+
+        bool xOverlap = a.xMin < b.xMax && b.xMin < a.xMax;
+        bool yOverlap = a.yMin < b.yMax && b.yMin < a.yMax;
+
+        bool xTouch = a.xMax == b.xMin || b.xMax == a.xMin;
+        bool yTouch = a.yMax == b.yMin || b.yMax == a.yMin;
+
+        return (xOverlap && yTouch) || (yOverlap && xTouch);
+    }
+
+    #endregion
 }
