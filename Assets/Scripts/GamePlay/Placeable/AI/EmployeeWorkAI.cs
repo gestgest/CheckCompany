@@ -82,6 +82,9 @@ public class EmployeeWorkAI : MonoBehaviour
     //자리로 출발할 때의 SeatPoint 위치. 책상이 옮겨진 걸 알아채는 기준점이다.
     private Vector3 _seatAnchor;
 
+    //지금 걸어가고 있는 목적지(NavMesh 위로 스냅된 좌표). 도착 판정에 쓴다.
+    private Vector3 _destination;
+
     private int _employeeId;
     private Employee _employee;
     private float _staminaAccumulator;
@@ -360,7 +363,28 @@ public class EmployeeWorkAI : MonoBehaviour
             return false;
         }
 
+        //도착 판정에 쓸 실제 목적지. agent의 remainingDistance를 믿으면 안 되는 이유는 HasArrived() 참고.
+        _destination = hit.position;
+
         return true;
+    }
+
+    /// <summary>
+    /// 지금 향하는 목적지에 닿았는지.
+    ///
+    /// 예전에는 pathPending / remainingDistance로 판정했는데, SetDestination() 직후 몇 프레임은
+    /// 경로 계산이 끝나지 않아 remainingDistance가 0으로 나온다. 그 값을 그대로 믿으면
+    /// 출발하자마자 "도착"으로 보고 그 자리에서 멈춰서, 책상으로도 문으로도 한 발짝을 안 뗐다.
+    ///
+    /// 그래서 agent 내부 상태 대신 목적지까지의 실제 거리로 본다.
+    /// y는 빼고 잰다 - 바닥 높이 차이나 캐릭터 피벗 때문에 영원히 도착 못 하는 걸 막는다.
+    /// </summary>
+    private bool HasArrived()
+    {
+        Vector3 offset = _destination - transform.position;
+        offset.y = 0f;
+
+        return offset.sqrMagnitude <= _arriveDistance * _arriveDistance;
     }
 
     private void ArriveAtDesk()
@@ -543,7 +567,7 @@ public class EmployeeWorkAI : MonoBehaviour
             return;
         }
 
-        if (_agent.pathPending || _agent.remainingDistance > _arriveDistance)
+        if (!HasArrived())
         {
             return;
         }
