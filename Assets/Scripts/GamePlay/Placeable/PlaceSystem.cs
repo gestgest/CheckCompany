@@ -61,7 +61,10 @@ public class PlaceSystem : MonoBehaviour
     
     [Space]
     [Header("ShopObjects")]
-    [SerializeField] private PlaceableObject[] _shopPlaceableObjects;
+    //카테고리별 상점 목록(DeskAssets/ChairAssets/ComputerAssets/DoorAssets ...). 자세한 이유는
+    //ResolvePrefab() 주석 참고 - 예전에는 property_id를 배열 인덱스로 그대로 써서(_shopPlaceableObjects[pid])
+    //카테고리마다 따로 매기던 id(0,1,2 / 100,101,102 / 200 / 300 ...)와 안 맞아 재접속하면 터졌다.
+    [SerializeField] private PlaceableObjectAssetsSO[] _placeableObjectCategories;
 
 
     [Space]
@@ -196,13 +199,81 @@ public class PlaceSystem : MonoBehaviour
         }
 
         int pid = data.GetPropertyID();
+        PlaceableObject prefab = ResolvePrefab(pid);
+
+        if (prefab == null)
+        {
+            Debug.LogError(
+                $"[PlaceSystem] property_id {pid}에 해당하는 오브젝트를 카테고리 목록에서 찾지 못해 " +
+                $"배치를 건너뜁니다. (object id {id})");
+            return;
+        }
+
         //생성
-        PlaceableObject obj = Instantiate(_shopPlaceableObjects[pid], _objectParent);
+        PlaceableObject obj = Instantiate(prefab, _objectParent);
         obj.SetPlacedObjectData(data);
         obj.Place();
 
         _placedObjects.Add(obj);
         _workstationManagerSO.RegisterWorkstation(obj);
+    }
+
+    /// <summary>
+    /// 저장된 property_id로 배치할 프리팹을 찾는다.
+    ///
+    /// PlaceableObjectAssetsSO.GetObject(id)는 id % 100으로 "자기 카테고리 안"에서만 찾는다.
+    /// 그런데 카테고리마다 나머지가 우연히 겹칠 수 있다 - 예를 들어 책상(id 0)과 문(id 300)은
+    /// 둘 다 300 % 100 = 0으로 같은 나머지를 갖는다. 그래서 여기서 어느 카테고리인지도 모른 채
+    /// GetObject(id)를 그냥 돌리면, 문을 찾으려다 책상을 집어올 수도 있다.
+    ///
+    /// 그래서 나머지 계산은 아예 쓰지 않고, 모든 카테고리를 훑으며 실제 id(SO.GetID())가
+    /// 정확히 일치하는 것만 찾는다. 카테고리당 물건이 몇 개 안 되니 성능은 문제없다.
+    /// </summary>
+    private PlaceableObject ResolvePrefab(int propertyId)
+    {
+        if (_placeableObjectCategories == null)
+        {
+            return null;
+        }
+
+        foreach (PlaceableObjectAssetsSO category in _placeableObjectCategories)
+        {
+            if (category == null)
+            {
+                continue;
+            }
+
+            foreach (PlaceableObjectSO so in category.GetObjects())
+            {
+                if (so == null || so.GetID() != propertyId)
+                {
+                    continue;
+                }
+
+                GameObject prefab = so.GetPrefab();
+
+                if (prefab == null)
+                {
+                    Debug.LogError(
+                        $"[PlaceSystem] '{so.GetName()}'(id {propertyId})에 프리팹이 연결되어 있지 않습니다.",
+                        so);
+                    return null;
+                }
+
+                PlaceableObject placeable = prefab.GetComponent<PlaceableObject>();
+
+                if (placeable == null)
+                {
+                    Debug.LogError(
+                        $"[PlaceSystem] '{so.GetName()}'(id {propertyId})의 프리팹에 PlaceableObject가 없습니다.",
+                        prefab);
+                }
+
+                return placeable;
+            }
+        }
+
+        return null;
     }
 
 

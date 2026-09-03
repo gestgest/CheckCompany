@@ -1063,16 +1063,11 @@ MonoBehaviour:
   _takenTile: {fileID: 11400000, guid: 82c57fe054a809b4391ce3d87d003bd3, type: 2}
   _redTile: {fileID: 11400000, guid: 4ebcc278a4352224bb0feae5ba27d006, type: 2}
   _objectParent: {fileID: 310482686}
-  _shopPlaceableObjects:
-  - {fileID: 132292087961979328, guid: ec71814fb4ff65441989d0088126ae12, type: 3}
-  - {fileID: 2649339848780705, guid: 7cda44f43693608bfee12e167a90b355, type: 3}
-  - {fileID: 2681238846410905, guid: bef9cc037623aa13af4246a3a1783618, type: 3}
-  - {fileID: 2055982069299105, guid: 9f16628a1d1834042d9a7ff4ddad3cbc, type: 3}
-  - {fileID: 2368004510963005, guid: 319f6a0c978df27efd610c26aa6a5495, type: 3}
-  - {fileID: 2443946853473705, guid: 28db55c2d06e881230d0716dfbc04271, type: 3}
-  - {fileID: 2308091726393505, guid: 897acffa0fd27c64251a0166d494f82a, type: 3}
-  - {fileID: 1117446987303305, guid: 71d35664952a947fc0b035fd1b08608a, type: 3}
-  - {fileID: 1705404836633205, guid: df9bdf6742da74b7d2e361335f619943, type: 3}
+  _placeableObjectCategories:
+  - {fileID: 11400000, guid: 1128d00c8a80d7a42819de59e1bee85f, type: 2}
+  - {fileID: 11400000, guid: 657a8ae92c452324eaee3eb71b0c35c6, type: 2}
+  - {fileID: 11400000, guid: 3ceb4f0d81e40824e85969d34388da5d, type: 2}
+  - {fileID: 11400000, guid: ba31ff30e5eaa9743ab31adee7632d51, type: 2}
   _placedObjectManager: {fileID: 11400000, guid: 78992eda014fc4149a161456aaedd847, type: 2}
   _workstationManagerSO: {fileID: 11400000, guid: 56a72685b0d48674e9fd351611961844, type: 2}
   _takenAreaEvent: {fileID: 11400000, guid: 767a94b576ed3cf4abacb6b5b867d660, type: 2}
