@@ -15,7 +15,7 @@ MonoBehaviour:
   object_name: OfficeDesk1
   id: 1
   width: 3
-  length: 1
+  length: 2
   money: 0
   type: 1
   icon: {fileID: 21300000, guid: e256c23323621df45911dcceb8d03f40, type: 3}

@@ -15,7 +15,7 @@ MonoBehaviour:
   object_name: ConferenceDesk
   id: 0
   width: 3
-  length: 1
+  length: 2
   money: 0
   type: 1
   icon: {fileID: 21300000, guid: dca687bf70f27804a9c2485afdb217a0, type: 3}
