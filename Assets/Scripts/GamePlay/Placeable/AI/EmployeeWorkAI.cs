@@ -12,7 +12,7 @@ using UnityEngine.AI;
 ///                 체력 0 ↓        ↑ 회복
 ///                        Resting ─┘
 ///
-/// GoingHome은 씬에 CompanyExitPoint가 있을 때만 거친다. 없으면 예전처럼 그 자리에서 바로 OffDuty.
+/// GoingHome은 놓인 문(ObjectType.Door)이 하나라도 있을 때만 거친다. 없으면 예전처럼 그 자리에서 바로 OffDuty.
 ///
 /// 예전에는 스폰되자마자 빈 책상으로 직진해서 도착하면 영원히 굳어 있었다(Working이 종착역).
 /// 그래서 새벽 3시에도 출근해 있고, 체력이 0이 돼도 계속 일했다.
@@ -28,7 +28,7 @@ public class EmployeeWorkAI : MonoBehaviour
         GoingToDesk, //자리로 이동중
         Working,     //자리에서 근무중
         Resting,     //체력이 바닥나 쉬는 중 (근무시간이어도)
-        GoingHome    //퇴근길, 출입구(CompanyExitPoint)로 이동중
+        GoingHome    //퇴근길, 출입구(문)로 이동중
     }
 
     [SerializeField] private WorkstationManagerSO _workstationManagerSO;
@@ -380,14 +380,14 @@ public class EmployeeWorkAI : MonoBehaviour
     }
 
     /// <summary>
-    /// 퇴근한다. 씬에 CompanyExitPoint가 등록돼 있으면 거기까지 걸어나간 뒤(GoingHome) 도착해서야
+    /// 퇴근한다. 놓인 문이 있으면 가장 가까운 문까지 걸어나간 뒤(GoingHome) 도착해서야
     /// 진짜로 OffDuty가 되고, 없거나 경로를 못 찾으면 예전처럼 그 자리에서 바로 OffDuty로 처리한다.
     /// </summary>
     private void LeaveWork()
     {
-        Transform exitPoint = _workstationManagerSO.GetExitPoint();
+        Transform exitPoint = _workstationManagerSO.GetExitPoint(transform.position);
 
-        if (exitPoint != null && MoveTo(exitPoint.position, "출입구", "CompanyExitPoint 위치를 NavMesh가 베이크된 곳으로 옮겨주세요."))
+        if (exitPoint != null && MoveTo(exitPoint.position, "출입구", "문 위치를 NavMesh가 베이크된 곳으로 옮겨주세요."))
         {
             SetState(State.GoingHome);
             Debug.Log($"[EmployeeWorkAI] employee {_employeeId} : 퇴근길, 출입구로 이동중 (GoingHome)");

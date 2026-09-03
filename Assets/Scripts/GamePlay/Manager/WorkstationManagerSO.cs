@@ -33,40 +33,49 @@ public class WorkstationManagerSO : ScriptableObject
     //반대 방향도 알아야 해서 표로 바꿨다. 중복 배정 방지도 이 표가 겸한다.
     private Dictionary<int, int> _seatOwners = new Dictionary<int, int>();
 
-    //퇴근할 때 걸어나갈 회사 출입구. 프리팹(직원)은 씬 오브젝트를 직접 참조할 수 없어서,
-    //CompanyExitPoint가 씬에 배치된 채 스스로 등록해준다 (RegisterWorkstation과 같은 방식).
-    //
-    //일부러 Init()에서 안 지운다 - CompanyExitPoint는 OnEnable에서 등록하는데, 그게
-    //GameManager.Start()(Init을 부르는 곳)보다 먼저 도는 경우 Init이 등록을 바로 지워버린다.
-    //출입구는 세션 데이터가 아니라 씬 배치 그 자체라 리셋할 이유도 없다.
-    private Transform _exitPoint;
+    //퇴근/출근할 때 걸어나가고 걸어들어올 회사 출입구들. Door 타입 오브젝트도 다른 배치물처럼
+    //PlaceSystem이 RegisterWorkstation/UnregisterWorkstation을 불러줄 때 같이 채워진다
+    //(워크스테이션 풀과 완전히 같은 방식 - 아래 두 함수 참고).
+    private List<PlaceableObject> _doors = new List<PlaceableObject>();
 
     public void Init()
     {
         _workstations = new List<PlaceableObject>();
         _placedObjects = new List<PlaceableObject>();
+        _doors = new List<PlaceableObject>();
         _employeeSeats = new Dictionary<int, PlaceableObject>();
         _seatOwners = new Dictionary<int, int>();
     }
 
-    /// <summary>씬에 놓인 CompanyExitPoint가 자신을 등록한다. 씬에 하나만 있다고 가정.</summary>
-    public void RegisterExitPoint(Transform exitPoint)
+    /// <summary>
+    /// 출퇴근길에 오갈 출입구. 놓인 문이 하나도 없으면 null(그 자리에서 그냥 출퇴근 처리 -
+    /// EmployeeWorkAI가 이미 이 경우를 예전 방식으로 처리해준다).
+    /// 문을 여러 개 놓을 수 있으므로 fromPosition에서 가장 가까운 문을 고른다 -
+    /// 직원이 자기가 있는 자리와 동떨어진 반대쪽 문으로 굳이 걸어가지 않게 하기 위함.
+    /// </summary>
+    public Transform GetExitPoint(Vector3 fromPosition)
     {
-        _exitPoint = exitPoint;
-    }
+        PlaceableObject nearest = null;
+        float nearestSqrDistance = float.MaxValue;
 
-    public void UnregisterExitPoint(Transform exitPoint)
-    {
-        if (_exitPoint == exitPoint)
+        foreach (PlaceableObject door in _doors)
         {
-            _exitPoint = null;
-        }
-    }
+            //파괴됐거나(잔여 참조) 아직 배치 확정 전(id 없음)인 문은 목적지로 쓸 수 없다
+            if (door == null)
+            {
+                continue;
+            }
 
-    /// <summary>퇴근길에 걸어갈 출입구. 씬에 CompanyExitPoint가 없으면 null(그 자리에서 그냥 퇴근 처리).</summary>
-    public Transform GetExitPoint()
-    {
-        return _exitPoint;
+            float sqrDistance = (door.transform.position - fromPosition).sqrMagnitude;
+
+            if (sqrDistance < nearestSqrDistance)
+            {
+                nearest = door;
+                nearestSqrDistance = sqrDistance;
+            }
+        }
+
+        return nearest != null ? nearest.transform : null;
     }
 
     /// <summary>지금까지 배치된 책상 수. HUD의 직원 수(n/m)에서 m으로 쓰인다.</summary>
@@ -74,7 +83,8 @@ public class WorkstationManagerSO : ScriptableObject
 
     /// <summary>
     /// 배치가 확정된 오브젝트를 등록한다.
-    /// 전체 목록에는 무조건 넣고(배치 규칙 판정에 필요), 자리 풀에는 IsWorkstation인 것만 넣는다.
+    /// 전체 목록에는 무조건 넣고(배치 규칙 판정에 필요), 자리 풀에는 IsWorkstation인 것만,
+    /// 출입구 풀에는 Type이 Door인 것만 넣는다.
     /// </summary>
     public void RegisterWorkstation(PlaceableObject workstation)
     {
@@ -86,6 +96,11 @@ public class WorkstationManagerSO : ScriptableObject
         if (!_placedObjects.Contains(workstation))
         {
             _placedObjects.Add(workstation);
+        }
+
+        if (workstation.Type == ObjectType.Door && !_doors.Contains(workstation))
+        {
+            _doors.Add(workstation);
         }
 
         if (!workstation.IsWorkstation || _workstations.Contains(workstation))
@@ -117,6 +132,7 @@ public class WorkstationManagerSO : ScriptableObject
         }
 
         _workstations.Remove(workstation);
+        _doors.Remove(workstation);
         _placedObjects.Remove(workstation);
     }
 
@@ -304,7 +320,7 @@ public class WorkstationManagerSO : ScriptableObject
         {
             PlaceableObject other = _placedObjects[i];
 
-            if (other == null || other == computer || other.Type != ObjectType.Table)
+            if (other == null || other == computer || other.Type != ObjectType.Desk)
             {
                 continue;
             }

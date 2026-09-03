@@ -59,7 +59,8 @@ public class PlaceableObjectSO : ScriptableObject
 public enum ObjectType
 {
     Etc = 0,
-    Table = 1,
+    Desk = 1,
     Chair = 2,
     Computer = 3,
+    Door = 4,
 }
