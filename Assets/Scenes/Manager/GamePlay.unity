@@ -17601,9 +17601,18 @@ MonoBehaviour:
   _sendFirebaseEventChannelSO: {fileID: 11400000, guid: bc6e20a0b24975943a58a86b83f606ea, type: 2}
   _getJSONEventChannelSO: {fileID: 11400000, guid: 273b81728c703114aa820167d4b00c02, type: 2}
   _testMode: 1
-  _testWorkstationPrefab: {fileID: 1289936835854364, guid: ec71814fb4ff65441989d0088126ae12, type: 3}
-  _testWorkstationPosition: {x: 0, y: 0, z: 0}
+  _testPlacements:
+  - prefab: {fileID: 2649339848780700, guid: 7cda44f43693608bfee12e167a90b355, type: 3}
+    position: {x: 0, y: 0, z: 0}
+    rotation: 0
+  - prefab: {fileID: 5466431155716825225, guid: b601892463f15eb42bc70e4a4c93a37d, type: 3}
+    position: {x: 0, y: 1, z: 0}
+    rotation: 0
+  - prefab: {fileID: 2055982069299100, guid: 9f16628a1d1834042d9a7ff4ddad3cbc, type: 3}
+    position: {x: 0, y: 0, z: -1}
+    rotation: 0
   _testSpawnEmployee: 1
+  _testTimeJumpMinutes: 180
   _gameDate:
     year: 0
     month: 0

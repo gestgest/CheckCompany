@@ -32,11 +32,31 @@ public class GameManager : MonoBehaviour
     [SerializeField] private SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
     [SerializeField] private GetJSONFirebaseEventChannelSO _getJSONEventChannelSO;
 
+    /// <summary>
+    /// 테스트모드에서 시작하자마자 깔아둘 오브젝트 하나. 책상만이 아니라 의자·컴퓨터·문까지
+    /// 한 번에 놓을 수 있어야 해서(컴퓨터는 책상 위 + 의자가 있어야 근무 자리로 인정되고,
+    /// 퇴근은 문이 있어야 한다) 프리팹과 위치를 묶어 배열로 받는다.
+    /// </summary>
+    [Serializable]
+    public struct TestPlacement
+    {
+        public GameObject prefab;
+
+        //PlaceableObject가 이 값을 '시작 모서리'로 보고 피벗을 역산한다 (SetPlacedObjectData 참고)
+        public Vector3 position;
+
+        //y축 회전(도). 타일 격자에 맞춰야 하므로 0/90/180/270만 의미가 있다.
+        public int rotation;
+    }
+
     [Header("Test (서버/로그인 없이 테스트할 때 자동 배치)")]
     [SerializeField] private bool _testMode = false;
-    [SerializeField] private GameObject _testWorkstationPrefab;
-    [SerializeField] private Vector3 _testWorkstationPosition;
+    [SerializeField] private TestPlacement[] _testPlacements;
     [SerializeField] private bool _testSpawnEmployee = false;
+
+    //K를 누르면 이만큼(분) 시간을 한 번에 건너뛴다. 기본 3시간 - 출퇴근(문) 같은 시간 경계
+    //이벤트를 실제로 몇 초씩 기다리지 않고 바로 확인하기 위한 디버그용.
+    [SerializeField] private int _testTimeJumpMinutes = 180;
 
 
     private string nickname;
@@ -65,6 +85,14 @@ public class GameManager : MonoBehaviour
         if (_testMode && Input.GetKeyDown(KeyCode.J))
         {
             SpawnTestEmployee();
+        }
+
+        //테스트모드에서 K를 누르면 시간을 한 번에 _testTimeJumpMinutes만큼 건너뛴다.
+        //TimeButton과 같은 경로(AddDateMinute)라 수입 정산·서버 저장이 그대로 같이 따라온다.
+        //IsDateReady 전에 누르면 _gameDate가 비어 있어 GameClock처럼 무시한다.
+        if (_testMode && IsDateReady && Input.GetKeyDown(KeyCode.K))
+        {
+            AddDateMinute(_testTimeJumpMinutes);
         }
     }
 
@@ -352,25 +380,15 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 서버/로그인 없이 테스트할 때 배치 UI를 거치지 않고 책상(워크스테이션)과 직원을 바로 하나 만들어준다.
-    /// _testWorkstationPrefab이 지정돼 있으면 책상을 놓고, _testSpawnEmployee가 켜져 있으면 직원도 만든다.
+    /// 서버/로그인 없이 테스트할 때 배치 UI를 거치지 않고 _testPlacements의 오브젝트들과 직원을 바로 만들어준다.
     /// </summary>
     private void SpawnTestSetup()
     {
-        if (_testWorkstationPrefab != null)
+        if (_testPlacements != null)
         {
-            GameObject deskObj = Instantiate(_testWorkstationPrefab, _testWorkstationPosition, Quaternion.identity);
-            PlaceableObject placeableObject = deskObj.GetComponent<PlaceableObject>();
-
-            if (placeableObject != null)
+            for (int i = 0; i < _testPlacements.Length; i++)
             {
-                placeableObject.SetPlacedObjectData(new PlacedObjectData(0, 0, _testWorkstationPosition));
-                placeableObject.Place();
-                _workstationManagerSO.RegisterWorkstation(placeableObject);
-            }
-            else
-            {
-                Debug.LogWarning("[GameManager] _testWorkstationPrefab에 PlaceableObject 컴포넌트가 없습니다.");
+                PlaceTestObject(_testPlacements[i], i);
             }
         }
 
@@ -378,6 +396,41 @@ public class GameManager : MonoBehaviour
         {
             SpawnTestEmployee();
         }
+    }
+
+    /// <summary>
+    /// 테스트 배치 하나를 실제로 놓는다.
+    ///
+    /// object id로 배열 인덱스를 그대로 쓴다. 예전에는 0으로 고정돼 있었는데, 그러면 두 개 이상 놓는 순간
+    /// WorkstationManagerSO가 id로 관리하는 자리 표(_seatOwners)에서 전부 같은 자리로 취급돼
+    /// 직원 한 명만 앉을 수 있게 된다. 테스트모드에는 서버 데이터가 없으니 인덱스로 충분하다.
+    /// </summary>
+    private void PlaceTestObject(TestPlacement placement, int index)
+    {
+        if (placement.prefab == null)
+        {
+            return;
+        }
+
+        GameObject obj = Instantiate(placement.prefab, placement.position, Quaternion.identity);
+        PlaceableObject placeableObject = obj.GetComponent<PlaceableObject>();
+
+        if (placeableObject == null)
+        {
+            Debug.LogWarning(
+                $"[GameManager] _testPlacements[{index}]의 '{placement.prefab.name}'에 PlaceableObject 컴포넌트가 없습니다.",
+                placement.prefab);
+            return;
+        }
+
+        //property_id는 프리팹이 들고 있는 ObjectSO에서 그대로 읽는다 (예전엔 0으로 박혀 있었다)
+        placeableObject.SetPlacedObjectData(
+            new PlacedObjectData(index, placeableObject.GetPropertyID(), placement.position, placement.rotation));
+
+        placeableObject.Place();
+
+        //책상이면 자리 풀에, 문이면 출입구 목록에 들어간다 (RegisterWorkstation이 타입 보고 나눈다)
+        _workstationManagerSO.RegisterWorkstation(placeableObject);
     }
 
     /// <summary>
@@ -397,6 +450,12 @@ public class GameManager : MonoBehaviour
         employee.Mental = 100;
         employee.CareerPeriod = 0;
         employee.Salary = 1000000;
+
+        //_WorkTime을 안 채우면 구조체 기본값(0~0)이 되고, EmployeeWorkAI.IsWorkTime()이
+        //start==end를 "근무시간 0시간"으로 봐서 몇 시로 점프해도 영원히 OffDuty로 멈춘다.
+        //서버 데이터 로딩 시 쓰는 기본값(9~18시)과 맞춘다.
+        employee._WorkTime = new WorkTime(9.0f, 18.0f);
+
         employee._EmployeeSO = recruitmentControllerSO.GetEmployeeSO(0);
 
         employeeControllerSO.CreateEmployee(employee);
