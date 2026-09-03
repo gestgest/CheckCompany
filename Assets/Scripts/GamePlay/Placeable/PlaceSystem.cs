@@ -35,10 +35,16 @@ public class PlaceSystem : MonoBehaviour
     [SerializeField] private TileBase _redTile;
     [SerializeField] private Transform _objectParent;
 
-    
-    private bool isFirst = true;
+
     private Vector3Int object_size;
     private Vector3Int startPos;
+
+    //손에 든 오브젝트가 지난 프레임에 칠해둔 발자국.
+    //예전에는 이 값을 startPos/object_size로 같이 썼는데, 그 둘은 SetAllArea()가
+    //배치된 오브젝트를 훑으면서 매 프레임 덮어쓰기 때문에 "어디를 지워야 하는지"가 어긋났다.
+    private Vector3Int _heldAreaStart;
+    private Vector3Int _heldAreaSize;
+    private bool _hasHeldArea;
 
     //이동(move) 모드 상태. 새로 만드는 배치와 달리, 취소하면 파괴가 아니라 원래 자리로 되돌려야 한다.
     private bool _isMoving;
@@ -269,10 +275,6 @@ public class PlaceSystem : MonoBehaviour
 
         selectedObject = target;
 
-        //isFirst가 true로 남아있으면 BeforeClearArea()가 계속 no-op이라
-        //드래그하는 동안 지나간 타일이 지워지지 않고 자국으로 남는다
-        isFirst = false;
-
         SetArea();
     }
 
@@ -284,8 +286,6 @@ public class PlaceSystem : MonoBehaviour
     /// <param name="isHandling">손에 들고 있는 오브젝트인지</param>
     private void CreateHandlingObject(GameObject building)
     {
-        //isFirst = true;
-
         //맨 처음 생성할때 0,0,0에 생성  => 마우스 위치에 생성으로 
         Vector3 position = SnapCoordinateToGrid(Vector3.zero);
 
@@ -316,7 +316,6 @@ public class PlaceSystem : MonoBehaviour
         selectedObject = tmp;
 
         SetArea();
-        isFirst = false;
     }
     
 
@@ -329,9 +328,6 @@ public class PlaceSystem : MonoBehaviour
         if (CheckTile(selectedObject, pos))
         {
             selectedObject.Place();
-
-            startPos = pos;
-            BeforeClearArea();
 
             _placedObjectManager.SendPlaceableObject(selectedObject);
 
@@ -388,7 +384,7 @@ public class PlaceSystem : MonoBehaviour
         selectedObject.Rotate();
 
         //돌면 차지하는 칸이 달라진다.
-        //SetArea()의 BeforeClearArea()가 아직 "돌기 전" 발자국을 기억하고 있어서 그것부터 지우고 다시 칠한다.
+        //SetArea()의 ClearHeldArea()가 아직 "돌기 전" 발자국을 기억하고 있어서 그것부터 지우고 다시 칠한다.
         SetArea();
     }
 
@@ -471,7 +467,7 @@ public class PlaceSystem : MonoBehaviour
 
     private void TakeOffPlaceMode()
     {
-        TakenArea(false); //delete handling object tile
+        ClearHeldArea(); //손에 들고 있던 오브젝트의 타일 지우기
         SetAllArea(false); //기존에 있는 타일 지우기
 
         //버튼 안 보이게
@@ -509,7 +505,9 @@ public class PlaceSystem : MonoBehaviour
         //드래그 중에 컴퓨터가 책상 상판에 붙어 따라다니는 게 보여야 한다.
         ApplyStackHeight(selectedObject);
 
-        BeforeClearArea();
+        //지난 프레임에 손에 든 오브젝트가 칠해둔 자국을 먼저 지우고, 배치된 오브젝트를 다시 칠한다.
+        //"전부 지우고 -> 전부 다시 칠한다" 순서라서, 지울 때 밑에 뭐가 깔려 있었는지 추측할 필요가 없다.
+        ClearHeldArea();
         SetAllArea(false);
         SetAllArea(true);
 
@@ -519,11 +517,17 @@ public class PlaceSystem : MonoBehaviour
         //"지금 놓을 수 있는지" 하나로 발자국 전체를 칠해준다.
         if (selectedObject.Type == ObjectType.Computer)
         {
-            PaintHeldArea(startpos, selectedObject.Size, CheckTile(selectedObject, startpos));
-            return;
+            FillArea(startpos, selectedObject.Size, CheckTile(selectedObject, startpos) ? _takenTile : _redTile);
+        }
+        else
+        {
+            TakenArea(startpos, selectedObject.Size, true);
         }
 
-        TakenArea(startpos, selectedObject.Size, true);
+        //다음 프레임에 정확히 이 범위만 지우면 된다
+        _heldAreaStart = startpos;
+        _heldAreaSize = selectedObject.Size;
+        _hasHeldArea = true;
     }
 
     /// <summary>
@@ -551,18 +555,28 @@ public class PlaceSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// 손에 든 오브젝트의 발자국을 한 가지 색으로 칠한다.
-    /// 다른 오브젝트 위에 올라가는 것(컴퓨터)은 칸이 겹치는 게 정상이라
-    /// TakenArea의 "이미 타일이 있으면 빨강" 규칙을 그대로 쓸 수 없다.
+    /// 손에 든 오브젝트가 지난 프레임에 칠해둔 발자국을 지운다.
+    ///
+    /// 무조건 비우기만 한다. 예전에는 "빨간 칸이면 원래 초록이었겠지" 하고 되살렸는데,
+    /// 책상 밖에 있는 컴퓨터의 발자국은 통째로 빨강이라 그게 전부 초록으로 바뀌었다.
+    /// 그 초록은 어느 배치된 오브젝트의 것도 아니라서 SetAllArea(false)가 못 지우고 자국으로 남았고,
+    /// 나중에 그 자리에 의자를 놓으려 하면 "이미 뭔가 있다"고 판정돼 놓을 수 없었다.
+    /// 밑에 깔려 있던 초록은 바로 뒤의 SetAllArea(true)가 다시 칠해주므로 되살릴 이유가 없다.
     /// </summary>
-    private void PaintHeldArea(Vector3Int startpos, Vector3Int size, bool isValid)
+    private void ClearHeldArea()
     {
-        //BeforeClearArea()가 다음 프레임에 이 범위를 지워야 하므로 기억해둔다
-        this.startPos = startpos;
-        this.object_size = size;
+        if (!_hasHeldArea)
+        {
+            return;
+        }
 
-        TileBase tile = isValid ? _takenTile : _redTile;
+        FillArea(_heldAreaStart, _heldAreaSize, null);
+        _hasHeldArea = false;
+    }
 
+    /// <summary>범위를 한 가지 타일로 덮어쓴다. tile이 null이면 지운다.</summary>
+    private void FillArea(Vector3Int startpos, Vector3Int size, TileBase tile)
+    {
         for (int i = 0; i < size.z; i++)
         {
             for (int j = 0; j < size.x; j++)
@@ -571,13 +585,23 @@ public class PlaceSystem : MonoBehaviour
             }
         }
     }
-    
+
     /// <summary> 모든 건물 타일 색칠 => false면 색칠no </summary>
     private void SetAllArea(bool isSelected) //
     {
         for (int i = 0; i < _placedObjects.Count; i++)
         {
             PlaceableObject po = _placedObjects[i]; //po는 null 아님, 아마 GetStartPosition 이거 자체가?
+
+            //컴퓨터는 책상 위에 겹쳐 놓는 게 정상이라 칸을 따로 차지하지 않는다.
+            //칠하게 두면 밑에 깔린 책상의 초록 위에 덮여 그 책상이 항상 빨갛게 보인다 -
+            //겹치지도 않았는데 겹친 것처럼 보이는 것이다.
+            //컴퓨터끼리의 중복은 WorkstationManagerSO.IsOverlappedByAnotherComputer가 따로 막는다.
+            if (po.Type == ObjectType.Computer)
+            {
+                continue;
+            }
+
             Vector3Int startpos = gridLayout.WorldToCell(po.GetStartPosition());
             TakenArea(startpos, po.Size, isSelected);
         }
@@ -663,15 +687,6 @@ public class PlaceSystem : MonoBehaviour
 
 
 
-    private void BeforeClearArea()
-    {
-        if (isFirst)
-        {
-            return;
-        }
-        TakenArea(false);
-    }
-
     //single
     private void TakenArea(bool isSelected)
     {
@@ -693,18 +708,14 @@ public class PlaceSystem : MonoBehaviour
                 //사무실 밖은 CheckTile이 어차피 거부한다. 누르기 전에 빨갛게 보여줘야 왜 안 놓이는지 안다.
                 bool isOutside = _officeArea != null && !_officeArea.Contains(cell);
 
-                //초록색인데 이미 초록색, 빨간색인 경우 => 빨간색 
+                //초록색인데 이미 초록색, 빨간색인 경우 => 빨간색
                 if (isSelected && (isOutside || mainTilemap.GetTile(cell) != null))
                 {
                     mainTilemap.SetTile(cell, _redTile);
                 }
-                //비어있는데 이미 빨간색인 경우 
-                else if (!isSelected && mainTilemap.GetTile(cell) == _redTile)
-                {
-                    //사무실 밖이라 빨갛던 칸은 밑에 깔린 초록이 없다.
-                    //되돌린답시고 초록을 칠하면 아무것도 없는 자리에 유령 타일이 남는다.
-                    mainTilemap.SetTile(cell, isOutside ? null : _takenTile);
-                }
+                //지울 때는 무조건 비운다.
+                //밑에 깔려 있던 초록을 되살리는 코드가 있었는데, 지우기는 항상 "전부 지우고 전부 다시 칠하기"의
+                //앞부분이라 되살릴 필요가 없었고, 오히려 없던 초록을 만들어내 자국으로 남겼다.
                 else
                 {
                     mainTilemap.SetTile(cell, tile);
