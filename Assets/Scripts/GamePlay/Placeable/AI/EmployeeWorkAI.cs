@@ -6,9 +6,9 @@ using UnityEngine.AI;
 /// 직원이 근무시간(Employee._WorkTime)에 맞춰 출근하고, 자리에서 일하고, 퇴근한다.
 /// 체력이 바닥나면 근무시간이라도 자리에서 일어나 쉰다.
 ///
-///   OffDuty ──출근시간──> GoingToDesk ──도착──> Working
-///      ↑                                          │
-///      └─ GoingHome(출입구로 이동) ←── 퇴근시간 ─────┘
+///   OffDuty ──출근시간──> GoingToDesk ──도착──> SittingDown ──> Working
+///      ↑                                                          │
+///      └─ GoingHome(출입구로 이동) ←── StandingUp ←── 퇴근시간 ─────┘
 ///                 체력 0 ↓        ↑ 회복
 ///                        Resting ─┘
 ///
@@ -18,6 +18,9 @@ using UnityEngine.AI;
 /// 그래서 새벽 3시에도 출근해 있고, 체력이 0이 돼도 계속 일했다.
 /// 이제 Working은 종착역이 아니고, 이 직원이 움직이는 이유는 전부 시간이나 체력에서 나온다.
 ///
+/// SittingDown / StandingUp은 앉고 일어서는 모션이 재생되는 동안만 머무는 상태다.
+/// 이 두 상태가 없으면 도착하자마자 앉은 자세로 굳고, 퇴근할 때는 앉은 채로 미끄러져 나간다.
+///
 /// EmployeeObjectSystem이 생성 직후 Init(employeeId)를 호출해줘야 한다.
 /// </summary>
 public class EmployeeWorkAI : MonoBehaviour
@@ -26,7 +29,9 @@ public class EmployeeWorkAI : MonoBehaviour
     {
         OffDuty,     //퇴근 상태. 배정받을 자리가 없어 대기하는 동안도 여기에 머문다
         GoingToDesk, //자리로 이동중
+        SittingDown, //자리에 도착해 앉는 중
         Working,     //자리에서 근무중
+        StandingUp,  //자리를 뜨려고 일어서는 중
         Resting,     //체력이 바닥나 쉬는 중 (근무시간이어도)
         GoingHome    //퇴근길, 출입구(문)로 이동중
     }
@@ -64,9 +69,16 @@ public class EmployeeWorkAI : MonoBehaviour
     //휴식에서 복귀하는 기준. 최대 체력 대비 비율이라 max_stamina가 다른 직원에게도 같이 통한다.
     [SerializeField, Range(0f, 1f)] private float _restExitStaminaRatio = 0.5f;
 
-    //진짜 앉는 모션은 에셋팩에 없어서(Movement/Combat/Gathering뿐), 근무 중이라는 걸 보여주는
-    //대체 동작으로 채굴 반복 동작(MiningLoop)을 빌려 쓴다. Idle <-> Working은 Animator 쪽 bool 전환.
-    private static readonly int IsWorkingHash = Animator.StringToHash("IsWorking");
+    [Header("Sit")]
+    //앉기/일어서기 모션이 끝날 때까지 기다리는 시간. Assets/Animation의 StandToSit(2.23초),
+    //SitToStand(2.27초) 길이에 맞춰둔 값이다. 클립을 갈아끼우면 여기도 같이 맞춰야
+    //다 앉기도 전에 근무로 넘어가거나, 다 일어서기도 전에 걸어나간다.
+    [SerializeField] private float _sitDownDuration = 2.2f;
+    [SerializeField] private float _standUpDuration = 2.2f;
+
+    //Animator의 앉기 3단(SitDown -> Seated -> StandUp)을 켜고 끄는 bool.
+    //true인 동안 앉는 모션 -> 앉은 자세 유지, false로 내리면 일어서는 모션이 재생된다.
+    private static readonly int IsSeatedHash = Animator.StringToHash("IsSeated");
 
     //출퇴근(자리로 걸어가는 GoingToDesk, 출입구로 걸어나가는 GoingHome)도 마찬가지로 전용 Walk 클립이
     //없어서 RunForward를 느리게(m_Speed 0.6) 재생해 걷는 것처럼 대체한다. 실제로 agent가 움직이는
@@ -161,6 +173,13 @@ public class EmployeeWorkAI : MonoBehaviour
             return;
         }
 
+        //앉거나 일어서는 도중에는 판단을 미룬다. 모션이 끝나면 다음 판단 때 이어서 처리하면 된다.
+        //(여기서 상태를 갈아버리면 앉다 만 자세로 걸어가거나 서 있는 채로 책상에 붙는다)
+        if (_state == State.SittingDown || _state == State.StandingUp)
+        {
+            return;
+        }
+
         bool onDuty = IsWorkTime();
 
         switch (_state)
@@ -189,17 +208,18 @@ public class EmployeeWorkAI : MonoBehaviour
                 break;
 
             case State.Working:
+                //앉아 있으므로 무엇을 하든 먼저 일어서야 한다
                 if (!onDuty)
                 {
-                    LeaveWork();
+                    StandUpThen(LeaveWork);
                 }
                 else if (IsExhausted())
                 {
-                    EnterRest();
+                    StandUpThen(EnterRest);
                 }
                 else if (IsSeatStale())
                 {
-                    GoToDesk();
+                    StandUpThen(GoToDesk);
                 }
                 break;
 
@@ -389,9 +409,10 @@ public class EmployeeWorkAI : MonoBehaviour
         return offset.sqrMagnitude <= _arriveDistance * _arriveDistance;
     }
 
+    /// <summary>자리에 닿았다. 의자 쪽으로 돌아앉으면서 앉는 모션을 시작한다.</summary>
     private void ArriveAtDesk()
     {
-        SetState(State.Working);
+        SetState(State.SittingDown);
 
         //도착 후에도 NavMeshAgent를 멈추지 않으면 계속 같은 목적지로 미세 보정을 시도해서
         //(특히 근처에 다른 직원이 있으면 서로 밀어내는 obstacle avoidance 때문에) 제자리에서 왔다갔다 떨리게 된다.
@@ -402,7 +423,57 @@ public class EmployeeWorkAI : MonoBehaviour
         //근무/휴식이 바뀌는 순간의 체력만 서버에 남긴다 (TickStamina 주석 참고)
         SaveStamina();
 
-        Debug.Log($"[EmployeeWorkAI] employee {_employeeId} : '{_seat.name}'에 도착해서 근무 시작 (Working)");
+        StartCoroutine(SitDownRoutine());
+
+        Debug.Log($"[EmployeeWorkAI] employee {_employeeId} : '{_seat.name}'에 도착해서 앉는 중 (SittingDown)");
+    }
+
+    /// <summary>앉는 모션이 끝나면 근무 상태로 넘어간다.</summary>
+    private IEnumerator SitDownRoutine()
+    {
+        yield return new WaitForSeconds(_sitDownDuration);
+
+        //기다리는 사이에 오브젝트가 지워졌거나 다른 데서 상태를 바꿨으면 손을 뗀다
+        if (_state != State.SittingDown)
+        {
+            yield break;
+        }
+
+        SetState(State.Working);
+
+        Debug.Log($"[EmployeeWorkAI] employee {_employeeId} : 근무 시작 (Working)");
+    }
+
+    /// <summary>
+    /// 자리에서 일어난 다음 next를 실행한다. 앉아있지 않으면 곧바로 실행한다.
+    ///
+    /// 퇴근/휴식/자리 이동은 전부 "앉아있던 자리를 뜨는" 행동이라서, 일어서는 모션이 끝날 때까지
+    /// NavMeshAgent를 세워둬야 한다. 안 그러면 앉은 자세 그대로 미끄러져 나간다.
+    /// </summary>
+    private void StandUpThen(System.Action next)
+    {
+        if (_state != State.Working)
+        {
+            next();
+            return;
+        }
+
+        SetState(State.StandingUp);
+        StartCoroutine(StandUpRoutine(next));
+
+        Debug.Log($"[EmployeeWorkAI] employee {_employeeId} : 자리에서 일어나는 중 (StandingUp)");
+    }
+
+    private IEnumerator StandUpRoutine(System.Action next)
+    {
+        yield return new WaitForSeconds(_standUpDuration);
+
+        if (_state != State.StandingUp)
+        {
+            yield break;
+        }
+
+        next();
     }
 
     /// <summary>
@@ -467,25 +538,37 @@ public class EmployeeWorkAI : MonoBehaviour
     }
 
     /// <summary>
-    /// 상태를 옮기고, 수입 정산이 보는 IsWorking을 같이 맞춘다.
+    /// 상태를 옮기고, 수입 정산이 보는 IsWorking과 Animator 파라미터를 같이 맞춘다.
     /// _state를 직접 대입하면 둘이 어긋나서 퇴근한 직원이 계속 돈을 벌거나 그 반대가 된다.
     /// </summary>
     private void SetState(State next)
     {
         _state = next;
 
-        bool isWorking = next == State.Working;
-
         if (_employee != null)
         {
-            _employee.IsWorking = isWorking;
+            _employee.IsWorking = IsAtDesk(next);
         }
 
         if (_animator != null)
         {
-            _animator.SetBool(IsWorkingHash, isWorking);
+            //앉는 중에도 true를 유지해야 SitDown -> Seated로 이어진다.
+            //일어서는 중(StandingUp)에 false로 내리는 것이 곧 일어서라는 신호다.
+            _animator.SetBool(IsSeatedHash, next == State.SittingDown || next == State.Working);
             _animator.SetBool(IsMovingHash, next == State.GoingToDesk || next == State.GoingHome);
         }
+    }
+
+    /// <summary>
+    /// 자리에 붙어 있는 상태인지. 수입 정산과 체력 소모가 같이 보는 기준이다.
+    ///
+    /// 앉는 동작(SittingDown)까지 근무로 친다. 이 게임은 실제 1초가 게임 1시간이라
+    /// 2초짜리 앉기 모션을 근무에서 빼면 하루 9시간 중 2시간이 통째로 날아간다.
+    /// 자리에 도착한 순간부터 일어서기 시작할 때까지를 근무로 보는 편이 정산에도 맞다.
+    /// </summary>
+    private static bool IsAtDesk(State state)
+    {
+        return state == State.SittingDown || state == State.Working;
     }
 
     /// <summary>Agent를 세운다. NavMesh 밖이면 아무것도 하지 않는다(에러만 뱉는다).</summary>
@@ -592,7 +675,7 @@ public class EmployeeWorkAI : MonoBehaviour
             return;
         }
 
-        bool isDraining = _state == State.Working;
+        bool isDraining = IsAtDesk(_state);
 
         //이미 한계치(0 또는 최대)라면 계산할 필요 없음 - 불필요한 서버 쓰기 방지
         if (isDraining && _employee.Stamina <= 0)
