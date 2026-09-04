@@ -52,8 +52,12 @@ public class WorkstationManagerSO : ScriptableObject
     /// EmployeeWorkAI가 이미 이 경우를 예전 방식으로 처리해준다).
     /// 문을 여러 개 놓을 수 있으므로 fromPosition에서 가장 가까운 문을 고른다 -
     /// 직원이 자기가 있는 자리와 동떨어진 반대쪽 문으로 굳이 걸어가지 않게 하기 위함.
+    ///
+    /// Transform이 아니라 PlaceableObject를 돌려준다. 부르는 쪽에서 목적지(transform.position)뿐 아니라
+    /// 여닫을 문(Door.Of)까지 같이 필요하기 때문이다.
+    /// 문 앞을 지나는지 보려고 매 프레임 불리는 자리라(EmployeeWorkAI.TickDoor) 할당 없이 훑기만 한다.
     /// </summary>
-    public Transform GetExitPoint(Vector3 fromPosition)
+    public PlaceableObject GetNearestDoor(Vector3 fromPosition)
     {
         PlaceableObject nearest = null;
         float nearestSqrDistance = float.MaxValue;
@@ -75,7 +79,7 @@ public class WorkstationManagerSO : ScriptableObject
             }
         }
 
-        return nearest != null ? nearest.transform : null;
+        return nearest;
     }
 
     /// <summary>지금까지 배치된 책상 수. HUD의 직원 수(n/m)에서 m으로 쓰인다.</summary>

@@ -13,6 +13,7 @@ using UnityEngine.AI;
 ///                        Resting ─┘
 ///
 /// GoingHome은 놓인 문(ObjectType.Door)이 하나라도 있을 때만 거친다. 없으면 예전처럼 그 자리에서 바로 OffDuty.
+/// 걸어가는 도중에 문 앞을 지나면 그 문이 열린다 - TickDoor 참고. 출근길과 퇴근길 양쪽에 똑같이 적용된다.
 ///
 /// 예전에는 스폰되자마자 빈 책상으로 직진해서 도착하면 영원히 굳어 있었다(Working이 종착역).
 /// 그래서 새벽 3시에도 출근해 있고, 체력이 0이 돼도 계속 일했다.
@@ -69,6 +70,11 @@ public class EmployeeWorkAI : MonoBehaviour
     //휴식에서 복귀하는 기준. 최대 체력 대비 비율이라 max_stamina가 다른 직원에게도 같이 통한다.
     [SerializeField, Range(0f, 1f)] private float _restExitStaminaRatio = 0.5f;
 
+    [Header("Door")]
+    //문에서 이 거리 안에 들어오면 문을 열기 시작한다. 문에 닿아서야 열면
+    //여는 동안(_openDuration) 몸이 이미 문짝을 뚫고 지나가 있다.
+    [SerializeField] private float _doorOpenDistance = 2.0f;
+
     [Header("Sit")]
     //앉기/일어서기 모션이 끝날 때까지 기다리는 시간. Assets/Animation의 StandToSit(2.23초),
     //SitToStand(2.27초) 길이에 맞춰둔 값이다. 클립을 갈아끼우면 여기도 같이 맞춰야
@@ -101,6 +107,10 @@ public class EmployeeWorkAI : MonoBehaviour
     private Employee _employee;
     private float _staminaAccumulator;
 
+    //지금 열어둔 채로 잡고 있는 문. 배치물과 컴포넌트를 같이 들고 있는 이유는 TickDoor 참고.
+    private PlaceableObject _heldDoorObject;
+    private Door _heldDoor;
+
     /// <summary>이 오브젝트가 대표하는 Employee의 ID. EmployeeObjectSystem에서 생성 직후 호출.</summary>
     public void Init(int employeeId)
     {
@@ -128,6 +138,9 @@ public class EmployeeWorkAI : MonoBehaviour
     private void OnDestroy()
     {
         StopAllCoroutines();
+
+        //잡은 채로 사라지면 그 문은 영영 열린 채로 남는다
+        ReleaseDoor();
 
         //오브젝트만 사라지고 Employee 데이터는 남는 경우(씬 전환 등)에 근무중으로 굳어 있으면
         //아무도 앉아 있지 않은데 계속 돈이 들어온다
@@ -482,9 +495,9 @@ public class EmployeeWorkAI : MonoBehaviour
     /// </summary>
     private void LeaveWork()
     {
-        Transform exitPoint = _workstationManagerSO.GetExitPoint(transform.position);
+        PlaceableObject exit = _workstationManagerSO.GetNearestDoor(transform.position);
 
-        if (exitPoint != null && MoveTo(exitPoint.position, "출입구", "문 위치를 NavMesh가 베이크된 곳으로 옮겨주세요."))
+        if (exit != null && MoveTo(exit.transform.position, "출입구", "문 위치를 NavMesh가 베이크된 곳으로 옮겨주세요."))
         {
             SetState(State.GoingHome);
             Debug.Log($"[EmployeeWorkAI] employee {_employeeId} : 퇴근길, 출입구로 이동중 (GoingHome)");
@@ -643,9 +656,85 @@ public class EmployeeWorkAI : MonoBehaviour
 
     #endregion
 
+    #region DOOR
+
+    /// <summary>
+    /// 출퇴근길에 문 앞을 지나면 그 문을 열어둔다.
+    ///
+    /// 문에 트리거를 달아두는 편이 자연스러워 보이지만 그러면 안 된다. ArriveHome() 뒤에 직원은
+    /// 문 자리에 그대로 서서 OffDuty로 대기하기 때문에, 트리거 안에 사람이 계속 있는 셈이 되어
+    /// 문이 밤새 열린 채로 있는다. 그래서 "걸어가는 중일 때만 연다"로 본다 -
+    /// 이렇게 하면 출근길(GoingToDesk)과 퇴근길(GoingHome)이 규칙 하나로 같이 처리되고,
+    /// 문 앞에 서 있기만 한 직원은 문을 열지 않는다.
+    ///
+    /// 여닫는 동작 자체와 여러 명이 같이 드나들 때의 처리는 Door가 맡는다. 여기서는 잡고 놓기만 한다.
+    /// </summary>
+    private void TickDoor()
+    {
+        PlaceableObject near = FindDoorWithinReach();
+
+        //잡고 있던 문 그대로면 아무것도 하지 않는다. Door 컴포넌트를 다시 찾지 않으려고 배치물로 비교한다.
+        if (near == _heldDoorObject)
+        {
+            return;
+        }
+
+        ReleaseDoor();
+
+        if (near == null)
+        {
+            return;
+        }
+
+        _heldDoorObject = near;
+        _heldDoor = Door.Of(near);
+
+        if (_heldDoor != null)
+        {
+            _heldDoor.Hold();
+        }
+    }
+
+    /// <summary>지금 열어야 할 문. 걸어가는 중이 아니거나 가장 가까운 문이 멀면 null.</summary>
+    private PlaceableObject FindDoorWithinReach()
+    {
+        if (_state != State.GoingToDesk && _state != State.GoingHome)
+        {
+            return null;
+        }
+
+        PlaceableObject nearest = _workstationManagerSO.GetNearestDoor(transform.position);
+
+        if (nearest == null)
+        {
+            return null;
+        }
+
+        //HasArrived와 같은 이유로 y는 뺀다 - 문틀 피벗 높이 때문에 거리가 부풀지 않도록
+        Vector3 offset = nearest.transform.position - transform.position;
+        offset.y = 0f;
+
+        return offset.sqrMagnitude <= _doorOpenDistance * _doorOpenDistance ? nearest : null;
+    }
+
+    /// <summary>잡고 있던 문을 놓는다. 실제로 닫히기까지는 Door가 조금 더 기다려준다.</summary>
+    private void ReleaseDoor()
+    {
+        if (_heldDoor != null)
+        {
+            _heldDoor.Release();
+        }
+
+        _heldDoor = null;
+        _heldDoorObject = null;
+    }
+
+    #endregion
+
     private void Update()
     {
         TickStamina();
+        TickDoor();
 
         if (_state != State.GoingToDesk && _state != State.GoingHome)
         {

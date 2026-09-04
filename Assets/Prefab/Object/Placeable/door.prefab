@@ -64,6 +64,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8e41affec0f6b38428e2d839d4228dfc, type: 3}
       insertIndex: -1
       addedObject: {fileID: -6165646065914079116}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8e41affec0f6b38428e2d839d4228dfc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -5211903472168340211}
   m_SourcePrefab: {fileID: 100100000, guid: 8e41affec0f6b38428e2d839d4228dfc, type: 3}
 --- !u!1 &4137927273793877995 stripped
 GameObject:
@@ -104,3 +107,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _placeableObjectSO: {fileID: 11400000, guid: bc1606c2a7f2c7f478944f42f152cf94, type: 2}
+--- !u!114 &-5211903472168340211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4137927273793877995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d9b41c07ae5482ba6c1e5f7d0834a26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _slab: {fileID: 0}
+  _hinge: {fileID: 0}
+  _openAngle: 90
+  _openDuration: 0.45
+  _closeDelay: 0.8
