@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: NightThemeSO
   m_EditorClassIdentifier: 
   _buildingMaterial: {fileID: 0}
-  _skybox: {fileID: 0}
+  _skybox: {fileID: 2100000, guid: bbbb9211949e7e9419c3a7dc7cff35b7, type: 2}
   _ambientColor: {r: 0.12, g: 0.14, b: 0.22, a: 1}
   _lightColor: {r: 0.5, g: 0.6, b: 0.9, a: 1}
   _lightIntensity: 0.25

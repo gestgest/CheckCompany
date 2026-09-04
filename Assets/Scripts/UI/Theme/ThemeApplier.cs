@@ -29,7 +29,7 @@ public class ThemeApplier : MonoBehaviour
     //테마에 따라 색과 밝기가 바뀔 직사광
     [SerializeField] private Light _sunLight;
 
-    //머티리얼을 갈아끼울 빌딩들. ThemeSO의 머티리얼이 비어 있으면 건드리지 않는다.
+    // 라이트/다크모드로 전환시 빌딩이 바뀌는 연출
     [SerializeField] private Renderer[] _buildingRenderers;
 
     //이 밑에서 ThemedGraphic을 전부 찾아 색을 입힌다 (보통 Canvas 루트).

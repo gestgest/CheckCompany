@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DayThemeSO
   m_EditorClassIdentifier: 
   _buildingMaterial: {fileID: 0}
-  _skybox: {fileID: 0}
+  _skybox: {fileID: 2100000, guid: 51aa3beeda3a90747a2045561be92e9b, type: 2}
   _ambientColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   _lightColor: {r: 1, g: 0.96, b: 0.9, a: 1}
   _lightIntensity: 1
