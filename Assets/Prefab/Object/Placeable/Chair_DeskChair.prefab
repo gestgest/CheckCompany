@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2368004510963003}
   - component: {fileID: 2368004510963004}
   - component: {fileID: 2368004510963005}
+  - component: {fileID: 2368004510963006}
   m_Layer: 0
   m_Name: Chair_DeskChair
   m_TagString: Untagged
@@ -122,5 +123,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _placeableObjectSO: {fileID: 11400000, guid: 4f07341653771d34ab021e7be3ef4991, type: 2}
-  _isWorkstation: 0
-  _seatPoint: {fileID: 0}
+--- !u!114 &2368004510963006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2368004510963000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c4f1a92be5b4d3e9a1c6f80d2547b13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _point: {fileID: 0}

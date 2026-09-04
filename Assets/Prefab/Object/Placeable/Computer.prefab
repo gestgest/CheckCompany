@@ -107,5 +107,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _placeableObjectSO: {fileID: 11400000, guid: 844233b2439002e4f85d8c65862e1982, type: 2}
-  _isWorkstation: 1
-  _seatPoint: {fileID: 0}

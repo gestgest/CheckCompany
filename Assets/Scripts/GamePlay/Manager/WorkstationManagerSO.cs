@@ -146,7 +146,7 @@ public class WorkstationManagerSO : ScriptableObject
 
         if (assigned != null)
         {
-            return assigned.GetSeatPoint();
+            return GetSeatPoint(assigned);
         }
 
         foreach (PlaceableObject workstation in _workstations)
@@ -164,15 +164,14 @@ public class WorkstationManagerSO : ScriptableObject
                 continue;
             }
 
-            //책상 위에 없거나 의자가 안 붙어있는 컴퓨터는 아직 앉을 수 없는 자리다.
-            //(TryResolveSeat이 여기서 의자를 찾아 자리로 꽂아주기도 한다)
+            //책상 위에 없거나 의자가 안 붙어있는 컴퓨터는 아직 앉을 수 없는 자리다
             if (!IsReadyForWork(workstation))
             {
                 continue;
             }
 
             Occupy(employeeId, workstation, objectId);
-            return workstation.GetSeatPoint();
+            return GetSeatPoint(workstation);
         }
 
         return null;
@@ -400,20 +399,27 @@ public class WorkstationManagerSO : ScriptableObject
     /// 이 컴퓨터가 근무 가능한 자리인지 확인한다.
     /// 조건 : 책상 위에 있을 것 + 그 책상에 의자가 맞닿아 있을 것.
     ///
-    /// 통과하면 찾아낸 의자를 컴퓨터의 자리로 꽂아준다(직원이 그 의자로 걸어간다).
-    /// 의자를 옮기거나 치우면 다음 호출에서 갱신되므로 따로 정리할 필요는 없다.
+    /// 통과하면 찾아낸 책상과 의자를 같이 내준다. 직원이 걸어가는 곳은 그 의자다.
+    ///
+    /// 결과를 컴퓨터에 캐싱해두지 않는다 - 의자나 책상은 언제든 옮기거나 치울 수 있어서
+    /// 캐싱하면 그때마다 무효화해줘야 하고, 이 함수를 부르는 쪽(배정 UI, 직원 AI의 판단 주기)은
+    /// 프레임마다가 아니라 몇 초에 한 번이라 매번 찾아도 부담이 없다.
     /// </summary>
     public bool TryResolveSeat(PlaceableObject computer, out PlaceableObject desk, out PlaceableObject chair)
     {
         desk = FindDeskUnder(computer);
         chair = desk != null ? FindChairNextTo(desk) : null;
 
-        if (computer != null)
-        {
-            computer.SetRuntimeSeatPoint(chair != null ? chair.GetSeatPoint() : null);
-        }
-
         return desk != null && chair != null;
+    }
+
+    /// <summary>
+    /// 이 자리에 배정된 직원이 실제로 걸어갈 지점 = 책상에 붙어있는 의자.
+    /// 아직 근무 자리가 아니면(책상 위가 아니거나 의자가 없으면) null.
+    /// </summary>
+    public Transform GetSeatPoint(PlaceableObject workstation)
+    {
+        return TryResolveSeat(workstation, out _, out PlaceableObject chair) ? Seat.PointOf(chair) : null;
     }
 
     /// <summary>책상 위에 있고 의자까지 붙어 있어 실제로 직원을 앉힐 수 있는 자리인지.</summary>
@@ -422,12 +428,6 @@ public class WorkstationManagerSO : ScriptableObject
         if (workstation == null || !workstation.IsWorkstation)
         {
             return false;
-        }
-
-        //컴퓨터가 아닌 자리는 예전처럼 그 자체로 근무 가능한 자리로 본다
-        if (workstation.Type != ObjectType.Computer)
-        {
-            return true;
         }
 
         return TryResolveSeat(workstation, out _, out _);

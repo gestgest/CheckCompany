@@ -38,7 +38,7 @@ public class EmployeeWorkAI : MonoBehaviour
     //agent 스스로 감속하게 만든다. remainingDistance만으로 판정하면 agent는 끝까지 전속력으로 오다가
     //문턱을 넘는 순간 급정지 + 주변 회피(obstacle avoidance) 보정이 겹쳐 도착 직전에 떨린다.
     [SerializeField] private float _arriveDistance = 0.3f;
-    [SerializeField] private float _seatNavMeshSampleRadius = 2.0f; //SeatPoint 주변에서 NavMesh를 찾을 반경
+    [SerializeField] private float _seatNavMeshSampleRadius = 2.0f; //자리(의자) 주변에서 NavMesh를 찾을 반경
 
     [Header("Decision")]
     //근무시간/체력을 다시 판단하는 간격. 매 프레임 볼 필요가 없고(게임 1시간이 실제 1초다),
@@ -79,7 +79,7 @@ public class EmployeeWorkAI : MonoBehaviour
     private State _state = State.OffDuty;
     private Transform _seat;
 
-    //자리로 출발할 때의 SeatPoint 위치. 책상이 옮겨진 걸 알아채는 기준점이다.
+    //자리로 출발할 때의 의자 위치. 의자가 옮겨진 걸 알아채는 기준점이다.
     private Vector3 _seatAnchor;
 
     //지금 걸어가고 있는 목적지(NavMesh 위로 스냅된 좌표). 도착 판정에 쓴다.
@@ -301,7 +301,9 @@ public class EmployeeWorkAI : MonoBehaviour
 
         if (assigned != null)
         {
-            return assigned.GetSeatPoint();
+            //자리는 컴퓨터에 배정되지만 실제로 걸어가는 곳은 그 책상에 붙어있는 의자다.
+            //의자를 치우면 여기서 null이 나오고, 아래 IsSeatStale이 자리를 놓친 것으로 본다.
+            return _workstationManagerSO.GetSeatPoint(assigned);
         }
 
         return _autoClaimSeat ? _workstationManagerSO.RequestSeat(_employeeId) : null;
@@ -320,25 +322,25 @@ public class EmployeeWorkAI : MonoBehaviour
             return true;
         }
 
-        Transform seat = assigned.GetSeatPoint();
+        Transform seat = _workstationManagerSO.GetSeatPoint(assigned);
 
         if (seat != _seat)
         {
             return true;
         }
 
-        //책상을 옮기면 SeatPoint도 같이 움직인다. 앉은 자세 그대로 끌려가면 안 되므로 다시 걸어간다.
+        //의자를 옮기면 자리도 같이 움직인다. 앉은 자세 그대로 끌려가면 안 되므로 다시 걸어간다.
         return (seat.position - _seatAnchor).sqrMagnitude > _seatMovedThreshold * _seatMovedThreshold;
     }
 
     private bool MoveToSeat()
     {
-        return MoveTo(_seat.position, $"'{_seat.name}'", "SeatPoint 위치를 책상 옆 바닥(NavMesh가 베이크된 곳)으로 옮겨주세요.");
+        return MoveTo(_seat.position, $"'{_seat.name}'", "의자(또는 의자의 SeatPoint)를 NavMesh가 베이크된 바닥 위로 옮겨주세요.");
     }
 
     /// <summary>
     /// destination 주변에서 실제로 걸어갈 수 있는 가장 가까운 지점을 찾아 그리로 출발시킨다.
-    /// SeatPoint/출입구 자체가 책상 모델 안쪽 등 NavMesh가 없는 지점일 수 있어서 스냅이 필요하다.
+    /// 의자 자리/출입구 자체가 모델 안쪽 등 NavMesh가 없는 지점일 수 있어서 스냅이 필요하다.
     /// GoToDesk(자리)와 LeaveWork(출입구) 둘 다 이 함수를 쓴다.
     /// </summary>
     private bool MoveTo(Vector3 destination, string label, string hint = "")

@@ -103,12 +103,8 @@ public class WorkstationAssignPopup : MonoBehaviour
     /// </summary>
     public void Open(PlaceableObject workstation)
     {
+        //IsWorkstation이 곧 "컴퓨터인가"다 - 책상이나 의자, 장식을 눌렀을 때는 그냥 닫혀 있는다
         if (workstation == null || !workstation.IsWorkstation)
-        {
-            return;
-        }
-
-        if (workstation.Type != ObjectType.Computer)
         {
             return;
         }

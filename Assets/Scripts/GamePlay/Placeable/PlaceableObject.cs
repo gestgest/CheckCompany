@@ -18,24 +18,19 @@ public class PlaceableObject : MonoBehaviour
     private int id;
     [SerializeField] private PlaceableObjectSO _placeableObjectSO;
     
-    [Header("Workstation")]
-    [SerializeField] private bool _isWorkstation;
-    [SerializeField] private Transform _seatPoint;
-
-    public bool IsWorkstation => _isWorkstation;
+    /// <summary>
+    /// 직원을 배정하는 단위. 자리는 컴퓨터 한 대가 하나다
+    /// (컴퓨터가 올라간 책상 + 그 책상에 붙은 의자까지 갖춰져야 실제로 앉을 수 있다 -
+    /// WorkstationManagerSO.IsReadyForWork 참고).
+    ///
+    /// 예전에는 프리팹마다 체크하는 bool이었다. 켜져 있는 건 컴퓨터 하나뿐인데도
+    /// 화분까지 전부 그 필드를 달고 다녔고, 쓰는 쪽은 어차피 Type == Computer를 같이 보고 있어서
+    /// 둘이 어긋날 여지만 있었다.
+    /// </summary>
+    public bool IsWorkstation => Type == ObjectType.Computer;
 
     /// <summary>상점 카테고리이자 배치 규칙의 기준. SO가 안 꽂혀 있으면 Etc로 본다.</summary>
     public ObjectType Type => _placeableObjectSO != null ? _placeableObjectSO.GetObjectType() : ObjectType.Etc;
-
-    /// <summary>
-    /// 컴퓨터처럼 자기 자리(의자)를 런타임에 찾아야 하는 오브젝트용.
-    /// 인스펙터의 _seatPoint보다 우선한다. WorkstationManagerSO가 채워준다.
-    /// </summary>
-    private Transform _runtimeSeatPoint;
-
-    //상점 가구가 수백 개로 늘어나면 프리팩마다 손으로 끌어다 넣는 것은 불가능하므로,
-    //이름 규칙만 지키면 에디터에서 자동으로 채워준다.
-    private const string SeatPointName = "SeatPoint";
 
     //타일 격자에 칸 단위로 맞춰야 하므로 90도 단위로만 돈다.
     private const int RotationStep = 90;
@@ -46,59 +41,6 @@ public class PlaceableObject : MonoBehaviour
 
     //씬에 하나뿐인 Grid. 칸 좌표 계산에 매번 필요해서 캐싱한다.
     private Grid _grid;
-
-#if UNITY_EDITOR
-    //컴포넌트를 처음 붙였을 때 1회
-    private void Reset()
-    {
-        AutoAssignReferences();
-    }
-
-    //인스펙터에서 값이 바뀌거나 프리팩을 열 때마다
-    private void OnValidate()
-    {
-        AutoAssignReferences();
-
-        if (_isWorkstation && _seatPoint == null)
-        {
-            Debug.LogWarning(
-                $"[PlaceableObject] '{name}' : 워크스테이션인데 '{SeatPointName}' 자식이 없습니다. " +
-                "직원이 오브젝트 중심(NavMesh가 없는 곳)으로 가려고 합니다.",
-                this
-            );
-        }
-    }
-#endif
-
-    /// <summary>비어있는 참조를 이름/타입으로 찾아 채운다. 이미 들어있는 값은 건드리지 않는다.</summary>
-    private void AutoAssignReferences()
-    {
-        if (_seatPoint == null)
-        {
-            _seatPoint = transform.Find(SeatPointName);
-        }
-    }
-
-    /// <summary>직원이 근무할 위치. 지정하지 않으면 오브젝트 자신의 Transform을 사용한다.</summary>
-    public Transform GetSeatPoint()
-    {
-        if (_runtimeSeatPoint != null)
-        {
-            return _runtimeSeatPoint;
-        }
-
-        return _seatPoint != null ? _seatPoint : transform;
-    }
-
-    /// <summary>
-    /// 런타임에 찾아낸 자리를 꽂아준다 (컴퓨터 -> 붙어있는 의자).
-    /// 의자를 옮기거나 치우면 다시 불려서 갱신되므로, 여기서는 마지막 값만 들고 있으면 된다.
-    /// </summary>
-    public void SetRuntimeSeatPoint(Transform seatPoint)
-    {
-        _runtimeSeatPoint = seatPoint;
-    }
-
 
     //init와 동일
     public void SetPlacedObjectData(PlacedObjectData placedObjectData)

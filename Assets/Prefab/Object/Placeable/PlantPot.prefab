@@ -128,8 +128,6 @@ MonoBehaviour:
     property_id: 8
     position: {x: 0, y: 0, z: 0}
     rotation: 0
-  _isWorkstation: 0
-  _seatPoint: {fileID: 0}
 --- !u!208 &1705404836633206
 NavMeshObstacle:
   m_ObjectHideFlags: 0

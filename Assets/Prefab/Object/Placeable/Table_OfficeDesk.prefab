@@ -155,8 +155,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _placeableObjectSO: {fileID: 11400000, guid: 39b0802b9fbe207478dd49fa7d69285a, type: 2}
-  _isWorkstation: 0
-  _seatPoint: {fileID: 1883292705527701}
 --- !u!208 &2649339848780706
 NavMeshObstacle:
   m_ObjectHideFlags: 0
