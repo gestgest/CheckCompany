@@ -183,7 +183,7 @@ public class PlaceableObjectIconGenerator : EditorWindow
 
     #endregion
 
-    #region 생성
+    #region Generation
 
     private void StartGenerate()
     {

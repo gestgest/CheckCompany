@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.coplaydev.unity-mcp": "https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity#main",
     "com.unity.adaptiveperformance.google.android": "5.1.6",
     "com.unity.adaptiveperformance.samsung.android": "5.1.0",
     "com.unity.addressables": "2.8.1",
