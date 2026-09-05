@@ -3491,7 +3491,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lightTheme: {fileID: 11400000, guid: 4a0c61f00cd20fc4ba493c151c017199, type: 2}
   _darkTheme: {fileID: 11400000, guid: 485b69f838711dc4d8ae2bb89ff1b30c, type: 2}
-  _mode: 1
+  _mode: 2
   _sunLight: {fileID: 648254839}
   _buildingRenderers: []
   _uiRoot: {fileID: 1301509490}
@@ -6355,6 +6355,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 858370021}
   - {fileID: 648254840}
+  - {fileID: 950836237}
   - {fileID: 1301509490}
   - {fileID: 1879193684}
-  - {fileID: 950836237}

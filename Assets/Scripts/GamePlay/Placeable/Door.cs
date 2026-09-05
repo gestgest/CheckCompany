@@ -50,6 +50,9 @@ public class Door : MonoBehaviour
     private Vector3 _closedLocalPosition;
     private Vector3 _hingeLocalPosition;
 
+    //경첩이 서 있는 방향(문짝 부모의 로컬 공간 기준). 월드 up을 그 공간으로 가져온 값이다.
+    private Vector3 _hingeLocalAxis = Vector3.up;
+
     /// <summary>이 배치물의 문. Door가 안 붙어 있는 문 프리팹이면 null (그냥 안 여닫힐 뿐이다).</summary>
     public static Door Of(PlaceableObject placeable)
     {
@@ -96,6 +99,32 @@ public class Door : MonoBehaviour
         _hingeLocalPosition = _hinge != null && _slab.parent != null
             ? _slab.parent.InverseTransformPoint(_hinge.position)
             : _closedLocalPosition;
+
+        _hingeLocalAxis = ResolveHingeAxis();
+    }
+
+    /// <summary>
+    /// 경첩 축을 문짝 부모의 로컬 공간에서 구한다.
+    ///
+    /// 그냥 Vector3.up을 쓰면 안 된다. door.fbx는 bakeAxisConversion이 꺼져 있어서
+    /// 블렌더(Z-up) → 유니티(Y-up) 변환이 메시가 아니라 노드의 -90도 X 회전으로 들어가 있다.
+    /// 그래서 문짝 부모의 로컬 up은 실제로는 월드 기준 수평 방향이고, 그걸 축으로 돌리면
+    /// 문이 경첩을 중심으로 옆으로 눕는다(도개교처럼).
+    ///
+    /// 월드의 위쪽을 그 공간으로 가져오면 모델을 어떻게 임포트했든, 배치하면서 몇 도로 돌렸든
+    /// 항상 실제로 서 있는 축이 나온다.
+    /// </summary>
+    private Vector3 ResolveHingeAxis()
+    {
+        if (_slab.parent == null)
+        {
+            return Vector3.up;
+        }
+
+        Vector3 axis = _slab.parent.InverseTransformDirection(Vector3.up);
+
+        //부모 스케일이 0이면 방향이 뭉개진다. 그때는 눕히느니 안 돌리는 게 낫다.
+        return axis.sqrMagnitude > 0.0001f ? axis.normalized : Vector3.up;
     }
 
     private void Update()
@@ -118,8 +147,7 @@ public class Door : MonoBehaviour
     /// <summary>지금 각도를 문짝 트랜스폼에 반영한다. 경첩을 축으로 도는 것이 여기서 나온다.</summary>
     private void ApplyAngle()
     {
-        //문틀은 y축으로만 돌아가 있으므로 부모 로컬 공간의 up이 곧 경첩 축이다
-        Quaternion turn = Quaternion.AngleAxis(_angle, Vector3.up);
+        Quaternion turn = Quaternion.AngleAxis(_angle, _hingeLocalAxis);
 
         _slab.localRotation = turn * _closedLocalRotation;
         _slab.localPosition = _hingeLocalPosition + turn * (_closedLocalPosition - _hingeLocalPosition);
