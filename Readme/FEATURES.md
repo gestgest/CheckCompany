@@ -18,13 +18,14 @@ CheckCompany의 주요 화면과 기능을 정리합니다.
 
 | 라이트 모드 | 다크 모드 |
 |:---:|:---:|
-| <img src="https://github.com/user-attachments/assets/326143b3-e5aa-4d89-b423-85aaf92c74ea" width="240"/> | <img width="240" alt="image" src="https://github.com/user-attachments/assets/7a9e9005-8b8d-48cf-b030-6757e9cf7911" /> |
+| <img src="https://github.com/user-attachments/assets/326143b3-e5aa-4d89-b423-85aaf92c74ea" width="240"/> | <img width="240" alt="image" src="https://github.com/user-attachments/assets/3641198a-8dca-4e5c-ba76-5660aa5d2775" />
+ |
 
 ### 회원가입
 
 | 라이트 모드 | 다크 모드 |
 |:---:|:---:|
-| <img src="https://github.com/user-attachments/assets/a5b11a29-4d4f-4ce2-9a90-c47c67aea42c" width="240"/> | <img width="240" alt="image" src="https://github.com/user-attachments/assets/466eb7b3-b033-4b98-a417-300058457a1a" /> |
+| <img src="https://github.com/user-attachments/assets/a5b11a29-4d4f-4ce2-9a90-c47c67aea42c" width="240"/> | <img width="240" alt="image" src="https://github.com/user-attachments/assets/a7cb1d64-b069-44eb-99c9-4675570a5365" />|
 
 ### 서버 통신 (Firebase Auth)
 
@@ -48,7 +49,7 @@ private IEnumerator LoginAynsc(string email, string password)
 
         string failedMessage = "Login Failed! Because ";
 
-        //보안을 위해 case에 상관없이 Login Failed?
+        //보안을 위해 case에 상관없이 Login Failed?이지만 일단 AuthError 타입 확인을 위해 이렇게 만들었다.
         switch (authError)
         {
             case AuthError.InvalidEmail:
