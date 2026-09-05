@@ -26,6 +26,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] PlacedObjectManager _placeManager;
     [SerializeField] WorkstationManagerSO _workstationManagerSO;
 
+    //PlaceSystem은 MyCompany 씬에 있고 GameManager는 GamePlay 씬에 있어 인스펙터로 못 꽂는다
+    //(다른 씬끼리는 참조를 직접 못 건다). PlaceableObject.GetGrid()와 같은 방식으로 찾아 캐싱한다.
+    private PlaceSystem _placeSystem;
+
     [Header("ServerEvent")] [SerializeField]
     private DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
 
@@ -431,6 +435,22 @@ public class GameManager : MonoBehaviour
 
         //책상이면 자리 풀에, 문이면 출입구 목록에 들어간다 (RegisterWorkstation이 타입 보고 나눈다)
         _workstationManagerSO.RegisterWorkstation(placeableObject);
+
+        //PlaceSystem에도 등록해야 이 칸이 타일맵에 "찬 칸"으로 칠해진다.
+        //이걸 빼먹으면 SetAllArea()가 이 오브젝트를 몰라서 나중에 상점 오브젝트를 같은 자리에
+        //겹쳐 놓을 수 있게 된다 (실제 서버 로드 경로는 PlaceSystem이 직접 생성해서 이 문제가 없다).
+        GetPlaceSystem()?.RegisterExternallyPlacedObject(placeableObject);
+    }
+
+    /// <summary>씬에 하나뿐인 PlaceSystem을 찾아 캐싱한다. 없으면(테스트용 미니 씬 등) null.</summary>
+    private PlaceSystem GetPlaceSystem()
+    {
+        if (_placeSystem == null)
+        {
+            _placeSystem = FindFirstObjectByType<PlaceSystem>();
+        }
+
+        return _placeSystem;
     }
 
     /// <summary>

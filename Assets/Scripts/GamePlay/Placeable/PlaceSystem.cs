@@ -219,6 +219,24 @@ public class PlaceSystem : MonoBehaviour
     }
 
     /// <summary>
+    /// 이미 만들어져서 배치까지 끝난 오브젝트를 타일 점유 목록에 등록한다.
+    ///
+    /// GameManager._testPlacements(로그인 없이 테스트할 때 자동 배치)처럼 이 클래스를 거치지 않고
+    /// 직접 Instantiate + Place()한 오브젝트를 위한 것 - 여기 등록을 안 하면 SetAllArea()가
+    /// 이 오브젝트의 존재를 몰라 타일을 안 칠하고, 그 자리에 다른 오브젝트가 그대로 겹쳐 놓인다.
+    /// 서버 저장(RegisterPlacedObjectData)은 따로 하지 않는다 - 테스트 배치는 애초에 서버에 안 쓴다.
+    /// </summary>
+    public void RegisterExternallyPlacedObject(PlaceableObject obj)
+    {
+        if (obj == null || _placedObjects.Contains(obj))
+        {
+            return;
+        }
+
+        _placedObjects.Add(obj);
+    }
+
+    /// <summary>
     /// 저장된 property_id로 배치할 프리팹을 찾는다.
     ///
     /// PlaceableObjectAssetsSO.GetObject(id)는 id % 100으로 "자기 카테고리 안"에서만 찾는다.
