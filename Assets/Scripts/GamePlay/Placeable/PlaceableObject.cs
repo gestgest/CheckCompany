@@ -35,6 +35,10 @@ public class PlaceableObject : MonoBehaviour
     //타일 격자에 칸 단위로 맞춰야 하므로 90도 단위로만 돈다.
     private const int RotationStep = 90;
 
+    //지금 배치 회전(0/90/180/270). transform.eulerAngles.y로 역산하면 문처럼 자체적으로
+    //기울어진(X가 0이 아닌) 모델에서 엉뚱한 값이 나오므로 따로 들고 있는다.
+    private int _placementRotation;
+
 
     //타일 한 칸의 월드 크기. Grid의 CellSwizzle이 XZY라서 cellSize.y가 월드 z축 길이다.
     private Vector2 _cellSize = Vector2.zero;
@@ -48,7 +52,9 @@ public class PlaceableObject : MonoBehaviour
         id = placedObjectData.GetID();
 
         //회전을 Init()보다 먼저 적용해야 칸 수 계산이 "돌아간 뒤"의 가로/세로를 본다
-        transform.rotation = Quaternion.Euler(0f, placedObjectData.GetRotation(), 0f);
+        //(문처럼 자체 기울기가 있는 모델은 각자 Start()에서 별도로 세운다 - 여기선 그대로 둔다)
+        _placementRotation = NormalizeDegrees(placedObjectData.GetRotation());
+        transform.rotation = Quaternion.Euler(0f, _placementRotation, 0f);
 
         Init();
 
@@ -59,10 +65,10 @@ public class PlaceableObject : MonoBehaviour
         transform.position += placedObjectData.GetPosition() - GetStartPosition();
     }
 
-    /// <summary>현재 y축 회전(도). 항상 0/90/180/270 중 하나다.</summary>
+    /// <summary>현재 배치 회전(도). 항상 0/90/180/270 중 하나다.</summary>
     public int GetRotation()
     {
-        return NormalizeDegrees(Mathf.RoundToInt(transform.eulerAngles.y / RotationStep) * RotationStep);
+        return _placementRotation;
     }
 
     /// <summary>90도 돌린다. 배치/이동 중 회전 버튼이 부르는 함수.</summary>
@@ -76,7 +82,13 @@ public class PlaceableObject : MonoBehaviour
     {
         degrees = NormalizeDegrees(degrees);
 
-        transform.rotation = Quaternion.Euler(0f, degrees, 0f);
+        //통째로 대입(= Quaternion.Euler(0, degrees, 0))하지 않고 차이만큼만 지금 트랜스폼 위에
+        //세계 Y축 기준으로 얹는다. 문처럼 Start()에서 자체적으로 기울여둔(X가 0이 아닌) 모델도
+        //그 기울기를 안 지우고 방향만 돈다 - 통째 대입이면 회전 버튼 한 번에 도로 눕는다.
+        int delta = NormalizeDegrees(degrees - _placementRotation);
+        transform.rotation = Quaternion.Euler(0f, delta, 0f) * transform.rotation;
+
+        _placementRotation = degrees;
 
         //돌면 가로/세로가 뒤바뀌므로 칸 수를 다시 세야 한다
         CalculateTileSize();
