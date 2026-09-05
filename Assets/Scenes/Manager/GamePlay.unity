@@ -763,7 +763,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 4
+  m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 250, y: 250}
@@ -17610,6 +17610,9 @@ MonoBehaviour:
     rotation: 0
   - prefab: {fileID: 2055982069299100, guid: 9f16628a1d1834042d9a7ff4ddad3cbc, type: 3}
     position: {x: 0, y: 0, z: -1}
+    rotation: 0
+  - prefab: {fileID: 3496991210290322520, guid: b1f8a05b2d45e4749bb122db3c42358a, type: 3}
+    position: {x: 9, y: 0, z: -9}
     rotation: 0
   _testSpawnEmployee: 1
   _testTimeJumpMinutes: 180
@@ -40053,7 +40056,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 4
+  m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 250, y: 250}
@@ -51365,7 +51368,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 4
+  m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 250, y: 250}
@@ -55864,7 +55867,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 4
+  m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 250, y: 250}

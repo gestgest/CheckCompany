@@ -1,32 +1,25 @@
+using System;
 using UnityEngine;
 
 /// <summary>
 /// 직원이 드나들 때 여닫히는 문. 문 프리팹(ObjectType.Door)에만 붙인다.
 ///
 /// Animator 대신 코드로 돌린다. 문은 축 하나짜리 회전이라 클립과 컨트롤러까지 만드는 것이
-/// 배보다 배꼽인 것도 있지만, 실제 이유는 두 가지다.
-/// - 닫히는 도중에 다음 직원이 오면 그 각도에서 그대로 다시 열려야 한다 (클립은 처음부터 되감는다).
-/// - 두 명이 같이 드나들 때 먼저 지나간 쪽이 문을 닫아버리면 안 된다 (아래 _holders).
 ///
 /// 회전축은 door.fbx가 이미 부품별로 쪼개져 있어서(LP_Door_Slab / LP_Hinge_0..2 / LP_Jamb_*)
 /// 경첩 노드의 위치를 그대로 쓴다. 문짝 자신의 피벗으로 돌리면 문짝 한가운데가 축이 되어
 /// 반쪽이 벽을 뚫고 반대편으로 나간다.
-///
-/// Seat과 같은 규칙 - 이름만 맞으면 프리팹마다 손으로 끌어다 넣지 않아도 된다.
 /// </summary>
 [RequireComponent(typeof(PlaceableObject))]
 public class Door : MonoBehaviour
 {
-
     [SerializeField] private Transform _slab;  //실제로 돌아가는 문짝
     [SerializeField] private Transform _hinge; //회전축이 지나는 지점(경첩). 높이는 상관없고 XZ만 쓰인다
 
     [Header("Motion")]
-    //열렸을 때의 각도. 부호를 뒤집으면(-90) 반대쪽으로 열린다.
-    [SerializeField] private float _openAngle = 90f;
+    [SerializeField] private float _openAngle = 90f; //열렸을 때의 각도.
 
-    //다 여는 데(또는 다 닫는 데) 걸리는 시간. 이 게임은 실제 1초가 게임 1시간이라
-    //앉기 모션(2.2초)처럼 잡으면 문 여는 데만 두 시간을 쓰는 꼴이 된다.
+    //다 여는 데(또는 다 닫는 데) 걸리는 시간.
     [SerializeField] private float _openDuration = 0.45f;
 
     //마지막 사람이 놓은 뒤 닫히기 시작할 때까지의 여유.
@@ -47,7 +40,7 @@ public class Door : MonoBehaviour
     private Vector3 _closedLocalPosition;
     private Vector3 _hingeLocalPosition;
 
-    //경첩이 서 있는 방향(문짝 부모의 로컬 공간 기준). 월드 up을 그 공간으로 가져온 값이다.
+    //경첩이 서 있는 방향. 
     private Vector3 _hingeLocalAxis = Vector3.up;
 
     /// <summary>이 배치물의 문. Door가 안 붙어 있는 문 프리팹이면 null (그냥 안 여닫힐 뿐이다).</summary>
@@ -56,6 +49,40 @@ public class Door : MonoBehaviour
         return placeable != null ? placeable.GetComponent<Door>() : null;
     }
 
+    private void Start()
+    {
+        //문을 세운다.
+        transform.rotation = Quaternion.Euler(-90, 0, 0); 
+    }
+
+
+    private void Update()
+    {
+        float target = _holders > 0 || Time.time < _closeTime ? _openAngle : 0f;
+
+        if (Mathf.Approximately(_angle, target))
+        {
+            return;
+        }
+
+        //각도를 목표로 끌고 갈 뿐이라 닫히는 도중에 다시 열려도 지금 각도에서 이어진다
+        float degreesPerSecond = Mathf.Abs(_openAngle) / Mathf.Max(_openDuration, 0.01f);
+
+        _angle = Mathf.MoveTowards(_angle, target, degreesPerSecond * Time.deltaTime);
+
+        ApplyAngle();
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /// <summary>문을 열어둔 채로 잡는다. 잡은 사람이 있는 동안은 닫히지 않는다.</summary>
     public void Hold()
     {
@@ -121,24 +148,6 @@ public class Door : MonoBehaviour
         //부모 스케일이 0이면 방향이 뭉개진다. 그때는 눕히느니 안 돌리는 게 낫다.
         return axis.sqrMagnitude > 0.0001f ? axis.normalized : Vector3.up;
     }
-
-    private void Update()
-    {
-        float target = _holders > 0 || Time.time < _closeTime ? _openAngle : 0f;
-
-        if (Mathf.Approximately(_angle, target))
-        {
-            return;
-        }
-
-        //각도를 목표로 끌고 갈 뿐이라 닫히는 도중에 다시 열려도 지금 각도에서 이어진다
-        float degreesPerSecond = Mathf.Abs(_openAngle) / Mathf.Max(_openDuration, 0.01f);
-
-        _angle = Mathf.MoveTowards(_angle, target, degreesPerSecond * Time.deltaTime);
-
-        ApplyAngle();
-    }
-
     /// <summary>지금 각도를 문짝 트랜스폼에 반영한다. 경첩을 축으로 도는 것이 여기서 나온다.</summary>
     private void ApplyAngle()
     {

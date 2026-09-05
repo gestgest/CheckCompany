@@ -19,4 +19,4 @@ MonoBehaviour:
   money: 0
   type: 4
   icon: {fileID: 21300000, guid: b8e48fc83363dcd48946e818a0a99b5d, type: 3}
-  prefab: {fileID: 4137927273793877995, guid: b1f8a05b2d45e4749bb122db3c42358a, type: 3}
+  prefab: {fileID: 3496991210290322520, guid: b1f8a05b2d45e4749bb122db3c42358a, type: 3}
