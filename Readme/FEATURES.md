@@ -97,11 +97,13 @@ private IEnumerator LoginAynsc(string email, string password)
 ## 3. 미션
 
 목표 달성을 게임의 성장 요소로 삼는 핵심 시스템입니다. 미션 하나는 여러 개의 todo 항목으로 이루어지고, 전부 체크되면 완료로 처리됩니다.
+직원이 할당된 미션을 완료하면 
+| 미션 목록 (진행 중) | 미션 생성 | 미션 수정 | 직원 미션 할당 |
+| :---: | :---: | :---: | :---: |
+| <img src="https://github.com/user-attachments/assets/8ae13b57-d02f-40bd-bfad-e8749b83e393" width="220" alt="미션 목록" /> | <img src="https://github.com/user-attachments/assets/d3394b26-7f6a-4b50-bfb4-16cf87022d04" width="220" alt="미션 생성" /> | <img src="https://github.com/user-attachments/assets/c4c41566-794f-4534-89ee-865fbe489f1c" width="220" alt="미션 수정" /> | <img src="https://github.com/user-attachments/assets/e1802dcd-2fac-442e-8960-475d806cafb4" width="220" alt="직원 미션 할당" /> |
+| 진행 중인 미션을 펼쳐 To-Do 체크리스트를 확인합니다. | 직군 유형, 난이도, To-Do 항목을 지정하여 새 미션을 생성합니다. | 기존 미션의 유형, 난이도, To-Do 항목을 수정합니다. | 특정 미션에 담당 직원을 지정 및 할당합니다. |
 
-| 미션 목록 (진행 중) | 미션 생성 | 미션 수정 |
-|:---:|:---:|:---:|
-| <img src="https://github.com/user-attachments/assets/8ae13b57-d02f-40bd-bfad-e8749b83e393" width="220"/> | <img src="https://github.com/user-attachments/assets/d3394b26-7f6a-4b50-bfb4-16cf87022d04" width="220"/> | <img src="https://github.com/user-attachments/assets/c4c41566-794f-4534-89ee-865fbe489f1c" width="220"/> |
-| 진행 중인 미션을 펼치면 todo 체크리스트가 나온다 | 유형(Dev/Designer/QA/Product)·난이도·todo 항목을 정해 새 미션을 만든다 | 기존 미션의 유형·난이도·todo를 다시 편집한다 |
+
 
 | 완료된 미션 목록 | 완료된 미션 상세 | 미션 달력 |
 |:---:|:---:|:---:|
