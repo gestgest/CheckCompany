@@ -2,16 +2,18 @@
 CheckCompany의 주요 화면
 
 ## 로그인 화면
-<img width="406" height="879" alt="스크린샷 2025-09-14 230143" src="https://github.com/user-attachments/assets/60d1335f-a720-491b-81b9-8a693f5dbc3a" /><br>
-메뉴<br><br>
+<img width="404" height="878" alt="image" src="https://github.com/user-attachments/assets/9c52cf2e-ee90-47f0-a87d-408fa8430da1" /> 라이트모드<br>
+<img width="404" height="878" alt="image" src="https://github.com/user-attachments/assets/9c52cf2e-ee90-47f0-a87d-408fa8430da1" /> 다크모드
 
-<img width="402" height="877" alt="스크린샷 2025-09-14 230156" src="https://github.com/user-attachments/assets/f661f7b2-baf5-473f-ae79-39d291ff9c2a" /><br>
+
+메뉴<br><br>
+<img width="407" height="883" alt="image" src="https://github.com/user-attachments/assets/8fb99001-636a-4307-9060-bb44d4f2dc18" /><br>
 로그인 화면<br><br>
 
-<img width="399" height="875" alt="image" src="https://github.com/user-attachments/assets/9a8b0157-f9d1-4698-92ba-f19e503bd7c8" /><br>
+<img width="407" height="883" alt="image" src="https://github.com/user-attachments/assets/4e9f9aa2-bf62-4064-86dc-ec6b4bda2eb0" /><br>
 회원가입 화면<br><br>
 
-### 코
+### 서버 통신 코드
 ```
 private IEnumerator LoginAynsc(string email, string password)
 {
