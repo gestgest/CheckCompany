@@ -17,9 +17,6 @@ using UnityEngine;
 [RequireComponent(typeof(PlaceableObject))]
 public class Door : MonoBehaviour
 {
-    //door.fbx의 노드 이름. 문짝은 정확히 이 이름이고, 경첩은 0/1/2로 여러 개라 접두사로 찾는다.
-    private const string SlabName = "LP_Door_Slab";
-    private const string HingePrefix = "LP_Hinge";
 
     [SerializeField] private Transform _slab;  //실제로 돌아가는 문짝
     [SerializeField] private Transform _hinge; //회전축이 지나는 지점(경첩). 높이는 상관없고 XZ만 쓰인다
@@ -78,12 +75,10 @@ public class Door : MonoBehaviour
 
     private void Awake()
     {
-        AutoAssignParts();
-
         if (_slab == null)
         {
             Debug.LogWarning(
-                $"[Door] '{name}' : 회전할 문짝('{SlabName}')을 찾지 못해 이 문은 여닫히지 않습니다. " +
+                $"[Door] '{name}' : 회전할 문짝을 찾지 못해 이 문은 여닫히지 않습니다. " +
                 "모델을 갈아끼웠다면 문짝 오브젝트를 _slab에 직접 꽂아주세요.",
                 this);
 
@@ -153,45 +148,4 @@ public class Door : MonoBehaviour
         _slab.localPosition = _hingeLocalPosition + turn * (_closedLocalPosition - _hingeLocalPosition);
     }
 
-    private void AutoAssignParts()
-    {
-        if (_slab == null)
-        {
-            _slab = FindDescendant(SlabName);
-        }
-
-        if (_hinge == null)
-        {
-            //경첩은 위아래로 여러 개지만 전부 같은 모서리에 붙어 있어서 XZ는 같다. 아무거나 하나면 된다.
-            _hinge = FindDescendant(HingePrefix);
-        }
-    }
-
-    /// <summary>이름이 prefix로 시작하는 자손을 찾는다. 문틀 안쪽에 한 겹 더 들어가 있어도 찾도록 재귀로 본다.</summary>
-    private Transform FindDescendant(string prefix)
-    {
-        Transform[] children = GetComponentsInChildren<Transform>(true);
-
-        for (int i = 0; i < children.Length; i++)
-        {
-            if (children[i] != transform && children[i].name.StartsWith(prefix, System.StringComparison.Ordinal))
-            {
-                return children[i];
-            }
-        }
-
-        return null;
-    }
-
-#if UNITY_EDITOR
-    private void Reset()
-    {
-        AutoAssignParts();
-    }
-
-    private void OnValidate()
-    {
-        AutoAssignParts();
-    }
-#endif
 }
