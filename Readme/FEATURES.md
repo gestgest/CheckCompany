@@ -1,19 +1,20 @@
-# 주요 화면
 CheckCompany의 주요 화면
 
-## 로그인 화면
-<img width="404" height="878" alt="image" src="https://github.com/user-attachments/assets/9c52cf2e-ee90-47f0-a87d-408fa8430da1" /> 라이트모드<br>
-<img width="404" height="878" alt="image" src="https://github.com/user-attachments/assets/9c52cf2e-ee90-47f0-a87d-408fa8430da1" /> 다크모드
+# 로그인 화면
+<img width="404" height="878" alt="image" src="https://github.com/user-attachments/assets/9c52cf2e-ee90-47f0-a87d-408fa8430da1" /> <br>라이트모드<br>
+<img width="409" height="882" alt="image" src="https://github.com/user-attachments/assets/cd1c7921-9c49-498d-82c4-4f5c2f2c1fcc" /> <br>다크모드<br>
 
 
 메뉴<br><br>
+<img width="407" height="882" alt="image" src="https://github.com/user-attachments/assets/326143b3-e5aa-4d89-b423-85aaf92c74ea" /><br>
 <img width="407" height="883" alt="image" src="https://github.com/user-attachments/assets/8fb99001-636a-4307-9060-bb44d4f2dc18" /><br>
-로그인 화면<br><br>
 
+로그인 화면<br><br>
+<img width="406" height="879" alt="image" src="https://github.com/user-attachments/assets/a5b11a29-4d4f-4ce2-9a90-c47c67aea42c" /><br>
 <img width="407" height="883" alt="image" src="https://github.com/user-attachments/assets/4e9f9aa2-bf62-4064-86dc-ec6b4bda2eb0" /><br>
 회원가입 화면<br><br>
 
-### 서버 통신 코드
+## 서버 통신 코드
 ```
 private IEnumerator LoginAynsc(string email, string password)
 {
@@ -65,7 +66,7 @@ private IEnumerator LoginAynsc(string email, string password)
 ```
 
 ---
-## 게임 화면
+# 게임 화면
   <img width="404" height="884" alt="image" src="https://github.com/user-attachments/assets/f8f9a9ed-139c-4f37-8358-46025570797e" /> <br>
   직원<br><br>
 
@@ -75,7 +76,7 @@ private IEnumerator LoginAynsc(string email, string password)
   <img width="405" height="883" alt="image" src="https://github.com/user-attachments/assets/d9ddc794-0db3-4de4-bc65-96bd159cc1e5" /><br>
   모집 공고 창<br><br>
 
-### 미션
+## 미션
 <img width="411" height="879" alt="image" src="https://github.com/user-attachments/assets/8ae13b57-d02f-40bd-bfad-e8749b83e393" />
 <img width="403" height="876" alt="image" src="https://github.com/user-attachments/assets/c4c41566-794f-4534-89ee-865fbe489f1c" />
 <img width="408" height="877" alt="image" src="https://github.com/user-attachments/assets/476930e1-868d-46c4-acc5-1c69212640b0" />
