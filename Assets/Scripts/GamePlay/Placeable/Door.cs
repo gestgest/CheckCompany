@@ -3,12 +3,7 @@ using UnityEngine;
 
 /// <summary>
 /// 직원이 드나들 때 여닫히는 문. 문 프리팹(ObjectType.Door)에만 붙인다.
-///
 /// Animator 대신 코드로 돌린다. 문은 축 하나짜리 회전이라 클립과 컨트롤러까지 만드는 것이
-///
-/// 회전축은 door.fbx가 이미 부품별로 쪼개져 있어서(LP_Door_Slab / LP_Hinge_0..2 / LP_Jamb_*)
-/// 경첩 노드의 위치를 그대로 쓴다. 문짝 자신의 피벗으로 돌리면 문짝 한가운데가 축이 되어
-/// 반쪽이 벽을 뚫고 반대편으로 나간다.
 /// </summary>
 [RequireComponent(typeof(PlaceableObject))]
 public class Door : MonoBehaviour

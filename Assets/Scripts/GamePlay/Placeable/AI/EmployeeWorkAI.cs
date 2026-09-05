@@ -94,6 +94,13 @@ public class EmployeeWorkAI : MonoBehaviour
     private NavMeshAgent _agent;
     private Animator _animator;
 
+    //퇴근해서 회사에 없는 상태. OffDuty와 구분해야 한다 -
+    //근무시간인데 빈 자리가 없어 대기하는 경우도 OffDuty지만, 그때는 회사에 있어야 한다.
+    private bool _isHome;
+
+    //퇴근했을 때 끌 것들. 매번 찾지 않도록 Awake에서 한 번 모은다.
+    private Renderer[] _renderers;
+
     private State _state = State.OffDuty;
     private Transform _seat;
 
@@ -122,6 +129,10 @@ public class EmployeeWorkAI : MonoBehaviour
     {
         _agent = GetComponent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
+
+        //SkinnedMeshRenderer까지 같이 잡힌다. 꺼져있는 것도 포함해서 모아야
+        //나중에 켤 때 원래 꺼져 있던 것만 골라낼 필요가 없다.
+        _renderers = GetComponentsInChildren<Renderer>(true);
 
         //agent 자신의 감속 반경을 도착 판정 반경과 맞춘다. autoBraking이 이 값부터 미리 속도를 줄이므로
         //remainingDistance가 문턱을 넘을 때는 이미 거의 멈춰 있는 상태다.
@@ -303,6 +314,12 @@ public class EmployeeWorkAI : MonoBehaviour
     /// <summary>배정된 자리로 출발한다. 자리가 없으면 대기(OffDuty)로 돌아가 다음 판단 때 다시 시도한다.</summary>
     private void GoToDesk()
     {
+        //출근. 퇴근해서 안 보이던 상태였으면 여기서 다시 나타난다.
+        //자리를 못 찾아도(아래에서 EnterOffDuty로 빠져도) 출근은 한 것이므로 먼저 켠다 -
+        //그래야 "자리가 없어서 서성이는 직원"이 플레이어 눈에 보인다.
+        //ResolveSeat/MoveToSeat이 NavMeshAgent를 쓰므로 그 전에 켜야 한다.
+        SetHome(false);
+
         Transform seat = ResolveSeat();
 
         if (seat == null)
@@ -504,18 +521,61 @@ public class EmployeeWorkAI : MonoBehaviour
             return;
         }
 
+        //문이 없거나 경로를 못 찾은 경우. 걸어나갈 곳이 없을 뿐 퇴근은 퇴근이라 그 자리에서 사라진다.
         Debug.Log($"[EmployeeWorkAI] employee {_employeeId} : 퇴근 (OffDuty)");
-        EnterOffDuty();
+        GoHome();
     }
 
     /// <summary>출입구에 도착해서 진짜로 퇴근 완료.</summary>
     private void ArriveHome()
     {
+        GoHome();
+
+        Debug.Log($"[EmployeeWorkAI] employee {_employeeId} : 출입구 도착, 퇴근 완료 (OffDuty)");
+    }
+
+    /// <summary>퇴근 처리. 회사에서 사라지고, 다음 출근시간에 GoToDesk()가 다시 켠다.</summary>
+    private void GoHome()
+    {
         //ArriveAtDesk와 같은 이유 - 도착 후에도 계속 목적지로 미세 보정하면 제자리에서 떨린다.
+        //SetHome이 agent를 끄기 전에 불러야 한다(꺼진 agent는 건드릴 수 없다).
         StopAgent();
         EnterOffDuty();
 
-        Debug.Log($"[EmployeeWorkAI] employee {_employeeId} : 출입구 도착, 퇴근 완료 (OffDuty)");
+        SetHome(true);
+    }
+
+    /// <summary>
+    /// 퇴근/출근에 따라 회사에서 보이게 하거나 감춘다.
+    ///
+    /// GameObject를 통째로 SetActive(false)하면 안 된다 - Update와 DecisionRoutine이 같이 멈춰서
+    /// 다음 날 출근시간이 와도 스스로 깨어나지 못하고, 집에서 체력이 회복되지도 않는다.
+    /// 그래서 보이는 것(Renderer)과 길찾기(NavMeshAgent)만 끄고 판단 로직은 계속 돌게 둔다.
+    ///
+    /// agent까지 끄는 이유는, 켜둔 채로 두면 안 보이는 직원이 출입구에 서서 다른 직원의
+    /// 회피 대상(obstacle avoidance)으로 남아 길을 막기 때문이다.
+    /// </summary>
+    private void SetHome(bool isHome)
+    {
+        if (_isHome == isHome)
+        {
+            return;
+        }
+
+        _isHome = isHome;
+
+        for (int i = 0; i < _renderers.Length; i++)
+        {
+            if (_renderers[i] != null)
+            {
+                _renderers[i].enabled = !isHome;
+            }
+        }
+
+        if (_agent != null)
+        {
+            _agent.enabled = !isHome;
+        }
     }
 
     /// <summary>체력이 바닥나 자리에서 일어난다. 근무시간이어도 일을 멈춘다.</summary>
@@ -587,7 +647,8 @@ public class EmployeeWorkAI : MonoBehaviour
     /// <summary>Agent를 세운다. NavMesh 밖이면 아무것도 하지 않는다(에러만 뱉는다).</summary>
     private void StopAgent()
     {
-        if (_agent == null || !_agent.isOnNavMesh)
+        //퇴근해서 꺼둔 agent는 isOnNavMesh를 읽는 것만으로도 에러가 난다
+        if (_agent == null || !_agent.isActiveAndEnabled || !_agent.isOnNavMesh)
         {
             return;
         }
@@ -600,7 +661,7 @@ public class EmployeeWorkAI : MonoBehaviour
     /// <summary>세워둔 Agent를 다시 움직일 수 있게 한다. NavMesh 위에 없으면 false.</summary>
     private bool ResumeAgent()
     {
-        if (_agent == null || !_agent.isOnNavMesh)
+        if (_agent == null || !_agent.isActiveAndEnabled || !_agent.isOnNavMesh)
         {
             return false;
         }
