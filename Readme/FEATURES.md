@@ -18,8 +18,6 @@ CheckCompany의 주요 화면과 기능을 정리합니다.
 
 라이트/다크 모드는 기기의 시스템 설정을 따라가며, `ThemeApplier`가 UI 색상과 3D 로비(빌딩) 조명을 함께 전환합니다.
 
-`ThemeSO` 하나가 낮/밤 프리셋 전체(스카이박스·조명·UI 색상)를 담고, 화면의 각 UI 요소는 `ThemedGraphic` 컴포넌트로 자신의 역할(`UIRole`: Backdrop/Surface/Button/PrimaryText/PlaceholderText)만 표시해둡니다. 테마가 바뀌면 `ThemeApplier`가 이 역할표를 보고 색을 일괄로 다시 칠합니다 — 화면마다 색을 따로 관리하지 않아도 되는 구조입니다.
-
 ### 시작 메뉴
 
 | 라이트 모드 | 다크 모드 |
