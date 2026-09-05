@@ -55,46 +55,79 @@ public static class BoxColliderFitter
             return false;
         }
 
-        MeshRenderer[] renderers = target.GetComponentsInChildren<MeshRenderer>();
+        MeshFilter[] filters = target.GetComponentsInChildren<MeshFilter>();
 
-        if (renderers.Length == 0)
+        if (filters.Length == 0)
         {
-            Debug.LogWarning($"[BoxColliderFitter] '{target.name}' : 자식에 MeshRenderer가 없습니다.", target);
+            Debug.LogWarning($"[BoxColliderFitter] '{target.name}' : 자식에 메쉬가 없습니다.", target);
             return false;
         }
 
-        //월드 기준 바운드를 모은 뒤 로컬로 되돌린다.
-        //Renderer.bounds는 월드 기준이라 그대로 넣으면 회전/스케일이 있는 프리팹에서 어긋난다.
-        Bounds world = renderers[0].bounds;
+        //메쉬의 바운드 상자를 꼭짓점 단위로 이 오브젝트의 '로컬' 공간에 옮겨서 감싼다.
+        //
+        //예전에는 Renderer.bounds(월드 축 기준 AABB)를 모아 lossyScale로 나눠 box.size에 넣었다.
+        //그런데 box.size는 로컬 축 기준으로 해석되므로, 루트에 회전이 걸린 프리팹에서는
+        //월드 축으로 잰 길이가 엉뚱한 로컬 축에 들어간다.
+        //(문: 루트가 -90도라 로컬 Y가 월드 -Z를 향하는데, 월드에서 잰 높이 2.14가
+        // 그대로 로컬 Y에 박혀서 메쉬는 서 있는데 콜라이더만 바닥에 눕는 모양이 됐다)
+        Transform t = target.transform;
+        Bounds local = default;
+        bool started = false;
 
-        for (int i = 1; i < renderers.Length; i++)
+        foreach (MeshFilter filter in filters)
         {
-            world.Encapsulate(renderers[i].bounds);
+            Mesh mesh = filter.sharedMesh;
+
+            if (mesh == null)
+            {
+                continue;
+            }
+
+            Bounds meshBounds = mesh.bounds;
+
+            for (int i = 0; i < CornerSigns.Length; i++)
+            {
+                Vector3 corner = meshBounds.center + Vector3.Scale(meshBounds.extents, CornerSigns[i]);
+
+                //메쉬 로컬 -> 월드 -> 대상의 로컬. 중간에 회전이 몇 번 끼어 있어도 정확히 따라간다.
+                Vector3 localPoint = t.InverseTransformPoint(filter.transform.TransformPoint(corner));
+
+                if (started)
+                {
+                    local.Encapsulate(localPoint);
+                }
+                else
+                {
+                    local = new Bounds(localPoint, Vector3.zero);
+                    started = true;
+                }
+            }
         }
 
-        Transform t = target.transform;
-        Vector3 localCenter = t.InverseTransformPoint(world.center);
-
-        Vector3 lossy = t.lossyScale;
-        Vector3 localSize = new Vector3(
-            SafeDivide(world.size.x, lossy.x),
-            SafeDivide(world.size.y, lossy.y),
-            SafeDivide(world.size.z, lossy.z));
+        if (!started)
+        {
+            Debug.LogWarning($"[BoxColliderFitter] '{target.name}' : 메쉬가 비어 있습니다.", target);
+            return false;
+        }
 
         Undo.RecordObject(box, "Fit BoxCollider");
-        box.center = localCenter;
-        box.size = localSize;
+        box.center = local.center;
+        box.size = local.size;
         EditorUtility.SetDirty(box);
 
         Debug.Log(
-            $"[BoxColliderFitter] '{target.name}' : size {localSize}, center {localCenter}",
+            $"[BoxColliderFitter] '{target.name}' : size {local.size}, center {local.center}",
             target);
 
         return true;
     }
 
-    private static float SafeDivide(float value, float scale)
+    //바운드 상자의 여덟 꼭짓점 부호
+    private static readonly Vector3[] CornerSigns =
     {
-        return Mathf.Approximately(scale, 0f) ? value : value / Mathf.Abs(scale);
-    }
+        new Vector3(-1f, -1f, -1f), new Vector3(1f, -1f, -1f),
+        new Vector3(-1f, 1f, -1f), new Vector3(1f, 1f, -1f),
+        new Vector3(-1f, -1f, 1f), new Vector3(1f, -1f, 1f),
+        new Vector3(-1f, 1f, 1f), new Vector3(1f, 1f, 1f)
+    };
 }
