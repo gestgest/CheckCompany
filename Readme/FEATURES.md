@@ -86,5 +86,13 @@ private IEnumerator LoginAynsc(string email, string password)
 <img width="405" height="882" alt="image" src="https://github.com/user-attachments/assets/d25ec010-1ad1-4506-af40-c3bb2ad16d33" />
 <img width="407" height="884" alt="image" src="https://github.com/user-attachments/assets/d3394b26-7f6a-4b50-bfb4-16cf87022d04" />
   
-### 배치
-<img width="410" height="885" alt="image" src="https://github.com/user-attachments/assets/6425d4b5-921e-4024-8ea4-916f221d32e9" />
+## 배치
+오브젝트 배치를 할 수 있다.
+<img width="411" height="804" alt="image" src="https://github.com/user-attachments/assets/85ede414-f83d-449c-95d8-fe1df6734ace" />
+회전, 제거, 설치, 취소를 할 수 있다.
+오브젝트 종류는 의자, 책상, 컴퓨터, 문이 있다.
+
+낮과 밤이 되면 자연스럽게 빛의 강도를 줄였고, 스카이박스의 material값을 줄였다.
+
+
+
