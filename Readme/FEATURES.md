@@ -18,8 +18,6 @@ CheckCompany의 주요 화면과 기능을 정리합니다.
 
 라이트/다크 모드는 기기의 시스템 설정을 따라가며, `ThemeApplier`가 UI 색상과 3D 로비(빌딩) 조명을 함께 전환합니다.
 
-`ThemeSO` 하나가 낮/밤 프리셋 전체(스카이박스·조명·UI 색상)를 담고, 화면의 각 UI 요소는 `ThemedGraphic` 컴포넌트로 자신의 역할(`UIRole`: Backdrop/Surface/Button/PrimaryText/PlaceholderText)만 표시해둡니다. 테마가 바뀌면 `ThemeApplier`가 이 역할표를 보고 색을 일괄로 다시 칠합니다 — 화면마다 색을 따로 관리하지 않아도 되는 구조입니다.
-
 ### 시작 메뉴
 
 | 라이트 모드 | 다크 모드 |
@@ -128,13 +126,8 @@ private IEnumerator LoginAynsc(string email, string password)
 
 문은 Animator 없이 코드로 직접 돌립니다. 경첩(Hinge) 위치를 축으로 회전시키고, 여러 직원이 동시에 드나들 때는 마지막 사람이 지나갈 때까지 열린 상태를 유지합니다 — 닫히는 도중에 다음 직원이 오면 그 각도에서 그대로 이어서 다시 열립니다.
 
-[직원이 다가오면 문이 자동으로 열리는 이미지]
+<img width="412" height="883" alt="gamescreen_1" src="https://github.com/user-attachments/assets/0cf665a4-e063-440b-abc6-1c3c0a5a43db" />
 
-### 사무실 영역
-
-지금 소유한 사무실 범위 밖에는 오브젝트를 놓을 수 없습니다. 배치·이동 중에는 아직 확장하지 않은 땅이 어두운 타일로 표시되어 "여기까지 넓힐 수 있다"를 미리 보여줍니다.
-
-[배치 중 사무실 확장 가능 범위가 어둡게 표시되는 이미지]
 
 ---
 
@@ -146,7 +139,8 @@ private IEnumerator LoginAynsc(string email, string password)
 - 배정하지 않아도 근무시간이 된 직원은 빈 자리를 스스로 찾아 앉습니다.
 - 배정된 책상을 다른 곳으로 옮기면, 이미 그 자리로 향하던(또는 앉아있던) 직원이 새 위치로 다시 걸어갑니다.
 
-[자리를 눌러 직원을 배정하는 팝업 이미지]
+<img width="408" height="837" alt="image" src="https://github.com/user-attachments/assets/d46ca7a1-1389-449d-b319-ee00161849ef" />
+
 
 ---
 
@@ -166,7 +160,8 @@ OffDuty ──출근시간──▶ GoingToDesk ──도착──▶ SittingDow
 - **체력 관리**: 근무 중에는 체력이 서서히 줄고, 근무가 아닐 때(이동·대기·휴식)는 회복됩니다. 체력이 바닥나면 근무시간이라도 자리에서 일어나 쉬러 갑니다.
 - **출퇴근 연출**: 퇴근하면 문으로 걸어나가 화면에서 사라지고, 다음 출근시간에 같은 문 앞에서 다시 나타나 자리로 걸어갑니다. (판단 로직 자체는 멈추지 않도록 렌더러와 길찾기만 꺼서, 자는 동안에도 체력 회복이 정상적으로 진행됩니다.)
 
-[직원이 출근해서 자리에 앉는 과정을 담은 이미지]
+<img width="400" height="867" alt="bandicam 2026-09-06 01-37-56-161" src="https://github.com/user-attachments/assets/932cf89b-0ffa-4a39-a949-75cb4429dafa" />
+
 
 ---
 
@@ -195,10 +190,8 @@ OffDuty ──출근시간──▶ GoingToDesk ──도착──▶ SittingDow
 ## 7. 게임 시간 시스템
 
 실제 1초가 게임 10분으로 흘러갑니다(하루가 약 2분 24초). 직원의 출퇴근·근무 판단이 전부 이 게임 시간을 기준으로 이뤄집니다.
-
 서버 쓰기 비용을 아끼기 위해 시간이 흐를 때마다 매번 저장하지 않고, 일정 틱마다(기본 하루에 한 번) 모아서 저장합니다.
 
-[시간 흐름과 날짜/재화가 표시되는 상단 HUD 이미지]
 
 ---
 
