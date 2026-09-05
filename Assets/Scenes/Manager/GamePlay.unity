@@ -17611,6 +17611,9 @@ MonoBehaviour:
   - prefab: {fileID: 2055982069299100, guid: 9f16628a1d1834042d9a7ff4ddad3cbc, type: 3}
     position: {x: 0, y: 0, z: -1}
     rotation: 0
+  - prefab: {fileID: 4137927273793877995, guid: b1f8a05b2d45e4749bb122db3c42358a, type: 3}
+    position: {x: 0, y: 0, z: -5}
+    rotation: 0
   _testSpawnEmployee: 1
   _testTimeJumpMinutes: 180
   _gameDate:
