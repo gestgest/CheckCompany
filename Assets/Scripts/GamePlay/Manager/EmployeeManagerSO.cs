@@ -102,6 +102,42 @@ public class EmployeeManagerSO : ScriptableObject
     //월급이 부족해서 지급하지 못했을 때 직원들이 잃는 스태미나/멘탈 양
     private const int UNPAID_SALARY_PENALTY = 20;
 
+    /// <summary>
+    /// 업무속도를 올린다(미션 완료 보상). 수입 계산이 WorkSpeed에 비례하므로 곧 돈을 더 버는 것과 같다.
+    ///
+    /// 상한을 두는 이유: WorkSpeed는 서버에 저장되는 영구 값이라, 미션을 깰 때마다 무한히 오르면
+    /// 후반에 수입이 통제 불능이 된다. 지원자 기본값이 80~120(RecruitmentManagerSO)이므로
+    /// 상한은 그보다 넉넉히 위에 둔다.
+    /// </summary>
+    /// <returns>실제로 오른 양. 이미 상한이면 0.</returns>
+    public int AddWorkSpeed(int employeeId, int amount, int max)
+    {
+        Employee employee = GetEmployeeById(employeeId);
+
+        //해고된 직원 등 id가 더 이상 없는 경우
+        if (employee == null || amount <= 0)
+        {
+            return 0;
+        }
+
+        int before = employee.WorkSpeed;
+        employee.WorkSpeed = Mathf.Min(before + amount, max);
+
+        int gained = employee.WorkSpeed - before;
+
+        if (gained == 0)
+        {
+            return 0;
+        }
+
+        SetServerWorkSpeed(GameManager.instance.Nickname, employeeId, employee.WorkSpeed);
+
+        //직원 목록에 업무속도가 표시되므로 갱신해줘야 바로 보인다
+        _isChangedEmployeePanelEventChannelSO.RaiseEvent(true);
+
+        return gained;
+    }
+
     //결제 시도하고 안되면 false
     public bool PayEmployees()
     {
@@ -277,6 +313,17 @@ public class EmployeeManagerSO : ScriptableObject
         );
     }
 
+    public void SetServerWorkSpeed(string nickname, int id, int workSpeed)
+    {
+        string em = "employees.";
+        _sendFirebaseEventChannelSO.RaiseEvent(
+            "GamePlayUser",
+            nickname,
+            em + id.ToString() + ".workSpeed",
+            workSpeed
+        );
+    }
+
 
     //고용된 직원 서버 자료들을 인 게임으로 가져오는 함수
     public void JSONToEmployees(Dictionary<string, object> serverEmployees)
@@ -306,6 +353,16 @@ public class EmployeeManagerSO : ScriptableObject
             //직원을 추가할 때마다 즉시 이벤트를 발생시켜 각 직원마다 오브젝트가 생성되도록 수정.
             _onChangedCreateEvent.RaiseEvent(employees.Count - 1);
         }
+
+        //Search_Employee_Index()가 이진탐색이라 리스트가 ID 순으로 정렬돼 있어야 한다.
+        //서버가 주는 employees는 Dictionary라 순회 순서가 보장되지 않고, 키가 문자열이라
+        //정렬돼 있더라도 "10"이 "2"보다 앞에 온다. 정렬하지 않으면 실제로 있는 직원인데도
+        //탐색이 -1을 돌려줘서 해고/상태창/미션 배정이 전부 조용히 실패한다.
+        //(CreateEmployee는 추가 직후 이미 이 함수를 부른다 - 여기만 빠져 있었다)
+        //오브젝트는 위 루프에서 이미 다 만들어졌고, 스왑마다 _onChangeEvent가 나가서
+        //EmployeeObjectSystem의 목록도 같은 순서로 따라온다.
+        SelectionEmployeeSort();
+
         _isChangedEmployeePanelEventChannelSO.RaiseEvent(true);
     }
 

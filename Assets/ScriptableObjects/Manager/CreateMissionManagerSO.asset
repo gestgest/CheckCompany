@@ -15,4 +15,3 @@ MonoBehaviour:
   _employeeManager: {fileID: 11400000, guid: 6a695d970d94e0a4bb81e3e309e1fadf, type: 2}
   _missionManager: {fileID: 11400000, guid: 9e94d4ac52d1fb64981eca91210c5b71, type: 2}
   _ChangeAssignedEmployeeEventChannel: {fileID: 11400000, guid: bbcb714acc99da748ac825e9d5476609, type: 2}
-  _refEmployeesID: 16000000

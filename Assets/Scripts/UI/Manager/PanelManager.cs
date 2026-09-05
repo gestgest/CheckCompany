@@ -59,11 +59,20 @@ public class PanelManager : MonoBehaviour
         indexList.Clear();
         indexList.Add(main_index);
         OnPanel(indexList);
-        if (GetPanel(indexList).GetPanels().Length != 0)
+
+        //자식이 있으면 0번 자식까지 들어간 것으로 경로를 잡는다.
+        //단 hasMini 패널은 예외다 - 그 자식은 버튼을 눌러야 열리는 미니(모달) 패널이라
+        //Panel.OnPanel()이 일부러 SwitchingPanel(0)을 건너뛴다. 여기서 0을 붙이면
+        //"화면은 안 열렸는데 경로만 열린 척"하는 상태가 되고, 그 뒤 PushIndexList(0)가
+        //이미 그 미니 패널을 현재 위치로 보고 "자식 수 = 0"이라며 전환을 취소해버린다.
+        //(CreateMissionPanel에서 직원 배정 패널이 안 열리던 원인)
+        Panel opened = GetPanel(indexList);
+
+        if (opened != null && opened.GetPanels().Length != 0 && !opened.GetHasMini())
         {
             indexList.Add(0);
         }
-        
+
         ClearNavStack();
     }
 

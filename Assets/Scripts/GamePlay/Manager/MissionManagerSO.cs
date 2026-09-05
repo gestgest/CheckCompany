@@ -9,6 +9,18 @@ public class MissionManagerSO : ScriptableObject
     //이미지 리스트?
     [SerializeField] private IconsSO iconsSO;
 
+    [Header("Manager")]
+    //완료 보상을 미션에 배정된 직원에게 주려면 필요하다
+    [SerializeField] private EmployeeManagerSO _employeeManager;
+
+    [Header("완료 보상")]
+    //난이도 한 칸당 오르는 업무속도. level은 0~3(Easy/Medium/Hard/VeryHard)이라
+    //5면 각각 +5 / +10 / +15 / +20이 된다.
+    [SerializeField] private int _workSpeedBonusPerLevel = 5;
+
+    //업무속도 상한. 지원자 기본값이 80~120(RecruitmentManagerSO)이라 200이면 대략 2배속이 천장이다.
+    [SerializeField] private int _maxWorkSpeed = 200;
+
     [Header("ServerEvent")]
     [SerializeField] private DeleteFirebaseEventChannelSO _deleteFirebaseEventChannelSO;
     [SerializeField] private SendFirebaseEventChannelSO _sendFirebaseEventChannelSO;
@@ -119,6 +131,44 @@ public class MissionManagerSO : ScriptableObject
 
     #endregion
 
+
+    /// <summary>
+    /// 미션을 완료했을 때 배정된 직원(Mission.RefEmployees)에게 주는 보상.
+    /// 업무속도를 난이도만큼 영구히 올린다 - 수입이 WorkSpeed에 비례하므로(EmployeeManagerSO.CollectIncome)
+    /// 그 직원이 앞으로 버는 돈이 늘어난다.
+    ///
+    /// 배정된 직원이 없으면 아무 일도 없다. "직원을 붙여둔 미션을 깨야 이득"이 배정의 이유가 된다.
+    ///
+    /// 주의: 지금은 중복 수령을 막지 않는다. todo 체크를 껐다 켜면 다시 지급된다
+    /// (기존 디버깅용 돈 보상도 같은 상태다). 정식 밸런싱 때는 Mission에 수령 여부를 남겨야 한다.
+    /// </summary>
+    public void GiveCompletionReward(Mission mission)
+    {
+        if (mission == null || _employeeManager == null)
+        {
+            return;
+        }
+
+        List<int> ids = mission.RefEmployees;
+
+        if (ids == null || ids.Count == 0)
+        {
+            return;
+        }
+
+        //level은 0부터라 +1을 해야 Easy도 보상이 있다
+        int bonus = _workSpeedBonusPerLevel * (mission.GetLevel() + 1);
+
+        for (int i = 0; i < ids.Count; i++)
+        {
+            int gained = _employeeManager.AddWorkSpeed(ids[i], bonus, _maxWorkSpeed);
+
+            if (gained > 0)
+            {
+                Debug.Log($"[미션 완료] '{mission.GetName()}' 보상 : 직원 {ids[i]} 업무속도 +{gained}");
+            }
+        }
+    }
 
     public void AddMission(Mission mission, bool toServer = true)
     {

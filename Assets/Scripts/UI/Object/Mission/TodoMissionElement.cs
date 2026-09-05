@@ -105,6 +105,9 @@ public class TodoMissionElement : MonoBehaviour
         if (mission.GetIsDone())
         {
             _missionControllerSO.SetServerDoneDate(mission);
+
+            //배정된 직원의 업무속도를 올려준다 (배정을 해두는 이유가 여기서 생긴다)
+            _missionControllerSO.GiveCompletionReward(mission);
         }
     }
 }
