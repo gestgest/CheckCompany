@@ -12,22 +12,19 @@ CheckCompany의 주요 화면과 기능을 정리합니다.
 
 | 라이트 모드 | 다크 모드 |
 |:---:|:---:|
-| <img src="https://github.com/user-attachments/assets/9c52cf2e-ee90-47f0-a87d-408fa8430da1" width="240"/> | <img width="240" alt="image" src="https://github.com/user-attachments/assets/ec387e0f-5c2b-4e7e-9c23-c95c0fc3deb0" />
- |
+| <img src="https://github.com/user-attachments/assets/9c52cf2e-ee90-47f0-a87d-408fa8430da1" width="240"/> | <img width="240" alt="image" src="https://github.com/user-attachments/assets/ec387e0f-5c2b-4e7e-9c23-c95c0fc3deb0" /> |
 
 ### 로그인
 
 | 라이트 모드 | 다크 모드 |
 |:---:|:---:|
-| <img src="https://github.com/user-attachments/assets/326143b3-e5aa-4d89-b423-85aaf92c74ea" width="240"/> | <img width="240" alt="image" src="https://github.com/user-attachments/assets/7a9e9005-8b8d-48cf-b030-6757e9cf7911" />
- |
+| <img src="https://github.com/user-attachments/assets/326143b3-e5aa-4d89-b423-85aaf92c74ea" width="240"/> | <img width="240" alt="image" src="https://github.com/user-attachments/assets/7a9e9005-8b8d-48cf-b030-6757e9cf7911" /> |
 
 ### 회원가입
 
 | 라이트 모드 | 다크 모드 |
 |:---:|:---:|
-| <img src="https://github.com/user-attachments/assets/a5b11a29-4d4f-4ce2-9a90-c47c67aea42c" width="240"/> | <img width="406" height="878" alt="image" src="https://github.com/user-attachments/assets/466eb7b3-b033-4b98-a417-300058457a1a" />
- |
+| <img src="https://github.com/user-attachments/assets/a5b11a29-4d4f-4ce2-9a90-c47c67aea42c" width="240"/> | <img width="240" alt="image" src="https://github.com/user-attachments/assets/466eb7b3-b033-4b98-a417-300058457a1a" /> |
 
 ### 서버 통신 (Firebase Auth)
 
