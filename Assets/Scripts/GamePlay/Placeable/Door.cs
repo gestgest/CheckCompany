@@ -52,7 +52,8 @@ public class Door : MonoBehaviour
     private void Start()
     {
         //문을 세운다.
-        transform.rotation = Quaternion.Euler(-90, 0, 0); 
+        transform.rotation = Quaternion.Euler(-90, 0, 0);
+        _hingeLocalAxis = _hinge.up;
     }
 
 
