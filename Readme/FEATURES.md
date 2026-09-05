@@ -128,7 +128,8 @@ private IEnumerator LoginAynsc(string email, string password)
 
 문은 Animator 없이 코드로 직접 돌립니다. 경첩(Hinge) 위치를 축으로 회전시키고, 여러 직원이 동시에 드나들 때는 마지막 사람이 지나갈 때까지 열린 상태를 유지합니다 — 닫히는 도중에 다음 직원이 오면 그 각도에서 그대로 이어서 다시 열립니다.
 
-[직원이 다가오면 문이 자동으로 열리는 이미지]
+<img width="412" height="883" alt="gamescreen_1" src="https://github.com/user-attachments/assets/0cf665a4-e063-440b-abc6-1c3c0a5a43db" />
+
 
 ---
 
@@ -140,7 +141,8 @@ private IEnumerator LoginAynsc(string email, string password)
 - 배정하지 않아도 근무시간이 된 직원은 빈 자리를 스스로 찾아 앉습니다.
 - 배정된 책상을 다른 곳으로 옮기면, 이미 그 자리로 향하던(또는 앉아있던) 직원이 새 위치로 다시 걸어갑니다.
 
-[자리를 눌러 직원을 배정하는 팝업 이미지]
+<img width="408" height="837" alt="image" src="https://github.com/user-attachments/assets/d46ca7a1-1389-449d-b319-ee00161849ef" />
+
 
 ---
 
@@ -160,7 +162,8 @@ OffDuty ──출근시간──▶ GoingToDesk ──도착──▶ SittingDow
 - **체력 관리**: 근무 중에는 체력이 서서히 줄고, 근무가 아닐 때(이동·대기·휴식)는 회복됩니다. 체력이 바닥나면 근무시간이라도 자리에서 일어나 쉬러 갑니다.
 - **출퇴근 연출**: 퇴근하면 문으로 걸어나가 화면에서 사라지고, 다음 출근시간에 같은 문 앞에서 다시 나타나 자리로 걸어갑니다. (판단 로직 자체는 멈추지 않도록 렌더러와 길찾기만 꺼서, 자는 동안에도 체력 회복이 정상적으로 진행됩니다.)
 
-[직원이 출근해서 자리에 앉는 과정을 담은 이미지]
+<img width="400" height="867" alt="bandicam 2026-09-06 01-37-56-161" src="https://github.com/user-attachments/assets/932cf89b-0ffa-4a39-a949-75cb4429dafa" />
+
 
 ---
 
