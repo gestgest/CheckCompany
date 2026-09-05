@@ -17599,7 +17599,7 @@ MonoBehaviour:
   _deleteFirebaseEventChannelSO: {fileID: 11400000, guid: 7a1f9e67b78693248b645e9629191902, type: 2}
   _sendFirebaseEventChannelSO: {fileID: 11400000, guid: bc6e20a0b24975943a58a86b83f606ea, type: 2}
   _getJSONEventChannelSO: {fileID: 11400000, guid: 273b81728c703114aa820167d4b00c02, type: 2}
-  _testMode: 0
+  _testMode: 1
   _testPlacements:
   - prefab: {fileID: 2649339848780700, guid: 7cda44f43693608bfee12e167a90b355, type: 3}
     position: {x: 0, y: 0, z: 0}
@@ -17611,7 +17611,7 @@ MonoBehaviour:
     position: {x: 0, y: 0, z: -1}
     rotation: 0
   - prefab: {fileID: 3496991210290322520, guid: b1f8a05b2d45e4749bb122db3c42358a, type: 3}
-    position: {x: 9, y: 0, z: -9}
+    position: {x: 0, y: 0, z: -9}
     rotation: 0
   _testSpawnEmployee: 1
   _testTimeJumpMinutes: 180

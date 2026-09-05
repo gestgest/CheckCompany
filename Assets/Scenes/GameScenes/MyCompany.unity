@@ -682,7 +682,7 @@ MonoBehaviour:
   _landOriginCell: {x: -10, y: -10}
   _landSizeInTiles: {x: 20, y: 20}
   _officeOriginCell: {x: -5, y: -5}
-  _officeSizeInTiles: {x: 5, y: 5}
+  _officeSizeInTiles: {x: 10, y: 10}
   _floor: {fileID: 556971319}
   _wallAlongZ: {fileID: 532014782}
   _wallAlongX: {fileID: 1907231138}
