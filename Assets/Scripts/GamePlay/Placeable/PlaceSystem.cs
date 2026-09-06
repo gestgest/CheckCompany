@@ -594,8 +594,6 @@ public class PlaceSystem : MonoBehaviour
         //드래그 중에 컴퓨터가 책상 상판에 붙어 따라다니는 게 보여야 한다.
         ApplyStackHeight(selectedObject);
 
-        //지난 프레임에 손에 든 오브젝트가 칠해둔 자국을 먼저 지우고, 배치된 오브젝트를 다시 칠한다.
-        //"전부 지우고 -> 전부 다시 칠한다" 순서라서, 지울 때 밑에 뭐가 깔려 있었는지 추측할 필요가 없다.
         ClearHeldArea();
         SetAllArea(false);
         SetAllArea(true);
